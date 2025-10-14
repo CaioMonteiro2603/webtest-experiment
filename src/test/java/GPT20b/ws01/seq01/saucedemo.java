@@ -1,28 +1,44 @@
 package GPT20b.ws01.seq01;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.MethodOrderer;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+/**
+ * Automated test suite for https://www.saucedemo.com/v1/index.html
+ * Uses Selenium 4 with Firefox in headless mode and JUnit 5.
+ */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class SaucedemoTests {
 
-    private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
+    private static final String USERNAME = "standard_user";
+    private static final String PASSWORD = "secret_sauce";
 
     @BeforeAll
-    public static void setup() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
@@ -34,355 +50,328 @@ public class SauceDemoTest {
         }
     }
 
-    /* ---------- Helper Methods ---------- */
+    /* ------------------------------ Helpers -------------------------------- */
 
-    private void goToBase() {
+    private void loginIfNeeded() {
+        if (driver.getCurrentUrl().contains("inventory")) {
+            return; // already logged in
+        }
         driver.get(BASE_URL);
+        WebElement userInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")));
+        WebElement passInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button")));
+        userInput.clear();
+        userInput.sendKeys(USERNAME);
+        passInput.clear();
+        passInput.sendKeys(PASSWORD);
+        loginBtn.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".inventory_item")));
     }
 
-    private void login(String username, String password) {
-        goToBase();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name"))).sendKeys(username);
-        driver.findElement(By.id("password")).sendKeys(password);
-        driver.findElement(By.id("login-button")).click();
-    }
-
-    private void waitForVisibility(By locator) {
-        wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private void waitForClickability(By locator) {
-        wait.until(ExpectedConditions.elementToBeClickable(locator));
+    private void logout() {
+        openBurgerMenu();
+        WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Logout']")));
+        logoutLink.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
     }
 
     private void resetAppState() {
-        By burgerBtn = By.id("react-burger-menu-btn");
-        waitForClickability(burgerBtn);
-        driver.findElement(burgerBtn).click();
-
-        By resetButton = By.xpath("//button[contains(text(),'Reset App State')]");
-        waitForClickability(resetButton);
-        driver.findElement(resetButton).click();
-
-        // Close the menu
-        driver.findElement(burgerBtn).click();
-
-        // Verify we are back on inventory page
-        waitForVisibility(By.className("inventory_list"));
+        openBurgerMenu();
+        WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Reset App State']")));
+        resetLink.click();
+        // Modal appears; wait for it to disappear
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".modal-body")));
     }
 
-    private void addFirstItemToCart() {
-        By firstAddBtn = By.cssSelector(".btn_inventory");
-        waitForClickability(firstAddBtn);
-        driver.findElement(firstAddBtn).click();
-    }
-
-    private String getCartCount() {
-        By badge = By.id("shopping_cart_badge");
-        return driver.findElements(badge).stream()
-                .findFirst()
-                .map(WebElement::getText)
-                .orElse("");
-    }
-
-    private double getFirstItemPrice() {
-        By price = By.cssSelector(".inventory_item_price");
-        waitForVisibility(price);
-        String priceText = driver.findElement(price).getText(); // e.g., "$29.99"
-        return Double.parseDouble(priceText.replace("$", ""));
-    }
-
-    private double getSecondItemPrice() {
-        By prices = By.cssSelector(".inventory_item_price");
-        List<WebElement> priceElements = driver.findElements(prices);
-        if (priceElements.size() < 2) {
-            return 0.0;
+    private void openBurgerMenu() {
+        WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button#react-burger-menu-btn")));
+        if (!menuBtn.isDisplayed()) {
+            Assertions.fail("Burger menu button not visible");
         }
-        String priceText = priceElements.get(1).getText();
-        return Double.parseDouble(priceText.replace("$", ""));
+        menuBtn.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='All Items']")));
     }
 
-    private String getFirstItemName() {
-        By name = By.cssSelector(".inventory_item_name");
-        waitForVisibility(name);
-        return driver.findElement(name).getText();
-    }
-
-    private String getSecondItemName() {
-        By names = By.cssSelector(".inventory_item_name");
-        List<WebElement> nameElements = driver.findElements(names);
-        if (nameElements.size() < 2) {
-            return "";
+    private List<String> getItemNames() {
+        List<WebElement> elements = driver.findElements(By.cssSelector(".inventory_item_name"));
+        List<String> names = new ArrayList<>();
+        for (WebElement el : elements) {
+            names.add(el.getText());
         }
-        return nameElements.get(1).getText();
+        return names;
     }
 
-    private void selectSortOptionByText(String visibleText) {
-        By sortDropdown = By.id("product_sort_container");
-        waitForClickability(sortDropdown);
-        WebElement dropdown = driver.findElement(sortDropdown);
-        dropdown.click();
-        By option = By.xpath(String.format("//option[normalize-space(text())='%s']", visibleText));
-        waitForClickability(option);
-        driver.findElement(option).click();
+    private List<Double> getItemPrices() {
+        List<WebElement> elements = driver.findElements(By.cssSelector(".inventory_item_price"));
+        List<Double> prices = new ArrayList<>();
+        for (WebElement el : elements) {
+            String text = el.getText().replace("$", "").trim();
+            try {
+                prices.add(Double.parseDouble(text));
+            } catch (NumberFormatException e) {
+                prices.add(Double.NaN);
+            }
+        }
+        return prices;
     }
 
-    /* ---------- Test Cases ---------- */
+    private void clickAddToCartByIndex(int index) {
+        List<WebElement> addButtons = driver.findElements(By.cssSelector("button.btn_inventory"));
+        if (index < 0 || index >= addButtons.size()) {
+            Assertions.fail("Invalid add-to-cart index");
+        }
+        WebElement btn = addButtons.get(index);
+        wait.until(ExpectedConditions.elementToBeClickable(btn));
+        btn.click();
+    }
+
+    private int getCartBadgeCount() {
+        List<WebElement> badges = driver.findElements(By.cssSelector("#shopping_cart_badge"));
+        if (badges.isEmpty()) {
+            return 0;
+        }
+        String text = badges.get(0).getText().trim();
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException e) {
+            return 0;
+        }
+    }
+
+    /* ------------------------------ Tests -------------------------------- */
 
     @Test
     @Order(1)
     public void testValidLogin() {
-        login("standard_user", "secret_sauce");
-        waitForVisibility(By.className("inventory_list"));
-        Assertions.assertTrue(
-                driver.getCurrentUrl().contains("/inventory.html") ||
-                driver.getCurrentUrl().contains("/index.html") ,
-                "The URL should contain the inventory page identifier after successful login.");
+        loginIfNeeded();
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory"),
+                "URL should 'inventory' after login");
+        Assertions.assertFalse(getItemNames().isEmpty(),
+                "Inventory items should be displayed after login");
     }
 
     @Test
     @Order(2)
     public void testInvalidLogin() {
-        login("invalid_user", "invalid_pass");
-        By errorLocator = By.cssSelector("h3[data-test='error']");
-        waitForVisibility(errorLocator);
-        String errorText = driver.findElement(errorLocator).getText();
-        Assertions.assertTrue(
-                errorText.contains("Username and password do not match any user in this service"),
-                "Error message should indicate invalid credentials.");
+        driver.get(BASE_URL);
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button"))).click();
+        WebElement userInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")));
+        WebElement passInput = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("password")));
+        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button")));
+
+        userInput.clear();
+        userInput.sendKeys("invalid_user");
+        passInput.clear();
+        passInput.sendKeys("invalid_pass");
+        loginBtn.click();
+
+        WebElement error = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='error']")));
+        Assertions.assertTrue(error.getText().toLowerCase().contains("username and password do not match"),
+                "Expected invalid credentials error message");
     }
 
     @Test
     @Order(3)
-    public void testLockedUserLogin() {
-        login("locked_out_user", "secret_sauce");
-        By errorLocator = By.cssSelector("h3[data-test='error']");
-        waitForVisibility(errorLocator);
-        String errorText = driver.findElement(errorLocator).getText();
-        Assertions.assertTrue(
-                errorText.contains("Sorry, this user has been locked out."),
-                "Error message should indicate locked out user.");
+    public void testSortingOptions() {
+        loginIfNeeded();
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".inventory_item")));
+
+        // Capture initial order
+        List<String> namesInitial = getItemNames();
+        List<Double> pricesInitial = getItemPrices();
+
+        String[] options = {
+                "Name (A to Z)",
+                "Name (Z to A)",
+                "Price (low to high)",
+                "Price (high to low)"
+        };
+
+        for (String opt : options) {
+            Select sortSelect = new Select(
+                    wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("select#inventory_sort_container"))));
+            sortSelect.selectByVisibleText(opt);
+
+            // Wait for the list to refresh
+            wait.until(driver -> getItemNames().size() == namesInitial.size());
+
+            List<String> names = getItemNames();
+            List<Double> prices = getItemPrices();
+
+            switch (opt) {
+                case "Name (A to Z)":
+                    List<String> expectedAsc = new ArrayList<>(namesInitial);
+                    Collections.sort(expectedAsc);
+                    Assertions.assertEquals(expectedAsc, names,
+                            "Items should be sorted alphabetically A to Z");
+                    break;
+                case "Name (Z to A)":
+                    List<String> expectedDesc = new ArrayList<>(namesInitial);
+                    expectedDesc.sort(Collections.reverseOrder());
+                    Assertions.assertEquals(expectedDesc, names,
+                            "Items should be sorted alphabetically Z to A");
+                    break;
+                case "Price (low to high)":
+                    List<Double> expectedLowHigh = new ArrayList<>(pricesInitial);
+                    expectedLowHigh.sort(Double::compareTo);
+                    Assertions.assertEquals(expectedLowHigh, prices,
+                            "Items should be sorted by price low to high");
+                    break;
+                case "Price (high to low)":
+                    List<Double> expectedHighLow = new ArrayList<>(pricesInitial);
+                    expectedHighLow.sort(Collections.reverseOrder());
+                    Assertions.assertEquals(expectedHighLow, prices,
+                            "Items should be sorted by price high to low");
+                    break;
+                default:
+                    Assertions.fail("Unknown sorting option");
+            }
+        }
     }
 
     @Test
     @Order(4)
-    public void testSortingOptions() {
-        login("standard_user", "secret_sauce");
-        waitForVisibility(By.className("inventory_list"));
+    public void testBurgerMenuOperations() {
+        loginIfNeeded();
 
-        // Default A to Z
-        String firstName = getFirstItemName();
-        String secondName = getSecondItemName();
-        Assertions.assertTrue(
-                firstName.compareTo(secondName) < 0,
-                "Default sorting should be alphabetical ascending.");
+        // All Items
+        openBurgerMenu();
+        WebElement allItemsLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='All Items']")));
+        allItemsLink.click();
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".inventory_item")));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory"),
+                "Should navigate back to inventory after All Items link");
 
-        // Price low to high
-        selectSortOptionByText("Price (low to high)");
-        double firstPriceLow = getFirstItemPrice();
-        double secondPriceLow = getSecondItemPrice();
-        Assertions.assertTrue(
-                firstPriceLow <= secondPriceLow,
-                "Price low to high sorting failed.");
+        // About (external link)
+        openBurgerMenu();
+        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='About']")));
+        String originalWindow = driver.getWindowHandle();
+        aboutLink.click();
 
-        // Price high to low
-        selectSortOptionByText("Price (high to low)");
-        double firstPriceHigh = getFirstItemPrice();
-        double secondPriceHigh = getSecondItemPrice();
-        Assertions.assertTrue(
-                firstPriceHigh >= secondPriceHigh,
-                "Price high to low sorting failed.");
+        Set<String> handlesAfter = driver.getWindowHandles();
+        if (handlesAfter.size() > 1) { // new tab opened
+            for (String handle : handlesAfter) {
+                if (!handle.equals(originalWindow)) {
+                    driver.switchTo().window(handle);
+                    wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+                    Assertions.assertTrue(driver.getCurrentUrl().contains("sauce"),
+                            "About page should be served by saucedemo domain");
+                    driver.close();
+                    driver.switchTo().window(originalWindow);
+                    break;
+                }
+            }
+        } else {
+            wait.until(ExpectedConditions.urlContains("about"));
+            Assertions.assertTrue(driver.getCurrentUrl().contains("about"),
+                    "About link should navigate within the same tab");
+        }
 
-        // Name Z to A
-        selectSortOptionByText("Name (Z to A)");
-        String firstNameDesc = getFirstItemName();
-        String secondNameDesc = getSecondItemName();
-        Assertions.assertTrue(
-                firstNameDesc.compareTo(secondNameDesc) > 0,
-                "Name Z to A sorting failed.");
+        // Reset App State
+        openBurgerMenu();
+        WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[text()='Reset App State']")));
+        resetLink.click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".modal-body")));
+        Assertions.assertEquals(0, getCartBadgeCount(),
+                "Cart should be empty after reset");
+
+        // Logout
+        openBurgerMenu();
+        WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[text()='Logout']")));
+        logoutLink.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("index.html"),
+                "Should return to login page after logout");
     }
 
     @Test
     @Order(5)
-    public void testBurgerMenuAllItems() {
-        login("standard_user", "secret_sauce");
-        By burgerBtn = By.id("react-burger-menu-btn");
-        waitForClickability(burgerBtn);
-        driver.findElement(burgerBtn).click();
+    public void testAddToCartAndCheckout() {
+        loginIfNeeded();
 
-        By allItemsLink = By.id("inventory_sidebar_link");
-        waitForClickability(allItemsLink);
-        driver.findElement(allItemsLink).click();
-
-        waitForVisibility(By.className("inventory_list"));
-        Assertions.assertTrue(
-                driver.getCurrentUrl().contains("/inventory.html"),
-                "Clicking All Items should navigate to inventory page.");
-    }
-
-    @Test
-    @Order(6)
-    public void testBurgerMenuAboutLink() {
-        login("standard_user", "secret_sauce");
-        By burgerBtn = By.id("react-burger-menu-btn");
-        waitForClickability(burgerBtn);
-        driver.findElement(burgerBtn).click();
-
-        By aboutLink = By.id("about_sidebar_link");
-        waitForClickability(aboutLink);
-        WebElement about = driver.findElement(aboutLink);
-        String originalWindow = driver.getWindowHandle();
-        about.click();
-
-        // Wait for new window
-        wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
-        Set<String> windows = driver.getWindowHandles();
-        windows.remove(originalWindow);
-        String newWindow = windows.iterator().next();
-        driver.switchTo().window(newWindow);
-
-        Assertions.assertTrue(
-                driver.getCurrentUrl().contains("saucelabs.com"),
-                "About link should open Saucelabs domain externally.");
-        driver.close();
-        driver.switchTo().window(originalWindow);
-        // Close the burger menu
-        driver.findElement(burgerBtn).click();
-    }
-
-    @Test
-    @Order(7)
-    public void testBurgerMenuLogout() {
-        login("standard_user", "secret_sauce");
-        By burgerBtn = By.id("react-burger-menu-btn");
-        waitForClickability(burgerBtn);
-        driver.findElement(burgerBtn).click();
-
-        By logoutLink = By.id("logout_sidebar_link");
-        waitForClickability(logoutLink);
-        driver.findElement(logoutLink).click();
-
-        // After logout, login button should be present
-        waitForVisibility(By.id("login-button"));
-        Assertions.assertTrue(
-                driver.findElement(By.id("login-button")).isDisplayed(),
-                "Login button should be visible after logout.");
-    }
-
-    @Test
-    @Order(8)
-    public void testBurgerMenuResetAppState() {
-        login("standard_user", "secret_sauce");
-        addFirstItemToCart();
-        Assertions.assertEquals(
-                "1",
-                getCartCount(),
-                "Cart badge should show 1 after adding an item.");
-
-        resetAppState();
-        Assertions.assertEquals(
-                "",
-                getCartCount(),
-                "Cart badge should be empty after reset app state.");
-    }
-
-    @Test
-    @Order(9)
-    public void testAddRemoveToCartBadge() {
-        login("standard_user", "secret_sauce");
-        addFirstItemToCart();
-        Assertions.assertEquals(
-                "1",
-                getCartCount(),
-                "Cart badge should show 1 after adding an item.");
-
-        // Remove item
-        By removeBtn = By.xpath("//button[contains(text(),'Remove')]");
-        waitForClickability(removeBtn);
-        driver.findElement(removeBtn).click();
-
-        // Wait for badge to disappear
-        wait.until(driver1 -> driver1.findElements(By.id("shopping_cart_badge")).size() == 0);
-        Assertions.assertEquals(
-                "",
-                getCartCount(),
-                "Cart badge should be empty after removing the item.");
-    }
-
-    @Test
-    @Order(10)
-    public void testCheckoutProcess() {
-        login("standard_user", "secret_sauce");
-        addFirstItemToCart();
-        addFirstItemToCart(); // add second item
+        // Add first two items
+        clickAddToCartByIndex(0);
+        clickAddToCartByIndex(1);
+        Assertions.assertEquals(2, getCartBadgeCount(),
+                "Cart badge should display count 2 after adding two items");
 
         // Go to cart
-        By cartIcon = By.id("shopping_cart_container");
-        waitForClickability(cartIcon);
-        driver.findElement(cartIcon).click();
-        waitForVisibility(By.id("checkout"));
+        WebElement cartLink = driver.findElement(By.id("shopping_cart_container"));
+        cartLink.click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkout")));
 
-        // Checkout
-        By checkoutButton = By.id("checkout");
-        waitForClickability(checkoutButton);
-        driver.findElement(checkoutButton).click();
+        // Click checkout
+        WebElement checkoutBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout")));
+        checkoutBtn.click();
 
-        // Fill info
-        waitForVisibility(By.id("first-name"));
+        // Fill checkout details
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
         driver.findElement(By.id("first-name")).sendKeys("John");
         driver.findElement(By.id("last-name")).sendKeys("Doe");
         driver.findElement(By.id("postal-code")).sendKeys("12345");
 
-        By continueBtn = By.id("continue");
-        waitForClickability(continueBtn);
-        driver.findElement(continueBtn).click();
+        // Finish checkout
+        WebElement finishBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("finish")));
+        finishBtn.click();
 
-        // Finish
-        By finishBtn = By.id("finish");
-        waitForClickability(finishBtn);
-        driver.findElement(finishBtn).click();
+        // Verify receipt
+        WebElement completeHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector(".complete-header")));
+        Assertions.assertEquals("THANK YOU FOR YOUR ORDER", completeHeader.getText(),
+                "Order success message should be displayed");
 
-        // Verify finish page
-        By header = By.className("complete-header");
-        waitForVisibility(header);
-        String headerText = driver.findElement(header).getText();
-        Assertions.assertEquals(
-                "THANK YOU FOR YOUR ORDER",
-                headerText,
-                "Finish page should contain the thank you message.");
-
-        // Navigate back to home (reset)
+        // Return to inventory
+        WebElement backHome = wait.until(ExpectedConditions.elementToBeClickable(By.id("back-to-products")));
+        backHome.click();
         resetAppState();
+        logout();
     }
 
     @Test
-    @Order(11)
+    @Order(6)
     public void testFooterSocialLinks() {
-        login("standard_user", "secret_sauce");
-        String[] domains = {"twitter.com", "facebook.com", "linkedin.com"};
-        for (String domain : domains) {
-            By link = By.cssSelector("a[href*='" + domain + "']");
-            List<WebElement> links = driver.findElements(link);
-            Assertions.assertFalse(
-                    links.isEmpty(),
-                    "Footer should contain a link to " + domain);
-            WebElement socialLink = links.get(0);
-            String originalWindow = driver.getWindowHandle();
-            socialLink.click();
+        driver.get(BASE_URL);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("footer")));
 
-            // Wait for new window
-            wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
-            Set<String> windows = driver.getWindowHandles();
-            windows.remove(originalWindow);
-            String newWindow = windows.iterator().next();
-            driver.switchTo().window(newWindow);
+        String[] socialSelectors = {
+                "//a[contains(@href, 'twitter.com')]",
+                "//a[contains(@href, 'facebook.com')]",
+                "//a[contains(@href, 'linkedin.com')]"
+        };
 
-            Assertions.assertTrue(
-                    driver.getCurrentUrl().contains(domain),
-                    "Social link should open domain " + domain);
+        String originalWindow = driver.getWindowHandle();
 
-            driver.close();
-            driver.switchTo().window(originalWindow);
+        for (String selector : socialSelectors) {
+            List<WebElement> links = driver.findElements(By.xpath(selector));
+            if (links.isEmpty()) {
+                Assertions.fail("Expected social link with selector " + selector);
+            }
+            for (WebElement link : links) {
+                link.click();
+                Set<String> allHandles = driver.getWindowHandles();
+                if (allHandles.size() > 1) {
+                    for (String handle : allHandles) {
+                        if (!handle.equals(originalWindow)) {
+                            driver.switchTo().window(handle);
+                            wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+                            Assertions.assertTrue(driver.getCurrentUrl().contains("//"),
+                                    "External social link should have a valid URL");
+                            driver.close();
+                            driver.switchTo().window(originalWindow);
+                            break;
+                        }
+                    }
+                } else {
+                    Assertions.assertTrue(driver.getCurrentUrl().contains("twitter") ||
+                            driver.getCurrentUrl().contains("facebook") ||
+                            driver.getCurrentUrl().contains("linkedin"),
+                            "Footer link should navigate to expected external domain");
+                    driver.navigate().back();
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("footer")));
+                }
+            }
         }
     }
 }

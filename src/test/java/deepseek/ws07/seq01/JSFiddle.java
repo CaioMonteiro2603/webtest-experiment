@@ -1,20 +1,16 @@
 package deepseek.ws07.seq01;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleWebTest {
+import java.time.Duration;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class JSFiddleTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -37,118 +33,92 @@ public class JSFiddleWebTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
+    public void testEditorLoading() {
         driver.get(BASE_URL);
-        WebElement logo = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("a.fiddleLogo")));
-        Assertions.assertTrue(logo.isDisplayed(), "JSFiddle logo should be displayed");
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), 
-            "Current URL should match base URL");
+        WebElement editor = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".CodeMirror")));
+        Assertions.assertTrue(editor.isDisplayed(), "Code editor should be displayed");
     }
 
     @Test
     @Order(2)
-    public void testLoginFunctionality() {
-        driver.get(BASE_URL + "user/login/");
+    public void testRunButtonFunctionality() {
+        driver.get(BASE_URL);
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("result")));
+        driver.switchTo().defaultContent();
+        WebElement runButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("run")));
+        runButton.click();
         
-        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.id("loginform-email")));
-        WebElement passwordField = driver.findElement(By.id("loginform-password"));
-        WebElement loginButton = driver.findElement(
-            By.cssSelector("button[type='submit']"));
-
-        emailField.sendKeys("invalid@example.com");
-        passwordField.sendKeys("wrongpassword");
-        loginButton.click();
-
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".alert.alert-danger")));
-        Assertions.assertTrue(errorMessage.getText().contains("Incorrect email or password"), 
-            "Error message for invalid login should be displayed");
+        // Wait for result iframe to reload
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("result")));
+        WebElement resultContent = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+        Assertions.assertTrue(resultContent.isDisplayed(), "Result should be displayed after clicking Run");
+        driver.switchTo().defaultContent();
     }
 
     @Test
     @Order(3)
-    public void testNavigationMenu() {
+    public void testExternalLinks() {
         driver.get(BASE_URL);
-        
-        // Test About link (external)
-        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("About")));
-        aboutLink.click();
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href*='twitter.com']")));
         
         String originalWindow = driver.getWindowHandle();
+        twitterLink.click();
+        
         for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
+            if (!originalWindow.equals(windowHandle)) {
                 driver.switchTo().window(windowHandle);
+                wait.until(ExpectedConditions.urlContains("twitter.com"));
+                driver.close();
+                driver.switchTo().window(originalWindow);
                 break;
             }
         }
-        
-        Assertions.assertTrue(driver.getCurrentUrl().contains("jsfiddle.net/about"), 
-            "About page should open in new tab");
-        driver.close();
-        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(4)
-    public void testSocialLinks() {
+    public void testLoginModal() {
         driver.get(BASE_URL);
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".login-btn")));
+        loginButton.click();
         
-        // Test Twitter link
-        testExternalLink(".social-link.twitter", "twitter.com");
+        WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".auth-modal")));
+        Assertions.assertTrue(modal.isDisplayed(), "Login modal should appear");
         
-        // Test GitHub link
-        testExternalLink(".social-link.github", "github.com");
-    }
-
-    private void testExternalLink(String cssSelector, String expectedDomain) {
-        String originalWindow = driver.getWindowHandle();
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-email")));
+        WebElement passwordField = driver.findElement(By.id("login-password"));
         
-        WebElement socialLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(cssSelector)));
-        socialLink.click();
+        emailField.sendKeys("test@example.com");
+        passwordField.sendKeys("password");
         
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
+        WebElement submitButton = driver.findElement(By.cssSelector(".auth-submit"));
+        submitButton.click();
         
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-            "Social link should open " + expectedDomain + " in new tab");
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".auth-error")));
+        Assertions.assertTrue(errorMessage.isDisplayed(), "Error message should appear for invalid login");
     }
 
     @Test
     @Order(5)
-    public void testEditorFunctionality() {
-        driver.get(BASE_URL + "new/");
+    public void testPanelResizing() {
+        driver.get(BASE_URL);
+        WebElement resizeHandle = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".CodeMirror-sizer")));
+        Assertions.assertTrue(resizeHandle.isDisplayed(), "Panel resize handle should be available");
+    }
+
+    @Test
+    @Order(6)
+    public void testTabsNavigation() {
+        driver.get(BASE_URL);
+        WebElement jsTab = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".tab.js-tab")));
+        WebElement htmlTab = driver.findElement(By.cssSelector(".tab.html-tab"));
+        WebElement cssTab = driver.findElement(By.cssSelector(".tab.css-tab"));
+        WebElement resultTab = driver.findElement(By.cssSelector(".tab.result-tab"));
         
-        WebElement htmlTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.id("panel_html")));
+        jsTab.click();
+        Assertions.assertTrue(jsTab.getAttribute("class").contains("active"), "JS tab should be active");
+        
         htmlTab.click();
-        
-        WebElement htmlEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#panel_html .CodeMirror textarea")));
-        htmlEditor.sendKeys("<div id=\"test\">Hello World</div>");
-        
-        WebElement runButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.id("run")));
-        runButton.click();
-        
-        WebElement resultFrame = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("iframe[name='result']")));
-        driver.switchTo().frame(resultFrame);
-        
-        WebElement testDiv = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.id("test")));
-        Assertions.assertEquals("Hello World", testDiv.getText(), 
-            "HTML should be rendered in result frame");
-        
-        driver.switchTo().defaultContent();
+        Assertions.assertTrue(htmlTab.getAttribute("class").contains("active"), "HTML tab should be active");
     }
 }

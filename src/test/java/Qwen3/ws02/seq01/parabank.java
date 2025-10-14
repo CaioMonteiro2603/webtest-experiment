@@ -1,35 +1,30 @@
 package Qwen3.ws02.seq01;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-import java.util.Set;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParabankTest {
+public class ParaBankTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
-    private static final String LOGIN_USERNAME = "caio1@gmail.com";
-    private static final String LOGIN_PASSWORD = "123";
-
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @AfterAll
@@ -42,166 +37,140 @@ public class ParabankTest {
     @Test
     @Order(1)
     public void testValidLogin() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username"))).sendKeys(LOGIN_USERNAME);
-        driver.findElement(By.name("password")).sendKeys(LOGIN_PASSWORD);
-        driver.findElement(By.xpath("//input[@value='Log In']")).click();
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        wait.until(ExpectedConditions.urlContains("overview.htm"));
-        assertTrue(driver.findElement(By.linkText("Accounts Overview")).isDisplayed(),
-                "Accounts Overview link should be visible after successful login.");
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
+
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("welcome.htm"), "Login should redirect to welcome page");
     }
 
     @Test
     @Order(2)
     public void testInvalidLogin() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username"))).sendKeys("invalid_user");
-        driver.findElement(By.name("password")).sendKeys("wrong_pass");
-        driver.findElement(By.xpath("//input[@value='Log In']")).click();
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        WebElement errorElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.className("error")));
-        assertTrue(errorElement.isDisplayed(), "Error message should be displayed for invalid login.");
-        assertTrue(errorElement.getText().contains("The username and password could not be verified."),
-                "Error message text is incorrect.");
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
+
+        usernameField.sendKeys("invalid_user");
+        passwordField.sendKeys("wrong_password");
+        loginButton.click();
+
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.errorMessage")));
+        assertTrue(errorMessage.isDisplayed(), "Error message should be displayed on invalid login");
     }
 
     @Test
     @Order(3)
-    public void testNavigationLinksOnAccountsOverview() {
-        testValidLogin(); // Ensure we are logged in
+    public void testAccountOverview() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        // Click on Accounts Overview link (to verify it's functional)
-        driver.findElement(By.linkText("Accounts Overview")).click();
-        wait.until(ExpectedConditions.urlContains("overview.htm"));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
 
-        // Click on the first account link (one level deep)
-        WebElement firstAccountLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath("//table[@id='accountTable']//tbody//tr[1]//a")));
-        String accountId = firstAccountLink.getText();
-        firstAccountLink.click();
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
 
-        wait.until(ExpectedConditions.urlContains("account.htm"));
-        assertTrue(driver.findElement(By.id("accountId")).getText().contains(accountId),
-                "Account details page should show the correct account ID.");
+        // Wait for account overview to load
+        wait.until(ExpectedConditions.urlContains("welcome.htm"));
+
+        // View account details
+        WebElement accountLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Accounts Overview")));
+        accountLink.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("accounts.htm"), "Should navigate to accounts overview page");
     }
 
     @Test
     @Order(4)
     public void testTransferFunds() {
-        testValidLogin(); // Ensure we are logged in
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        driver.findElement(By.linkText("Transfer Funds")).click();
-        wait.until(ExpectedConditions.urlContains("transfer.htm"));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
 
-        // Simple transfer
-        WebElement amountField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("amount")));
-        amountField.clear();
-        amountField.sendKeys("100");
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
 
-        driver.findElement(By.xpath("//input[@value='Transfer']")).click();
-        wait.until(ExpectedConditions.urlContains("transferResult.htm"));
+        // Navigate to transfer funds
+        WebElement transferLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Transfer Funds")));
+        transferLink.click();
 
-        assertTrue(driver.findElement(By.className("title")).getText().contains("Transfer Complete"),
-                "Transfer Complete title should be present.");
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("transfer.htm"), "Should navigate to transfer funds page");
+
+        // Fill form
+        WebElement fromAccount = driver.findElement(By.id("fromAccountId"));
+        WebElement toAccount = driver.findElement(By.id("toAccountId"));
+        WebElement amount = driver.findElement(By.id("amount"));
+        WebElement transferButton = driver.findElement(By.xpath("//input[@value='Transfer']"));
+
+        fromAccount.sendKeys("12345");
+        toAccount.sendKeys("12346");
+        amount.sendKeys("100");
+
+        transferButton.click();
+
+        // Verify successful transfer
+        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.message")));
+        assertTrue(successMessage.getText().contains("Transfer Complete"), "Transfer should be complete successfully");
     }
 
     @Test
     @Order(5)
-    public void testBillPay() {
-        testValidLogin(); // Ensure we are logged in
+    public void testServices() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        driver.findElement(By.linkText("Bill Pay")).click();
-        wait.until(ExpectedConditions.urlContains("billpay.htm"));
+        // Click services link directly since we don't have a valid login to test other areas
+        WebElement servicesLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Services")));
+        servicesLink.click();
 
-        // Fill in minimal bill pay info
-        driver.findElement(By.name("payee.name")).sendKeys("Test Payee");
-        driver.findElement(By.name("payee.address.street")).sendKeys("123 Test St");
-        driver.findElement(By.name("payee.address.city")).sendKeys("Test City");
-        driver.findElement(By.name("payee.address.state")).sendKeys("CA");
-        driver.findElement(By.name("payee.address.zipCode")).sendKeys("90210");
-        driver.findElement(By.name("payee.phoneNumber")).sendKeys("1234567890");
-        driver.findElement(By.name("payee.accountNumber")).sendKeys("12345");
-        driver.findElement(By.name("verifyAccount")).sendKeys("12345");
-        WebElement amountField = driver.findElement(By.name("amount"));
-        amountField.clear();
-        amountField.sendKeys("50");
-
-        driver.findElement(By.xpath("//input[@value='Send Payment']")).click();
-        wait.until(ExpectedConditions.urlContains("billpayConfirm.htm"));
-
-        assertTrue(driver.findElement(By.className("title")).getText().contains("Bill Payment Complete"),
-                "Bill Payment Complete title should be present.");
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("services.htm"), "Should navigate to services page");
     }
 
     @Test
     @Order(6)
-    public void testUpdateProfile() {
-        testValidLogin(); // Ensure we are logged in
+    public void testExternalLinksInFooter() {
+        driver.get("https://parabank.parasoft.com/parabank/index.htm");
 
-        driver.findElement(By.linkText("Update Contact Info")).click();
-        wait.until(ExpectedConditions.urlContains("updateprofile.htm"));
+        String parentWindow = driver.getWindowHandle();
+        for (String window : driver.getWindowHandles()) {
+            if (!window.equals(parentWindow)) {
+                driver.switchTo().window(window);
+                driver.close();
+            }
+        }
 
-        // Simple update (e.g., phone)
-        WebElement phoneField = driver.findElement(By.id("customer.phoneNumber"));
-        String originalPhone = phoneField.getAttribute("value");
-        String newPhone = "9876543210";
-        phoneField.clear();
-        phoneField.sendKeys(newPhone);
-
-        driver.findElement(By.xpath("//input[@value='Update Profile']")).click();
-        // Confirmation can be a redirect, so we wait for a stable element on the next page (overview)
-        wait.until(ExpectedConditions.urlContains("overview.htm"));
-
-        // While we can't easily re-read the profile without another navigation,
-        // asserting the successful redirect and absence of error is sufficient for this flow.
-        assertTrue(driver.findElement(By.linkText("Accounts Overview")).isDisplayed(),
-                "Should be back on overview page after update.");
-    }
-
-    @Test
-    @Order(7)
-    public void testFooterLinksExternal() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
-
-        // Click 'About Us' (external link)
-        WebElement aboutUsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About Us")));
-        aboutUsLink.click();
-        assertExternalLinkAndReturn(originalWindow, "parasoft.com");
-
-        // Click 'Services' (external link)
-        driver.get(BASE_URL); // Re-get base to ensure clean state for next click
-        originalWindow = driver.getWindowHandle();
-        WebElement servicesLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Services")));
-        servicesLink.click();
-        assertExternalLinkAndReturn(originalWindow, "parasoft.com");
-
-        // There are no Twitter/Facebook/LinkedIn links on this site's footer.
-    }
-
-    @Test
-    @Order(8)
-    public void testLogout() {
-        testValidLogin(); // Ensure we are logged in
-
-        driver.findElement(By.linkText("Log Out")).click();
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        assertTrue(driver.findElement(By.xpath("//input[@value='Log In']")).isDisplayed(),
-                "Should be back on login page after logout.");
-    }
-
-
-    // --- Helper Methods ---
-
-    private void assertExternalLinkAndReturn(String originalWindow, String expectedDomain) {
-        Set<String> allWindows = driver.getWindowHandles();
-        String newWindow = allWindows.stream().filter(handle -> !handle.equals(originalWindow)).findFirst().orElse(null);
-        assertNotNull(newWindow, "A new window should have been opened for " + expectedDomain);
-        driver.switchTo().window(newWindow);
-        assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                "New window URL should contain " + expectedDomain + ". URL was: " + driver.getCurrentUrl());
+        // Footer links - About Us
+        WebElement aboutLink = driver.findElement(By.cssSelector("a[href*='about']"));
+        aboutLink.click();
+        
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("about"), "Should open About Us link");
         driver.close();
-        driver.switchTo().window(originalWindow);
+        driver.switchTo().window(parentWindow);
+
+        // Footer links - Contact Us
+        WebElement contactLink = driver.findElement(By.cssSelector("a[href*='contact']"));
+        contactLink.click();
+
+        currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("contact"), "Should open Contact Us link");
+        driver.close();
+        driver.switchTo().window(parentWindow);
     }
 }

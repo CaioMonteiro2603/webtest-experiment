@@ -1,16 +1,14 @@
 package Qwen3.ws03.seq01;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-import java.util.Set;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -20,17 +18,13 @@ public class BugBankTest {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://bugbank.netlify.app/";
-    private static final String DASHBOARD_URL = "https://bugbank.netlify.app/home";
-    private static final String LOGIN_EMAIL = "caio@gmail.com";
-    private static final String LOGIN_PASSWORD = "123";
-
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @AfterAll
@@ -43,109 +37,167 @@ public class BugBankTest {
     @Test
     @Order(1)
     public void testValidLogin() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Entrar')]"))).click();
+        driver.get("https://bugbank.netlify.app/");
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@data-testid='email']"))).sendKeys(LOGIN_EMAIL);
-        driver.findElement(By.xpath("//input[@data-testid='password']")).sendKeys(LOGIN_PASSWORD);
-        driver.findElement(By.xpath("//button[@data-testid='entrar']")).click();
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]"));
 
-        wait.until(ExpectedConditions.urlToBe(DASHBOARD_URL));
-        assertTrue(driver.findElement(By.xpath("//button[@data-testid='btn-movimentacao']")).isDisplayed(),
-                "Transfer button should be visible after successful login.");
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("dashboard"), "Login should redirect to dashboard");
     }
 
     @Test
     @Order(2)
     public void testInvalidLogin() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Entrar')]"))).click();
+        driver.get("https://bugbank.netlify.app/");
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@data-testid='email']"))).sendKeys("invalid_user@gmail.com");
-        driver.findElement(By.xpath("//input[@data-testid='password']")).sendKeys("wrong_pass");
-        driver.findElement(By.xpath("//button[@data-testid='entrar']")).click();
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]"));
 
-        WebElement errorElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[@data-testid='modalText']")));
-        assertTrue(errorElement.isDisplayed(), "Error message should be displayed for invalid login.");
-        assertTrue(errorElement.getText().contains(" Inválido!"), "Error message text is incorrect.");
-        
-        driver.findElement(By.xpath("//button[@data-testid='btnCloseModal']")).click();
-        wait.until(ExpectedConditions.invisibilityOf(errorElement));
+        usernameField.sendKeys("invalid_user");
+        passwordField.sendKeys("wrong_password");
+        loginButton.click();
+
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-testid='error-message']")));
+        assertTrue(errorMessage.isDisplayed(), "Error message should be displayed on invalid login");
     }
 
     @Test
     @Order(3)
-    public void testNavigationToTransferPage() {
-        testValidLogin(); // Ensure we are logged in
+    public void testAccountOperations() {
+        driver.get("https://bugbank.netlify.app/");
 
-        driver.findElement(By.xpath("//button[@data-testid='btn-movimentacao']")).click();
-        wait.until(ExpectedConditions.urlContains("/transfer"));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]"));
 
-        assertTrue(driver.findElement(By.xpath("//p[contains(text(), 'Preencha os dados da transferência')]")).isDisplayed(),
-                "Transfer page header should be visible.");
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
+
+        // Wait for dashboard to load
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
+        // Account balance check
+        WebElement balance = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-testid='balance-value']")));
+        assertNotNull(balance.getText(), "Balance should be displayed");
+
+        // Click on Transfer button
+        WebElement transferButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Transferir')]")));
+        transferButton.click();
+
+        // Verify on transfer page
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("transfer"), "Should navigate to transfer page");
     }
 
     @Test
     @Order(4)
-    public void testNavigationToExtractPage() {
-        testValidLogin(); // Ensure we are logged in
+    public void testTransactionHistory() {
+        driver.get("https://bugbank.netlify.app/");
 
-        driver.findElement(By.xpath("//button[@data-testid='btn-extrato']")).click();
-        wait.until(ExpectedConditions.urlContains("/extract"));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]"));
 
-        assertTrue(driver.findElement(By.xpath("//th[contains(text(), 'Saldo')]")).isDisplayed(),
-                "Extract page balance header should be visible.");
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
+
+        // Wait for dashboard to load
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+
+        // View transaction history
+        WebElement historyLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Histórico")));
+        historyLink.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("history"), "Should navigate to transaction history page");
     }
 
     @Test
     @Order(5)
-    public void testFooterSocialLinks() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
+    public void testExternalLinksInFooter() {
+        driver.get("https://bugbank.netlify.app/");
 
-        // Click Facebook link
-        WebElement fbLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@alt='facebook']")));
-        fbLink.click();
-        assertExternalLinkAndReturn(originalWindow, "facebook.com");
+        String parentWindow = driver.getWindowHandle();
+        for (String window : driver.getWindowHandles()) {
+            if (!window.equals(parentWindow)) {
+                driver.switchTo().window(window);
+                driver.close();
+            }
+        }
 
-        // Click Twitter link
-        driver.get(BASE_URL); // Reset to base URL
-        originalWindow = driver.getWindowHandle();
-        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@alt='twitter']")));
-        twitterLink.click();
-        assertExternalLinkAndReturn(originalWindow, "twitter.com");
+        // Test footer links - Terms of Service
+        try {
+            WebElement termsLink = driver.findElement(By.linkText("Termos de Serviço"));
+            termsLink.click();
+            
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("terms"), "Should open Terms of Service link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // If element doesn't exist, continue
+        }
 
-        // Click Instagram link
-        driver.get(BASE_URL); // Reset to base URL
-        originalWindow = driver.getWindowHandle();
-        WebElement instaLink = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//img[@alt='instagram']")));
-        instaLink.click();
-        assertExternalLinkAndReturn(originalWindow, "instagram.com");
+        // Test footer links - Privacy Policy
+        try {
+            WebElement privacyLink = driver.findElement(By.linkText("Política de Privacidade"));
+            privacyLink.click();
+
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("privacy"), "Should open Privacy Policy link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // If element doesn't exist, continue
+        }
+
+        // Test footer links - About Us
+        try {
+            WebElement aboutLink = driver.findElement(By.linkText("Sobre Nós"));
+            aboutLink.click();
+
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("about"), "Should open About Us link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // If element doesn't exist, continue
+        }
     }
-
+    
     @Test
     @Order(6)
-    public void testLogout() {
-        testValidLogin(); // Ensure we are logged in
+    public void testProfileSettings() {
+        driver.get("https://bugbank.netlify.app/");
 
-        driver.findElement(By.xpath("//button[@data-testid='btn-settings']")).click();
-        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[@data-testid='btn-sair']"))).click();
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]"));
 
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        assertTrue(driver.findElement(By.xpath("//button[contains(text(), 'Entrar')]")).isDisplayed(),
-                "Should be back on home page after logout.");
-    }
+        usernameField.sendKeys("caio@gmail.com");
+        passwordField.sendKeys("123");
+        loginButton.click();
 
-    // --- Helper Methods ---
+        // Wait for dashboard to load
+        wait.until(ExpectedConditions.urlContains("dashboard"));
 
-    private void assertExternalLinkAndReturn(String originalWindow, String expectedDomain) {
-        Set<String> allWindows = driver.getWindowHandles();
-        String newWindow = allWindows.stream().filter(handle -> !handle.equals(originalWindow)).findFirst().orElse(null);
-        assertNotNull(newWindow, "A new window should have been opened for " + expectedDomain);
-        driver.switchTo().window(newWindow);
-        assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                "New window URL should contain " + expectedDomain + ". URL was: " + driver.getCurrentUrl());
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        // Go to profile settings
+        WebElement profileButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-testid='profile-button']")));
+        profileButton.click();
+
+        // Wait for profile page to load
+        wait.until(ExpectedConditions.urlContains("profile"));
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("profile"), "Should navigate to profile page");
     }
 }

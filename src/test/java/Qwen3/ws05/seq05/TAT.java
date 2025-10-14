@@ -1,395 +1,292 @@
-package GPT5.ws05.seq05;
+package Qwen3.ws05.seq05;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessSuite {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CacTatTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-
-    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 
     @BeforeAll
     public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void teardown() {
-        if (driver != null) driver.quit();
-    }
-
-    // -------------------- Helpers --------------------
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should land on base URL");
-        wait.until(d -> d.findElements(By.tagName("form")).size() > 0);
-    }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private boolean present(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        return null;
-    }
-
-    private void clearAndType(WebElement el, String text) {
-        el.clear();
-        el.sendKeys(text);
-        Assertions.assertEquals(text, el.getAttribute("value"), "Typed value should be reflected in input");
-    }
-
-    private String hostOf(String url) {
-        try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
-    }
-
-    private void handleExternalLink(WebElement link) {
-        String originalWindow = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        String originalHost = hostOf(driver.getCurrentUrl());
-        String href = link.getAttribute("href");
-        if (href == null || href.isBlank()) return;
-
-        waitClickable(link).click();
-        Set<String> after = driver.getWindowHandles();
-
-        if (after.size() > before.size()) {
-            // New tab/window opened
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(d -> d.getCurrentUrl() != null && d.getCurrentUrl().startsWith("http"));
-            String newHost = hostOf(driver.getCurrentUrl());
-            Assertions.assertNotEquals(originalHost, newHost, "External link should lead to a different host");
-            driver.close();
-            driver.switchTo().window(originalWindow);
-        } else {
-            // Same tab navigation
-            wait.until(d -> !hostOf(d.getCurrentUrl()).equals(originalHost));
-            String newHost = hostOf(driver.getCurrentUrl());
-            Assertions.assertNotEquals(originalHost, newHost, "External link should lead to a different host");
-            driver.navigate().back();
-            wait.until(d -> hostOf(d.getCurrentUrl()).equals(originalHost));
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
-
-    private String getValidationMessage(WebElement input) {
-        Object msg = ((JavascriptExecutor) driver).executeScript("return arguments[0].validationMessage;", input);
-        return msg == null ? "" : msg.toString();
-    }
-
-    private boolean waitForVisible(By by) {
-        try {
-            WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-            return el.isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    // -------------------- Tests --------------------
 
     @Test
     @Order(1)
-    public void basePageLoadsAndHasCoreElements() {
-        openBase();
-        Assertions.assertTrue(present(By.cssSelector("h1, h2, header")), "A visible header/title should be present");
-        Assertions.assertTrue(present(By.id("firstName")) || present(By.name("firstName")),
-                "First name input should be present");
-        Assertions.assertTrue(present(By.id("lastName")) || present(By.name("lastName")),
-                "Last name input should be present");
-        Assertions.assertTrue(present(By.id("email")) || present(By.cssSelector("input[type='email']")),
-                "Email input should be present");
-        Assertions.assertTrue(present(By.id("open-text-area")) || present(By.tagName("textarea")),
-                "Message textarea should be present");
-        Assertions.assertTrue(present(By.cssSelector("button[type='submit']")),
-                "Submit button should be present");
+    public void testPageLoadAndTitle() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        String pageTitle = driver.getTitle();
+        assertEquals("CAC TAT", pageTitle, "Page title should match expected value");
+        
+        WebElement header = driver.findElement(By.tagName("h1"));
+        assertTrue(header.isDisplayed(), "Header should be displayed");
+        assertEquals("CAC TAT", header.getText(), "Header text should match expected value");
     }
 
     @Test
     @Order(2)
-    public void fillValidFormAndSubmitShowsSuccess() {
-        openBase();
-        WebElement firstName = firstPresent(By.id("firstName"), By.name("firstName"));
-        WebElement lastName = firstPresent(By.id("lastName"), By.name("lastName"));
-        WebElement email = firstPresent(By.id("email"), By.cssSelector("input[type='email']"));
-        WebElement textarea = firstPresent(By.id("open-text-area"), By.tagName("textarea"));
-        WebElement submit = firstPresent(By.cssSelector("button[type='submit']"));
-
-        Assumptions.assumeTrue(firstName != null && lastName != null && email != null && textarea != null && submit != null,
-                "Critical fields not found; skipping");
-
-        clearAndType(firstName, "John");
-        clearAndType(lastName, "Doe");
-        clearAndType(email, "john.doe@example.com");
-        clearAndType(textarea, "Mensagem de teste via Selenium.");
-
-        // Optional product dropdown
-        WebElement product = firstPresent(By.id("product"), By.cssSelector("select"));
-        if (product != null) {
-            Select select = new Select(product);
-            if (select.getOptions().size() > 1) {
-                select.selectByIndex(1);
-                Assertions.assertEquals(select.getOptions().get(1).getText(),
-                        select.getFirstSelectedOption().getText(), "Selected product should reflect choice");
-            }
+    public void testNavigationLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        List<WebElement> navLinks = driver.findElements(By.cssSelector(".navbar-nav a"));
+        assertTrue(navLinks.size() > 0, "Should have navigation links");
+        
+        // Check each link
+        for (WebElement link : navLinks) {
+            assertTrue(link.isDisplayed(), "Navigation link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Navigation link should have href attribute");
         }
-
-        // Optional radios (e.g., service type)
-        List<WebElement> radios = driver.findElements(By.cssSelector("input[type='radio']"));
-        if (!radios.isEmpty()) {
-            waitClickable(radios.get(0)).click();
-            Assertions.assertTrue(radios.get(0).isSelected(), "Chosen radio should be selected");
-        }
-
-        // Optional checkboxes (e.g., contact by phone)
-        List<WebElement> checks = driver.findElements(By.cssSelector("input[type='checkbox']"));
-        if (!checks.isEmpty()) {
-            waitClickable(checks.get(0)).click();
-            Assertions.assertTrue(checks.get(0).isSelected(), "Checkbox should be selected");
-        }
-
-        waitClickable(submit).click();
-
-        // Expect success message on the page (commonly .success)
-        boolean success = waitForVisible(By.cssSelector(".success, .alert-success, [data-test='success']"));
-        // Some builds may show an alert
-        if (!success) {
-            try {
-                Alert a = wait.until(ExpectedConditions.alertIsPresent());
-                a.accept();
-                success = true;
-            } catch (TimeoutException ignored) {}
-        }
-        Assertions.assertTrue(success, "After valid submit, a success indicator should appear");
     }
 
     @Test
     @Order(3)
-    public void invalidEmailTriggersValidation() {
-        openBase();
-        WebElement firstName = firstPresent(By.id("firstName"), By.name("firstName"));
-        WebElement lastName = firstPresent(By.id("lastName"), By.name("lastName"));
-        WebElement email = firstPresent(By.id("email"), By.cssSelector("input[type='email']"));
-        WebElement textarea = firstPresent(By.id("open-text-area"), By.tagName("textarea"));
-        WebElement submit = firstPresent(By.cssSelector("button[type='submit']"));
-
-        Assumptions.assumeTrue(firstName != null && lastName != null && email != null && textarea != null && submit != null,
-                "Critical fields not found; skipping");
-
-        clearAndType(firstName, "A");
-        clearAndType(lastName, "B");
-        clearAndType(email, "not-an-email");
-        clearAndType(textarea, "Any message");
-
-        waitClickable(submit).click();
-
-        // HTML5 native browser validation or page-level error
-        String msg = getValidationMessage(email);
-        boolean nativeValidation = msg != null && msg.trim().length() > 0;
-        boolean pageError = waitForVisible(By.cssSelector(".error, .alert-error, [data-test='error']"));
-
-        Assumptions.assumeTrue(nativeValidation || pageError, "No validation surfaced; skipping");
-        Assertions.assertTrue(nativeValidation || pageError,
-                "Invalid email should trigger validation (native or page-level)");
+    public void testMainContentSections() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        // Check if main content sections are present
+        WebElement heroSection = driver.findElement(By.id("hero"));
+        assertTrue(heroSection.isDisplayed(), "Hero section should be displayed");
+        
+        WebElement featuresSection = driver.findElement(By.id("features"));
+        assertTrue(featuresSection.isDisplayed(), "Features section should be displayed");
+        
+        WebElement testimonialsSection = driver.findElement(By.id("testimonials"));
+        assertTrue(testimonialsSection.isDisplayed(), "Testimonials section should be displayed");
+        
+        WebElement contactSection = driver.findElement(By.id("contact"));
+        assertTrue(contactSection.isDisplayed(), "Contact section should be displayed");
     }
 
     @Test
     @Order(4)
-    public void dropdownSelectionChanges() {
-        openBase();
-        WebElement product = firstPresent(By.id("product"), By.cssSelector("select"));
-        Assumptions.assumeTrue(product != null, "Product dropdown not present; skipping");
-
-        Select select = new Select(product);
-        List<String> options = select.getOptions().stream().map(WebElement::getText).collect(Collectors.toList());
-        Assumptions.assumeTrue(options.size() >= 2, "Not enough options to test selection; skipping");
-
-        select.selectByIndex(0);
-        String first = select.getFirstSelectedOption().getText();
-
-        select.selectByIndex(1);
-        String second = select.getFirstSelectedOption().getText();
-
-        Assertions.assertNotEquals(first, second, "Selecting a different option should change the selection text");
+    public void testHeroSectionElements() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement heroSection = driver.findElement(By.id("hero"));
+        assertTrue(heroSection.isDisplayed(), "Hero section should be displayed");
+        
+        WebElement heroTitle = driver.findElement(By.cssSelector("#hero h2"));
+        assertTrue(heroTitle.isDisplayed(), "Hero title should be displayed");
+        
+        WebElement heroDescription = driver.findElement(By.cssSelector("#hero p"));
+        assertTrue(heroDescription.isDisplayed(), "Hero description should be displayed");
+        
+        WebElement ctaButton = driver.findElement(By.cssSelector("#hero .btn"));
+        assertTrue(ctaButton.isDisplayed(), "Call to action button should be displayed");
     }
 
     @Test
     @Order(5)
-    public void radioAndCheckboxBehavior() {
-        openBase();
-        List<WebElement> radios = driver.findElements(By.cssSelector("input[type='radio']"));
-        List<WebElement> checks = driver.findElements(By.cssSelector("input[type='checkbox']"));
-        Assumptions.assumeTrue(!radios.isEmpty() || !checks.isEmpty(), "No radios or checkboxes found; skipping");
-
-        if (!radios.isEmpty()) {
-            WebElement r0 = radios.get(0);
-            waitClickable(r0).click();
-            Assertions.assertTrue(r0.isSelected(), "Radio should be selected after click");
-
-            String name = r0.getAttribute("name");
-            if (name != null) {
-                List<WebElement> sameGroup = driver.findElements(By.cssSelector("input[type='radio'][name='" + name + "']"));
-                if (sameGroup.size() > 1) {
-                    WebElement r1 = sameGroup.get(1);
-                    waitClickable(r1).click();
-                    Assertions.assertTrue(r1.isSelected(), "Second radio should be selected");
-                    Assertions.assertFalse(r0.isSelected(), "First radio should be unselected due to exclusivity");
-                }
-            }
-        }
-
-        if (!checks.isEmpty()) {
-            WebElement c0 = checks.get(0);
-            waitClickable(c0).click();
-            Assertions.assertTrue(c0.isSelected(), "Checkbox should be selected");
-            waitClickable(c0).click();
-            Assertions.assertFalse(c0.isSelected(), "Checkbox should toggle off");
+    public void testFeaturesSection() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement featuresSection = driver.findElement(By.id("features"));
+        assertTrue(featuresSection.isDisplayed(), "Features section should be displayed");
+        
+        List<WebElement> featureCards = driver.findElements(By.cssSelector(".feature-card"));
+        assertTrue(featureCards.size() > 0, "Should have feature cards");
+        
+        for (WebElement card : featureCards) {
+            assertTrue(card.isDisplayed(), "Feature card should be displayed");
         }
     }
 
     @Test
     @Order(6)
-    public void fileUploadIfAvailable() {
-        openBase();
-        WebElement fileInput = firstPresent(By.id("file-upload"), By.cssSelector("input[type='file']"));
-        Assumptions.assumeTrue(fileInput != null, "File upload input not present; skipping");
-
-        // Create a tiny temporary file path reference (we won't actually create it; just ensure control accepts a path string)
-        String fakePath = System.getProperty("user.dir") + "/README.txt";
-        fileInput.sendKeys(fakePath);
-        Assertions.assertTrue(fileInput.getAttribute("value") != null, "File input should reflect selected path");
+    public void testTestimonialsSection() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement testimonialsSection = driver.findElement(By.id("testimonials"));
+        assertTrue(testimonialsSection.isDisplayed(), "Testimonials section should be displayed");
+        
+        List<WebElement> testimonialCards = driver.findElements(By.cssSelector(".testimonial-card"));
+        assertTrue(testimonialCards.size() > 0, "Should have testimonial cards");
+        
+        for (WebElement card : testimonialCards) {
+            assertTrue(card.isDisplayed(), "Testimonial card should be displayed");
+        }
     }
 
     @Test
     @Order(7)
-    public void internalLinksOneLevelBelow() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        String original = driver.getCurrentUrl();
-
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<WebElement> internal = new ArrayList<>();
-        for (WebElement a : anchors) {
-            String href = a.getAttribute("href");
-            if (href == null || href.isBlank()) continue;
-            if (hostOf(href).equals(baseHost)) internal.add(a);
+    public void testContactForm() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement contactSection = driver.findElement(By.id("contact"));
+        assertTrue(contactSection.isDisplayed(), "Contact section should be displayed");
+        
+        WebElement contactForm = driver.findElement(By.cssSelector("#contact form"));
+        assertTrue(contactForm.isDisplayed(), "Contact form should be displayed");
+        
+        List<WebElement> formInputs = driver.findElements(By.cssSelector("#contact form input, #contact form textarea"));
+        assertTrue(formInputs.size() > 0, "Should have form inputs");
+        
+        for (WebElement input : formInputs) {
+            assertTrue(input.isDisplayed(), "Form input should be displayed");
         }
-        Assumptions.assumeTrue(!internal.isEmpty(), "No internal links found; skipping");
-
-        int visited = 0;
-        for (WebElement a : internal) {
-            if (visited >= 3) break;
-            String href = a.getAttribute("href");
-            if (href == null) continue;
-
-            // Only one level below (same directory as index.html)
-            try {
-                URI base = URI.create(original);
-                URI link = URI.create(href);
-                String basePath = base.getPath();
-                String linkPath = link.getPath();
-                int baseDepth = Math.max(0, basePath.replaceAll("^/+", "").split("/").length - 1);
-                int linkDepth = Math.max(0, linkPath.replaceAll("^/+", "").split("/").length - 1);
-                if (linkDepth != baseDepth) continue; // skip deeper paths
-            } catch (Exception ignored) { continue; }
-
-            String before = driver.getCurrentUrl();
-            try {
-                waitClickable(a).click();
-                wait.until(d -> !d.getCurrentUrl().equals(before));
-                Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on same host");
-                Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Internal page should render");
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlToBe(before));
-                visited++;
-            } catch (Exception e) {
-                driver.get(BASE_URL);
-                wait.until(ExpectedConditions.urlContains("cac-tat.s3.eu-central-1.amazonaws.com"));
-            }
-        }
-        Assertions.assertTrue(visited >= 1, "At least one internal link should be visited when present");
+        
+        WebElement submitButton = driver.findElement(By.cssSelector("#contact form button[type='submit']"));
+        assertTrue(submitButton.isDisplayed(), "Submit button should be displayed");
     }
 
     @Test
     @Order(8)
-    public void externalLinksOpenDifferentDomain() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<WebElement> externals = new ArrayList<>();
-        for (WebElement a : anchors) {
-            String href = a.getAttribute("href");
-            if (href == null || href.isBlank()) continue;
-            String host = hostOf(href);
-            if (!host.equals(baseHost) && href.startsWith("http")) externals.add(a);
+    public void testSocialMediaLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        List<WebElement> socialLinks = driver.findElements(By.cssSelector(".social-links a"));
+        assertEquals(3, socialLinks.size(), "Should have 3 social media links");
+        
+        String mainWindowHandle = driver.getWindowHandle();
+        
+        for (WebElement link : socialLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.isEmpty()) {
+                // Clicking this should open in new tab
+                link.click();
+                wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+                
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(mainWindowHandle)) {
+                        driver.switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                
+                String currentUrl = driver.getCurrentUrl();
+                if (href.contains("facebook.com")) {
+                    assertTrue(currentUrl.contains("facebook.com"), "Facebook URL should contain facebook.com");
+                } else if (href.contains("twitter.com")) {
+                    assertTrue(currentUrl.contains("twitter.com"), "Twitter URL should contain twitter.com");
+                } else if (href.contains("linkedin.com")) {
+                    assertTrue(currentUrl.contains("linkedin.com"), "LinkedIn URL should contain linkedin.com");
+                }
+                
+                driver.close();
+                driver.switchTo().window(mainWindowHandle);
+            }
         }
-        Assumptions.assumeTrue(!externals.isEmpty(), "No external links found; skipping");
-
-        int validated = 0;
-        for (WebElement link : externals) {
-            if (validated >= 3) break;
-            handleExternalLink(link);
-            validated++;
-        }
-        Assertions.assertTrue(validated > 0, "At least one external link should be validated");
     }
 
     @Test
     @Order(9)
-    public void requiredFieldsPreventEmptySubmission() {
-        openBase();
-        WebElement firstName = firstPresent(By.id("firstName"), By.name("firstName"));
-        WebElement lastName = firstPresent(By.id("lastName"), By.name("lastName"));
-        WebElement email = firstPresent(By.id("email"), By.cssSelector("input[type='email']"));
-        WebElement textarea = firstPresent(By.id("open-text-area"), By.tagName("textarea"));
-        WebElement submit = firstPresent(By.cssSelector("button[type='submit']"));
+    public void testFooterLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector(".footer a"));
+        assertTrue(footerLinks.size() > 0, "Should have footer links");
+        
+        for (WebElement link : footerLinks) {
+            assertTrue(link.isDisplayed(), "Footer link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Footer link should have href attribute");
+        }
+    }
 
-        Assumptions.assumeTrue(submit != null, "Submit button not found; skipping");
+    @Test
+    @Order(10)
+    public void testResponsiveDesignElements() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        // Check if responsive navigation exists (hamburguer menu for mobile)
+        try {
+            WebElement menuToggle = driver.findElement(By.cssSelector(".navbar-toggler"));
+            assertTrue(menuToggle.isDisplayed(), "Menu toggle should be displayed on mobile view");
+        } catch (NoSuchElementException ignored) {
+            // Menu toggle may not exist on this page or may not be relevant for current size
+        }
+        
+        // Check that main elements are visible
+        WebElement header = driver.findElement(By.tagName("header"));
+        assertTrue(header.isDisplayed(), "Header should be displayed");
+        
+        WebElement mainContent = driver.findElement(By.tagName("main"));
+        assertTrue(mainContent.isDisplayed(), "Main content should be displayed");
+        
+        WebElement footer = driver.findElement(By.tagName("footer"));
+        assertTrue(footer.isDisplayed(), "Footer should be displayed");
+    }
 
-        if (firstName != null) firstName.clear();
-        if (lastName != null) lastName.clear();
-        if (email != null) { email.clear(); email.sendKeys(""); }
-        if (textarea != null) textarea.clear();
+    @Test
+    @Order(11)
+    public void testPageNavigationToSections() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        // Test navigation to sections by clicking links
+        List<WebElement> navLinks = driver.findElements(By.cssSelector(".navbar-nav a"));
+        for (WebElement link : navLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && href.contains("#")) {
+                // Click the link
+                link.click();
+                
+                // Wait for smooth scroll
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ignored) {}
+                
+                // Test that the target section is reachable
+                String targetId = href.substring(href.indexOf('#') + 1);
+                try {
+                    WebElement targetSection = driver.findElement(By.id(targetId));
+                    assertTrue(targetSection.isDisplayed(), "Target section should be visible after navigation");
+                } catch (NoSuchElementException e) {
+                    // Allow for cases where section isn't directly visible due to layout
+                    // Just ensure the page doesn't break
+                }
+            }
+        }
+    }
 
-        waitClickable(submit).click();
-
-        // Check for native validation messages or page-level errors
-        List<String> msgs = new ArrayList<>();
-        if (firstName != null) msgs.add(getValidationMessage(firstName));
-        if (lastName != null) msgs.add(getValidationMessage(lastName));
-        if (email != null) msgs.add(getValidationMessage(email));
-        if (textarea != null) msgs.add(getValidationMessage(textarea));
-
-        boolean anyNative = msgs.stream().filter(Objects::nonNull).anyMatch(s -> s.trim().length() > 0);
-        boolean pageError = waitForVisible(By.cssSelector(".error, .alert-error, [data-test='error']"));
-
-        Assumptions.assumeTrue(anyNative || pageError, "No validation surfaced; skipping");
-        Assertions.assertTrue(anyNative || pageError, "Empty required fields should prevent submission");
+    @Test
+    @Order(12)
+    public void testAccessibilityAndSemanticElements() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        // Test for semantic HTML elements
+        List<WebElement> headerElements = driver.findElements(By.tagName("header"));
+        assertEquals(1, headerElements.size(), "Should have one header element");
+        
+        List<WebElement> navElements = driver.findElements(By.tagName("nav"));
+        assertTrue(navElements.size() > 0, "Should have navigation elements");
+        
+        List<WebElement> mainElements = driver.findElements(By.tagName("main"));
+        assertEquals(1, mainElements.size(), "Should have one main element");
+        
+        List<WebElement> footerElements = driver.findElements(By.tagName("footer"));
+        assertEquals(1, footerElements.size(), "Should have one footer element");
+        
+        // Test for proper heading hierarchy
+        List<WebElement> h1Elements = driver.findElements(By.tagName("h1"));
+        assertEquals(1, h1Elements.size(), "Should have one H1 element");
+        
+        // Test for alternative text on images
+        List<WebElement> imgElements = driver.findElements(By.tagName("img"));
+        for (WebElement img : imgElements) {
+            String altText = img.getAttribute("alt");
+            assertNotNull(altText, "Image should have alt text");
+        }
     }
 }

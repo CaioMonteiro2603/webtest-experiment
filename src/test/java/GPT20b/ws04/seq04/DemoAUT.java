@@ -1,391 +1,194 @@
-package GPT5.ws04.seq04;
+package GPT20b.ws04.seq04;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.firefox.*;
+import org.openqa.selenium.support.ui.*;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class KatalonTestFormHeadlessTest {
+
+    private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
-
     @BeforeAll
-    public static void setUpClass() {
+    public static void initDriver() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
     }
 
     @AfterAll
-    public static void tearDownClass() {
-        if (driver != null) driver.quit();
-    }
-
-    // ================== Helpers ==================
-
-    private void goHome() {
-        driver.get(BASE_URL);
-        wait.until(d -> d.findElements(By.tagName("form")).size() > 0
-                || d.findElements(By.xpath("//*[contains(.,'Katalon') or contains(.,'Form')]")).size() > 0);
-    }
-
-    private WebElement findFirst(By by) {
-        List<WebElement> els = driver.findElements(by);
-        return els.isEmpty() ? null : els.get(0);
-    }
-
-    private WebElement getInputLike(String idOrNameOrPlaceholder) {
-        String xp = "//input[@id='" + idOrNameOrPlaceholder + "' or @name='" + idOrNameOrPlaceholder + "' or contains(translate(@placeholder,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'" + idOrNameOrPlaceholder.toLowerCase() + "')]";
-        return findFirst(By.xpath(xp));
-    }
-
-    private WebElement getTextareaLike(String idOrNameOrPlaceholder) {
-        String xp = "//textarea[@id='" + idOrNameOrPlaceholder + "' or @name='" + idOrNameOrPlaceholder + "' or contains(translate(@placeholder,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'" + idOrNameOrPlaceholder.toLowerCase() + "')]";
-        return findFirst(By.xpath(xp));
-    }
-
-    private WebElement getSelectLike(String idOrNameOrLabelText) {
-        // by id or name
-        WebElement sel = findFirst(By.xpath("//select[@id='" + idOrNameOrLabelText + "' or @name='" + idOrNameOrLabelText + "']"));
-        if (sel != null) return sel;
-        // by label text
-        WebElement label = findFirst(By.xpath("//label[contains(.,'" + idOrNameOrLabelText + "')]"));
-        if (label != null) {
-            String forAttr = label.getAttribute("for");
-            if (forAttr != null && !forAttr.isEmpty()) {
-                sel = findFirst(By.id(forAttr));
-                if (sel != null) return sel;
-            }
-            // select near the label
-            sel = findFirst(By.xpath("//label[contains(.,'" + idOrNameOrLabelText + "')]/following::select[1]"));
+    public static void quitDriver() {
+        if (driver != null) {
+            driver.quit();
         }
-        return sel;
     }
 
-    private void setSelectByVisibleText(WebElement select, String containsText) {
-        if (select == null) return;
-        List<WebElement> options = select.findElements(By.tagName("option"));
-        for (WebElement opt : options) {
-            if (opt.getText() != null && opt.getText().toLowerCase().contains(containsText.toLowerCase())) {
-                wait.until(ExpectedConditions.elementToBeClickable(opt)).click();
-                return;
+    /* --------------------------------------------------------------------- */
+    /* Helper methods                                                         */
+    /* --------------------------------------------------------------------- */
+
+    private WebElement findElement(String... cssSelectors) {
+        for (String sel : cssSelectors) {
+            List<WebElement> elements = driver.findElements(By.cssSelector(sel));
+            if (!elements.isEmpty()) {
+                return elements.get(0);
             }
         }
-        if (!options.isEmpty()) {
-            wait.until(ExpectedConditions.elementToBeClickable(options.get(0))).click();
-        }
+        throw new NoSuchElementException("Unable to find element: " + String.join(", ", cssSelectors));
     }
 
-    private void verifyAndCloseExternalLink(WebElement link) {
-        String href = link.getAttribute("href");
-        if (href == null || href.trim().isEmpty()) return;
-        String baseDomain = deriveDomain(BASE_URL);
-        String targetDomain = deriveDomain(href);
-        boolean isExternal = !targetDomain.equalsIgnoreCase(baseDomain);
-
-        String original = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(link)).click();
-        } catch (Exception e) {
-            ((JavascriptExecutor) driver).executeScript("window.open(arguments[0],'_blank');", href);
-        }
-
-        try {
-            wait.until(d -> d.getWindowHandles().size() > before.size() || !d.getCurrentUrl().startsWith(BASE_URL));
-        } catch (TimeoutException ignored) {}
-
-        Set<String> after = driver.getWindowHandles();
-
-        if (after.size() > before.size()) {
-            for (String h : after) {
-                if (!before.contains(h)) {
-                    driver.switchTo().window(h);
-                    if (isExternal) {
-                        wait.until(ExpectedConditions.urlContains(targetDomain));
-                        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(targetDomain.toLowerCase()),
-                                "URL should contain external domain: " + targetDomain);
-                    }
-                    driver.close();
-                    driver.switchTo().window(original);
-                    return;
-                }
-            }
+    private void openAndVerifyExternalLink(String partialHref, String domain) {
+        List<WebElement> links = driver.findElements(By.cssSelector("a[href*='" + partialHref + "']"));
+        if (links.isEmpty()) return; // nothing to test
+        WebElement link = links.get(0);
+        String originalWindow = driver.getWindowHandle();
+        Set<String> handlesBefore = driver.getWindowHandles();
+        link.click();
+        Set<String> handlesAfter = driver.getWindowHandles();
+        if (handlesAfter.size() > handlesBefore.size()) {
+            handlesAfter.removeAll(handlesBefore);
+            String newWindow = handlesAfter.iterator().next();
+            driver.switchTo().window(newWindow);
+            wait.until(d -> d.getCurrentUrl().contains(domain));
+            driver.close();
+            driver.switchTo().window(originalWindow);
         } else {
-            if (isExternal && !driver.getCurrentUrl().startsWith(BASE_URL)) {
-                Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(targetDomain.toLowerCase()),
-                        "URL should contain external domain: " + targetDomain);
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlContains(deriveOrigin(BASE_URL)));
-            }
+            wait.until(d -> d.getCurrentUrl().contains(domain));
+            driver.navigate().back();
         }
     }
 
-    private String deriveDomain(String url) {
-        try {
-            URI u = URI.create(url);
-            String host = u.getHost();
-            if (host == null) return url;
-            String[] parts = host.split("\\.");
-            if (parts.length >= 2) return parts[parts.length - 2] + "." + parts[parts.length - 1];
-            return host;
-        } catch (Exception e) {
-            return url;
-        }
-    }
-
-    private String deriveOrigin(String url) {
-        try {
-            URI u = URI.create(url);
-            String scheme = u.getScheme() == null ? "https" : u.getScheme();
-            String host = u.getHost();
-            int port = u.getPort();
-            return scheme + "://" + host + (port == -1 ? "" : ":" + port);
-        } catch (Exception e) {
-            return url;
-        }
-    }
-
-    private void assertDisplayed(WebElement el, String message) {
-        Assertions.assertNotNull(el, message + " (element not found)");
-        Assertions.assertTrue(el.isDisplayed(), message + " (element not displayed)");
-    }
-
-    // ================== Tests ==================
+    /* --------------------------------------------------------------------- */
+    /* Test cases                                                             */
+    /* --------------------------------------------------------------------- */
 
     @Test
     @Order(1)
-    public void testHomeLoadsAndExternalLinks() {
-        goHome();
-        // Assert form exists
-        WebElement form = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("form")));
-        Assertions.assertTrue(form.isDisplayed(), "Main form should be visible.");
-        Assertions.assertTrue(driver.getTitle() != null, "Page title should be present.");
+    public void testEmptyFormSubmissionShowsErrors() {
+        driver.navigate().to(BASE_URL);
+        // Ensure form is present
+        WebElement form = findElement("form#contactForm, form");
+        assertNotNull(form, "Form should be present on page");
 
-        // Probe some typical inputs on this demo page for stability
-        WebElement firstName = getInputLike("first-name");
-        if (firstName == null) firstName = getInputLike("first name");
-        WebElement email = getInputLike("email");
-        assertDisplayed(firstName, "First name input should be present.");
-        assertDisplayed(email, "Email input should be present.");
+        // Click submit without filling
+        WebElement submitBtn = findElement("button[type='submit'], input[type='submit'], button.btn-primary");
+        submitBtn.click();
 
-        // External links (common on demo pages)
-        List<WebElement> externals = new ArrayList<>();
-        externals.addAll(driver.findElements(By.cssSelector("a[href*='katalon.com']")));
-        externals.addAll(driver.findElements(By.cssSelector("a[href*='github.com']")));
-        externals.addAll(driver.findElements(By.cssSelector("a[href*='twitter.com']")));
-        externals.addAll(driver.findElements(By.cssSelector("a[href*='facebook.com']")));
-        externals = externals.stream().distinct().collect(Collectors.toList());
-        for (WebElement a : externals) {
-            verifyAndCloseExternalLink(a);
-        }
-
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(deriveOrigin(BASE_URL)), "Should remain on same origin after external link checks.");
+        // Expect at least one error message displayed
+        List<WebElement> errorMessages = driver.findElements(By.cssSelector(".error, .form-error, .invalid-feedback"));
+        assertFalse(errorMessages.isEmpty(), "Expected validation error messages after empty submission");
     }
 
     @Test
     @Order(2)
-    public void testEmptySubmitShowsValidationOrPreventsSubmit() {
-        goHome();
-        WebElement submit = findFirst(By.cssSelector("button[type='submit'], input[type='submit'], button#submit"));
-        Assertions.assertNotNull(submit, "Submit button should exist.");
+    public void testValidFormSubmissionShowsSuccess() {
+        driver.navigate().to(BASE_URL);
 
-        // Try submit with empty form
-        wait.until(ExpectedConditions.elementToBeClickable(submit)).click();
-
-        // Expect either an error helper, HTML5 validation preventing navigation, or a visible message
-        boolean errorOrBlocked = false;
+        // Fill required fields if they exist
         try {
-            wait.until(d ->
-                    d.findElements(By.cssSelector(".help-block, .error, [role='alert']")).size() > 0
-                            || d.findElements(By.xpath("//*[contains(.,'required') or contains(.,'obrigat') or contains(.,'Please')]")).size() > 0
-                            || Objects.equals(d.getCurrentUrl(), BASE_URL) // remained on same page (blocked)
-            );
-            errorOrBlocked = true;
-        } catch (TimeoutException ignored) {}
-        Assertions.assertTrue(errorOrBlocked, "Expected validation feedback or blocked submission for empty form.");
+            WebElement firstName = findElement("input[name='firstName'], input#firstname, input#first-name");
+            firstName.clear();
+            firstName.sendKeys("John");
+        } catch (NoSuchElementException ignored) {}
+
+        try {
+            WebElement lastName = findElement("input[name='lastName'], input#lastname, input#last-name");
+            lastName.clear();
+            lastName.sendKeys("Doe");
+        } catch (NoSuchElementException ignored) {}
+
+        try {
+            WebElement email = findElement("input[name='email'], input#email, input#email-address");
+            email.clear();
+            email.sendKeys("john@example.com");
+        } catch (NoSuchElementException ignored) {}
+
+        try {
+            WebElement message = findElement("textarea[name='message'], textarea#message, textarea#comments");
+            message.clear();
+            message.sendKeys("This is a test message.");
+        } catch (NoSuchElementException ignored) {}
+
+        // Submit form
+        WebElement submitBtn = findElement("button[type='submit'], input[type='submit'], button.btn-primary");
+        submitBtn.click();
+
+        // Verify success indicator
+        WebElement successMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector(".alert-success, .success, .form-success, .alert[role='alert']")));
+        assertNotNull(successMsg, "Success message should be displayed after form submission");
     }
 
     @Test
     @Order(3)
-    public void testFillAndSubmitFormSuccessfully() {
-        goHome();
+    public void testCheckboxInteraction() {
+        driver.navigate().to(BASE_URL);
 
-        // Fill text inputs (robust selectors)
-        WebElement firstName = Optional.ofNullable(getInputLike("first-name")).orElse(getInputLike("first name"));
-        WebElement lastName = Optional.ofNullable(getInputLike("last-name")).orElse(getInputLike("last name"));
-        WebElement email = getInputLike("email");
-        WebElement password = Optional.ofNullable(getInputLike("password")).orElse(getInputLike("senha"));
-        WebElement company = Optional.ofNullable(getInputLike("company")).orElse(getInputLike("empresa"));
-        WebElement address = Optional.ofNullable(getInputLike("address")).orElse(getInputLike("endereco"));
-        WebElement dob = Optional.ofNullable(getInputLike("dob")).orElse(getInputLike("date"));
+        // Locate a checkbox if present
+        List<WebElement> checkboxes = driver.findElements(By.cssSelector("input[type='checkbox']"));
+        if (checkboxes.isEmpty()) return; // No checkbox to test
+        WebElement cb = checkboxes.get(0);
+        boolean isSelectedBefore = cb.isSelected();
 
-        if (firstName != null) { firstName.clear(); firstName.sendKeys("John"); }
-        if (lastName != null) { lastName.clear(); lastName.sendKeys("Tester"); }
-        if (email != null) { email.clear(); email.sendKeys("john.tester@example.com"); }
-        if (password != null) { password.clear(); password.sendKeys("Secret123!"); }
-        if (company != null) { company.clear(); company.sendKeys("Katalon QA"); }
-        if (address != null) { address.clear(); address.sendKeys("123 Testing Street"); }
-        if (dob != null) { dob.clear(); dob.sendKeys("1990-01-01"); }
+        // Toggle checkbox
+        wait.until(ExpectedConditions.elementToBeClickable(cb));
+        cb.click();
 
-        // Gender radio (pick first if present)
-        WebElement maleRadio = findFirst(By.cssSelector("input[type='radio'][name*='gender'], input[type='radio'][id*='male'], input[type='radio'][value*='male']"));
-        if (maleRadio != null) wait.until(ExpectedConditions.elementToBeClickable(maleRadio)).click();
+        // Verify state changed
+        assertNotEquals(isSelectedBefore, cb.isSelected(),
+                "Checkbox state should toggle after click");
 
-        // Role dropdown (select)
-        WebElement roleSelect = Optional.ofNullable(getSelectLike("role")).orElse(getSelectLike("Role"));
-        if (roleSelect != null) setSelectByVisibleText(roleSelect, "QA");
-
-        // Expectation multi-select or checkboxes
-        WebElement expectationSelect = Optional.ofNullable(getSelectLike("expectation")).orElse(getSelectLike("Job"));
-        if (expectationSelect != null) {
-            List<WebElement> options = expectationSelect.findElements(By.tagName("option"));
-            if (!options.isEmpty()) wait.until(ExpectedConditions.elementToBeClickable(options.get(0))).click();
-            if (options.size() > 1) wait.until(ExpectedConditions.elementToBeClickable(options.get(1))).click();
-        } else {
-            // checkbox fallbacks
-            List<WebElement> checks = driver.findElements(By.cssSelector("input[type='checkbox']"));
-            if (!checks.isEmpty()) wait.until(ExpectedConditions.elementToBeClickable(checks.get(0))).click();
-        }
-
-        // Development ways (checkboxes)
-        List<WebElement> devWays = driver.findElements(By.cssSelector("input[type='checkbox'][name*='development'], input[type='checkbox'][id*='development']"));
-        if (!devWays.isEmpty()) wait.until(ExpectedConditions.elementToBeClickable(devWays.get(0))).click();
-
-        // Comment
-        WebElement comment = Optional.ofNullable(getTextareaLike("comment")).orElse(getTextareaLike("Comments"));
-        if (comment != null) { comment.clear(); comment.sendKeys("Submitting the demo form via Selenium."); }
-
-        // Submit
-        WebElement submit = findFirst(By.cssSelector("button[type='submit'], input[type='submit'], button#submit"));
-        Assertions.assertNotNull(submit, "Submit button should exist.");
-        wait.until(ExpectedConditions.elementToBeClickable(submit)).click();
-
-        // Expect success message/modal
-        WebElement success = wait.until(d -> {
-            List<By> locs = Arrays.asList(
-                    By.xpath("//*[contains(translate(.,'SUCCESS','success'),'success')]"),
-                    By.cssSelector(".alert-success, .modal, .swal2-container"),
-                    By.id("submit-msg")
-            );
-            for (By by : locs) {
-                List<WebElement> found = d.findElements(by);
-                if (!found.isEmpty()) return found.get(0);
-            }
-            return null;
-        });
-        Assertions.assertNotNull(success, "Expected a success confirmation after submitting the form.");
-
-        // Close modal if any
-        List<WebElement> closes = driver.findElements(By.xpath("//button[contains(.,'OK') or contains(.,'Ok') or contains(.,'Close') or contains(.,'Fechar')]"));
-        if (!closes.isEmpty()) {
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(closes.get(0))).click();
-            } catch (Exception ignored) {}
-        }
+        // Toggle back
+        cb.click();
+        assertEquals(isSelectedBefore, cb.isSelected(),
+                "Checkbox should revert to original state after second click");
     }
 
     @Test
     @Order(4)
-    public void testDropdownOrSortingBehaviorIfPresent() {
-        goHome();
+    public void testDropdownSelectionChangesValue() {
+        driver.navigate().to(BASE_URL);
 
-        // Collect all selects and try switching an option to assert state change
-        List<WebElement> selects = driver.findElements(By.tagName("select"));
-        Assumptions.assumeTrue(!selects.isEmpty(), "No dropdowns found on the page; skipping.");
+        List<WebElement> selects = driver.findElements(By.cssSelector("select"));
+        if (selects.isEmpty()) return; // No dropdown present
 
         WebElement select = selects.get(0);
         List<WebElement> options = select.findElements(By.tagName("option"));
-        Assumptions.assumeTrue(options.size() > 1, "Not enough options in dropdown; skipping.");
+        if (options.size() < 2) return; // Not enough options to test
 
-        String initiallySelected = options.stream().filter(WebElement::isSelected).map(WebElement::getText).findFirst().orElse(options.get(0).getText());
-        WebElement alternative = options.stream().filter(o -> !o.getText().equals(initiallySelected)).findFirst().orElse(options.get(1));
+        // Select first option
+        options.get(0).click();
+        String firstVal = select.getAttribute("value");
 
-        wait.until(ExpectedConditions.elementToBeClickable(select)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(alternative)).click();
+        // Select second option
+        options.get(1).click();
+        String secondVal = select.getAttribute("value");
 
-        String nowSelected = select.findElements(By.tagName("option")).stream().filter(WebElement::isSelected).map(WebElement::getText).findFirst().orElse("");
-        Assertions.assertNotEquals(initiallySelected, nowSelected, "Selected option should change after user interaction.");
+        assertNotEquals(firstVal, secondVal, "Dropdown selection should change the value");
     }
 
     @Test
     @Order(5)
-    public void testInternalLinksOneLevelIfAny() {
-        goHome();
-        String origin = deriveOrigin(BASE_URL);
+    public void testExternalSocialLinks() {
+        driver.navigate().to(BASE_URL);
 
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<String> visited = new ArrayList<>();
+        // Twitter
+        openAndVerifyExternalLink("twitter.com", "twitter.com");
 
-        for (WebElement a : anchors) {
-            String href = a.getAttribute("href");
-            if (href == null || href.isEmpty()) continue;
-            if (!href.startsWith(origin)) continue; // external handled elsewhere
+        // Facebook
+        openAndVerifyExternalLink("facebook.com", "facebook.com");
 
-            // One level below the page (same origin, different path)
-            if (href.equals(driver.getCurrentUrl()) || visited.contains(href)) continue;
-
-            String current = driver.getCurrentUrl();
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(a)).click();
-            } catch (Exception e) {
-                ((JavascriptExecutor) driver).executeScript("window.location.href=arguments[0];", href);
-            }
-
-            try {
-                wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(current)));
-                Assertions.assertTrue(driver.getCurrentUrl().startsWith(origin), "Internal navigation should keep same origin.");
-            } finally {
-                visited.add(href);
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlToBe(current));
-            }
-        }
-    }
-
-    @Test
-    @Order(6)
-    public void testMenuBurgerIfPresent() {
-        goHome();
-        WebElement burger = findFirst(By.xpath("//button[contains(@class,'menu') or contains(@aria-label,'menu') or contains(.,'☰')]"));
-        Assumptions.assumeTrue(burger != null, "No burger/menu button on this page; skipping.");
-
-        wait.until(ExpectedConditions.elementToBeClickable(burger)).click();
-
-        WebElement about = findFirst(By.xpath("//a[contains(.,'About')]"));
-        if (about != null) {
-            verifyAndCloseExternalLink(about);
-        }
-
-        WebElement reset = findFirst(By.xpath("//a[contains(.,'Reset')] | //button[contains(.,'Reset')]"));
-        if (reset != null) {
-            wait.until(ExpectedConditions.elementToBeClickable(reset)).click();
-            Assertions.assertTrue(driver.findElements(By.tagName("form")).size() > 0, "Form should remain present after Reset.");
-        }
-
-        WebElement allItems = findFirst(By.xpath("//a[contains(.,'All Items') or contains(.,'Home')]"));
-        if (allItems != null) {
-            wait.until(ExpectedConditions.elementToBeClickable(allItems)).click();
-            Assertions.assertTrue(driver.getCurrentUrl().startsWith(originOfCurrent()), "Expected navigation to remain on same origin after 'All Items/Home'.");
-        }
-    }
-
-    private String originOfCurrent() {
-        return deriveOrigin(driver.getCurrentUrl());
+        // LinkedIn
+        openAndVerifyExternalLink("linkedin.com", "linkedin.com");
     }
 }

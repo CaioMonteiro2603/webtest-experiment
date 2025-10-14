@@ -1,27 +1,38 @@
-package GPT5.ws06.seq05;
+package GPT20b.ws06.seq05;
 
-import org.junit.jupiter.api.*;
+import java.time.Duration;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
-import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessSuite {
+public class AutomationIntTestingWebTest {
+
+    private static final String BASE_URL = "https://automationintesting.online/";
+    private static final String INVENTORY_URL = BASE_URL + "inventory.html";
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://automationintesting.online/";
-
     @BeforeAll
-    public static void setup() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -29,321 +40,241 @@ public class AutomationInTestingHeadlessSuite {
     }
 
     @AfterAll
-    public static void teardown() {
-        if (driver != null) driver.quit();
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
-    // ------------------------ Helpers ------------------------
+    // ------------------------------------------------------------------
+    // Utility methods
+    // ------------------------------------------------------------------
 
-    private void openBase() {
+    private void navigateToHome() {
         driver.get(BASE_URL);
-        waitUntilReady();
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should land on base URL");
-        Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Body should exist");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
 
-    private void waitUntilReady() {
-        try {
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        } catch (Exception ignored) {}
+    private void login(String username, String password) {
+        navigateToHome();
+        WebElement userField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("input[name='username'], input#username, input[name='user']")));
+        WebElement passField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("input[type='password'], input#password")));
+        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button[type='submit'], button#loginBtn, button.login")));
+        userField.clear();
+        userField.sendKeys(username);
+        passField.clear();
+        passField.sendKeys(password);
+        loginBtn.click();
+        wait.until(ExpectedConditions.urlToBe(INVENTORY_URL));
     }
 
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
+    private boolean isLoggedIn() {
+        return driver.findElements(By.linkText("Logout")).stream()
+                .anyMatch(el -> el.isDisplayed() && el.isEnabled());
     }
 
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        return null;
-    }
-
-    private boolean present(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    private String hostOf(String url) {
-        try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
-    }
-
-    private void clearAndType(WebElement el, String text) {
-        el.clear();
-        el.sendKeys(text);
-        Assertions.assertEquals(text, el.getAttribute("value"), "Typed value should reflect in input");
-    }
-
-    private boolean waitVisible(By by) {
-        try {
-            WebElement el = wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-            return el.isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
+    private void logout() {
+        List<WebElement> logoutLinks = driver.findElements(By.linkText("Logout"));
+        if (!logoutLinks.isEmpty() && logoutLinks.get(0).isDisplayed()) {
+            WebElement logout = logoutLinks.get(0);
+            wait.until(ExpectedConditions.elementToBeClickable(logout)).click();
+            wait.until(ExpectedConditions.urlToBe(BASE_URL));
         }
     }
 
-    private void handleExternalLink(WebElement link) {
-        String originalWindow = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        String originalHost = hostOf(driver.getCurrentUrl());
-        String href = link.getAttribute("href");
-        if (href == null || href.isBlank()) return;
+    private String getFirstItemName() {
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector(".inventory_item_name"))).getText();
+    }
 
-        waitClickable(link).click();
-        Set<String> after = driver.getWindowHandles();
-
-        if (after.size() > before.size()) {
-            // Opened in new tab/window
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(d -> d.getCurrentUrl() != null && d.getCurrentUrl().startsWith("http"));
-            String newHost = hostOf(driver.getCurrentUrl());
-            Assertions.assertNotEquals(originalHost, newHost, "External link should navigate to a different host");
-            driver.close();
-            driver.switchTo().window(originalWindow);
-        } else {
-            // Navigated in same tab
-            wait.until(d -> !hostOf(d.getCurrentUrl()).equals(originalHost));
-            String newHost = hostOf(driver.getCurrentUrl());
-            Assertions.assertNotEquals(originalHost, newHost, "External link should navigate to a different host");
-            driver.navigate().back();
-            wait.until(d -> hostOf(d.getCurrentUrl()).equals(originalHost));
-            waitUntilReady();
+    private void resetAppState() {
+        List<WebElement> resetLinks = driver.findElements(By.linkText("Reset App State"));
+        if (!resetLinks.isEmpty() && resetLinks.get(0).isDisplayed()) {
+            WebElement reset = resetLinks.get(0);
+            wait.until(ExpectedConditions.elementToBeClickable(reset)).click();
+            wait.until(ExpectedConditions.urlToBe(INVENTORY_URL));
         }
     }
 
-    // ------------------------ Tests ------------------------
+    // ------------------------------------------------------------------
+    // Tests
+    // ------------------------------------------------------------------
 
     @Test
     @Order(1)
-    public void basePageLoadsWithCoreSections() {
-        openBase();
-        // Header and navigation should exist
-        Assertions.assertTrue(present(By.cssSelector("header, .navbar, nav")), "Header/nav should be present");
-        // Hero/main content should exist
-        Assertions.assertTrue(present(By.cssSelector("main, .hero, .container")), "Main/hero container should be present");
-        // Footer should exist
-        Assertions.assertTrue(present(By.tagName("footer")), "Footer should be present");
+    public void testHomePageLoads() {
+        navigateToHome();
+        String title = driver.getTitle();
+        assertNotNull(title, "Page title should not be null");
+        assertTrue(title.length() > 0, "Page title should not be empty");
     }
 
     @Test
     @Order(2)
-    public void navigateInternalTopNavLinksOneLevelBelow() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        String originalUrl = driver.getCurrentUrl();
-
-        // Collect top nav/internal links from header/footer/body
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<WebElement> internal = new ArrayList<>();
-        for (WebElement a : anchors) {
-            String href = a.getAttribute("href");
-            if (href == null || href.isBlank()) continue;
-            if (!href.startsWith("http")) continue;
-            String host = hostOf(href);
-            if (baseHost.equals(host)) internal.add(a);
-        }
-        Assumptions.assumeTrue(!internal.isEmpty(), "No internal links found; skipping");
-
-        // Visit up to 3 internal links that are at most one level below the base path
-        int visited = 0;
-        for (WebElement link : internal) {
-            if (visited >= 3) break;
-            String href = link.getAttribute("href");
-            if (href == null) continue;
-
-            try {
-                URI base = URI.create(originalUrl);
-                URI dest = URI.create(href);
-                String basePath = base.getPath();
-                String destPath = dest.getPath();
-
-                // Normalize trailing slashes
-                if (basePath.endsWith("/")) basePath = basePath.substring(0, basePath.length() - 1);
-                if (destPath.endsWith("/")) destPath = destPath.substring(0, destPath.length() - 1);
-
-                int baseDepth = Math.max(0, basePath.replaceAll("^/+", "").split("/").length);
-                int destDepth = Math.max(0, destPath.replaceAll("^/+", "").split("/").length);
-                if (destDepth > baseDepth + 1) continue; // skip deeper than one level
-
-                String before = driver.getCurrentUrl();
-                waitClickable(link).click();
-                wait.until(d -> !d.getCurrentUrl().equals(before));
-                waitUntilReady();
-                Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on same host");
-                Assertions.assertTrue(present(By.tagName("body")), "Internal page should render body");
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlToBe(before));
-                visited++;
-            } catch (Exception e) {
-                // Recover to base and continue
-                driver.get(BASE_URL);
-                waitUntilReady();
-            }
-        }
-
-        Assertions.assertTrue(visited >= 1, "Should visit at least one internal link");
+    public void testLoginValid() {
+        login("caio@gmail.com", "123");
+        assertTrue(isLoggedIn(), "User should be logged in after valid credentials");
+        assertTrue(driver.getCurrentUrl().contains("inventory"), "URL should contain inventory after login");
+        assertFalse(driver.findElements(By.cssSelector(".inventory_item")).isEmpty(),
+                "Inventory items should be displayed after login");
+        logout();
     }
 
     @Test
     @Order(3)
-    public void contactFormPositiveFlow() {
-        openBase();
-
-        // Scroll to contact form if present
-        WebElement name = firstPresent(By.id("name"), By.name("name"));
-        WebElement email = firstPresent(By.id("email"), By.name("email"), By.cssSelector("input[type='email']"));
-        WebElement phone = firstPresent(By.id("phone"), By.name("phone"), By.cssSelector("input[type='tel']"));
-        WebElement subject = firstPresent(By.id("subject"), By.name("subject"));
-        WebElement description = firstPresent(By.id("description"), By.name("description"), By.cssSelector("textarea"));
-        WebElement submit = firstPresent(By.id("submitContact"), By.cssSelector("button[type='submit'], .contact .btn"));
-
-        Assumptions.assumeTrue(name != null && email != null && phone != null && subject != null && description != null && submit != null,
-                "Contact form fields not found; skipping");
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", name);
-
-        clearAndType(name, "John Tester");
-        clearAndType(email, "john.tester@example.com");
-        clearAndType(phone, "1234567890");
-        clearAndType(subject, "Booking inquiry");
-        clearAndType(description, "Automation test message for contact form.");
-
-        waitClickable(submit).click();
-
-        // Expect a success indication on page
-        boolean success =
-                waitVisible(By.cssSelector(".alert-success, .alert.alert-success, [data-test='contact-success'], .contact .alert-success"));
-        // Some builds display toast/notification (guard)
-        success = success || waitVisible(By.cssSelector(".toast-success, .notification-success"));
-
-        Assertions.assertTrue(success, "Submitting a valid contact form should show success indicator");
+    public void testLoginInvalidShowsError() {
+        navigateToHome();
+        WebElement userField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("input[name='username'], input#username, input[name='user']")));
+        WebElement passField = wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.cssSelector("input[type='password'], input#password")));
+        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button[type='submit'], button#loginBtn, button.login")));
+        userField.clear();
+        userField.sendKeys("wrong");
+        passField.clear();
+        passField.sendKeys("wrong");
+        loginBtn.click();
+        List<WebElement> errors = driver.findElements(By.cssSelector(".error, .alert, .error-message"));
+        assertFalse(errors.isEmpty(), "Error message should appear with invalid credentials");
+        assertTrue(driver.getCurrentUrl().contains("index"), "URL should remain on home after failed login");
+        logout();
     }
 
     @Test
     @Order(4)
-    public void contactFormInvalidEmailShowsValidation() {
-        openBase();
-        WebElement name = firstPresent(By.id("name"), By.name("name"));
-        WebElement email = firstPresent(By.id("email"), By.name("email"), By.cssSelector("input[type='email']"));
-        WebElement phone = firstPresent(By.id("phone"), By.name("phone"), By.cssSelector("input[type='tel']"));
-        WebElement subject = firstPresent(By.id("subject"), By.name("subject"));
-        WebElement description = firstPresent(By.id("description"), By.name("description"), By.cssSelector("textarea"));
-        WebElement submit = firstPresent(By.id("submitContact"), By.cssSelector("button[type='submit'], .contact .btn"));
+    public void testSortingDropdownChangesOrder() {
+        login("caio@gmail.com", "123");
+        List<WebElement> sortSelectElems = driver.findElements(By.cssSelector("select#sort-select, select#sort"));
+        assertFalse(sortSelectElems.isEmpty(), "Sorting dropdown should exist on inventory page");
+        WebElement sortSelect = sortSelectElems.get(0);
+        Select sort = new Select(sortSelect);
+        int optionCount = sort.getOptions().size();
+        assertTrue(optionCount > 1, "Sorting dropdown should have multiple options");
 
-        Assumptions.assumeTrue(name != null && email != null && phone != null && subject != null && description != null && submit != null,
-                "Contact form fields not found; skipping");
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", name);
-
-        clearAndType(name, "A");
-        clearAndType(email, "not-an-email");
-        clearAndType(phone, "111");
-        clearAndType(subject, "X");
-        clearAndType(description, "Y");
-
-        waitClickable(submit).click();
-
-        // Look for field errors or error alert
-        boolean fieldError = waitVisible(By.cssSelector(".error, .help-block, .invalid-feedback, input:invalid"));
-        boolean alertError = waitVisible(By.cssSelector(".alert-danger, .alert.alert-danger, [data-test='contact-error']"));
-
-        Assumptions.assumeTrue(fieldError || alertError, "No validation surfaced; skipping");
-        Assertions.assertTrue(fieldError || alertError, "Invalid email should trigger validation feedback");
+        String firstNameBefore = getFirstItemName();
+        for (int i = 0; i < optionCount; i++) {
+            sort.selectByIndex(i);
+            // Wait for change to apply
+            wait.until(ExpectedConditions.stalenessOf(sortSelect));
+            sort = new Select(sortSelect);
+            String firstNameAfter = getFirstItemName();
+            if (i > 0) {
+                assertNotEquals(firstNameBefore, firstNameAfter,
+                        "Sorting option selection did not change item order");
+                firstNameBefore = firstNameAfter;
+            }
+        }
+        resetAppState();
+        logout();
     }
 
     @Test
     @Order(5)
-    public void optionalSelectDropdownChangesSelectionIfPresent() {
-        openBase();
-        // If any select exists on the page, exercise a basic selection change
-        List<WebElement> selects = driver.findElements(By.tagName("select"));
-        Assumptions.assumeTrue(!selects.isEmpty(), "No select dropdown present; skipping");
+    public void testBurgerMenuLinks() {
+        login("caio@gmail.com", "123");
+        List<WebElement> burgerBtns = driver.findElements(By.cssSelector("button[aria-label='Open Menu'], button.menu-btn, button#burger"));
+        assertFalse(burgerBtns.isEmpty(), "Burger menu button should be present");
+        WebElement burger = burgerBtns.get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(burger)).click();
 
-        WebElement selectEl = selects.get(0);
-        Select select = new Select(selectEl);
-        List<WebElement> options = select.getOptions();
-        Assumptions.assumeTrue(options.size() >= 2, "Not enough options to test selection; skipping");
+        List<WebElement> menuLinks = driver.findElements(By.cssSelector(".menu a, .nav a, .menu-item a"));
+        assertFalse(menuLinks.isEmpty(), "Menu links should appear after opening burger menu");
 
-        select.selectByIndex(0);
-        String first = select.getFirstSelectedOption().getText();
+        boolean hasAllItems = false, hasAbout = false, hasLogout = false, hasReset = false;
+        for (WebElement link : menuLinks) {
+            String text = link.getText().trim().toLowerCase();
+            if (text.contains("all items") || text.contains("inventory")) hasAllItems = true;
+            if (text.contains("about")) hasAbout = true;
+            if (text.contains("logout")) hasLogout = true;
+            if (text.contains("reset")) hasReset = true;
+        }
+        assertTrue(hasAllItems, "All Items link missing in burger menu");
+        assertTrue(hasAbout, "About link missing in burger menu");
+        assertTrue(hasLogout, "Logout link missing in burger menu");
+        assertTrue(hasReset, "Reset App State link missing in burger menu");
 
-        select.selectByIndex(1);
-        String second = select.getFirstSelectedOption().getText();
+        // Test About external navigation
+        for (WebElement link : menuLinks) {
+            if (link.getText().trim().equalsIgnoreCase("About")) {
+                String original = driver.getWindowHandle();
+                wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+                wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
+                Set<String> windows = driver.getWindowHandles();
+                for (String win : windows) {
+                    if (!win.equals(original)) {
+                        driver.switchTo().window(win);
+                        assertTrue(driver.getCurrentUrl().contains("github.com") || driver.getCurrentUrl().startsWith("https://"),
+                                "About link should navigate to an external domain");
+                        driver.close();
+                        driver.switchTo().window(original);
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
-        Assertions.assertNotEquals(first, second, "Selecting a different option should change the selected text");
+        // Reset App State
+        for (WebElement link : menuLinks) {
+            if (link.getText().trim().equalsIgnoreCase("Reset App State")) {
+                wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+                wait.until(ExpectedConditions.urlToBe(INVENTORY_URL));
+                break;
+            }
+        }
+
+        // Logout
+        for (WebElement link : menuLinks) {
+            if (link.getText().trim().equalsIgnoreCase("Logout")) {
+                wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+                wait.until(ExpectedConditions.urlToBe(BASE_URL));
+                break;
+            }
+        }
     }
 
     @Test
     @Order(6)
-    public void externalLinksInFooterOrBodyOpenDifferentDomain() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
+    public void testFooterSocialExternalLinks() {
+        login("caio@gmail.com", "123");
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertFalse(footerLinks.isEmpty(), "Footer should contain links");
+        Set<String> expectedDomains = new HashSet<>();
+        expectedDomains.add("twitter.com");
+        expectedDomains.add("facebook.com");
+        expectedDomains.add("linkedin.com");
 
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<WebElement> external = anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    if (href == null || href.isBlank()) return false;
-                    if (!href.startsWith("http")) return false;
-                    String host = hostOf(href);
-                    return !host.equals(baseHost);
-                })
-                .collect(Collectors.toList());
-
-        Assumptions.assumeTrue(!external.isEmpty(), "No external links found; skipping");
-
-        int validated = 0;
-        for (WebElement link : external) {
-            if (validated >= 3) break; // limit to reduce flakiness
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href == null || href.isEmpty()) continue;
+            String host;
             try {
-                handleExternalLink(link);
-                validated++;
+                host = new java.net.URI(href).getHost();
+                if (host == null) continue;
             } catch (Exception e) {
-                // If a popup blocker or CSP prevents opening, continue with others
-                driver.get(BASE_URL);
-                waitUntilReady();
+                continue;
+            }
+            if (!expectedDomains.contains(host.toLowerCase())) continue;
+
+            String original = driver.getWindowHandle();
+            wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+            wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
+            Set<String> windows = driver.getWindowHandles();
+            for (String win : windows) {
+                if (!win.equals(original)) {
+                    driver.switchTo().window(win);
+                    assertTrue(driver.getCurrentUrl().contains(host),
+                            "External link URL does not contain expected domain: " + host);
+                    driver.close();
+                    driver.switchTo().window(original);
+                    break;
+                }
             }
         }
-        Assertions.assertTrue(validated > 0, "At least one external link should be validated");
-    }
-
-    @Test
-    @Order(7)
-    public void bookingWidgetPresenceAndBasicInteractionIfAvailable() {
-        openBase();
-        // Typical booking widget inputs: checkin/checkout and name fields might exist
-        WebElement checkin = firstPresent(By.id("checkin"), By.name("checkin"), By.cssSelector("input[name='checkin']"));
-        WebElement checkout = firstPresent(By.id("checkout"), By.name("checkout"), By.cssSelector("input[name='checkout']"));
-        WebElement roomName = firstPresent(By.id("roomname"), By.name("roomname"));
-        WebElement deposit = firstPresent(By.id("depositpaid"), By.name("depositpaid"));
-        WebElement bookBtn = firstPresent(By.cssSelector("button#book, button[name='book'], .booking .btn"));
-
-        Assumptions.assumeTrue(checkin != null && checkout != null, "Booking date inputs not present; skipping");
-
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkin);
-
-        // Try to type simple dates; if widget prevents typing, ignore failures gracefully
-        try { clearAndType(checkin, "2025-01-01"); } catch (Exception ignored) {}
-        try { clearAndType(checkout, "2025-01-02"); } catch (Exception ignored) {}
-
-        if (roomName != null) {
-            try { clearAndType(roomName, "Family Room"); } catch (Exception ignored) {}
-        }
-        if (deposit != null) {
-            List<WebElement> radios = driver.findElements(By.cssSelector("input[name='depositpaid'][type='radio']"));
-            if (!radios.isEmpty()) {
-                waitClickable(radios.get(0)).click();
-                Assertions.assertTrue(radios.get(0).isSelected(), "Deposit radio should toggle");
-            }
-        }
-
-        if (bookBtn != null) {
-            // Do not actually submit a booking to avoid polluting demo data; assert clickable
-            Assertions.assertTrue(bookBtn.isDisplayed(), "Book button should be displayed");
-            Assertions.assertTrue(bookBtn.isEnabled(), "Book button should be enabled");
-        }
+        logout();
     }
 }

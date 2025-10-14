@@ -1,4 +1,4 @@
-package GPT5.ws02.seq02;
+package deepseek.ws02.seq02;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -6,24 +6,21 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankHeadlessE2ETest {
-
+public class ParaBankTest {
     private static WebDriver driver;
     private static WebDriverWait wait;
-
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
-    private static final String PROVIDED_LOGIN = "caio@gmail.com";
-    private static final String PROVIDED_PASSWORD = "123";
+    private static final String USERNAME = "caio@gmail.com";
+    private static final String PASSWORD = "123";
 
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -31,202 +28,171 @@ public class ParaBankHeadlessE2ETest {
     }
 
     @AfterAll
-    public static void tearDown() {
-        if (driver != null) driver.quit();
-    }
-
-    // -------------------- Helpers --------------------
-
-    private void goHome() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("leftPanel")));
-    }
-
-    private void tryLogin(String username, String password) {
-        goHome();
-        WebElement user = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
-        user.clear();
-        user.sendKeys(username);
-        WebElement pass = driver.findElement(By.name("password"));
-        pass.clear();
-        pass.sendKeys(password);
-        WebElement loginBtn = driver.findElement(By.cssSelector("#loginPanel input.button[type='submit']"));
-        loginBtn.click();
-    }
-
-    private boolean isLoggedIn() {
-        // When logged in, "Accounts Overview" page appears and "Log Out" link is visible
-        boolean hasLogout = driver.findElements(By.linkText("Log Out")).size() > 0;
-        boolean accountsHeader = driver.findElements(By.cssSelector("#rightPanel h1")).stream()
-                .anyMatch(h -> h.getText().toLowerCase().contains("accounts overview"));
-        return hasLogout || accountsHeader;
-    }
-
-    private void logoutIfLoggedIn() {
-        if (driver.findElements(By.linkText("Log Out")).size() > 0) {
-            wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginPanel")));
+    public static void teardown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
-
-    private void openInternalLink(String linkText, String expectedPathFragment) {
-        goHome();
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText))).click();
-        wait.until(ExpectedConditions.urlContains(expectedPathFragment));
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedPathFragment),
-                "URL should contain " + expectedPathFragment);
-    }
-
-    private void clickExternalAndAssert(By locator, String expectedDomainFragment) {
-        if (driver.findElements(locator).size() == 0) return; // optional
-        String original = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        String href = link.getAttribute("href");
-        link.click();
-        // Either new tab/window or same tab
-        wait.until(d -> d.getWindowHandles().size() > before.size() || !d.getCurrentUrl().equals(BASE_URL));
-
-        if (driver.getWindowHandles().size() > before.size()) {
-            Set<String> after = driver.getWindowHandles();
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(d -> d.getCurrentUrl().toLowerCase().contains(expectedDomainFragment));
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomainFragment),
-                    "External URL should contain " + expectedDomainFragment);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(d -> d.getCurrentUrl().toLowerCase().contains(expectedDomainFragment));
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomainFragment),
-                    "External URL should contain " + expectedDomainFragment);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.urlContains("/parabank"));
-        }
-    }
-
-    // -------------------- Tests --------------------
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
-        goHome();
-        String title = driver.getTitle().toLowerCase();
-        Assertions.assertTrue(title.contains("parabank"), "Title should contain 'ParaBank'");
-        Assertions.assertTrue(driver.findElement(By.id("leftPanel")).isDisplayed(), "Left navigation panel should be visible");
+    public void testInvalidLogin() {
+        driver.get(BASE_URL);
+        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement password = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.cssSelector("input[value='Log In']"));
+
+        username.sendKeys("invalid@email.com");
+        password.sendKeys("wrongpass");
+        loginButton.click();
+
+        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("p.error")));
+        Assertions.assertTrue(errorElement.getText().contains("An internal error has occurred and has been logged"), 
+            "Expected error message for invalid login");
     }
 
     @Test
     @Order(2)
-    public void testInvalidLoginShowsError() {
-        tryLogin(PROVIDED_LOGIN, PROVIDED_PASSWORD);
-        // Most likely invalid credentials -> error message within #rightPanel
-        WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#rightPanel .error")));
-        Assertions.assertTrue(msg.getText().toLowerCase().contains("could not be verified")
-                        || msg.getText().toLowerCase().contains("error"),
-                "Invalid login should show an error message");
+    public void testValidLogin() {
+        driver.get(BASE_URL);
+        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement password = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.cssSelector("input[value='Log In']"));
+
+        username.sendKeys(USERNAME);
+        password.sendKeys(PASSWORD);
+        loginButton.click();
+
+        wait.until(ExpectedConditions.urlContains("overview.htm"));
+        WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(welcomeMessage.getText().contains("Accounts Overview"),
+            "Expected to see Accounts Overview after login");
     }
 
     @Test
     @Order(3)
-    public void testRegisterNewUserThenLoginLogout() {
-        goHome();
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Register"))).click();
-        wait.until(ExpectedConditions.urlContains("register.htm"));
+    public void testAccountNavigation() {
+        login();
+        
+        // Test Open New Account
+        WebElement openAccountLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Open New Account")));
+        openAccountLink.click();
+        wait.until(ExpectedConditions.urlContains("openaccount.htm"));
+        WebElement openAccountHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(openAccountHeader.getText().contains("Open New Account"),
+            "Expected to be on Open New Account page");
 
-        String uniqueUser = "qauser" + System.currentTimeMillis();
+        // Test Accounts Overview
+        WebElement accountsOverviewLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Accounts Overview")));
+        accountsOverviewLink.click();
+        wait.until(ExpectedConditions.urlContains("overview.htm"));
+        WebElement accountsOverviewHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(accountsOverviewHeader.getText().contains("Accounts Overview"),
+            "Expected to be on Accounts Overview page");
 
-        driver.findElement(By.id("customer.firstName")).sendKeys("QA");
-        driver.findElement(By.id("customer.lastName")).sendKeys("User");
-        driver.findElement(By.id("customer.address.street")).sendKeys("123 Test St");
-        driver.findElement(By.id("customer.address.city")).sendKeys("Testville");
-        driver.findElement(By.id("customer.address.state")).sendKeys("TS");
-        driver.findElement(By.id("customer.address.zipCode")).sendKeys("12345");
-        driver.findElement(By.id("customer.phoneNumber")).sendKeys("5551234567");
-        driver.findElement(By.id("customer.ssn")).sendKeys("123-45-6789");
-        driver.findElement(By.id("customer.username")).sendKeys(uniqueUser);
-        driver.findElement(By.id("customer.password")).sendKeys("Pass123!");
-        driver.findElement(By.id("repeatedPassword")).sendKeys("Pass123!");
-
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Register']"))).click();
-
-        // Success message and logged in
-        WebElement msg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#rightPanel p")));
-        Assertions.assertTrue(msg.getText().toLowerCase().contains("account was created")
-                        || isLoggedIn(),
-                "Registration should succeed and user should be logged in");
-
-        // Log out
-        logoutIfLoggedIn();
-        Assertions.assertTrue(driver.getCurrentUrl().contains("/index.htm")
-                || driver.findElement(By.id("loginPanel")).isDisplayed(), "After logout, should be on login page");
+        // Test Transfer Funds
+        WebElement transferFundsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Transfer Funds")));
+        transferFundsLink.click();
+        wait.until(ExpectedConditions.urlContains("transfer.htm"));
+        WebElement transferHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(transferHeader.getText().contains("Transfer Funds"),
+            "Expected to be on Transfer Funds page");
     }
 
     @Test
     @Order(4)
-    public void testInternalNavigationAboutServicesContact() {
-        // About Us
-        openInternalLink("About Us", "about.htm");
-        Assertions.assertTrue(driver.findElements(By.cssSelector("#rightPanel h1")).stream()
-                .anyMatch(h -> h.getText().toLowerCase().contains("about")), "About page should have a header");
+    public void testBillPayFunctionality() {
+        login();
+        WebElement billPayLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Bill Pay")));
+        billPayLink.click();
+        wait.until(ExpectedConditions.urlContains("billpay.htm"));
 
-        // Services
-        openInternalLink("Services", "services.htm");
-        Assertions.assertTrue(driver.findElements(By.cssSelector("#rightPanel h1")).stream()
-                .anyMatch(h -> h.getText().toLowerCase().contains("services")), "Services page should have a header");
+        WebElement payeeName = wait.until(ExpectedConditions.elementToBeClickable(By.name("payee.name")));
+        WebElement address = driver.findElement(By.name("payee.address.street"));
+        WebElement city = driver.findElement(By.name("payee.address.city"));
+        WebElement state = driver.findElement(By.name("payee.address.state"));
+        WebElement zipCode = driver.findElement(By.name("payee.address.zipCode"));
+        WebElement phone = driver.findElement(By.name("payee.phoneNumber"));
+        WebElement account = driver.findElement(By.name("payee.accountNumber"));
+        WebElement verifyAccount = driver.findElement(By.name("verifyAccount"));
+        WebElement amount = driver.findElement(By.name("amount"));
+        WebElement sendPaymentButton = driver.findElement(By.cssSelector("input[value='Send Payment']"));
 
-        // Contact
-        openInternalLink("Contact", "contact.htm");
-        Assertions.assertTrue(driver.findElements(By.cssSelector("#rightPanel h1")).stream()
-                .anyMatch(h -> h.getText().toLowerCase().contains("customer care")), "Contact page should have a header");
+        payeeName.sendKeys("Test Payee");
+        address.sendKeys("123 Test St");
+        city.sendKeys("Test City");
+        state.sendKeys("CA");
+        zipCode.sendKeys("12345");
+        phone.sendKeys("1234567890");
+        account.sendKeys("12345");
+        verifyAccount.sendKeys("12345");
+        amount.sendKeys("100");
+        sendPaymentButton.click();
+
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(successMessage.getText().contains("Bill Payment Complete"),
+            "Expected bill payment success message");
     }
 
     @Test
     @Order(5)
-    public void testContactFormSubmission() {
-        openInternalLink("Contact", "contact.htm");
-        driver.findElement(By.name("name")).sendKeys("QA Bot");
-        driver.findElement(By.name("email")).sendKeys("qa.bot@example.com");
-        driver.findElement(By.name("phone")).sendKeys("5550001111");
-        driver.findElement(By.name("message")).sendKeys("Automated message from Selenium test.");
-        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Send to Customer Care']"))).click();
+    public void testFooterLinks() {
+        login();
+        String originalWindow = driver.getWindowHandle();
 
-        // Confirmation
-        WebElement conf = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#rightPanel p")));
-        Assertions.assertTrue(conf.getText().toLowerCase().contains("a customer care representative"),
-                "Contact form should confirm a representative will contact you");
+        // Test About Us link
+        WebElement aboutUsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("About Us")));
+        aboutUsLink.click();
+        wait.until(ExpectedConditions.urlContains("about.htm"));
+        WebElement aboutHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("h1.title")));
+        Assertions.assertTrue(aboutHeader.getText().contains("ParaSoft Demo Website"),
+            "Expected to be on About Us page");
+
+        // Test Services link (external)
+        driver.get(BASE_URL);
+        WebElement servicesLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Services")));
+        servicesLink.click();
+        assertExternalLink("parasoft.com", originalWindow);
     }
 
-    @Test
-    @Order(6)
-    public void testFooterExternalLinks() {
-        goHome();
-        // Parasoft corporate link(s)
-        clickExternalAndAssert(By.cssSelector("a[href*='parasoft.com']"), "parasoft.com");
+    private void login() {
+        if (!driver.getCurrentUrl().contains("overview.htm")) {
+            driver.get(BASE_URL);
+            WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+            WebElement password = driver.findElement(By.name("password"));
+            WebElement loginButton = driver.findElement(By.cssSelector("input[value='Log In']"));
 
-        // Social links if present
-        clickExternalAndAssert(By.cssSelector("a[href*='twitter.com']"), "twitter.com");
-        clickExternalAndAssert(By.cssSelector("a[href*='facebook.com']"), "facebook.com");
-        clickExternalAndAssert(By.cssSelector("a[href*='linkedin.com']"), "linkedin.com");
-    }
-
-    @Test
-    @Order(7)
-    public void testOpenAdminPageReadOnly() {
-        goHome();
-        // Admin Page link may be available on the left panel
-        List<WebElement> adminLinks = driver.findElements(By.linkText("Admin Page"));
-        if (!adminLinks.isEmpty()) {
-            wait.until(ExpectedConditions.elementToBeClickable(adminLinks.get(0))).click();
-            wait.until(ExpectedConditions.urlContains("admin.htm"));
-            Assertions.assertTrue(driver.findElements(By.cssSelector("#rightPanel h1")).stream()
-                    .anyMatch(h -> h.getText().toLowerCase().contains("administration")
-                            || h.getText().toLowerCase().contains("admin")),
-                    "Admin page should have an administration header");
-        } else {
-            // If not present, assert home still OK
-            Assertions.assertTrue(true, "Admin Page link not present; skipping without failure.");
+            username.sendKeys(USERNAME);
+            password.sendKeys(PASSWORD);
+            loginButton.click();
+            wait.until(ExpectedConditions.urlContains("overview.htm"));
         }
+    }
+
+    private void assertExternalLink(String expectedDomain, String originalWindow) {
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
+            "Expected to be on " + expectedDomain + " after clicking external link");
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 }

@@ -1,371 +1,377 @@
-package GPT5.ws08.seq05;
+package Qwen3.ws08.seq05;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreHeadlessSuite {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class JPetStoreTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://jpetstore.aspectran.com/";
-
     @BeforeAll
     public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void teardown() {
-        if (driver != null) driver.quit();
-    }
-
-    // ---------------------- Helpers ----------------------
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        waitDocumentReady();
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should land on base URL");
-        Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Body should be present");
-        dismissOverlaysIfAny();
-    }
-
-    private void waitDocumentReady() {
-        try {
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        } catch (Exception ignored) {}
-    }
-
-    private void dismissOverlaysIfAny() {
-        // Best-effort cookie banners / modals
-        List<By> candidates = Arrays.asList(
-                By.cssSelector("button[id*='accept'],button[class*='accept'],button[aria-label*='accept']"),
-                By.cssSelector("button[class*='agree'],button[id*='agree']"),
-                By.cssSelector(".cookie-accept,.cc-allow,.cc-accept,.cookiebar-close,.cc-dismiss,.btn-close,.close")
-        );
-        for (By by : candidates) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) {
-                try {
-                    wait.until(ExpectedConditions.elementToBeClickable(els.get(0))).click();
-                    break;
-                } catch (Exception ignored) {}
-            }
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private String hostOf(String url) {
-        try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
-    }
-
-    private int depthOfPath(String path) {
-        if (path == null) return 0;
-        String p = path;
-        if (p.startsWith("/")) p = p.substring(1);
-        if (p.endsWith("/")) p = p.substring(0, p.length() - 1);
-        if (p.isEmpty()) return 0;
-        return p.split("/").length;
-    }
-
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        return null;
-    }
-
-    private void handleExternalLink(WebElement link) {
-        String originalWindow = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        String baseHost = hostOf(driver.getCurrentUrl());
-
-        waitClickable(link).click();
-
-        // wait for new tab or navigation
-        try {
-            wait.until(d -> d.getWindowHandles().size() > before.size() || !hostOf(d.getCurrentUrl()).equals(baseHost));
-        } catch (TimeoutException ignored) {}
-
-        Set<String> after = driver.getWindowHandles();
-        if (after.size() > before.size()) {
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            waitDocumentReady();
-            Assertions.assertNotEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should be on an external domain");
-            driver.close();
-            driver.switchTo().window(originalWindow);
-        } else {
-            waitDocumentReady();
-            Assertions.assertNotEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should have navigated to an external domain");
-            driver.navigate().back();
-            waitDocumentReady();
-        }
-    }
-
-    // ---------------------- Tests ----------------------
 
     @Test
     @Order(1)
-    public void baseLoads_CoreUIVisible() {
-        openBase();
-        Assertions.assertTrue(driver.getTitle().toLowerCase().contains("jpetstore"), "Title should mention JPetStore");
-
-        // Header nav and footer should exist
-        Assertions.assertTrue(driver.findElements(By.cssSelector("header, .header, #Header")).size() > 0, "Header should exist");
-        Assertions.assertTrue(driver.findElements(By.cssSelector("footer, .footer, #Footer")).size() > 0, "Footer should exist");
-
-        // Category tiles or links should be visible
-        Assertions.assertTrue(
-                driver.findElements(By.partialLinkText("Fish")).size() > 0 ||
-                driver.findElements(By.partialLinkText("Dogs")).size() > 0 ||
-                driver.findElements(By.partialLinkText("Cats")).size() > 0 ||
-                driver.findElements(By.cssSelector("a[href*='catalog']")).size() > 0,
-                "At least one category link should be present");
+    public void testPageLoadAndTitle() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        String pageTitle = driver.getTitle();
+        assertTrue(pageTitle.contains("JPetStore"), "Page title should contain JPetStore");
+        
+        WebElement header = driver.findElement(By.cssSelector("header h1"));
+        assertTrue(header.isDisplayed(), "Header should be displayed");
+        assertEquals("JPetStore", header.getText(), "Header text should match expected value");
     }
 
     @Test
     @Order(2)
-    public void quickSearch_Fish_ShowsResults() {
-        openBase();
-        WebElement search = firstPresent(
-                By.name("keyword"),
-                By.cssSelector("input[type='search']"),
-                By.cssSelector("input[placeholder*='Search']")
-        );
-        Assumptions.assumeTrue(search != null, "Search input not available; skipping");
-        search.clear();
-        search.sendKeys("fish");
-        search.sendKeys(Keys.ENTER);
-
-        // Assert results: product table or list appears, or URL changes
-        boolean hasResults = false;
-        try {
-            hasResults = wait.until(d ->
-                    d.getCurrentUrl().contains("search") ||
-                    d.findElements(By.cssSelector("table, .product, .product-list, #Catalog")).size() > 0);
-        } catch (TimeoutException ignored) {}
-        Assertions.assertTrue(hasResults, "Search should navigate to a results view or show product list");
-
-        // If there are product rows, assert at least one row mentioning fish
-        List<WebElement> rows = driver.findElements(By.cssSelector("table tr, .product"));
-        if (!rows.isEmpty()) {
-            boolean mentionsFish = rows.stream().anyMatch(r ->
-                    r.getText().toLowerCase().contains("fish"));
-            Assertions.assertTrue(mentionsFish, "At least one result should mention 'fish'");
+    public void testNavigationMenu() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        List<WebElement> navLinks = driver.findElements(By.cssSelector("nav a"));
+        assertTrue(navLinks.size() > 0, "Should have navigation links");
+        
+        for (WebElement link : navLinks) {
+            assertTrue(link.isDisplayed(), "Navigation link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Navigation link should have href attribute");
         }
     }
 
     @Test
     @Order(3)
-    public void signInPage_InvalidLogin_ShowsErrorOrStays() {
-        openBase();
-        WebElement signIn = firstPresent(
-                By.partialLinkText("Sign In"),
-                By.cssSelector("a[href*='signon'], a[href*='signin'], a[href*='account']")
-        );
-        Assumptions.assumeTrue(signIn != null, "Sign In link not found; skipping");
-        String start = driver.getCurrentUrl();
-        waitClickable(signIn).click();
-        waitDocumentReady();
-
-        // Fill credentials (invalid on purpose)
-        WebElement user = firstPresent(By.name("username"), By.id("username"));
-        WebElement pass = firstPresent(By.name("password"), By.id("password"));
-        WebElement loginBtn = firstPresent(By.cssSelector("input[type='submit'][value*='Login']"),
-                By.cssSelector("button[type='submit']"), By.cssSelector("input[type='submit']"));
-
-        Assumptions.assumeTrue(user != null && pass != null && loginBtn != null, "Login form not found; skipping");
-        user.clear(); user.sendKeys("invalid_user");
-        pass.clear(); pass.sendKeys("invalid_pass");
-        waitClickable(loginBtn).click();
-        waitDocumentReady();
-
-        // Either show error, or remain on sign-in
-        boolean errorShown = driver.findElements(By.cssSelector(".error, .alert, .message, .validation, #MessageBar")).stream()
-                .anyMatch(WebElement::isDisplayed);
-        boolean stayedOnSignIn = driver.getCurrentUrl().contains("signon") || driver.getCurrentUrl().contains("signin") || driver.getCurrentUrl().equals(start);
-        Assertions.assertTrue(errorShown || stayedOnSignIn, "Invalid login should not authenticate");
+    public void testHomePageElements() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Check for welcome message
+        WebElement welcomeMessage = driver.findElement(By.cssSelector(".welcome-message"));
+        assertTrue(welcomeMessage.isDisplayed(), "Welcome message should be displayed");
+        
+        // Check for featured products
+        WebElement featuredProducts = driver.findElement(By.id("featured-products"));
+        assertTrue(featuredProducts.isDisplayed(), "Featured products section should be displayed");
     }
 
     @Test
     @Order(4)
-    public void navigateCategory_AddFirstItemToCart_ThenCleanup() {
-        openBase();
-        // Open a category (prefer Fish/Dogs/Cats if available)
-        WebElement category = firstPresent(
-                By.partialLinkText("Fish"),
-                By.partialLinkText("Dogs"),
-                By.partialLinkText("Cats"),
-                By.cssSelector("a[href*='/catalog']")
-        );
-        Assumptions.assumeTrue(category != null, "No category link found; skipping");
-        waitClickable(category).click();
-        waitDocumentReady();
+    public void testCategoryNavigation() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        List<WebElement> categoryLinks = driver.findElements(By.cssSelector(".category-link"));
+        assertTrue(categoryLinks.size() > 0, "Should have category links");
+        
+        for (WebElement link : categoryLinks) {
+            assertTrue(link.isDisplayed(), "Category link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Category link should have href attribute");
+        }
+    }
 
-        // Click first product in list
-        WebElement firstProduct = firstPresent(
-                By.cssSelector("table a[href*='products'], table a[href*='items']"),
-                By.cssSelector("a[href*='/products/']"),
-                By.cssSelector("a[href*='/items/']")
-        );
-        Assumptions.assumeTrue(firstProduct != null, "No product link found in category; skipping");
-        String productName = firstProduct.getText();
-        waitClickable(firstProduct).click();
-        waitDocumentReady();
+    @Test
+    @Order(5)
+    public void testProductListing() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Navigate to a category to see product listings
+        try {
+            WebElement categoryLink = driver.findElement(By.linkText("Fish"));
+            categoryLink.click();
+            
+            // Wait for products to load
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.className("product-list")));
+            
+            WebElement productListing = driver.findElement(By.className("product-list"));
+            assertTrue(productListing.isDisplayed(), "Product listing should be displayed");
+            
+            List<WebElement> productItems = driver.findElements(By.cssSelector(".product-item"));
+            assertTrue(productItems.size() > 0, "Should have product items");
+            
+            for (WebElement item : productItems) {
+                assertTrue(item.isDisplayed(), "Product item should be displayed");
+            }
+        } catch (NoSuchElementException ignored) {
+            // If Fish category not found, proceed with general testing
+        }
+    }
 
-        // Add to cart: click first "Add to Cart"
-        WebElement addBtn = firstPresent(
-                By.cssSelector("a[href*='addToCart'], a[href*='addCart'], a.button"),
-                By.xpath("//a[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'add to cart')]"),
-                By.cssSelector("input[type='submit'][value*='Add']")
-        );
-        Assumptions.assumeTrue(addBtn != null, "Add to Cart control not found; skipping");
-        waitClickable(addBtn).click();
-        waitDocumentReady();
+    @Test
+    @Order(6)
+    public void testShoppingCartFunctionality() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Check if cart is accessible
+        try {
+            WebElement cartLink = driver.findElement(By.cssSelector("[href='/cart']"));
+            assertTrue(cartLink.isDisplayed(), "Cart link should be displayed");
+        } catch (NoSuchElementException ignored) {
+            // Cart access might depend on session state
+        }
+        
+        // Try to find and interact with add to cart button
+        try {
+            List<WebElement> addToCartButtons = driver.findElements(By.cssSelector(".add-to-cart-btn"));
+            if (!addToCartButtons.isEmpty()) {
+                WebElement addButton = addToCartButtons.get(0);
+                assertTrue(addButton.isDisplayed(), "Add to cart button should be displayed");
+            }
+        } catch (NoSuchElementException ignored) {
+            // Might not find add to cart buttons on homepage
+        }
+    }
 
-        // Verify cart page
-        boolean onCart = driver.getCurrentUrl().toLowerCase().contains("cart");
-        Assertions.assertTrue(onCart || driver.findElements(By.xpath("//*[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'shopping cart')]")).size() > 0,
-                "Should be on cart or show cart contents");
-        Assertions.assertTrue(driver.findElements(By.cssSelector("table, .cart, #Cart")).size() > 0, "Cart table/list should be present");
+    @Test
+    @Order(7)
+    public void testFooterLinks() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Check footer
+        WebElement footer = driver.findElement(By.tagName("footer"));
+        assertTrue(footer.isDisplayed(), "Footer should be displayed");
+        
+        // Find footer links
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertTrue(footerLinks.size() > 0, "Should have footer links");
+        
+        for (WebElement link : footerLinks) {
+            assertTrue(link.isDisplayed(), "Footer link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Footer link should have href attribute");
+        }
+    }
 
-        // At least one line mentions product or has quantity/price
-        List<WebElement> cartRows = driver.findElements(By.cssSelector("table tr"));
-        Assertions.assertTrue(cartRows.size() > 1, "Cart should have at least one line item");
+    @Test
+    @Order(8)
+    public void testExternalLinksInFooter() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertTrue(footerLinks.size() > 0, "Should have footer links");
+        
+        String mainWindowHandle = driver.getWindowHandle();
+        
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.isEmpty() && !href.startsWith("#")) {
+                // Click external links that open in new tabs
+                link.click();
+                wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+                
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(mainWindowHandle)) {
+                        driver.switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                
+                String currentUrl = driver.getCurrentUrl();
+                // Look for any valid external domains
+                if (currentUrl.contains("aspectran.com") || currentUrl.contains("github.com")) {
+                    // These are valid internal references
+                } else {
+                    // For external links, just ensure they're not malformed
+                    assertTrue(currentUrl.contains("http") || currentUrl.contains("https"), 
+                               "External link should be a valid URL");
+                }
+                
+                driver.close();
+                driver.switchTo().window(mainWindowHandle);
+            }
+        }
+    }
 
-        // Cleanup: remove items if remove link present, otherwise set qty 0 and update
-        List<WebElement> removeLinks = driver.findElements(By.xpath("//a[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'remove')]"));
-        if (!removeLinks.isEmpty()) {
-            waitClickable(removeLinks.get(0)).click();
-            waitDocumentReady();
-        } else {
-            List<WebElement> qtyInputs = driver.findElements(By.cssSelector("input[name*='quantity'], input.qty, input[name*='qty']"));
-            if (!qtyInputs.isEmpty()) {
-                WebElement qty = qtyInputs.get(0);
-                qty.clear();
-                qty.sendKeys("0");
-                WebElement updateBtn = firstPresent(
-                        By.xpath("//input[@type='submit' and contains(translate(@value,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'update')]"),
-                        By.xpath("//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'update')]")
-                );
-                if (updateBtn != null) {
-                    waitClickable(updateBtn).click();
-                    waitDocumentReady();
+    @Test
+    @Order(9)
+    public void testSearchFunctionality() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Check if search bar is present
+        try {
+            WebElement searchInput = driver.findElement(By.id("search-input"));
+            WebElement searchButton = driver.findElement(By.id("search-button"));
+            
+            assertTrue(searchInput.isDisplayed(), "Search input should be displayed");
+            assertTrue(searchButton.isDisplayed(), "Search button should be displayed");
+            
+            // Test typing into search box
+            searchInput.sendKeys("fish");
+            searchButton.click();
+        } catch (NoSuchElementException ignored) {
+            // Search might not be available on homepage or might not be active
+        }
+    }
+
+    @Test
+    @Order(10)
+    public void testResponsiveDesignElements() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Check basic responsive elements
+        List<WebElement> navElements = driver.findElements(By.cssSelector("nav"));
+        assertTrue(navElements.size() > 0, "Should have navigation elements");
+        
+        // Check for mobile menu toggle if present
+        try {
+            WebElement mobileToggle = driver.findElement(By.cssSelector(".mobile-menu-toggle"));
+            assertTrue(mobileToggle.isDisplayed(), "Mobile menu toggle should be displayed");
+        } catch (NoSuchElementException ignored) {
+            // Mobile menu might not be displayed in headless mode
+        }
+        
+        // Check for responsive image containers
+        WebElement mainContent = driver.findElement(By.tagName("main"));
+        assertTrue(mainContent.isDisplayed(), "Main content should be displayed");
+    }
+
+    @Test
+    @Order(11)
+    public void testUserAccountFunctionality() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Try to find login elements
+        try {
+            WebElement loginLink = driver.findElement(By.cssSelector("[href='/login']"));
+            assertTrue(loginLink.isDisplayed(), "Login link should be displayed");
+        } catch (NoSuchElementException ignored) {
+            // Login not immediately visible
+        }
+        
+        // Try to find register link
+        try {
+            WebElement registerLink = driver.findElement(By.cssSelector("[href='/register']"));
+            assertTrue(registerLink.isDisplayed(), "Register link should be displayed");
+        } catch (NoSuchElementException ignored) {
+            // Registration might not be part of main UI or available
+        }
+    }
+
+    @Test
+    @Order(12)
+    public void testProductDetailView() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Try to get to a product detail page
+        try {
+            // Get the first category URL
+            WebElement fishLink = driver.findElement(By.linkText("Fish"));
+            fishLink.click();
+            
+            // Wait for category page to load
+            wait.until(ExpectedConditions.urlContains("/category/Fish"));
+            
+            // Try to click on first product
+            List<WebElement> productLinks = driver.findElements(By.cssSelector(".product-link"));
+            if (!productLinks.isEmpty()) {
+                WebElement firstProduct = productLinks.get(0);
+                String productUrl = firstProduct.getAttribute("href");
+                assertTrue(productUrl != null && !productUrl.isEmpty(), "Product link should have URL");
+            }
+        } catch (NoSuchElementException e) {
+            // If Fish category is not there, continue with basic testing
+        }
+    }
+
+    @Test
+    @Order(13)
+    public void testPageNavigation() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Navigate through different sections
+        List<WebElement> navLinks = driver.findElements(By.cssSelector("nav a"));
+        int linksCount = Math.min(navLinks.size(), 5); // Limit to prevent too many navigations
+        
+        for (int i = 0; i < linksCount; i++) {
+            WebElement link = navLinks.get(i);
+            String href = link.getAttribute("href");
+            
+            if (href != null && !href.isEmpty() && !href.startsWith("#")) {
+                // Only test internal links, not external ones
+                if (href.contains("jpetstore.aspectran.com")) {
+                    link.click();
+                    wait.until(ExpectedConditions.urlContains("jpetstore.aspectran.com"));
+                    
+                    // Verify navigation
+                    String currentUrl = driver.getCurrentUrl();
+                    assertTrue(currentUrl.contains("jpetstore.aspectran.com"), 
+                               "Should remain on JPetStore domain after navigation");
+                    
+                    // Go back to home
+                    driver.navigate().back();
+                    wait.until(ExpectedConditions.urlContains("jpetstore.aspectran.com"));
                 }
             }
         }
     }
 
     @Test
-    @Order(5)
-    public void internalLinks_OneLevelBelow_Work() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        URI base = URI.create(driver.getCurrentUrl());
-        int baseDepth = depthOfPath(base.getPath());
-
-        List<String> hrefs = driver.findElements(By.cssSelector("a[href]")).stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .filter(h -> h.startsWith("http"))
-                .distinct()
-                .collect(Collectors.toList());
-
-        List<String> internalOneLevel = hrefs.stream()
-                .filter(h -> baseHost.equals(hostOf(h)))
-                .filter(h -> {
-                    URI u = URI.create(h);
-                    int depth = depthOfPath(u.getPath());
-                    return depth <= baseDepth + 1; // one level below
-                })
-                .collect(Collectors.toList());
-
-        Assumptions.assumeTrue(!internalOneLevel.isEmpty(), "No internal one-level-below links found; skipping");
-        int checked = 0;
-        String original = driver.getCurrentUrl();
-        for (String link : internalOneLevel) {
-            if (checked >= 3) break; // limit for stability
-            Optional<WebElement> anchor = driver.findElements(By.cssSelector("a[href]")).stream()
-                    .filter(a -> link.equals(a.getAttribute("href"))).findFirst();
-            if (anchor.isEmpty()) continue;
-            String before = driver.getCurrentUrl();
-            try {
-                waitClickable(anchor.get()).click();
-                wait.until(d -> !d.getCurrentUrl().equals(before));
-                waitDocumentReady();
-                Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should stay within same host");
-                Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Destination should render");
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlToBe(before));
-                checked++;
-            } catch (Exception e) {
-                driver.get(original);
-                waitDocumentReady();
+    @Order(14)
+    public void testAccessibilityAndSemanticElements() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Test for semantic HTML elements
+        List<WebElement> headerElements = driver.findElements(By.tagName("header"));
+        assertEquals(1, headerElements.size(), "Should have one header element");
+        
+        List<WebElement> navElements = driver.findElements(By.tagName("nav"));
+        assertTrue(navElements.size() > 0, "Should have navigation elements");
+        
+        List<WebElement> mainElements = driver.findElements(By.tagName("main"));
+        assertEquals(1, mainElements.size(), "Should have one main element");
+        
+        List<WebElement> footerElements = driver.findElements(By.tagName("footer"));
+        assertEquals(1, footerElements.size(), "Should have one footer element");
+        
+        // Test for images with alt attributes
+        List<WebElement> imgElements = driver.findElements(By.tagName("img"));
+        for (WebElement img : imgElements) {
+            String altText = img.getAttribute("alt");
+            if (altText != null) {
+                assertFalse(altText.trim().isEmpty(), "Image alt text should not be empty");
             }
         }
-        Assertions.assertTrue(checked >= 1, "At least one internal one-level-below link should load");
     }
 
     @Test
-    @Order(6)
-    public void footerOrHeader_ExternalLinks_OpenOnDifferentDomain() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        List<WebElement> anchors = driver.findElements(By.cssSelector("footer a[href], header a[href], nav a[href], a[target='_blank']"));
-        List<WebElement> external = anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    return href != null && href.startsWith("http") && !hostOf(href).equals(baseHost);
-                })
-                .collect(Collectors.toList());
-
-        Assumptions.assumeTrue(!external.isEmpty(), "No external links found; skipping");
-        int validated = 0;
-        for (WebElement link : external) {
-            if (validated >= 3) break; // cap to reduce flakiness
-            try {
-                handleExternalLink(link);
-                validated++;
-            } catch (Exception e) {
-                driver.get(BASE_URL);
-                waitDocumentReady();
-            }
+    @Order(15)
+    public void testLoginForm() {
+        driver.get("https://jpetstore.aspectran.com/");
+        
+        // Try to locate login elements
+        try {
+            WebElement loginLink = driver.findElement(By.linkText("Sign In"));
+            assertTrue(loginLink.isDisplayed(), "Sign In link should be displayed");
+            
+            // Check if sign-in form is present on click
+            loginLink.click();
+            wait.until(ExpectedConditions.urlContains("/login"));
+            
+            WebElement loginForm = driver.findElement(By.cssSelector("form[action='/login']"));
+            assertTrue(loginForm.isDisplayed(), "Login form should be displayed");
+            
+            // Go back to main page
+            driver.navigate().back();
+            wait.until(ExpectedConditions.urlContains("jpetstore.aspectran.com"));
+        } catch (NoSuchElementException | TimeoutException ignored) {
+            // Login functionality might be disabled or not present on homepage
         }
-        Assertions.assertTrue(validated > 0, "Should validate at least one external link");
-    }
-
-    @Test
-    @Order(7)
-    public void optionalDropdowns_IfAny_ChangeSelection() {
-        openBase();
-        List<WebElement> selects = driver.findElements(By.tagName("select"));
-        Assumptions.assumeTrue(!selects.isEmpty(), "No select dropdowns present; skipping");
-        Select s = new Select(selects.get(0));
-        List<WebElement> opts = s.getOptions();
-        Assumptions.assumeTrue(opts.size() >= 2, "Not enough options to test selection; skipping");
-        s.selectByIndex(0);
-        String first = s.getFirstSelectedOption().getText();
-        s.selectByIndex(1);
-        String second = s.getFirstSelectedOption().getText();
-        Assertions.assertNotEquals(first, second, "Selection should change after choosing a different option");
     }
 }

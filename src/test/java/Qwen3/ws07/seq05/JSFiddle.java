@@ -1,338 +1,339 @@
-package GPT5.ws07.seq05;
+package Qwen3.ws07.seq05;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleHeadlessSuite {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class JsFiddleTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://jsfiddle.net/";
-
     @BeforeAll
     public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED by prompt
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void teardown() {
-        if (driver != null) driver.quit();
-    }
-
-    // ====================== Helpers ======================
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        waitDocumentReady();
-        dismissOverlaysIfAny();
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should be on base URL");
-        Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Body element should exist");
-    }
-
-    private void waitDocumentReady() {
-        try {
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        } catch (Exception ignored) {}
-    }
-
-    private void dismissOverlaysIfAny() {
-        // Generic cookie/consent banners (best-effort and guarded)
-        String[] acceptTexts = new String[]{"accept", "agree", "allow", "got it"};
-        for (String t : acceptTexts) {
-            By xpath = By.xpath("//*[self::button or self::a][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'" + t + "')]");
-            List<WebElement> els = driver.findElements(xpath);
-            if (!els.isEmpty()) {
-                try {
-                    WebElement btn = wait.until(ExpectedConditions.elementToBeClickable(els.get(0)));
-                    btn.click();
-                    waitDocumentReady();
-                    break;
-                } catch (Exception ignored) {}
-            }
-        }
-        // Close icons common patterns
-        By closeBtn = By.cssSelector("[data-dismiss], .cookiebar-close, .cc-dismiss, .close, .btn-close");
-        List<WebElement> closes = driver.findElements(closeBtn);
-        if (!closes.isEmpty()) {
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(closes.get(0))).click();
-            } catch (Exception ignored) {}
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private boolean visible(By by) {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(by)).isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
-    private boolean present(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    private String hostOf(String url) {
-        try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
-    }
-
-    private int depthOfPath(String path) {
-        if (path == null || path.isEmpty() || "/".equals(path)) return 0;
-        String p = path;
-        if (p.startsWith("/")) p = p.substring(1);
-        if (p.endsWith("/")) p = p.substring(0, p.length() - 1);
-        if (p.isEmpty()) return 0;
-        return p.split("/").length;
-    }
-
-    private void handleExternalLink(WebElement link) {
-        String originalWindow = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        String baseHost = hostOf(driver.getCurrentUrl());
-
-        // open link
-        waitClickable(link).click();
-
-        // determine if new window opened
-        try {
-            wait.until(d -> driver.getWindowHandles().size() != before.size() || !hostOf(d.getCurrentUrl()).equals(baseHost));
-        } catch (TimeoutException ignored) {}
-
-        Set<String> after = driver.getWindowHandles();
-        if (after.size() > before.size()) {
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            waitDocumentReady();
-            Assertions.assertNotEquals(baseHost, hostOf(driver.getCurrentUrl()), "External link should navigate to another domain");
-            driver.close();
-            driver.switchTo().window(originalWindow);
-        } else {
-            waitDocumentReady();
-            Assertions.assertNotEquals(baseHost, hostOf(driver.getCurrentUrl()), "External link should navigate to another domain (same tab)");
-            driver.navigate().back();
-            waitDocumentReady();
-        }
-    }
-
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        return null;
-    }
-
-    // ====================== Tests ======================
 
     @Test
     @Order(1)
-    public void baseLoads_HeaderFooterCoreAreasPresent() {
-        openBase();
-        Assertions.assertTrue(present(By.cssSelector("header, .navbar, nav")), "Header/nav should be present");
-        Assertions.assertTrue(present(By.tagName("footer")), "Footer should be present");
-        // Top search bar should exist on JSFiddle
-        Assertions.assertTrue(present(By.cssSelector("input[type='search'], input[name='q'], input[placeholder*='Search']")), "Search input should be present");
+    public void testPageLoadAndTitle() {
+        driver.get("https://jsfiddle.net/");
+        
+        String pageTitle = driver.getTitle();
+        assertTrue(pageTitle.contains("JSFiddle"), "Page title should contain JSFiddle");
+        
+        WebElement header = driver.findElement(By.cssSelector("header h1"));
+        assertTrue(header.isDisplayed(), "Header should be displayed");
     }
 
     @Test
     @Order(2)
-    public void searchFromHeaderNavigatesToSearchResults() {
-        openBase();
-        WebElement search = firstPresent(
-                By.cssSelector("input[type='search']"),
-                By.cssSelector("input[name='q']"),
-                By.cssSelector("input[placeholder*='Search']")
-        );
-        Assumptions.assumeTrue(search != null, "Search input not found; skipping test");
-        String startUrl = driver.getCurrentUrl();
-        search.clear();
-        search.sendKeys("react");
-        search.sendKeys(Keys.ENTER);
-
-        // Assert navigation to a search page or query in URL
-        boolean urlChanged = false;
-        try {
-            urlChanged = wait.until(d ->
-                    !d.getCurrentUrl().equals(startUrl) &&
-                    (d.getCurrentUrl().contains("/search") || d.getCurrentUrl().contains("?q=") || d.getCurrentUrl().contains("&q=")));
-        } catch (TimeoutException ignored) {}
-        Assertions.assertTrue(urlChanged || present(By.cssSelector("[class*='search']")), "Search should navigate to results or update URL with query");
-
-        // Go back to keep state clean
-        driver.navigate().back();
-        waitDocumentReady();
+    public void testNavigationMenu() {
+        driver.get("https://jsfiddle.net/");
+        
+        List<WebElement> navLinks = driver.findElements(By.cssSelector("nav a"));
+        assertTrue(navLinks.size() > 0, "Should have navigation links");
+        
+        for (WebElement link : navLinks) {
+            assertTrue(link.isDisplayed(), "Navigation link should be displayed");
+            assertNotNull(link.getAttribute("href"), "Navigation link should have href attribute");
+        }
     }
 
     @Test
     @Order(3)
-    public void visitInternalLinks_OneLevelBelow() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        URI base = URI.create(driver.getCurrentUrl());
-        int baseDepth = depthOfPath(base.getPath());
-
-        // collect internal links
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<String> hrefs = anchors.stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .filter(h -> h.startsWith("http"))
-                .distinct()
-                .collect(Collectors.toList());
-
-        List<String> candidates = hrefs.stream()
-                .filter(h -> baseHost.equals(hostOf(h)))
-                .filter(h -> {
-                    URI u = URI.create(h);
-                    int depth = depthOfPath(u.getPath());
-                    return depth <= baseDepth + 1; // one level below the base
-                })
-                .collect(Collectors.toList());
-
-        Assumptions.assumeTrue(!candidates.isEmpty(), "No internal links one-level-below found; skipping");
-
-        int visited = 0;
-        String originalUrl = driver.getCurrentUrl();
-        for (String h : candidates) {
-            if (visited >= 3) break; // limit to reduce flakiness
-            try {
-                String before = driver.getCurrentUrl();
-                // find the anchor again to avoid stale reference
-                Optional<WebElement> linkOpt = driver.findElements(By.cssSelector("a[href]")).stream()
-                        .filter(a -> h.equals(a.getAttribute("href"))).findFirst();
-                if (linkOpt.isEmpty()) continue;
-                waitClickable(linkOpt.get()).click();
-                wait.until(d -> !d.getCurrentUrl().equals(before));
-                waitDocumentReady();
-                Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on jsfiddle.net host");
-                Assertions.assertTrue(present(By.tagName("body")), "Destination page should render content");
-                driver.navigate().back();
-                wait.until(ExpectedConditions.urlToBe(before));
-                visited++;
-            } catch (Exception e) {
-                // Recover and continue
-                driver.get(originalUrl);
-                waitDocumentReady();
-            }
-        }
-
-        Assertions.assertTrue(visited >= 1, "Should be able to visit at least one internal link one-level-below");
+    public void testMainEditorSections() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check if editor sections are present
+        WebElement htmlSection = driver.findElement(By.id("editor-html"));
+        assertTrue(htmlSection.isDisplayed(), "HTML editor section should be displayed");
+        
+        WebElement cssSection = driver.findElement(By.id("editor-css"));
+        assertTrue(cssSection.isDisplayed(), "CSS editor section should be displayed");
+        
+        WebElement jsSection = driver.findElement(By.id("editor-js"));
+        assertTrue(jsSection.isDisplayed(), "JavaScript editor section should be displayed");
+        
+        WebElement resultSection = driver.findElement(By.id("result"));
+        assertTrue(resultSection.isDisplayed(), "Result section should be displayed");
     }
 
     @Test
     @Order(4)
-    public void docsLink_OpensDocsSubdomainAsExternal() {
-        openBase();
-        // Many builds link to docs.jsfiddle.net or help pages
-        WebElement docsLink = firstPresent(
-                By.cssSelector("a[href*='docs.']"),
-                By.cssSelector("a[href*='documentation']"),
-                By.partialLinkText("Docs")
-        );
-        Assumptions.assumeTrue(docsLink != null, "Docs link not found; skipping");
-
-        String baseHost = hostOf(driver.getCurrentUrl());
-        handleExternalLink(docsLink);
-        Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "After external check we should be back on base host");
+    public void testEditorFunctionality() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Test HTML editor
+        WebElement htmlEditor = driver.findElement(By.id("editor-html"));
+        assertTrue(htmlEditor.isDisplayed(), "HTML editor should be displayed");
+        
+        // Test CSS editor
+        WebElement cssEditor = driver.findElement(By.id("editor-css"));
+        assertTrue(cssEditor.isDisplayed(), "CSS editor should be displayed");
+        
+        // Test JavaScript editor
+        WebElement jsEditor = driver.findElement(By.id("editor-js"));
+        assertTrue(jsEditor.isDisplayed(), "JavaScript editor should be displayed");
+        
+        // Test result area
+        WebElement resultArea = driver.findElement(By.id("result"));
+        assertTrue(resultArea.isDisplayed(), "Result area should be displayed");
     }
 
     @Test
     @Order(5)
-    public void externalLinksInFooterOrHeader_OpenOnDifferentDomain() {
-        openBase();
-        String baseHost = hostOf(driver.getCurrentUrl());
-        List<WebElement> anchors = driver.findElements(By.cssSelector("footer a[href], header a[href], nav a[href], a[target='_blank']"));
-        List<WebElement> external = anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    if (href == null || !href.startsWith("http")) return false;
-                    String host = hostOf(href);
-                    return !baseHost.equals(host);
-                })
-                .collect(Collectors.toList());
-
-        Assumptions.assumeTrue(!external.isEmpty(), "No external links detected; skipping");
-        int validated = 0;
-        for (WebElement link : external) {
-            if (validated >= 3) break; // keep it lean
-            try {
-                handleExternalLink(link);
-                validated++;
-            } catch (Exception e) {
-                // If popup blocked or CSP issues, attempt to continue
-                driver.get(BASE_URL);
-                waitDocumentReady();
-            }
-        }
-        Assertions.assertTrue(validated > 0, "At least one external link should be verified");
+    public void testRunButton() {
+        driver.get("https://jsfiddle.net/");
+        
+        WebElement runButton = driver.findElement(By.id("run"));
+        assertTrue(runButton.isDisplayed(), "Run button should be displayed");
+        assertEquals("Run", runButton.getText(), "Run button should say 'Run'");
+        
+        // Test if click works (even if results are empty)
+        runButton.click();
+        
+        // Wait for button to potentially change state
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException ignored) {}
     }
 
     @Test
     @Order(6)
-    public void signInOrCreateLink_VisibleAndNavigable() {
-        openBase();
-        // Try to locate a Sign in / Login / Create button/link
-        WebElement authLink = firstPresent(
-                By.partialLinkText("Sign in"),
-                By.partialLinkText("Log in"),
-                By.cssSelector("a[href*='/login'], a[href*='/signin']"),
-                By.partialLinkText("Create"),
-                By.cssSelector("a[href*='/user/']")
-        );
-        Assumptions.assumeTrue(authLink != null, "Auth-related link not found; skipping");
-
-        String before = driver.getCurrentUrl();
-        waitClickable(authLink).click();
-        try {
-            wait.until(d -> !d.getCurrentUrl().equals(before));
-        } catch (TimeoutException ignored) {}
-        waitDocumentReady();
-        Assertions.assertTrue(
-                driver.getCurrentUrl().contains("login") ||
-                driver.getCurrentUrl().contains("signin") ||
-                hostOf(driver.getCurrentUrl()).contains("jsfiddle.net"),
-                "Auth navigation should occur or remain on host with different path");
-        // Return to base
-        driver.get(BASE_URL);
-        waitDocumentReady();
+    public void testSaveAndLoadFeatures() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check save feature
+        WebElement saveButton = driver.findElement(By.id("save"));
+        assertTrue(saveButton.isDisplayed(), "Save button should be displayed");
+        
+        // Check load feature
+        WebElement loadButton = driver.findElement(By.id("load"));
+        assertTrue(loadButton.isDisplayed(), "Load button should be displayed");
     }
 
     @Test
     @Order(7)
-    public void optionalDropdowns_ChangeSelectionIfPresent() {
-        openBase();
-        List<WebElement> selects = driver.findElements(By.tagName("select"));
-        Assumptions.assumeTrue(!selects.isEmpty(), "No <select> dropdowns on page; skipping");
+    public void testFiddleOptions() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check fiddle options
+        WebElement fiddleOptions = driver.findElement(By.id("fiddle-options"));
+        assertTrue(fiddleOptions.isDisplayed(), "Fiddle options should be displayed");
+        
+        // Check for framework selection
+        List<WebElement> frameworkSelects = driver.findElements(By.cssSelector("[id*='framework']"));
+        for (WebElement select : frameworkSelects) {
+            if (select.isDisplayed()) {
+                assertTrue(select.isDisplayed(), "Framework selection should be displayed");
+            }
+        }
+    }
 
-        WebElement selectEl = selects.get(0);
-        Select select = new Select(selectEl);
-        List<WebElement> opts = select.getOptions();
-        Assumptions.assumeTrue(opts.size() >= 2, "Not enough options to test selection; skipping");
+    @Test
+    @Order(8)
+    public void testExternalLinksInFooter() {
+        driver.get("https://jsfiddle.net/");
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertTrue(footerLinks.size() > 0, "Should have footer links");
+        
+        String mainWindowHandle = driver.getWindowHandle();
+        
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.isEmpty() && !href.startsWith("#")) {
+                // Click external links
+                link.click();
+                wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+                
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(mainWindowHandle)) {
+                        driver.switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                
+                String currentUrl = driver.getCurrentUrl();
+                // JSFiddle may link to external resources
+                assertTrue(currentUrl.contains("jsfiddle.net") || 
+                           currentUrl.contains("github.com") ||
+                           currentUrl.contains("stackoverflow.com"),
+                           "External link should point to valid domain");
+                
+                driver.close();
+                driver.switchTo().window(mainWindowHandle);
+            }
+        }
+    }
 
-        select.selectByIndex(0);
-        String first = select.getFirstSelectedOption().getText();
-        select.selectByIndex(1);
-        String second = select.getFirstSelectedOption().getText();
+    @Test
+    @Order(9)
+    public void testResponsiveDesignElements() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check for responsive elements
+        WebElement container = driver.findElement(By.id("container"));
+        assertTrue(container.isDisplayed(), "Main container should be displayed");
+        
+        // Check for editor container
+        WebElement editorContainer = driver.findElement(By.id("editor-container"));
+        assertTrue(editorContainer.isDisplayed(), "Editor container should be displayed");
+        
+        // Check for result container
+        WebElement resultContainer = driver.findElement(By.id("result-container"));
+        assertTrue(resultContainer.isDisplayed(), "Result container should be displayed");
+    }
 
-        Assertions.assertNotEquals(first, second, "Changing dropdown selection should reflect new option");
+    @Test
+    @Order(10)
+    public void testKeyboardShortcuts() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Test that editor areas can receive keyboard input
+        WebElement htmlEditor = driver.findElement(By.id("editor-html"));
+        htmlEditor.sendKeys("Hello JSFiddle");
+        
+        String text = htmlEditor.getAttribute("value");
+        assertTrue(text.contains("Hello JSFiddle"), "Editor should accept text input");
+    }
+
+    @Test
+    @Order(11)
+    public void testFiddleCreationFunctionality() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check if we can interact with editor areas
+        WebElement htmlEditor = driver.findElement(By.id("editor-html"));
+        WebElement cssEditor = driver.findElement(By.id("editor-css"));
+        WebElement jsEditor = driver.findElement(By.id("editor-js"));
+        
+        // Fill editors with sample code
+        htmlEditor.clear();
+        htmlEditor.sendKeys("<h1>Hello World</h1>");
+        
+        cssEditor.clear();
+        cssEditor.sendKeys("h1 { color: blue; }");
+        
+        jsEditor.clear();
+        jsEditor.sendKeys("console.log('Test');"); 
+        
+        // Verify content was entered
+        assertTrue(htmlEditor.getAttribute("value").contains("<h1>Hello World</h1>"), 
+                   "HTML editor should contain the entered content");
+        assertTrue(cssEditor.getAttribute("value").contains("color: blue"), 
+                   "CSS editor should contain the entered content");
+        assertTrue(jsEditor.getAttribute("value").contains("console.log"), 
+                   "JavaScript editor should contain the entered content");
+    }
+
+    @Test
+    @Order(12)
+    public void testJavaScriptExecution() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Test if we can run JavaScript
+        WebElement jsEditor = driver.findElement(By.id("editor-js"));
+        jsEditor.clear();
+        jsEditor.sendKeys("alert('JSFiddle Test')"); 
+        
+        WebElement runButton = driver.findElement(By.id("run"));
+        runButton.click();
+        
+        // Try to handle alert if present
+        try {
+            Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+            String alertText = alert.getText();
+            alert.accept(); // Accept the alert
+        } catch (TimeoutException e) {
+            // Alert may not appear, which is fine for this test
+        }
+    }
+
+    @Test
+    @Order(13)
+    public void testPageNavigationToExamples() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Try to find and click example links if available
+        try {
+            WebElement exampleLink = driver.findElement(By.linkText("Examples"));
+            exampleLink.click();
+            
+            // Wait for navigation to complete
+            wait.until(ExpectedConditions.urlContains("examples"));
+        } catch (NoSuchElementException ignored) {
+            // Examples link may not exist or be in different location
+        }
+    }
+
+    @Test
+    @Order(14)
+    public void testAccessibilityAndSemanticElements() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check semantic HTML elements
+        List<WebElement> headerElements = driver.findElements(By.tagName("header"));
+        assertEquals(1, headerElements.size(), "Should have one header element");
+        
+        List<WebElement> mainElements = driver.findElements(By.tagName("main"));
+        assertEquals(1, mainElements.size(), "Should have one main element");
+        
+        List<WebElement> footerElements = driver.findElements(By.tagName("footer"));
+        assertEquals(1, footerElements.size(), "Should have one footer element");
+        
+        // Check for proper labeling of editors
+        List<WebElement> labels = driver.findElements(By.cssSelector("label"));
+        assertTrue(labels.size() > 0, "Should have labels for editor sections");
+        
+        // Check for ARIA attributes
+        List<WebElement> ariaElements = driver.findElements(By.cssSelector("[aria-label]"));
+        assertTrue(ariaElements.size() > 0, "Should have ARIA attributes for accessibility");
+    }
+
+    @Test
+    @Order(15)
+    public void testPageElementsStructure() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check top-level structure
+        List<WebElement> mainSections = driver.findElements(By.cssSelector("main > section"));
+        assertTrue(mainSections.size() > 0, "Should have main sections");
+        
+        // Check for common form elements
+        List<WebElement> buttons = driver.findElements(By.cssSelector("button"));
+        assertTrue(buttons.size() > 0, "Should have buttons");
+        
+        // Check for input elements
+        List<WebElement> inputs = driver.findElements(By.cssSelector("input"));
+        assertTrue(inputs.size() > 0, "Should have input elements");
+        
+        // Check for textareas
+        List<WebElement> textareas = driver.findElements(By.tagName("textarea"));
+        assertTrue(textareas.size() > 0, "Should have textareas");
+        
+        // Check for div containers
+        List<WebElement> divs = driver.findElements(By.tagName("div"));
+        assertTrue(divs.size() > 10, "Should have multiple div containers");
     }
 }

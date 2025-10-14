@@ -1,19 +1,20 @@
 package deepseek.ws04.seq01;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class FormPageTest {
+
     private static WebDriver driver;
+    private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 
     @BeforeAll
@@ -21,6 +22,7 @@ public class KatalonFormTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
@@ -34,117 +36,93 @@ public class KatalonFormTest {
     @Order(1)
     public void testFormSubmission() {
         driver.get(BASE_URL);
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
-        WebElement lastName = driver.findElement(By.id("last-name"));
-        WebElement genderMale = driver.findElement(By.id("male"));
-        WebElement dob = driver.findElement(By.id("dob"));
-        WebElement address = driver.findElement(By.id("address"));
-        WebElement email = driver.findElement(By.id("email"));
-        WebElement password = driver.findElement(By.id("password"));
-        WebElement company = driver.findElement(By.id("company"));
+        WebElement firstNameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        WebElement genderRadio = driver.findElement(By.id("gender-male"));
+        WebElement dobField = driver.findElement(By.id("dob"));
+        WebElement addressField = driver.findElement(By.id("address"));
+        WebElement emailField = driver.findElement(By.id("email"));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement companyField = driver.findElement(By.id("company"));
         WebElement roleDropdown = driver.findElement(By.id("role"));
-        WebElement jobExpectation = driver.findElement(By.id("expectation"));
-        WebElement developmentCheckbox = driver.findElement(By.xpath("//input[@value='Development']"));
+        WebElement expectField = driver.findElement(By.id("expectation"));
         WebElement submitButton = driver.findElement(By.id("submit"));
 
-        firstName.sendKeys("John");
-        lastName.sendKeys("Doe");
-        genderMale.click();
-        dob.sendKeys("01/01/1990");
-        address.sendKeys("123 Main St");
-        email.sendKeys("john.doe@example.com");
-        password.sendKeys("password123");
-        company.sendKeys("Test Company");
-        
-        Select roleSelect = new Select(roleDropdown);
-        roleSelect.selectByVisibleText("QA");
-        
-        Select expectationSelect = new Select(jobExpectation);
-        expectationSelect.selectByVisibleText("Good teamwork");
-        
-        developmentCheckbox.click();
-
+        firstNameField.sendKeys("John");
+        lastNameField.sendKeys("Doe");
+        genderRadio.click();
+        dobField.sendKeys("01/01/1990");
+        addressField.sendKeys("123 Main St");
+        emailField.sendKeys("john.doe@example.com");
+        passwordField.sendKeys("password123");
+        companyField.sendKeys("Acme Corp");
+        new Select(roleDropdown).selectByVisibleText("QA");
+        expectField.sendKeys("Looking for a challenging role.");
         submitButton.click();
 
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.id("submit-msg")));
-        Assertions.assertTrue(successMessage.getText().contains("Successfully submitted!"),
-            "Form submission was not successful");
+        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("submit-msg")));
+        Assertions.assertTrue(successMessage.getText().contains("Successfully submitted!"), "Form submission should be successful");
     }
 
     @Test
     @Order(2)
     public void testFormValidation() {
         driver.get(BASE_URL);
-
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submit")));
         submitButton.click();
 
-        WebElement firstNameValidation = driver.findElement(By.id("first-name-error"));
-        Assertions.assertTrue(firstNameValidation.isDisplayed(), 
-            "First name validation error not displayed");
-        Assertions.assertEquals("Please enter First Name", firstNameValidation.getText(),
-            "Incorrect validation message for first name");
-
-        WebElement lastNameValidation = driver.findElement(By.id("last-name-error"));
-        Assertions.assertTrue(lastNameValidation.isDisplayed(),
-            "Last name validation error not displayed");
+        WebElement firstNameError = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name-error")));
+        Assertions.assertTrue(firstNameError.isDisplayed(), "First name error should be displayed");
+        WebElement lastNameError = driver.findElement(By.id("last-name-error"));
+        Assertions.assertTrue(lastNameError.isDisplayed(), "Last name error should be displayed");
+        WebElement emailError = driver.findElement(By.id("email-error"));
+        Assertions.assertTrue(emailError.isDisplayed(), "Email error should be displayed");
     }
 
     @Test
     @Order(3)
-    public void testCheckboxAndRadioButtons() {
+    public void testOptionalFields() {
         driver.get(BASE_URL);
+        WebElement firstNameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
+        WebElement dobField = driver.findElement(By.id("dob"));
+        WebElement submitButton = driver.findElement(By.id("submit"));
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement genderFemale = wait.until(ExpectedConditions.elementToBeClickable(By.id("female")));
-        WebElement developmentCheckbox = driver.findElement(By.xpath("//input[@value='Development']"));
-        WebElement automationCheckbox = driver.findElement(By.xpath("//input[@value='Automation']"));
+        firstNameField.sendKeys("Jane");
+        dobField.sendKeys("01/01/1990");
+        submitButton.click();
 
-        genderFemale.click();
-        developmentCheckbox.click();
-        automationCheckbox.click();
-
-        Assertions.assertTrue(genderFemale.isSelected(), "Female radio button not selected");
-        Assertions.assertTrue(developmentCheckbox.isSelected(), "Development checkbox not selected");
-        Assertions.assertTrue(automationCheckbox.isSelected(), "Automation checkbox not selected");
+        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("submit-msg")));
+        Assertions.assertTrue(successMessage.getText().contains("Successfully submitted!"), "Form should accept optional fields");
     }
 
     @Test
     @Order(4)
-    public void testSelectDropdowns() {
+    public void testExternalLink() {
         driver.get(BASE_URL);
+        WebElement katalonLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Katalon")));
+        katalonLink.click();
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement roleDropdown = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("role")));
-        WebElement expectationDropdown = driver.findElement(By.id("expectation"));
-
-        Select roleSelect = new Select(roleDropdown);
-        roleSelect.selectByVisibleText("Manager");
-        
-        Select expectationSelect = new Select(expectationDropdown);
-        expectationSelect.selectByVisibleText("High salary");
-
-        Assertions.assertEquals("Manager", roleSelect.getFirstSelectedOption().getText(),
-            "Incorrect option selected for role");
-        Assertions.assertEquals("High salary", expectationSelect.getFirstSelectedOption().getText(),
-            "Incorrect option selected for expectation");
+        String currentWindow = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(currentWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        wait.until(ExpectedConditions.urlContains("katalon.com"));
+        driver.close();
+        driver.switchTo().window(currentWindow);
     }
 
     @Test
     @Order(5)
-    public void testCommentField() {
+    public void testResetButton() {
         driver.get(BASE_URL);
+        WebElement firstNameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
+        WebElement resetButton = driver.findElement(By.id("reset"));
 
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement commentField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("comment")));
-        String testComment = "This is a test comment for the form";
-
-        commentField.sendKeys(testComment);
-        Assertions.assertEquals(testComment, commentField.getAttribute("value"),
-            "Comment not properly entered in field");
+        firstNameField.sendKeys("Test");
+        resetButton.click();
+        Assertions.assertEquals("", firstNameField.getAttribute("value"), "First name field should be reset");
     }
 }

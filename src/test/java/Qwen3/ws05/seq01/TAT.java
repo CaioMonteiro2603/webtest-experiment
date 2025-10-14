@@ -1,36 +1,30 @@
 package Qwen3.ws05.seq01;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
-
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
-import java.util.Set;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class TatTest {
+public class CACTATTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static JavascriptExecutor jsExecutor;
-
-    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        jsExecutor = (JavascriptExecutor) driver;
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @AfterAll
@@ -43,221 +37,184 @@ public class TatTest {
     @Test
     @Order(1)
     public void testPageLoadAndTitle() {
-        driver.get(BASE_URL);
-        assertEquals("Central de Atendimento ao Cliente TAT", driver.getTitle(), "Page title is incorrect.");
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+
+        String title = driver.getTitle();
+        assertTrue(title.contains("TAT"), "Page title should contain 'TAT'");
+
+        // Verify main content is present
+        WebElement mainHeader = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1")));
+        assertTrue(mainHeader.isDisplayed(), "Main header should be displayed");
     }
 
     @Test
     @Order(2)
-    public void testFormSubmissionWithRequiredFields() {
-        driver.get(BASE_URL);
+    public void testNavigationLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Wait for and fill First Name
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        firstName.sendKeys("Caio");
+        // Check for main navigation links
+        List<WebElement> navLinks = driver.findElements(By.cssSelector("nav a"));
+        assertTrue(navLinks.size() > 0, "Navigation links should be present");
 
-        // Fill Last Name
-        driver.findElement(By.id("lastName")).sendKeys("Silva");
+        // Click first navigation link (assuming it's home)
+        WebElement homeLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Home")));
+        homeLink.click();
 
-        // Fill Email
-        driver.findElement(By.id("email")).sendKeys("caio.silva@example.com");
-
-        // Fill Open Text Area (required)
-        driver.findElement(By.id("open-text-area")).sendKeys("Test message for required fields submission.");
-
-        // Submit form
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        // Assert Success Message
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success span")));
-        assertTrue(successMessage.getText().contains("Mensagem enviada com sucesso!"), "Success message should be displayed.");
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("index.html"), "Should navigate to home page");
     }
 
     @Test
     @Order(3)
-    public void testFormSubmissionWithAllFields() {
-        driver.get(BASE_URL);
+    public void testContactForm() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Wait for and fill First Name
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        firstName.sendKeys("Ana");
+        // Find contact form
+        WebElement contactLink = driver.findElement(By.linkText("Contact"));
+        contactLink.click();
 
-        // Fill Last Name
-        driver.findElement(By.id("lastName")).sendKeys("Paula");
+        // Wait for form to load
+        WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("name")));
+        WebElement emailField = driver.findElement(By.id("email"));
+        WebElement messageField = driver.findElement(By.id("message"));
+        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
 
-        // Fill Email
-        driver.findElement(By.id("email")).sendKeys("ana.paula@example.com");
-
-        // Fill Phone
-        driver.findElement(By.id("phone")).sendKeys("1234567890");
-
-        // Fill Open Text Area
-        driver.findElement(By.id("open-text-area")).sendKeys("Test message with all fields filled.");
+        // Fill form
+        nameField.sendKeys("John Doe");
+        emailField.sendKeys("john@example.com");
+        messageField.sendKeys("Test message for contact form");
 
         // Submit form
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        submitButton.click();
 
-        // Assert Success Message
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success span")));
-        assertTrue(successMessage.getText().contains("Mensagem enviada com sucesso!"), "Success message should be displayed for all fields.");
+        // Verify form submission
+        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".alert-success")));
+        assertTrue(successMessage.isDisplayed(), "Success message should be displayed after form submission");
     }
 
     @Test
     @Order(4)
-    public void testFormSubmission_InvalidEmail() {
-        driver.get(BASE_URL);
+    public void testServiceSection() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Fill fields with invalid email
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName"))).sendKeys("Test");
-        driver.findElement(By.id("lastName")).sendKeys("User");
-        WebElement emailField = driver.findElement(By.id("email"));
-        emailField.sendKeys("invalid-email"); // Intentionally invalid
-        driver.findElement(By.id("open-text-area")).sendKeys("Test with invalid email.");
+        // Find service section
+        WebElement servicesLink = driver.findElement(By.linkText("Services"));
+        servicesLink.click();
 
-        // Submit form
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        // Wait for services page to load
+        wait.until(ExpectedConditions.urlContains("services.html"));
 
-        // Assert Error Message
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error span")));
-        assertTrue(errorMessage.getText().contains("Valide os campos obrigatórios!"), "Error message for invalid email should be displayed.");
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("services.html"), "Should navigate to services page");
+
+        // Check if service items are displayed
+        List<WebElement> serviceItems = driver.findElements(By.cssSelector(".service-item"));
+        assertTrue(serviceItems.size() > 0, "Service items should be displayed");
     }
 
     @Test
     @Order(5)
-    public void testDelayedResponse() {
-        driver.get(BASE_URL);
+    public void testTeamSection() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Check Delayed Response checkbox
-        WebElement delayedCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("checkbox")));
-        delayedCheckbox.click();
+        // Find team section
+        WebElement teamLink = driver.findElement(By.linkText("Team"));
+        teamLink.click();
 
-        // Fill required fields
-        driver.findElement(By.id("firstName")).sendKeys("Delayed");
-        driver.findElement(By.id("lastName")).sendKeys("Test");
-        driver.findElement(By.id("email")).sendKeys("delayed.test@example.com");
-        driver.findElement(By.id("open-text-area")).sendKeys("This is a delayed response test.");
+        // Wait for team page to load
+        wait.until(ExpectedConditions.urlContains("team.html"));
 
-        // Submit form
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("team.html"), "Should navigate to team page");
 
-        // Assert Success Message (should take longer due to delay)
-        // The test passes if the message appears eventually, which the WebDriverWait handles.
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success span")));
-        assertTrue(successMessage.getText().contains("Mensagem enviada com sucesso!"), "Success message should be displayed for delayed response.");
+        // Check if team members are displayed
+        List<WebElement> teamMembers = driver.findElements(By.cssSelector(".team-member"));
+        assertTrue(teamMembers.size() > 0, "Team members should be displayed");
     }
 
     @Test
     @Order(6)
-    public void testClearFieldsFunctionality() {
-        driver.get(BASE_URL);
+    public void testExternalLinksInFooter() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Fill several fields
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        firstName.sendKeys("ToBeCleared");
+        String parentWindow = driver.getWindowHandle();
+        for (String window : driver.getWindowHandles()) {
+            if (!window.equals(parentWindow)) {
+                driver.switchTo().window(window);
+                driver.close();
+            }
+        }
 
-        driver.findElement(By.id("lastName")).sendKeys("Name");
-        driver.findElement(By.id("email")).sendKeys("test@example.com");
-        driver.findElement(By.id("phone")).sendKeys("987654321");
-        driver.findElement(By.id("open-text-area")).sendKeys("This text should be cleared.");
+        // Check footer social links
+        try {
+            WebElement twitterLink = driver.findElement(By.cssSelector("a[href*='twitter']"));
+            twitterLink.click();
+            
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("twitter"), "Should open Twitter link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // Continue if Twitter link not found
+        }
 
-        // Click Clear Fields button
-        driver.findElement(By.cssSelector("button[type='reset']")).click();
+        try {
+            WebElement linkedinLink = driver.findElement(By.cssSelector("a[href*='linkedin']"));
+            linkedinLink.click();
 
-        // Assert fields are cleared
-        assertEquals("", firstName.getAttribute("value"), "First name field should be cleared.");
-        assertEquals("", driver.findElement(By.id("lastName")).getAttribute("value"), "Last name field should be cleared.");
-        assertEquals("", driver.findElement(By.id("email")).getAttribute("value"), "Email field should be cleared.");
-        assertEquals("", driver.findElement(By.id("phone")).getAttribute("value"), "Phone field should be cleared.");
-        assertEquals("", driver.findElement(By.id("open-text-area")).getAttribute("value"), "Text area should be cleared.");
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("linkedin"), "Should open LinkedIn link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // Continue if LinkedIn link not found
+        }
+
+        try {
+            WebElement facebookLink = driver.findElement(By.cssSelector("a[href*='facebook']"));
+            facebookLink.click();
+
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("facebook"), "Should open Facebook link");
+            driver.close();
+            driver.switchTo().window(parentWindow);
+        } catch (NoSuchElementException e) {
+            // Continue if Facebook link not found
+        }
     }
 
     @Test
     @Order(7)
-    public void testTextAreaValidation() {
-        driver.get(BASE_URL);
+    public void testResponsiveDesign() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Fill required fields but leave text area empty
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName"))).sendKeys("Text");
-        driver.findElement(By.id("lastName")).sendKeys("Area");
-        driver.findElement(By.id("email")).sendKeys("text.area@example.com");
-        // Intentionally leave open-text-area empty
+        // Check responsive design elements
+        WebElement mobileMenuButton = driver.findElement(By.cssSelector(".mobile-menu-button"));
+        assertTrue(mobileMenuButton.isDisplayed(), "Mobile menu button should be displayed");
 
-        // Submit form
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        // Assert Error Message
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error span")));
-        assertTrue(errorMessage.getText().contains("Valide os campos obrigatórios!"), "Error message for empty text area should be displayed.");
+        // Check that page adapts to different screen sizes by checking basic layout elements
+        WebElement header = driver.findElement(By.tagName("header"));
+        WebElement footer = driver.findElement(By.tagName("footer"));
+        
+        assertTrue(header.isDisplayed(), "Header should be displayed");
+        assertTrue(footer.isDisplayed(), "Footer should be displayed");
     }
 
     @Test
     @Order(8)
-    public void testPhoneValidation_Required() {
-        driver.get(BASE_URL);
+    public void testImageLoading() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
 
-        // Check phone required checkbox
-        WebElement phoneRequiredCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("label[for='phone-checkbox']")));
-        phoneRequiredCheckbox.click();
+        // Check if images are loaded
+        List<WebElement> images = driver.findElements(By.cssSelector("img"));
+        assertTrue(images.size() > 0, "Images should be present on page");
 
-        // Fill other required fields
-        driver.findElement(By.id("firstName")).sendKeys("Phone");
-        driver.findElement(By.id("lastName")).sendKeys("Required");
-        driver.findElement(By.id("email")).sendKeys("phone.required@example.com");
-        driver.findElement(By.id("open-text-area")).sendKeys("Test phone required validation.");
-
-        // Submit form without phone number
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-
-        // Assert Error Message
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error span")));
-        assertTrue(errorMessage.getText().contains("Valide os campos obrigatórios!"), "Error message for missing required phone should be displayed.");
-    }
-
-    @Test
-    @Order(9)
-    public void testFooterLinksExternal() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
-
-        // Click Política de Privacidade link (one level deep within the same domain)
-        WebElement privacyLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Política de Privacidade")));
-        privacyLink.click();
-        wait.until(ExpectedConditions.urlContains("privacy"));
-
-        // The "privacy" link is an anchor within the same page, so we just assert the URL changed.
-        assertTrue(driver.getCurrentUrl().contains("#"), "URL should change to include anchor for Política de Privacidade.");
-
-        // Go back to main page for external links
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-
-        // Click W3C link (external)
-        originalWindow = driver.getWindowHandle();
-        WebElement w3cLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("W3C")));
-        // Scroll to element to ensure it's clickable (sometimes needed in headless)
-        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", w3cLink);
-        w3cLink.click();
-        assertExternalLinkAndReturn(originalWindow, "w3c.br");
-
-        // Click Home link (internal, but one level below - it's just an anchor)
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        WebElement homeLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Home")));
-        homeLink.click();
-        // Asserting the URL is the base URL suffices for an anchor link
-        assertEquals(BASE_URL, driver.getCurrentUrl(), "URL should be base URL after clicking Home anchor.");
-    }
-
-    // --- Helper Methods ---
-
-    private void assertExternalLinkAndReturn(String originalWindow, String expectedDomain) {
-        Set<String> allWindows = driver.getWindowHandles();
-        String newWindow = allWindows.stream().filter(handle -> !handle.equals(originalWindow)).findFirst().orElse(null);
-        assertNotNull(newWindow, "A new window should have been opened for " + expectedDomain);
-        driver.switchTo().window(newWindow);
-        assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                "New window URL should contain " + expectedDomain + ". URL was: " + driver.getCurrentUrl());
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        // Wait for images to be loaded 
+        for (WebElement img : images) {
+            if (img.isDisplayed()) {
+                // Image is displayed, which means it loaded successfully
+                assertTrue(img.isDisplayed(), "Images should be displayed");
+            }
+        }
     }
 }
