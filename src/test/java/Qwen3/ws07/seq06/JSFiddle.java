@@ -1,359 +1,208 @@
-package GTP5.ws07.seq06;
+package Qwen3.ws07.seq06;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleHeadlessSuite {
+import static org.junit.jupiter.api.Assertions.*;
+
+@TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
+public class JsFiddleTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
-    private static final String BASE_URL = "https://jsfiddle.net/";
-
     @BeforeAll
-    public static void setupClass() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, DEFAULT_TIMEOUT);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void tearDownClass() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    // ============================
-    // Helpers / Utilities
-    // ============================
-
-    private static void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.urlContains("jsfiddle.net"));
-        // Dismiss cookie banner if present
-        clickIfPresent(By.cssSelector("button#CybotCookiebotDialogBodyLevelButtonAccept, button[aria-label*='accept' i], button[aria-label*='agree' i], button:contains('Accept')"));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Base page did not load.");
-    }
-
-    private static Optional<WebElement> first(By by) {
-        List<WebElement> els = driver.findElements(by);
-        return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
-    }
-
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
-    }
-
-    private static Optional<WebElement> waitClickable(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.elementToBeClickable(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
-    }
-
-    private static boolean clickIfPresent(By by) {
-        Optional<WebElement> el = waitClickable(by);
-        el.ifPresent(WebElement::click);
-        return el.isPresent();
-    }
-
-    private static boolean elementExists(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    private static void clearAndType(By locator, String value) {
-        Optional<WebElement> el = first(locator);
-        el.ifPresent(e -> {
-            wait.until(ExpectedConditions.visibilityOf(e));
-            e.clear();
-            e.sendKeys(value);
-        });
-    }
-
-    private static String hostOf(String url) {
-        try {
-            URI u = new URI(url);
-            return (u.getHost() == null ? "" : u.getHost().toLowerCase(Locale.ROOT));
-        } catch (URISyntaxException e) {
-            return "";
-        }
-    }
-
-    private static String pathOf(String url) {
-        try {
-            URI u = new URI(url);
-            String p = u.getPath();
-            return p == null || p.isEmpty() ? "/" : p;
-        } catch (URISyntaxException e) {
-            return "/";
-        }
-    }
-
-    private static int depthOfPath(String path) {
-        if (path == null || path.isEmpty() || path.equals("/")) return 0;
-        String s = path;
-        if (s.startsWith("/")) s = s.substring(1);
-        if (s.endsWith("/")) s = s.substring(0, s.length() - 1);
-        if (s.isEmpty()) return 0;
-        return s.split("/").length;
-    }
-
-    private static String toAbsoluteUrl(String href) {
-        if (href == null || href.isBlank()) return "";
-        if (href.startsWith("http://") || href.startsWith("https://")) return href;
-        if (href.startsWith("//")) return "https:" + href;
-        if (href.startsWith("/")) return BASE_URL.endsWith("/") ? BASE_URL.substring(0, BASE_URL.length() - 1) + href : BASE_URL + href;
-        try {
-            URI base = new URI(driver.getCurrentUrl());
-            return base.resolve(href).toString();
-        } catch (URISyntaxException e) {
-            return href;
-        }
-    }
-
-    private static List<String> collectInternalLinksOneLevel() {
-        String baseHost = hostOf(BASE_URL);
-        Set<String> urls = new LinkedHashSet<>();
-        for (WebElement a : driver.findElements(By.cssSelector("a[href]"))) {
-            String raw = a.getAttribute("href");
-            if (raw == null || raw.startsWith("mailto:") || raw.startsWith("tel:") || raw.startsWith("javascript:")) continue;
-            String href = toAbsoluteUrl(raw);
-            if (!hostOf(href).equals(baseHost)) continue;
-            String path = pathOf(href);
-            if (depthOfPath(path) <= 1) {
-                urls.add(href);
-            }
-        }
-        urls.add(BASE_URL);
-        return new ArrayList<>(urls);
-    }
-
-    private static void assertExternalLink(WebElement link) {
-        String original = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-
-        String href = link.getAttribute("href");
-        if (href == null || href.isBlank()) return;
-        String expectedHost = hostOf(toAbsoluteUrl(href));
-
-        wait.until(ExpectedConditions.elementToBeClickable(link)).click();
-
-        try {
-            wait.until(d -> d.getWindowHandles().size() != before.size());
-        } catch (TimeoutException ignored) {}
-
-        Set<String> after = driver.getWindowHandles();
-        if (after.size() > before.size()) {
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(d -> !d.getCurrentUrl().isEmpty());
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase(Locale.ROOT).contains(expectedHost),
-                    "External link did not navigate to expected domain. Expected host: " + expectedHost + " actual: " + driver.getCurrentUrl());
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(d -> !d.getCurrentUrl().equals(BASE_URL));
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase(Locale.ROOT).contains(expectedHost),
-                    "External link did not navigate to expected domain in same tab.");
-            driver.navigate().back();
-            wait.until(ExpectedConditions.urlContains("jsfiddle.net"));
-        }
-    }
-
-    // ============================
-    // Tests
-    // ============================
-
     @Test
     @Order(1)
-    @DisplayName("Base page loads and one-level internal pages are reachable")
-    void baseAndInternalPagesReachable() {
-        openBase();
-        List<String> internal = collectInternalLinksOneLevel();
-        Assertions.assertFalse(internal.isEmpty(), "No internal links found at one level.");
-        for (String url : internal) {
-            driver.navigate().to(url);
-            wait.until(d -> d.getCurrentUrl().startsWith("https://"));
-            Assertions.assertEquals(hostOf(BASE_URL), hostOf(driver.getCurrentUrl()),
-                    "Internal navigation landed on unexpected host: " + driver.getCurrentUrl());
-            Assertions.assertFalse(driver.getPageSource().isEmpty(), "Page appears empty: " + url);
-        }
-        openBase();
+    public void testHomePageLoadsCorrectly() {
+        driver.get("https://jsfiddle.net/");
+        
+        String currentPageTitle = driver.getTitle();
+        assertTrue(currentPageTitle.contains("JSFiddle"), "Page title should contain 'JSFiddle'");
+        
+        // Check for main fiddle editor elements
+        WebElement editorContainer = driver.findElement(By.cssSelector(".editor-container"));
+        assertTrue(editorContainer.isDisplayed(), "Editor container should be displayed");
+        
+        WebElement iframe = driver.findElement(By.tagName("iframe"));
+        assertTrue(iframe.isDisplayed(), "IFrame should be displayed");
     }
 
     @Test
     @Order(2)
-    @DisplayName("External links on base and one-level pages open correct domains")
-    void externalLinksPolicy() {
-        openBase();
-        Set<String> pages = new LinkedHashSet<>(collectInternalLinksOneLevel());
-        for (String p : pages) {
-            driver.navigate().to(p);
-            wait.until(ExpectedConditions.urlContains("jsfiddle.net"));
-            List<WebElement> externals = driver.findElements(By.cssSelector("a[href]"))
-                    .stream()
-                    .filter(a -> {
-                        String href = a.getAttribute("href");
-                        if (href == null || href.startsWith("#") || href.startsWith("javascript:") || href.startsWith("mailto:")) return false;
-                        return !hostOf(toAbsoluteUrl(href)).equals(hostOf(BASE_URL));
-                    })
-                    .collect(Collectors.toList());
-            for (WebElement link : externals) {
-                assertExternalLink(link);
-            }
+    public void testEditorFunctionality() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Wait for editor to be available
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".ace_editor")));
+        
+        // Test that editor is present and editable
+        WebElement editor = driver.findElement(By.cssSelector(".ace_editor"));
+        assertTrue(editor.isDisplayed(), "Editor should be displayed");
+        
+        // Check for language selection (if available)
+        try {
+            WebElement languageSelect = driver.findElement(By.cssSelector(".language-select"));
+            assertTrue(languageSelect.isDisplayed(), "Language selector should be present");
+        } catch (NoSuchElementException e) {
+            // Language selector might not be present, that's OK
         }
-        openBase();
     }
 
     @Test
     @Order(3)
-    @DisplayName("Sorting dropdown (if present) cycles options and affects order")
-    void sortingDropdownIfPresent() {
-        openBase();
-        // JSFiddle home may not have sorting; try any visible select
-        List<WebElement> selects = driver.findElements(By.cssSelector("select[id*='sort' i], select[name*='sort' i], select"));
-        Assumptions.assumeTrue(!selects.isEmpty(), "No select dropdown found; skipping sort test.");
-        WebElement select = selects.get(0);
-        Select sel = new Select(select);
-        List<WebElement> options = sel.getOptions();
-        Assumptions.assumeTrue(options.size() >= 2, "Not enough options to exercise sorting.");
-        String before = sel.getFirstSelectedOption().getText().trim();
-
-        // Snapshot of a repeated section (heuristic)
-        List<String> baseline = driver.findElements(By.cssSelector("section, article, .post, .card, .list"))
-                .stream().map(WebElement::getText).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-
-        sel.selectByIndex(options.size() - 1);
-        String afterSel1 = sel.getFirstSelectedOption().getText().trim();
-        List<String> after1 = driver.findElements(By.cssSelector("section, article, .post, .card, .list"))
-                .stream().map(WebElement::getText).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-
-        sel.selectByIndex(0);
-        String afterSel2 = sel.getFirstSelectedOption().getText().trim();
-        List<String> after2 = driver.findElements(By.cssSelector("section, article, .post, .card, .list"))
-                .stream().map(WebElement::getText).map(String::trim).filter(s -> !s.isEmpty()).collect(Collectors.toList());
-
-        Assertions.assertNotEquals(before, afterSel1, "Selecting another option did not change selection.");
-        Assertions.assertNotEquals(afterSel1, afterSel2, "Selecting back did not change selection.");
-        Assertions.assertTrue(!baseline.equals(after1) || !after1.equals(after2) || !baseline.equals(after2),
-                "Sorting did not appear to change the page content ordering (acceptable if static).");
-        openBase();
+    public void testFiddleCreation() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Test creation of a simple fiddle
+        // Wait for page elements
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".ace_editor")));
+        
+        // Check if we can find the HTML, CSS, and JS panes
+        List<WebElement> panes = driver.findElements(By.cssSelector(".ace_editor"));
+        assertTrue(panes.size() >= 3, "Should have at least 3 editor panes (HTML, CSS, JS)");
+        
+        // Try to find the run button 
+        try {
+            WebElement runButton = driver.findElement(By.cssSelector(".run-button"));
+            assertTrue(runButton.isDisplayed(), "Run button should be displayed");
+        } catch (NoSuchElementException e) {
+            // Run button might not have specific class
+        }
     }
 
     @Test
     @Order(4)
-    @DisplayName("Menu (burger) actions if available: open/close, About (external), Home")
-    void menuBurgerActionsIfAvailable() {
-        openBase();
-        // Hamburger/menu button candidates
-        By[] burgers = new By[] {
-                By.cssSelector("button[aria-label*='menu' i], .hamburger, .navbar-toggler, .bm-burger-button"),
-                By.xpath("//button[contains(translate(@aria-label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'menu') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'menu')]")
-        };
-        Optional<WebElement> burger = Optional.empty();
-        for (By by : burgers) {
-            burger = first(by);
-            if (burger.isPresent()) break;
+    public void testNavigationToExamples() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Try to find examples link
+        try {
+            WebElement examplesLink = driver.findElement(By.linkText("Examples"));
+            examplesLink.click();
+            
+            // Wait for examples page or check URL change
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains("examples") || currentUrl.contains("explore"), 
+                       "Should navigate to examples section");
+            
+            // Go back to main page
+            driver.navigate().back();
+        } catch (NoSuchElementException e) {
+            // If examples link doesn't exist, that's okay for this test
         }
-        Assumptions.assumeTrue(burger.isPresent(), "No burger/menu button found; skipping.");
-
-        wait.until(ExpectedConditions.elementToBeClickable(burger.get())).click();
-
-        // Home / All Items
-        By home = By.xpath("//*[self::a or self::button][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'home') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'all items')]");
-        if (elementExists(home)) {
-            clickIfPresent(home);
-            Assertions.assertEquals(hostOf(BASE_URL), hostOf(driver.getCurrentUrl()), "Home navigation left base host.");
-        }
-
-        // About (external)
-        By about = By.xpath("//*[self::a or self::button][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'about')]");
-        if (elementExists(about)) {
-            assertExternalLink(driver.findElement(about));
-        }
-
-        // Reset App State (generic)
-        By reset = By.xpath("//*[self::a or self::button][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset app state') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset')]");
-        if (elementExists(reset)) {
-            Assertions.assertTrue(clickIfPresent(reset), "Reset App State click failed.");
-        }
-
-        // Logout (if any)
-        By logout = By.xpath("//*[self::a or self::button][contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'logout') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'log out')]");
-        if (elementExists(logout)) {
-            clickIfPresent(logout);
-            Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Logout did not return to base site.");
-        }
-
-        // Close menu if still open
-        clickIfPresent(burgers[0]);
-        openBase();
     }
 
     @Test
     @Order(5)
-    @DisplayName("Login behavior (if a login form is available)")
-    void loginBehaviorIfPresent() {
-        openBase();
-
-        // Try to navigate to sign-in if a link exists
-        By signInLink = By.xpath("//a[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'sign in') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'login')]");
-        if (elementExists(signInLink)) {
-            clickIfPresent(signInLink);
-        }
-
-        Optional<WebElement> user = first(By.cssSelector("input[type='email'], input[name*='user' i], input[id*='user' i], input[name*='email' i], input[id*='email' i]"));
-        Optional<WebElement> pass = first(By.cssSelector("input[type='password'], input[name*='pass' i], input[id*='pass' i]"));
-
-        Optional<WebElement> submit = Optional.empty();
-        if (user.isPresent() || pass.isPresent()) {
-            // Generic submit candidates
-            By[] submits = new By[] {
-                    By.cssSelector("button[type='submit']"),
-                    By.cssSelector("input[type='submit']"),
-                    By.xpath("//button[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'sign in') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'login')]"),
-                    By.xpath("//input[@type='submit' or @type='button'][contains(translate(@value,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'login') or contains(translate(@value,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'sign in')]")
-            };
-            for (By by : submits) {
-                if (elementExists(by)) { submit = first(by); break; }
+    public void testExternalLinksInFooter() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Wait for footer to be present
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("footer")));
+        
+        // Check for external links in footer
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && (href.contains("github") || href.contains("twitter") || href.contains("facebook"))) {
+                // These are external links we want to test
+                String oldTab = driver.getWindowHandle();
+                link.click();
+                String winHandle = driver.getWindowHandle();
+                driver.switchTo().window(winHandle);
+                
+                // Verify we navigated to expected domain
+                if (href.contains("github")) {
+                    assertTrue(driver.getCurrentUrl().contains("github.com"), 
+                              "GitHub link should navigate to GitHub website");
+                } else if (href.contains("twitter")) {
+                    assertTrue(driver.getCurrentUrl().contains("twitter.com"), 
+                              "Twitter link should navigate to Twitter website");
+                } else if (href.contains("facebook")) {
+                    assertTrue(driver.getCurrentUrl().contains("facebook.com"), 
+                              "Facebook link should navigate to Facebook website");
+                }
+                
+                driver.close();
+                driver.switchTo().window(oldTab);
             }
         }
+    }
 
-        Assumptions.assumeTrue(user.isPresent() && pass.isPresent() && submit.isPresent(), "No native login form detected; skipping login tests.");
+    @Test
+    @Order(6)
+    public void testResponsiveLayout() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Check if the page is responsive by verifying key elements are present
+        WebElement header = driver.findElement(By.tagName("header"));
+        assertTrue(header.isDisplayed(), "Header should be displayed");
+        
+        WebElement mainContent = driver.findElement(By.tagName("main"));
+        assertTrue(mainContent.isDisplayed(), "Main content should be displayed");
+        
+        WebElement footer = driver.findElement(By.tagName("footer"));
+        assertTrue(footer.isDisplayed(), "Footer should be displayed");
+        
+        // Check if editor is responsive by checking it's in the main content
+        WebElement editorContainer = driver.findElement(By.cssSelector(".editor-container"));
+        assertTrue(editorContainer.isDisplayed(), "Editor container should be displayed");
+    }
 
-        // Negative: invalid credentials
-        clearAndType(By.cssSelector("input[type='email'], input[name*='user' i], input[id*='user' i], input[name*='email' i], input[id*='email' i]"), "invalid@example.com");
-        clearAndType(By.cssSelector("input[type='password'], input[name*='pass' i], input[id*='pass' i]"), "wrong");
-        wait.until(ExpectedConditions.elementToBeClickable(submit.get())).click();
-
-        boolean error = elementExists(By.cssSelector(".error, .alert, [role='alert']")) ||
-                driver.getPageSource().toLowerCase(Locale.ROOT).contains("invalid") ||
-                driver.getPageSource().toLowerCase(Locale.ROOT).contains("error");
-        Assertions.assertTrue(error || driver.getCurrentUrl().contains("login") || driver.getCurrentUrl().startsWith(BASE_URL),
-                "Invalid login did not show an error or remain on a login page.");
-
-        // Positive login not possible (no credentials provided)
-        Assumptions.assumeTrue(false, "No valid credentials available; skipping positive login.");
+    @Test
+    @Order(7)
+    public void testKeyFunctionality() {
+        driver.get("https://jsfiddle.net/");
+        
+        // Wait for the editor to load
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".ace_editor")));
+        
+        // Try to interact with editor by checking it's editable
+        try {
+            WebElement editor = driver.findElement(By.cssSelector(".ace_editor"));
+            assertTrue(editor.isDisplayed(), "Editor should be visible");
+            
+            // Try to check if we can interact with ace editor (keystrokes)
+            // Instead, we check for the presence of ace-related elements
+            List<WebElement> aceElements = driver.findElements(By.cssSelector(".ace_scroller"));
+            assertTrue(aceElements.size() > 0, "Ace editor should be loaded");
+        } catch (NoSuchElementException e) {
+            // If core elements don't exist, it might be another version of JSFiddle
+            // but the page should still load properly
+        }
+        
+        // Check for save/share buttons
+        try {
+            List<WebElement> saveButtons = driver.findElements(By.cssSelector("[title*='save'], [title*='Save']"));
+            if (!saveButtons.isEmpty()) {
+                assertTrue(saveButtons.get(0).isDisplayed(), "Save button should be displayed");
+            }
+        } catch (NoSuchElementException e) {
+            // Save button might not be available in certain contexts
+        }
     }
 }
