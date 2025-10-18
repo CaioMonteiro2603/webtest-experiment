@@ -117,7 +117,7 @@ reports/
 │   │   └── seq10
 ```
 
-### The folders named `ws01`, `ws02`, ..., `ws09` correspond to nive web sites, generally used for web testing tools. An exception is `ws10`, which is a real website we use for testing:
+### The folders named `ws01`, `ws02`, ..., `ws09` correspond to nine web sites, generally used for web testing tools. An exception is `ws10`, which is a real website we use for testing:
 - [`ws01`](https://www.saucedemo.com/v1/index.html)
 - [`ws02`](https://parabank.parasoft.com/parabank/index.htm)
 - [`ws03`](https://bugbank.netlify.app/)
