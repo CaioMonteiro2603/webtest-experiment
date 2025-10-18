@@ -1,4 +1,4 @@
-# Repository with Experiments evaluating GPT5 Thinking, GPT4, Gemini Pro 2.5, OpenRouter and Suna.
+# Repository with experiments evaluating GPT5 Thinking, GPT4, Gemini Pro 2.5, OpenRouter and Suna.
 
 ## Folder Naming
 
