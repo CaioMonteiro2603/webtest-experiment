@@ -1,299 +1,431 @@
-package GPT5.ws05.seq09;
+package Qwen3.ws05.seq09;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
-
-import java.net.URI;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessTest {
+public class CacTatFormTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 
-    // Core field locators (multiple fallbacks to be resilient)
-    private static final By FORM = By.cssSelector("form, .container, body");
-    private static final By FIRST_NAME = By.cssSelector("#firstName, input[name='firstName'], input[placeholder*='Nome'][type='text'], input[placeholder*='First'][type='text']");
-    private static final By LAST_NAME = By.cssSelector("#lastName, input[name='lastName'], input[placeholder*='Sobrenome'][type='text'], input[placeholder*='Last'][type='text']");
-    private static final By EMAIL = By.cssSelector("#email, input[type='email'][name='email'], input[placeholder*='mail']");
-    private static final By PHONE = By.cssSelector("#phone, input[name='phone'], input[placeholder*='Telefone'], input[placeholder*='Phone']");
-    private static final By PRODUCT_SELECT = By.cssSelector("#product, select[name='product'], select");
-    private static final By OPEN_TEXT = By.cssSelector("#open-text-area, textarea[name='open-text-area'], textarea");
-    private static final By FILE_INPUT = By.cssSelector("input[type='file']");
-    private static final By SUBMIT = By.cssSelector("button[type='submit'], #submit-button, .button");
-    private static final By SUCCESS = By.cssSelector(".success, .alert-success, #success");
-    private static final By ERROR = By.cssSelector(".error, .alert-error, #error");
-
-    // Optional behaviors
-    private static final By MAKE_PHONE_REQUIRED_CHECKBOX = By.cssSelector("input[type='checkbox'][name*='phone'], input[type='checkbox'][id*='phone']");
-
-    // Menu-like (not applicable here) - used only to assert absence
-    private static final By BURGER = By.id("react-burger-menu-btn");
-    private static final By MENU = By.cssSelector(".bm-menu-wrap, nav, aside");
-    private static final By MENU_ALL_ITEMS = By.id("inventory_sidebar_link");
-    private static final By MENU_ABOUT = By.id("about_sidebar_link");
-    private static final By MENU_LOGOUT = By.id("logout_sidebar_link");
-    private static final By MENU_RESET = By.id("reset_sidebar_link");
-
-    // Internal privacy link (one level below)
-    private static final By PRIVACY_LINK = By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'privacy') or contains(.,'Política') or contains(.,'Privacidade')]");
-
     @BeforeAll
-    public static void setUpClass() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void tearDownClass() {
-        if (driver != null) driver.quit();
-    }
-
-    /* ===================== Helpers ===================== */
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(FORM));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith("https://cac-tat.s3.eu-central-1.amazonaws.com"), "Should stay on expected origin");
-    }
-
-    private WebElement waitVisible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement waitClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private boolean isPresent(By locator) {
-        return !driver.findElements(locator).isEmpty();
-    }
-
-    private static String hostOf(String url) {
-        try { return Optional.ofNullable(new URI(url).getHost()).orElse(""); }
-        catch (Exception e) { return ""; }
-    }
-
-    private void assertExternalLinkOpens(WebElement link, String expectedDomain) {
-        String originalHandle = driver.getWindowHandle();
-        Set<String> oldHandles = driver.getWindowHandles();
-        waitClickable(By.cssSelector("body")); // stabilize
-        link.click();
-
-        wait.until(d -> d.getWindowHandles().size() > oldHandles.size() || d.getCurrentUrl().contains(expectedDomain));
-
-        if (driver.getWindowHandles().size() > oldHandles.size()) {
-            Set<String> diff = new HashSet<>(driver.getWindowHandles());
-            diff.removeAll(oldHandles);
-            String newHandle = diff.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "External URL should contain: " + expectedDomain);
-            driver.close();
-            driver.switchTo().window(originalHandle);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "External URL should contain: " + expectedDomain);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(FORM));
+    static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
 
-    /* ===================== Tests ===================== */
-
     @Test
     @Order(1)
-    public void landing_CoreElementsPresent() {
-        openBase();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(isPresent(FIRST_NAME), "First name should be present"),
-                () -> Assertions.assertTrue(isPresent(LAST_NAME), "Last name should be present"),
-                () -> Assertions.assertTrue(isPresent(EMAIL), "Email should be present"),
-                () -> Assertions.assertTrue(isPresent(OPEN_TEXT), "Message textarea should be present"),
-                () -> Assertions.assertTrue(isPresent(PRODUCT_SELECT), "Product dropdown should be present"),
-                () -> Assertions.assertTrue(isPresent(SUBMIT), "Submit button should be present")
-        );
+    void testPageTitleAndHeader() {
+        driver.get(BASE_URL);
+
+        assertEquals("Customer Support", driver.getTitle(), "Page title should be 'Customer Support'");
+
+        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        assertEquals("CAC TAT", header.getText(), "Main header should be CAC TAT");
     }
 
     @Test
     @Order(2)
-    public void dropdown_ExerciseOptionsAndAssertChange() {
-        openBase();
-        Select product = new Select(waitVisible(PRODUCT_SELECT));
-        List<String> options = product.getOptions().stream().map(WebElement::getText).collect(Collectors.toList());
-        Assumptions.assumeTrue(options.size() >= 2, "Need at least two options in product dropdown");
-        String initial = product.getFirstSelectedOption().getText();
-        product.selectByIndex(1);
-        String after = product.getFirstSelectedOption().getText();
-        Assertions.assertNotEquals(initial, after, "Selecting another product should change selection");
-        product.selectByIndex(0);
-        String restored = product.getFirstSelectedOption().getText();
-        Assertions.assertEquals(product.getOptions().get(0).getText(), restored, "Re-selecting first option should restore initial");
+    void testFormFieldsArePresent() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        WebElement email = driver.findElement(By.id("email"));
+        WebElement phone = driver.findElement(By.id("phone"));
+        WebElement requestType = driver.findElement(By.id("request-type"));
+        WebElement message = driver.findElement(By.id("message"));
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+
+        assertTrue(firstName.isDisplayed(), "First name field should be displayed");
+        assertTrue(lastName.isDisplayed(), "Last name field should be displayed");
+        assertTrue(email.isDisplayed(), "Email field should be displayed");
+        assertTrue(phone.isDisplayed(), "Phone field should be displayed");
+        assertTrue(requestType.isDisplayed(), "Request type dropdown should be displayed");
+        assertTrue(message.isDisplayed(), "Message textarea should be displayed");
+        assertTrue(agreeCheckbox.isDisplayed(), "Agree checkbox should be displayed");
+        assertTrue(submitButton.isDisplayed(), "Submit button should be displayed");
     }
 
     @Test
     @Order(3)
-    public void invalidEmail_ShowsError_NoSuccess() {
-        openBase();
-        waitVisible(FIRST_NAME).clear();
-        driver.findElement(FIRST_NAME).sendKeys("Caio");
-        waitVisible(LAST_NAME).clear();
-        driver.findElement(LAST_NAME).sendKeys("Silva");
-        waitVisible(EMAIL).clear();
-        driver.findElement(EMAIL).sendKeys("invalid-email");
-        waitVisible(OPEN_TEXT).clear();
-        driver.findElement(OPEN_TEXT).sendKeys("Mensagem de teste com e-mail inválido.");
-        waitClickable(SUBMIT).click();
+    void testSuccessfulFormSubmission() {
+        driver.get(BASE_URL);
 
-        boolean html5Validation = Optional.ofNullable(driver.findElement(EMAIL).getDomProperty("validationMessage"))
-                .map(String::trim).orElse("").length() > 0;
-        boolean customError = isPresent(ERROR);
-        Assertions.assertTrue(html5Validation || customError, "Invalid email should trigger validation error");
-        Assertions.assertTrue(driver.findElements(SUCCESS).isEmpty(), "Success message must not be present");
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio.silva@example.com");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Complaint");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("This is a test message from an automated test.");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("success-message")));
+        assertTrue(successMessage.isDisplayed(), "Success message should appear");
+        assertEquals("Thank you for contacting us! We will be in touch shortly.", successMessage.getText().trim(), "Success message should match expected");
     }
 
     @Test
     @Order(4)
-    public void phoneRequiredCheckbox_WhenChecked_PhoneBecomesMandatory() {
-        openBase();
-        Assumptions.assumeTrue(isPresent(MAKE_PHONE_REQUIRED_CHECKBOX), "Phone required checkbox not available on this page");
-        WebElement toggler = driver.findElement(MAKE_PHONE_REQUIRED_CHECKBOX);
-        if (!toggler.isSelected()) toggler.click();
+    void testFirstNameIsRequired() {
+        driver.get(BASE_URL);
 
-        // Fill other required fields but leave phone empty
-        waitVisible(FIRST_NAME).clear();
-        driver.findElement(FIRST_NAME).sendKeys("Ana");
-        waitVisible(LAST_NAME).clear();
-        driver.findElement(LAST_NAME).sendKeys("Tester");
-        waitVisible(EMAIL).clear();
-        driver.findElement(EMAIL).sendKeys("ana.tester@example.com");
-        waitVisible(OPEN_TEXT).clear();
-        driver.findElement(OPEN_TEXT).sendKeys("Verificando obrigatoriedade do telefone.");
-        waitClickable(SUBMIT).click();
+        WebElement lastName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("last-name")));
+        lastName.sendKeys("Silva");
 
-        boolean phoneInvalid = Optional.ofNullable(driver.findElement(PHONE).getDomProperty("validationMessage"))
-                .map(String::trim).orElse("").length() > 0;
-        boolean errorShown = isPresent(ERROR);
-        Assertions.assertTrue(phoneInvalid || errorShown, "Phone should be required when checkbox is checked");
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio@example.com");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Need help.");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        String firstNameClass = driver.findElement(By.id("first-name")).getAttribute("class");
+        assertTrue(firstNameClass.contains("error"), "First name field should have error class when empty");
     }
 
     @Test
     @Order(5)
-    public void validSubmission_ShowsSuccessMessage() {
-        openBase();
-        // Ensure phone requirement off if toggle exists
-        if (isPresent(MAKE_PHONE_REQUIRED_CHECKBOX)) {
-            WebElement t = driver.findElement(MAKE_PHONE_REQUIRED_CHECKBOX);
-            if (t.isSelected()) t.click();
+    void testLastNameIsRequired() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio@example.com");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Need help.");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
         }
 
-        waitVisible(FIRST_NAME).clear();
-        driver.findElement(FIRST_NAME).sendKeys("Maria");
-        waitVisible(LAST_NAME).clear();
-        driver.findElement(LAST_NAME).sendKeys("Quality");
-        waitVisible(EMAIL).clear();
-        driver.findElement(EMAIL).sendKeys("maria.quality@example.com");
-        waitVisible(OPEN_TEXT).clear();
-        driver.findElement(OPEN_TEXT).sendKeys("Mensagem válida para envio com sucesso.");
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
 
-        // Exercise select and file input (optional)
-        if (isPresent(PRODUCT_SELECT)) {
-            Select s = new Select(driver.findElement(PRODUCT_SELECT));
-            if (s.getOptions().size() > 1) s.selectByIndex(1);
-        }
-        if (isPresent(FILE_INPUT)) {
-            // Cannot rely on local filesystem; skip actual upload while keeping locator coverage.
-            driver.findElement(FILE_INPUT).isDisplayed();
-        }
-
-        waitClickable(SUBMIT).click();
-
-        boolean successBlock = isPresent(SUCCESS);
-        boolean successText = driver.getPageSource().toLowerCase().contains("sucesso") ||
-                              driver.getPageSource().toLowerCase().contains("success");
-        Assertions.assertTrue(successBlock || successText, "A success message/indicator should appear after valid submission");
+        String lastNameClass = driver.findElement(By.id("last-name")).getAttribute("class");
+        assertTrue(lastNameClass.contains("error"), "Last name field should have error class when empty");
     }
 
     @Test
     @Order(6)
-    public void privacyPolicy_InternalOneLevel_NavigateAndBack() {
-        openBase();
-        Assumptions.assumeTrue(isPresent(PRIVACY_LINK), "Privacy/Política de Privacidade link not found on the base page");
-        String origin = driver.getWindowHandle();
-        Set<String> old = driver.getWindowHandles();
+    void testEmailIsRequired() {
+        driver.get(BASE_URL);
 
-        WebElement link = waitClickable(PRIVACY_LINK);
-        link.click();
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
 
-        // Either new tab or same tab
-        wait.until(d -> d.getWindowHandles().size() > old.size() || d.getCurrentUrl().contains("privacy"));
-        if (driver.getWindowHandles().size() > old.size()) {
-            Set<String> diff = new HashSet<>(driver.getWindowHandles());
-            diff.removeAll(old);
-            String newTab = diff.iterator().next();
-            driver.switchTo().window(newTab);
-            wait.until(ExpectedConditions.urlContains("privacy"));
-            Assertions.assertTrue(driver.getCurrentUrl().contains("privacy"), "Should navigate to privacy page (one level below)");
-            driver.close();
-            driver.switchTo().window(origin);
-        } else {
-            wait.until(ExpectedConditions.urlContains("privacy"));
-            Assertions.assertTrue(driver.getCurrentUrl().contains("privacy"), "Should navigate to privacy page (one level below)");
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(FORM));
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Need help.");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
         }
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        String emailClass = driver.findElement(By.id("email")).getAttribute("class");
+        assertTrue(emailClass.contains("error"), "Email field should have error class when empty");
     }
 
     @Test
     @Order(7)
-    public void externalLinks_OpenInNewTab_AssertDomainAndClose() {
-        openBase();
-        String baseHost = hostOf(BASE_URL);
-        List<WebElement> links = driver.findElements(By.cssSelector("a[href^='http']"));
-        List<WebElement> externals = links.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    String host = hostOf(href);
-                    return href != null && !host.isEmpty() && !host.contains(baseHost);
-                })
-                .collect(Collectors.toList());
+    void testEmailInvalidFormat() {
+        driver.get(BASE_URL);
 
-        int max = Math.min(3, externals.size());
-        for (int i = 0; i < max; i++) {
-            WebElement a = externals.get(i);
-            String host = hostOf(a.getAttribute("href"));
-            if (!host.isEmpty()) {
-                assertExternalLinkOpens(a, host);
-            }
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("invalid-email");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Need help.");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
         }
 
-        // If there are no external links, ensure page is still interactive
-        if (max == 0) {
-            Assertions.assertTrue(isPresent(SUBMIT), "No external links found; base page should remain interactive");
-        }
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        String emailClass = driver.findElement(By.id("email")).getAttribute("class");
+        assertTrue(emailClass.contains("error"), "Email field should have error class on invalid format");
     }
 
     @Test
     @Order(8)
-    public void burgerMenuAndInventory_AreNotApplicable_ButGuarded() {
-        openBase();
-        Assertions.assertTrue(driver.findElements(BURGER).isEmpty(), "Burger/menu button should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU).isEmpty(), "Side menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_ALL_ITEMS).isEmpty(), "All Items menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_ABOUT).isEmpty(), "About menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_LOGOUT).isEmpty(), "Logout menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_RESET).isEmpty(), "Reset App State menu should not exist on this site");
+    void testMessageIsRequired() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio@example.com");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        String messageClass = driver.findElement(By.id("message")).getAttribute("class");
+        assertTrue(messageClass.contains("error"), "Message field should have error class when empty");
+    }
+
+    @Test
+    @Order(9)
+    void testAgreeCheckboxIsRequired() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio@example.com");
+
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("5551234567");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Need help.");
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        submitButton.click();
+
+        WebElement agreeLabel = driver.findElement(By.cssSelector("label[for='agree']"));
+        String classAttr = agreeLabel.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Agree checkbox label should show error when not checked");
+    }
+
+    @Test
+    @Order(10)
+    void testRequestTypeDropdownOptions() {
+        driver.get(BASE_URL);
+
+        Select requestType = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("request-type"))));
+        java.util.List<WebElement> options = requestType.getOptions();
+
+        assertEquals(4, options.size(), "Request type dropdown should have 4 options");
+
+        java.util.List<String> expectedOptions = java.util.Arrays.asList("Select an issue...", "Question", "Complaint", "Other");
+        for (int i = 0; i < expectedOptions.size(); i++) {
+            assertEquals(expectedOptions.get(i), options.get(i).getText(), "Dropdown option should match");
+        }
+    }
+
+    @Test
+    @Order(11)
+    void testPhoneFieldAcceptsOnlyDigits() {
+        driver.get(BASE_URL);
+
+        WebElement phoneField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("phone")));
+        phoneField.sendKeys("abc123xyz");
+
+        assertEquals("123", phoneField.getAttribute("value"), "Phone field should only accept digits");
+    }
+
+    @Test
+    @Order(12)
+    void testRequestTypeSelectionAffectsAppearance() {
+        driver.get(BASE_URL);
+
+        Select requestType = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("request-type"))));
+        requestType.selectByVisibleText("Complaint");
+
+        WebElement messageField = driver.findElement(By.id("message"));
+        String backgroundColor = messageField.getCssValue("background-color");
+        assertEquals("rgba(255, 0, 0, 1)", backgroundColor, "Message field should turn red for complaint");
+    }
+
+    @Test
+    @Order(13)
+    void testSubmitButtonDisabledInitially() {
+        driver.get(BASE_URL);
+
+        WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("btn-primary")));
+        assertFalse(submitButton.isEnabled(), "Submit button should be disabled initially");
+    }
+
+    @Test
+    @Order(14)
+    void testSubmitButtonEnabledWhenFormValid() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("caio@example.com");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Test message");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.className("btn-primary"));
+        assertTrue(submitButton.isEnabled(), "Submit button should be enabled when form is valid");
+    }
+
+    @Test
+    @Order(15)
+    void testFooterLinksOpenInNewTab() {
+        driver.get(BASE_URL);
+
+        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("footer a[href*='github']")));
+        String originalWindow = driver.getWindowHandle();
+
+        githubLink.click();
+
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        String url = driver.getCurrentUrl();
+        assertTrue(url.contains("github.com"), "GitHub link should redirect to GitHub");
+
+        driver.close();
+        driver.switchTo().window(originalWindow);
+    }
+
+    @Test
+    @Order(16)
+    void testFormResetButton() {
+        driver.get(BASE_URL);
+
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstName.sendKeys("Caio");
+
+        WebElement lastName = driver.findElement(By.id("last-name"));
+        lastName.sendKeys("Silva");
+
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("test@example.com");
+
+        Select requestType = new Select(driver.findElement(By.id("request-type")));
+        requestType.selectByVisibleText("Question");
+
+        WebElement message = driver.findElement(By.id("message"));
+        message.sendKeys("Testing reset.");
+
+        WebElement resetButton = driver.findElement(By.cssSelector("button[type='reset']"));
+        resetButton.click();
+
+        // Verify fields are cleared
+        wait.until(ExpectedConditions.textToBe(By.id("first-name"), ""));
+        assertEquals("", lastName.getAttribute("value"), "Last name should be cleared");
+        assertEquals("", email.getAttribute("value"), "Email should be cleared");
+        assertEquals("", message.getAttribute("value"), "Message should be cleared");
+        assertEquals("Select an issue...", requestType.getFirstSelectedOption().getText(), "Request type should be reset");
     }
 }

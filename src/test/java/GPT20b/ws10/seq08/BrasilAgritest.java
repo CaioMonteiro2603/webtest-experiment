@@ -1,28 +1,38 @@
-package GPT5.ws10.seq08;
+package GPT20b.ws10.seq08;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriBetaE2ETest {
+public class GestaoBrasilAgriTest {
+
+    private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
+    private static final String USERNAME = "superadmin@brasilagritest.com.br";
+    private static final String PASSWORD = "10203040";
+    private static final String BASE_HOST = "gestao.brasilagritest.com";
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-
-    private static final String BASE_URL = "https://beta.brasilagritest.com/login";
-    private static final String LOGIN = "superadmin@brasilagritest.com.br";
-    private static final String PASSWORD = "10203040";
 
     @BeforeAll
     public static void setUp() {
@@ -34,326 +44,207 @@ public class BrasilAgriBetaE2ETest {
 
     @AfterAll
     public static void tearDown() {
-        if (driver != null) driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
-    // -------------------- Helpers --------------------
+    /* ---------- Helper methods ---------- */
 
-    private void openLogin() {
+    private void navigateToLogin() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.or(
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='email']")),
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[name='email']")),
-                ExpectedConditions.titleContains("Login")
-        ));
     }
 
-    private boolean exists(By by) {
-        return !driver.findElements(by).isEmpty();
+    private void performLogin(String user, String pass) {
+        navigateToLogin();
+
+        By emailField = By.id("email");
+        By passwordField = By.id("password");
+        By loginButton = By.cssSelector("button[type='submit']");
+
+        List<WebElement> elements = driver.findElements(emailField);
+        Assumptions.assumeTrue(!elements.isEmpty(),
+                "Login form email field not found; skipping test.");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).sendKeys(user);
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).clear();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(passwordField)).sendKeys(pass);
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton)).click();
     }
 
-    private Optional<WebElement> first(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return Optional.of(els.get(0));
-        }
-        return Optional.empty();
-    }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private void type(By by, String text) {
-        WebElement el = waitClickable(by);
-        el.clear();
-        el.sendKeys(text);
-    }
-
-    private boolean isLoggedInHeuristic() {
-        // Look for common dashboard markers or logout button
-        return exists(By.xpath("//button[contains(.,'Sair') or contains(.,'Logout')]")) ||
-               exists(By.cssSelector("a[href*='logout']")) ||
-               exists(By.cssSelector("[data-test='logout']")) ||
-               driver.getCurrentUrl().toLowerCase().contains("/dashboard") ||
-               exists(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'dashboard')]"));
-    }
-
-    private void logoutIfPossible() {
-        if (exists(By.xpath("//button[contains(.,'Sair') or contains(.,'Logout')]"))) {
-            waitClickable(By.xpath("//button[contains(.,'Sair') or contains(.,'Logout')]")).click();
-        } else if (exists(By.cssSelector("a[href*='logout']"))) {
-            waitClickable(By.cssSelector("a[href*='logout']")).click();
-        } else if (exists(By.cssSelector("[data-test='logout']"))) {
-            waitClickable(By.cssSelector("[data-test='logout']")).click();
-        }
-        // Wait until login screen is back (if it logs out)
-        wait.until((ExpectedCondition<Boolean>) d ->
-                exists(By.cssSelector("input[type='email']")) ||
-                exists(By.cssSelector("input[name='email']")) ||
-                driver.getCurrentUrl().contains("/login")
-        );
-    }
-
-    private void login(String email, String password) {
-        openLogin();
-        By emailBy = exists(By.cssSelector("input[name='email']")) ? By.cssSelector("input[name='email']") : By.cssSelector("input[type='email']");
-        By passBy = exists(By.cssSelector("input[name='password']")) ? By.cssSelector("input[name='password']") : By.cssSelector("input[type='password']");
-        type(emailBy, email);
-        type(passBy, password);
-
-        By submitBy = exists(By.cssSelector("button[type='submit']")) ? By.cssSelector("button[type='submit']")
-                : By.xpath("//button[contains(.,'Entrar') or contains(.,'Login')]");
-        waitClickable(submitBy).click();
-
-        // Wait until either dashboard or an error appears
-        wait.until((ExpectedCondition<Boolean>) d ->
-                isLoggedInHeuristic() ||
-                exists(By.cssSelector(".error, .alert-danger, [role='alert']")) ||
-                exists(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'credenciais') or contains(.,'inválid') or contains(.,'invalid')]"))
-        );
-    }
-
-    private void resetAppStateIfAvailable() {
-        // Try common patterns for "Reset App State"
-        if (exists(By.xpath("//a[contains(.,'Reset App State')] | //button[contains(.,'Reset App State')]"))) {
-            waitClickable(By.xpath("//a[contains(.,'Reset App State')] | //button[contains(.,'Reset App State')]")).click();
-            // Confirm with a toast or by checking a state reset marker if any; otherwise just wait briefly via condition
-            wait.until(ExpectedConditions.or(
-                    ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".toast-success, .alert-success")),
-                    ExpectedConditions.urlContains("reset")
-            ));
+    private void ensureLoggedIn() {
+        if (driver.findElements(By.id("logout-button")).isEmpty()) {
+            performLogin(USERNAME, PASSWORD);
+            // wait for logout button to confirm login
+            By logout = By.id("logout-button");
+            wait.until(ExpectedConditions.visibilityOfElementLocated(logout));
         }
     }
 
-    private Optional<WebElement> findBurgerMenu() {
-        By[] candidates = new By[] {
-                By.cssSelector("[aria-label='menu']"),
-                By.cssSelector(".navbar-burger"),
-                By.id("react-burger-menu-btn"),
-                By.xpath("//button[contains(@aria-label,'menu') or contains(.,'Menu')]")
-        };
-        return first(candidates);
-    }
-
-    private void openBurgerIfPresent() {
-        Optional<WebElement> burger = findBurgerMenu();
-        burger.ifPresent(b -> wait.until(ExpectedConditions.elementToBeClickable(b)).click());
-    }
-
-    private void assertExternalLinkOpens(String cssSelector, String expectedDomain) {
-        List<WebElement> links = driver.findElements(By.cssSelector(cssSelector));
-        if (links.isEmpty()) return; // treat as optional
-        String original = driver.getWindowHandle();
-        String before = driver.getCurrentUrl();
-        wait.until(ExpectedConditions.elementToBeClickable(links.get(0))).click();
-        try {
-            wait.until(d -> d.getWindowHandles().size() > 1 || !d.getCurrentUrl().equals(before));
-        } catch (TimeoutException ignored) {}
-
-        Set<String> handles = driver.getWindowHandles();
-        if (handles.size() > 1) {
-            for (String h : handles) if (!h.equals(original)) { driver.switchTo().window(h); break; }
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "External link should navigate to " + expectedDomain);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "External link should navigate to " + expectedDomain);
-            driver.navigate().back();
-        }
-    }
-
-    // Try to exercise a generic sorting dropdown if present on dashboard lists/tables.
-    private void exerciseFirstSortingDropdownIfAny() {
-        List<WebElement> selects = driver.findElements(By.cssSelector("select, .select select"));
-        if (selects.isEmpty()) return;
-
-        // Choose the first real <select> having 2+ options
-        WebElement selectEl = null;
-        for (WebElement s : selects) {
-            try {
-                Select sel = new Select(s);
-                if (sel.getOptions().size() >= 2) { selectEl = s; break; }
-            } catch (Exception ignored) {}
-        }
-        if (selectEl == null) return;
-
-        Select sel = new Select(selectEl);
-
-        // Try to detect an adjacent list/table to observe changes
-        List<String> beforeTexts = collectFirstColumnTexts();
-
-        // Switch to last option, then to first, and expect some change (heuristic)
-        int count = sel.getOptions().size();
-        sel.selectByIndex(count - 1);
-        wait.until(d -> true); // allow minimal rendering
-
-        List<String> after1 = collectFirstColumnTexts();
-        sel.selectByIndex(0);
-        wait.until(d -> true);
-        List<String> after2 = collectFirstColumnTexts();
-
-        boolean changedOnce = !beforeTexts.equals(after1) || !after1.equals(after2);
-        Assertions.assertTrue(changedOnce, "Changing sort options should influence list/table order (heuristic)");
-    }
-
-    private List<String> collectFirstColumnTexts() {
-        List<WebElement> rows = driver.findElements(By.cssSelector("table tbody tr"));
-        if (!rows.isEmpty()) {
-            return rows.stream().map(r -> {
-                List<WebElement> tds = r.findElements(By.cssSelector("td"));
-                return tds.isEmpty() ? r.getText() : tds.get(0).getText();
-            }).collect(Collectors.toList());
-        }
-        // fallback: collect from list items/cards
-        List<WebElement> items = driver.findElements(By.cssSelector(".list-group .list-group-item, .card .card-title, li"));
-        return items.stream().limit(10).map(WebElement::getText).collect(Collectors.toList());
-    }
-
-    // -------------------- Tests --------------------
+    /* ---------- Tests ---------- */
 
     @Test
     @Order(1)
-    public void loginPageLoads_controlsPresent() {
-        openLogin();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(exists(By.cssSelector("input[type='email']")) || exists(By.cssSelector("input[name='email']")),
-                        "Email input should be present"),
-                () -> Assertions.assertTrue(exists(By.cssSelector("input[type='password']")) || exists(By.cssSelector("input[name='password']")),
-                        "Password input should be present"),
-                () -> Assertions.assertTrue(exists(By.cssSelector("button[type='submit']")) ||
-                        exists(By.xpath("//button[contains(.,'Entrar') or contains(.,'Login')]")), "Submit button should be present")
-        );
+    public void testLoginPageLoads() {
+        navigateToLogin();
+        String title = driver.getTitle();
+        Assertions.assertTrue(title.toLowerCase().contains("login"),
+                "Page title should contain 'login'.");
+        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("login"),
+                "URL should contain 'login' path.");
     }
 
     @Test
     @Order(2)
-    public void invalidLoginShowsError() {
-        login("invalid@example.com", "wrongpass123");
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(exists(By.cssSelector(".error, .alert-danger, [role='alert']")) ||
-                        exists(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'inválid') or contains(.,'invalid')]")),
-                        "Some error indicator/message should appear for invalid login"),
-                () -> Assertions.assertTrue(driver.getCurrentUrl().contains("/login") || !isLoggedInHeuristic(),
-                        "Should remain on login page and not be logged in")
-        );
+    public void testInvalidCredentials() {
+        performLogin("invalid@user.com", "wrongpass");
+        By errorLocator = By.cssSelector(".alert-danger, .invalid-feedback");
+        List<WebElement> errors = driver.findElements(errorLocator);
+        Assertions.assertFalse(errors.isEmpty(),
+                "Error message should appear for invalid credentials.");
+        String msg = errors.get(0).getText().toLowerCase();
+        Assertions.assertTrue(msg.contains("invalid") || msg.contains("incorrect") || msg.contains("wrong"),
+                "Error message should indicate invalid credentials.");
     }
 
     @Test
     @Order(3)
-    public void validLoginNavigatesToDashboard_orExplicitError() {
-        login(LOGIN, PASSWORD);
-        Assertions.assertTrue(isLoggedInHeuristic() ||
-                        exists(By.cssSelector(".error, .alert-danger, [role='alert']")),
-                "Either we should reach dashboard (logged in) or see an explicit error");
+    public void testValidLogin() {
+        performLogin(USERNAME, PASSWORD);
+        By logoutButton = By.id("logout-button");
+        WebElement logout = wait.until(ExpectedConditions.visibilityOfElementLocated(logoutButton));
+        Assertions.assertTrue(logout.isDisplayed(), "Logout button should be visible after valid login.");
+        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("dashboard") ||
+                             driver.getCurrentUrl().toLowerCase().contains("panel"),
+                             "After login, URL expected to contain 'dashboard' or 'panel'.");
     }
 
     @Test
     @Order(4)
-    public void burgerMenu_openClose_allItems_about_logout_resetIfAvailable() {
-        if (!isLoggedInHeuristic()) login(LOGIN, PASSWORD);
+    public void testSortingDropdownOnInventory() {
+        ensureLoggedIn();
 
-        Optional<WebElement> burger = findBurgerMenu();
-        if (burger.isPresent()) {
-            wait.until(ExpectedConditions.elementToBeClickable(burger.get())).click();
-            boolean menuOpened = exists(By.cssSelector(".bm-menu-wrap, nav, aside")) ||
-                                 exists(By.xpath("//button[contains(.,'Fechar') or contains(.,'Close')]"));
-            Assertions.assertTrue(menuOpened, "Burger/menu should open");
+        By inventoryLink = By.linkText("All Items");
+        List<WebElement> inventories = driver.findElements(inventoryLink);
+        Assumptions.assumeTrue(!inventories.isEmpty(),
+                "All Items link not found; skipping test.");
+        wait.until(ExpectedConditions.elementToBeClickable(inventoryLink)).click();
 
-            // All Items (navigate to some main listing)
-            if (exists(By.xpath("//a[contains(.,'All Items')]")) || exists(By.id("inventory_sidebar_link"))) {
-                first(By.xpath("//a[contains(.,'All Items')]"), By.id("inventory_sidebar_link"))
-                        .ifPresent(WebElement::click);
-                // verify URL or presence of a list/table
-                wait.until((ExpectedCondition<Boolean>) d ->
-                        exists(By.cssSelector("table, .list-group, .card, .data-table")) ||
-                        !driver.getCurrentUrl().contains("/login"));
-                Assertions.assertTrue(true, "All Items action executed");
-                openBurgerIfPresent();
+        By sortSelect = By.cssSelector("select#sort-selector, select[name='sort']");
+        List<WebElement> selects = driver.findElements(sortSelect);
+        Assumptions.assumeTrue(!selects.isEmpty(),
+                "Sorting dropdown not found; skipping test.");
+
+        Select sort = new Select(selects.get(0));
+        List<WebElement> options = sort.getOptions();
+        Assertions.assertTrue(options.size() > 1, "Sorting dropdown should have multiple options.");
+
+        String firstItemName = null;
+        for (WebElement option : options) {
+            sort.selectByVisibleText(option.getText());
+            // Wait for the table to update
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".table-loading")));
+            By itemNameLocator = By.cssSelector(".item-table .item-name");
+            List<WebElement> items = driver.findElements(itemNameLocator);
+            Assumptions.assumeTrue(!items.isEmpty(),
+                    "No item rows displayed after sorting; skipping further checks.");
+            String currentFirst = items.get(0).getText();
+            if (firstItemName != null) {
+                Assertions.assertNotEquals(firstItemName, currentFirst,
+                        "Sorting should change the order of items.");
             }
-
-            // About (external)
-            if (exists(By.xpath("//a[contains(.,'About')]")) || exists(By.cssSelector("a[href*='http']"))) {
-                WebElement about = first(By.xpath("//a[contains(.,'About')]"), By.cssSelector("a[href*='http']"))
-                        .orElse(null);
-                if (about != null) {
-                    String href = about.getAttribute("href");
-                    String expectedDomain = href != null && href.contains("http") ? href.split("/")[2] : "http";
-                    String original = driver.getWindowHandle();
-                    String before = driver.getCurrentUrl();
-                    wait.until(ExpectedConditions.elementToBeClickable(about)).click();
-                    try { wait.until(d -> d.getWindowHandles().size() > 1 || !d.getCurrentUrl().equals(before)); } catch (TimeoutException ignored) {}
-                    Set<String> handles = driver.getWindowHandles();
-                    if (handles.size() > 1) {
-                        for (String h : handles) if (!h.equals(original)) { driver.switchTo().window(h); break; }
-                        wait.until(ExpectedConditions.urlContains(expectedDomain));
-                        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "About should open external site");
-                        driver.close();
-                        driver.switchTo().window(original);
-                    } else {
-                        wait.until(ExpectedConditions.urlContains(expectedDomain));
-                        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "About should open external site");
-                        driver.navigate().back();
-                    }
-                    openBurgerIfPresent();
-                }
-            }
-
-            // Reset App State (optional)
-            resetAppStateIfAvailable();
-
-            // Logout via menu if present (will be re-logged in by later tests as needed)
-            if (exists(By.xpath("//a[contains(.,'Logout')]")) ||
-                exists(By.xpath("//button[contains(.,'Logout') or contains(.,'Sair')]")) ||
-                exists(By.cssSelector("a[href*='logout']"))) {
-                first(By.xpath("//a[contains(.,'Logout')]"),
-                      By.xpath("//button[contains(.,'Logout') or contains(.,'Sair')]"),
-                      By.cssSelector("a[href*='logout']"))
-                        .ifPresent(WebElement::click);
-                // Expect back to login
-                wait.until((ExpectedCondition<Boolean>) d ->
-                        driver.getCurrentUrl().contains("/login") ||
-                        exists(By.cssSelector("input[type='email']"))
-                );
-                Assertions.assertTrue(driver.getCurrentUrl().contains("/login") || exists(By.cssSelector("input[type='email']")),
-                        "After logout, login page should be visible");
-            } else {
-                // Close menu if close control exists
-                first(By.id("react-burger-cross-btn"),
-                     By.xpath("//button[contains(.,'Close') or contains(.,'Fechar')]"))
-                    .ifPresent(WebElement::click);
-            }
-        } else {
-            Assumptions.assumeTrue(false, "Burger/menu not present; skipping menu-related assertions");
+            firstItemName = currentFirst;
         }
     }
 
     @Test
     @Order(5)
-    public void sortingDropdown_exercisesIfPresent_andAffectsOrder() {
-        if (!isLoggedInHeuristic()) login(LOGIN, PASSWORD);
-        exerciseFirstSortingDropdownIfAny();
+    public void testBurgerMenuOperations() {
+        ensureLoggedIn();
+
+        By burgerBtn = By.cssSelector("button[aria-label='Toggle navigation'], .navbar-toggler");
+        List<WebElement> btns = driver.findElements(burgerBtn);
+        Assumptions.assumeTrue(!btns.isEmpty(), "Burger menu button not found; skipping test.");
+        wait.until(ExpectedConditions.elementToBeClickable(burgerBtn)).click();
+
+        // Click All Items
+        By allItemsLink = By.linkText("All Items");
+        if (!driver.findElements(allItemsLink).isEmpty()) {
+            wait.until(ExpectedConditions.elementToBeClickable(allItemsLink)).click();
+            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("items") ||
+                                 driver.getCurrentUrl().toLowerCase().contains("all-items"),
+                                 "URL should reference items after clicking All Items.");
+        }
+
+        // About external
+        By aboutLink = By.linkText("About");
+        if (!driver.findElements(aboutLink).isEmpty()) {
+            String originalWin = driver.getWindowHandle();
+            wait.until(ExpectedConditions.elementToBeClickable(aboutLink)).click();
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+            Set<String> handles = driver.getWindowHandles();
+            for (String h : handles) {
+                if (!h.equals(originalWin)) {
+                    driver.switchTo().window(h);
+                    Assertions.assertTrue(driver.getCurrentUrl().contains("about") ||
+                                         driver.getCurrentUrl().contains("external"),
+                                         "About link opened a non‑internal URL.");
+                    driver.close();
+                    driver.switchTo().window(originalWin);
+                }
+            }
+        }
+
+        // Reset App State
+        By resetLink = By.linkText("Reset App State");
+        if (!driver.findElements(resetLink).isEmpty()) {
+            wait.until(ExpectedConditions.elementToBeClickable(resetLink)).click();
+            // After reset, verify that cart badge count is zero if cart exists
+            By cartBadge = By.cssSelector(".cart-badge");
+            if (!driver.findElements(cartBadge).isEmpty()) {
+                String badgeText = driver.findElement(cartBadge).getText();
+                Assertions.assertTrue(badgeText.equals("0") || badgeText.isEmpty(),
+                        "Cart badge should be zero after reset.");
+            }
+        }
+
+        // Logout
+        By logoutLink = By.id("logout-button");
+        if (!driver.findElements(logoutLink).isEmpty()) {
+            wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
+            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("login"),
+                    "Should return to login page after logout.");
+        }
     }
 
     @Test
     @Order(6)
-    public void footerSocialLinks_openExternally_ifPresent() {
-        // test without requiring login
-        openLogin();
-        assertExternalLinkOpens("a[href*='twitter.com']", "twitter.com");
-        assertExternalLinkOpens("a[href*='facebook.com']", "facebook.com");
-        assertExternalLinkOpens("a[href*='linkedin.com']", "linkedin.com");
-    }
+    public void testFooterExternalLinks() {
+        navigateToLogin(); // start from login to ensure fresh load
+        By footerLinks = By.xpath("//footer//a[starts-with(@href,'http')]");
+        List<WebElement> links = driver.findElements(footerLinks);
+        Assertions.assertFalse(links.isEmpty(), "No external links found in footer.");
 
-    @Test
-    @Order(7)
-    public void logout_returnsToLoginPage() {
-        if (!isLoggedInHeuristic()) login(LOGIN, PASSWORD);
-        logoutIfPossible();
-        Assertions.assertTrue(driver.getCurrentUrl().contains("/login") ||
-                              exists(By.cssSelector("input[type='email']")),
-                "After logout, should be on login screen");
+        String originalWin = driver.getWindowHandle();
+        for (WebElement link : links) {
+            String href = link.getAttribute("href");
+            if (href == null || href.isEmpty() || href.contains(BASE_HOST)) {
+                continue; // skip internal or empty links
+            }
+            // click link
+            wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+            wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+            Set<String> handles = driver.getWindowHandles();
+            for (String h : handles) {
+                if (!h.equals(originalWin)) {
+                    driver.switchTo().window(h);
+                    Assertions.assertTrue(driver.getCurrentUrl().contains(href),
+                            "Opened link URL does not contain expected domain: " + href);
+                    driver.close();
+                    driver.switchTo().window(originalWin);
+                }
+            }
+        }
     }
 }

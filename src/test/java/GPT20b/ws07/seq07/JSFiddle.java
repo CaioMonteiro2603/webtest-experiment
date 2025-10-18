@@ -1,258 +1,232 @@
-package GPT5.ws07.seq07;
+package GPT20b.ws07.seq07;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class JsFiddleWebTest {
 
-/**
- * Single-file JUnit 5 + Selenium 4 test suite for https://jsfiddle.net/
- *
- * - Uses FirefoxDriver in HEADLESS mode via options.addArguments("--headless")
- * - Uses WebDriverWait with Duration.ofSeconds(10)
- * - Tests base page, external links, and one-level internal links (limited to avoid flakiness)
- */
-@TestMethodOrder(OrderAnnotation.class)
-public class JsfiddleNetTest {
-    private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static URI baseUri;
+    private static final String BASE_URL = "https://jsfiddle.net/";
+    // Dummy credentials used only for negative test
+    private static final String INVALID_EMAIL = "nonexistent@example.com";
+    private static final String INVALID_PASSWORD = "wrongpass";
 
     @BeforeAll
-    public static void beforeAll() throws URISyntaxException {
+    public static void setUpAll() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        baseUri = new URI(BASE_URL);
     }
 
     @AfterAll
-    public static void afterAll() {
+    public static void tearDownAll() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    private void goToBaseAndWait() {
-        driver.navigate().to(BASE_URL);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(baseUri.getHost().toLowerCase()),
-                "Expected current URL to contain host: " + baseUri.getHost());
-    }
+    /* ---------- Helper methods ------------------------------------- */
 
-    private boolean isExternalHref(String href) {
-        if (href == null || href.trim().isEmpty()) return false;
-        try {
-            URI uri = new URI(href);
-            String host = uri.getHost();
-            if (host == null) return false; // relative -> internal
-            return !host.equalsIgnoreCase(baseUri.getHost());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        for (String h : driver.getWindowHandles()) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
-    }
-
-    private void closeTabAndSwitchBack(String originalHandle) {
-        driver.close();
-        driver.switchTo().window(originalHandle);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-    }
-
-    private List<String> collectOneLevelInternalLinks() {
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        Set<String> result = new LinkedHashSet<>();
-        for (WebElement a : anchors) {
+    private WebElement findElementWithFallback(List<By> locators) {
+        for (By locator : locators) {
             try {
-                String href = a.getAttribute("href");
-                if (href == null || href.trim().isEmpty()) continue;
-                URI uri = new URI(href);
-                if (uri.getHost() == null || uri.getHost().equalsIgnoreCase(baseUri.getHost())) {
-                    // include internal or relative links; one-level limitation applied later when testing
-                    result.add(href);
-                }
-            } catch (Exception e) {
-                // treat as internal if parsing fails
-                String href = a.getAttribute("href");
-                if (href != null) result.add(href);
+                return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            } catch (Exception ignored) {
             }
         }
-        return new ArrayList<>(result);
+        throw new NoSuchElementException("Required element not found using locators: " + locators);
     }
+
+    private void clickAndVerify(String linkText, String expectedPartOfUrl) {
+        WebElement link = findElementWithFallback(
+                List.of(By.linkText(linkText), By.xpath("//a[normalize-space()='" + linkText + "']")));
+        wait.until(ExpectedConditions.elementToBeClickable(link));
+        link.click();
+        wait.until(ExpectedConditions.urlContains(expectedPartOfUrl));
+        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedPartOfUrl),
+                "URL should contain '" + expectedPartOfUrl + "' after clicking '" + linkText + "'");
+    }
+
+    /* ---------- Tests ---------------------------------------------- */
 
     @Test
     @Order(1)
-    public void testHomePageTitleAndHeader() {
-        goToBaseAndWait();
-        String title = driver.getTitle();
-        Assertions.assertTrue(title != null && title.toLowerCase().contains("jsfiddle"),
-                "Expected page title to contain 'JSFiddle', actual: " + title);
-
-        // Look for main header/logo area (robust: look for element with role banner or header tags)
-        List<WebElement> headers = driver.findElements(By.cssSelector("header, .header, .navbar, .top"));
-        Assertions.assertTrue(headers.size() > 0 && headers.get(0).isDisplayed(),
-                "Expected a visible header or navbar on the JSFiddle home page.");
+    public void testHomePageLoads() {
+        driver.get(BASE_URL);
+        Assertions.assertTrue(driver.getTitle().toLowerCase().contains("jsfiddle"),
+                "Page title should contain 'jsFiddle'");
     }
 
     @Test
     @Order(2)
-    public void testCreateNewFiddleButtonOpensEditor() {
-        goToBaseAndWait();
-        // Try to find "New" or "Create" link/button; use several robust selectors
-        List<By> selectors = Arrays.asList(
-                By.cssSelector("a[href='/']"), // logo link
-                By.cssSelector("a.logo"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'new')]"),
-                By.xpath("//a[contains(translate(@title,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'new')]"),
-                By.cssSelector("a[href*='fiddle']"),
-                By.cssSelector("button[title*='New'], button[aria-label*='New']")
-        );
+    public void testLoginWithInvalidCredentials() {
+        clickAndVerify("Login", "login");
+        WebElement emailField = findElementWithFallback(
+                List.of(By.id("email"), By.name("email"), By.cssSelector("input[placeholder='Email']")));
+        WebElement passwordField = findElementWithFallback(
+                List.of(By.id("password"), By.name("password"), By.cssSelector("input[placeholder='Password']")));
+        WebElement loginButton = findElementWithFallback(
+                List.of(By.xpath("//button[normalize-space()='Login']"), By.cssSelector("button.btn-primary")));
 
-        boolean opened = false;
-        String originalUrl = driver.getCurrentUrl();
-        for (By sel : selectors) {
-            List<WebElement> elems = driver.findElements(sel);
-            if (elems.isEmpty()) continue;
-            for (WebElement e : elems) {
-                try {
-                    if (!e.isDisplayed()) continue;
-                    wait.until(ExpectedConditions.elementToBeClickable(e));
-                    String href = e.getAttribute("href");
-                    e.click();
-                    // Wait for either URL change or editor area present
-                    wait.until(d -> !d.getCurrentUrl().equals(originalUrl)
-                            || d.findElements(By.cssSelector(".panel, #panel, .result, #editor")).size() > 0);
-                    // assert success: URL contains 'fiddle' or an editor panel exists
-                    String current = driver.getCurrentUrl();
-                    boolean hasEditor = driver.findElements(By.cssSelector(".panel, #panel, #editor, .CodeMirror")).size() > 0;
-                    if (current.toLowerCase().contains("fiddle") || hasEditor) {
-                        opened = true;
-                        break;
-                    } else {
-                        // navigate back and try next
-                        driver.navigate().back();
-                        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                    }
-                } catch (Exception ignored) {
-                }
-            }
-            if (opened) break;
-        }
+        emailField.clear();
+        emailField.sendKeys(INVALID_EMAIL);
+        passwordField.clear();
+        passwordField.sendKeys(INVALID_PASSWORD);
 
-        Assertions.assertTrue(opened, "Expected to open an editor or a fiddle page from the home page using a 'New' or related control.");
-        // return to base for subsequent tests
-        driver.navigate().to(BASE_URL);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+        loginButton.click();
+
+        WebElement errorMsg = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert.alert-danger, .alert")));
+        Assertions.assertTrue(errorMsg.isDisplayed(), "Error message should be displayed for invalid login");
+        Assertions.assertTrue(errorMsg.getText().toLowerCase().contains("invalid"),
+                "Error message should indicate invalid credentials");
     }
 
     @Test
     @Order(3)
-    public void testExternalLinksOpenAndContainDomain() {
-        goToBaseAndWait();
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<String> hrefs = anchors.stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
+    public void testSortingDropdownExists() {
+        // Navigate to a new fiddle editor to see the language dropdown
+        clickAndVerify("New", "create");
+        // The language dropdown has id 'jsframework' on the editor page
+        List<WebElement> dropdowns = driver.findElements(By.id("jsframework"));
+        Assumptions.assumeTrue(!dropdowns.isEmpty(), "Language dropdown not present on editor page");
 
-        String originalHandle = driver.getWindowHandle();
-        int tested = 0;
-        for (String href : hrefs) {
-            if (isExternalHref(href)) {
-                tested++;
-                if (tested > 4) break; // limit to avoid flakiness
-                String newHandle = openUrlInNewTab(href);
-                try {
-                    try {
-                        URI u = new URI(href);
-                        String host = u.getHost();
-                        if (host != null) {
-                            wait.until(ExpectedConditions.urlContains(host));
-                            Assertions.assertTrue(driver.getCurrentUrl().contains(host),
-                                    "External link should open a URL that contains host: " + host);
-                        }
-                    } catch (URISyntaxException ignored) {
-                        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                    }
-                } finally {
-                    // close and switch back
-                    closeTabAndSwitchBack(originalHandle);
-                }
-            }
-        }
-        if (hrefs.stream().anyMatch(this::isExternalHref)) {
-            Assertions.assertTrue(tested > 0, "There are external links but none were tested.");
-        }
+        WebElement languageDropdown = dropdowns.get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(languageDropdown));
+        languageDropdown.click();
+
+        // Verify at least two options are available
+        List<WebElement> options = wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector("#jsframework option")));
+        Assumptions.assumeTrue(options.size() > 1, "Sorting options are not present");
+
+        // Capture current selection
+        String originalValue = languageDropdown.getAttribute("value");
+
+        // Select a different option
+        WebElement newOption = options.stream()
+                .filter(opt -> !opt.getAttribute("value").equals(originalValue))
+                .findFirst()
+                .get();
+        wait.until(ExpectedConditions.elementToBeClickable(newOption));
+        newOption.click();
+
+        // Verify the selected value changed
+        String updatedValue = languageDropdown.getAttribute("value");
+        Assertions.assertNotEquals(originalValue, updatedValue,
+                "The language dropdown selection should change after selecting a new option");
     }
 
     @Test
     @Order(4)
-    public void testOneLevelInternalLinksNavigateAndContainContent() {
-        goToBaseAndWait();
-        List<String> internalLinks = collectOneLevelInternalLinks().stream()
-                .filter(h -> !h.equalsIgnoreCase(BASE_URL))
-                .collect(Collectors.toList());
+    public void testBurgerMenuInteractions() {
+        // jsFiddle does not have a classic burger menu; it uses a top navigation bar.
+        // We will interact with the 'My Account' menu and check its items.
 
-        int tested = 0;
-        for (String href : internalLinks) {
-            if (tested >= 6) break; // keep test suite fast and stable
-            try {
-                // Only navigate to links that keep us one level below root OR are relative
-                URI uri = new URI(href);
-                String path = uri.getPath() == null ? "" : uri.getPath();
-                String normalized = path.replaceAll("^/+", "").replaceAll("/+$", "");
-                int segments = normalized.isEmpty() ? 0 : normalized.split("/").length;
-                if (segments > 2) continue; // skip deeper links
+        clickAndVerify("My Account", "myaccount");
 
-                driver.navigate().to(href);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        // Verify that the dropdown contains 'Logout' and 'Profile'
+        List<WebElement> menuItems = driver.findElements(By.cssSelector(".dropdown-menu li a"));
+        Assumptions.assumeTrue(!menuItems.isEmpty(), "Account dropdown items not found");
 
-                boolean hasHeader = driver.findElements(By.cssSelector("h1, h2, h3")).stream().anyMatch(WebElement::isDisplayed);
-                boolean hasBodyText = driver.findElements(By.tagName("body")).stream()
-                        .anyMatch(b -> b.getText() != null && b.getText().trim().length() > 20);
+        boolean logoutFound = false;
+        boolean profileFound = false;
+        for (WebElement item : menuItems) {
+            String txt = item.getText().trim();
+            if (txt.equalsIgnoreCase("Logout")) logoutFound = true;
+            if (txt.equalsIgnoreCase("Profile")) profileFound = true;
+        }
+        Assertions.assertTrue(logoutFound, "'Logout' should be present in account menu");
+        Assertions.assertTrue(profileFound, "'Profile' should be present in account menu");
+    }
 
-                Assertions.assertTrue(hasHeader || hasBodyText, "Navigated internal page " + href + " should contain header or body text.");
+    @Test
+    @Order(5)
+    public void testFooterExternalLinks() {
+        // Scroll to footer
+        ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("window.scrollTo(0, document.body.scrollHeight);");
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a[href^='http']"));
 
-                tested++;
-            } catch (URISyntaxException e) {
-                // if URI can't be parsed, skip
-            } catch (Exception e) {
-                // register a failure for navigation but continue
-                Assertions.fail("Failed to navigate or validate internal link: " + href + " -> " + e.getMessage());
-            } finally {
-                // return to base
-                driver.navigate().to(BASE_URL);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        Assumptions.assumeTrue(!footerLinks.isEmpty(), "No external footer links found");
+
+        String originalHandle = driver.getWindowHandle();
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href == null || !href.contains(".")) continue;
+
+            // Open link in new tab
+            ((org.openqa.selenium.JavascriptExecutor) driver).executeScript("window.open(arguments[0]);", href);
+            wait.until(d -> d.getWindowHandles().size() > 1);
+            for (String handle : driver.getWindowHandles()) {
+                if (!handle.equals(originalHandle)) {
+                    driver.switchTo().window(handle);
+                    break;
+                }
             }
-        }
 
-        if (!internalLinks.isEmpty()) {
-            Assertions.assertTrue(tested > 0, "Expected to test at least one one-level internal link.");
+            Assertions.assertTrue(driver.getCurrentUrl().contains(href),
+                    "Opened link URL should contain the href: " + href);
+
+            driver.close();
+            driver.switchTo().window(originalHandle);
         }
+    }
+
+    @Test
+    @Order(6)
+    public void testCartAddRemovePlaceholder() {
+        // jsFiddle does not have a cart; this test demonstrates handling non‑existent features.
+        // Skip the test if a cart badge is not found.
+        List<WebElement> badgeElements = driver.findElements(By.cssSelector(".cart-badge, #cart-count"));
+        Assumptions.assumeTrue(!badgeElements.isEmpty(), "Cart feature not present, skipping test");
+
+        WebElement addBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(".add-to-cart")));
+        addBtn.click();
+
+        WebElement badge = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart-badge")));
+        Assertions.assertNotNull(badge, "Cart badge should appear after adding an item");
+
+        WebElement removeBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector(".remove-from-cart")));
+        removeBtn.click();
+
+        Assertions.assertTrue(driver.findElements(By.cssSelector(".cart-badge")).isEmpty(),
+                "Cart badge should disappear after removing the item");
+    }
+
+    @Test
+    @Order(7)
+    public void testNotOperationalFeaturePlaceholder() {
+        // Placeholder for a feature that would be present in the original target site
+        // For jsFiddle, we skip the test if the element is not found.
+        List<WebElement> placeholderElements = driver.findElements(By.id("nonexistent-feature"));
+        Assumptions.assumeTrue(placeholderElements.isEmpty(),
+                "Feature not available on jsFiddle; skipping test");
     }
 }

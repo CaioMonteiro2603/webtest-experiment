@@ -1,300 +1,446 @@
-package GPT5.ws04.seq09;
+package Qwen3.ws04.seq09;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
-
-import java.net.URI;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessTest {
+public class FormTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 
-    // Robust locators (with fallbacks)
-    private static final By FORM_CONTAINER = By.cssSelector("form, .container, body");
-    private static final By FIRST_NAME = By.cssSelector("input#first-name, input[name='firstName'], input[id*='first'][type='text']");
-    private static final By LAST_NAME = By.cssSelector("input#last-name, input[name='lastName'], input[id*='last'][type='text']");
-    private static final By GENDER_MALE = By.cssSelector("input[type='radio'][value='male'], input[type='radio'][id*='male'], input[type='radio'][name*='gender']");
-    private static final By DOB = By.cssSelector("input#dob, input[type='date'], input[name*='dob']");
-    private static final By ADDRESS = By.cssSelector("textarea#address, textarea[name='address'], textarea[id*='address']");
-    private static final By EMAIL = By.cssSelector("input#email, input[type='email'], input[name='email']");
-    private static final By PASSWORD = By.cssSelector("input#password, input[type='password'][name='password'], input[id*='password']");
-    private static final By COMPANY = By.cssSelector("input#company, input[name='company']");
-    private static final By ROLE_SELECT = By.cssSelector("select#role, select[name='role'], select[id*='role'], select");
-    private static final By EXPECTATIONS_MULTI = By.cssSelector("select#expectation, select[name='expectation'], select[multiple]");
-    private static final By DEV_CHECKBOX = By.cssSelector("input[type='checkbox'][id*='development'], input[type='checkbox'][name*='development'], input[type='checkbox']");
-    private static final By SLIDER = By.cssSelector("input[type='range'], input[id*='slider']");
-    private static final By SUBMIT_BUTTON = By.cssSelector("button#submit, button[type='submit'], button.btn, input[type='submit']");
-
-    private static final By SUCCESS_MESSAGE = By.cssSelector("#submit-msg, .success, .alert-success, [data-test='submit-success']");
-    private static final By ERROR_MESSAGE = By.cssSelector(".error, .help-block, .alert-danger, [data-test='error']");
-
-    // "Menu / burger" and other e-commerce-ish items are not part of this site;
-    // tests will guard with presence checks and behave accordingly.
-    private static final By BURGER_BUTTON = By.id("react-burger-menu-btn");
-    private static final By SIDE_MENU = By.cssSelector(".bm-menu-wrap");
-    private static final By MENU_ALL_ITEMS = By.id("inventory_sidebar_link");
-    private static final By MENU_ABOUT = By.id("about_sidebar_link");
-    private static final By MENU_LOGOUT = By.id("logout_sidebar_link");
-    private static final By MENU_RESET = By.id("reset_sidebar_link");
-
     @BeforeAll
-    public static void beforeAll() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void afterAll() {
-        if (driver != null) driver.quit();
-    }
-
-    /* ================= Helpers ================= */
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(FORM_CONTAINER));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL.substring(0, BASE_URL.indexOf("/", 8))), "Should be on the same origin as BASE_URL");
-    }
-
-    private WebElement waitVisible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement waitClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private boolean isPresent(By locator) {
-        return !driver.findElements(locator).isEmpty();
-    }
-
-    private void safeClick(By locator) {
-        if (isPresent(locator)) {
-            waitClickable(locator).click();
+    static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
-
-    private Select firstSelect(By locator) {
-        List<WebElement> selects = driver.findElements(locator);
-        Assumptions.assumeFalse(selects.isEmpty(), "No select found for " + locator);
-        return new Select(selects.get(0));
-    }
-
-    private void assertExternalLink(By linkEl, String expectedDomainContains) {
-        String original = driver.getWindowHandle();
-        Set<String> old = driver.getWindowHandles();
-        waitClickable(By.xpath(".")); // NOP, ensure DOM stable
-        linkEl.click();
-        // Wait for either new tab or same-tab nav
-        wait.until(d -> d.getWindowHandles().size() > old.size() || driver.getCurrentUrl().contains(expectedDomainContains));
-        if (driver.getWindowHandles().size() > old.size()) {
-            Set<String> diff = new HashSet<>(driver.getWindowHandles());
-            diff.removeAll(old);
-            String newHandle = diff.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains(expectedDomainContains));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomainContains), "External URL should contain: " + expectedDomainContains);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomainContains));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomainContains), "External URL should contain: " + expectedDomainContains);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(FORM_CONTAINER));
-        }
-    }
-
-    private static String hostOf(String href) {
-        try {
-            return Optional.ofNullable(new URI(href).getHost()).orElse("");
-        } catch (Exception e) {
-            return "";
-        }
-    }
-
-    /* ================= Tests ================= */
 
     @Test
     @Order(1)
-    public void pageLoads_CoreElementsPresent() {
-        openBase();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(isPresent(FIRST_NAME), "First name input should be present"),
-                () -> Assertions.assertTrue(isPresent(LAST_NAME), "Last name input should be present"),
-                () -> Assertions.assertTrue(isPresent(EMAIL), "Email input should be present"),
-                () -> Assertions.assertTrue(isPresent(PASSWORD), "Password input should be present"),
-                () -> Assertions.assertTrue(isPresent(ROLE_SELECT), "Role select should be present"),
-                () -> Assertions.assertTrue(isPresent(SUBMIT_BUTTON), "Submit button should be present")
-        );
+    void testPageTitleAndHeader() {
+        driver.get(BASE_URL);
+
+        assertEquals("Katalon Automation Recorder", driver.getTitle(), "Page title should match");
+
+        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        assertTrue(header.getText().contains("Practice Form"), "Header should contain 'Practice Form'");
     }
 
     @Test
     @Order(2)
-    public void sortingDropdown_RoleSelect_ChangesSelection() {
-        openBase();
-        Select role = firstSelect(ROLE_SELECT);
-        List<String> options = role.getOptions().stream().map(WebElement::getText).collect(Collectors.toList());
-        Assumptions.assumeTrue(options.size() >= 2, "Need at least two role options to test");
-        String initial = role.getFirstSelectedOption().getText();
-        role.selectByIndex(1);
-        String after = role.getFirstSelectedOption().getText();
-        Assertions.assertNotEquals(initial, after, "Selecting a different role should change the selected option");
-        role.selectByIndex(0);
-        String restored = role.getFirstSelectedOption().getText();
-        Assertions.assertEquals(role.getOptions().get(0).getText(), restored, "Re-selecting index 0 should restore first option");
+    void testFormFieldsPresence() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        WebElement genderMale = driver.findElement(By.cssSelector("input[value='Male']"));
+        WebElement genderFemale = driver.findElement(By.cssSelector("input[value='Female']"));
+        WebElement dobField = driver.findElement(By.id("dob"));
+        WebElement addressField = driver.findElement(By.id("address"));
+        WebElement emailField = driver.findElement(By.id("email"));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement companyField = driver.findElement(By.id("company"));
+        WebElement roleDropdown = driver.findElement(By.id("role"));
+        WebElement expectedSalaryField = driver.findElement(By.id("salary"));
+        WebElement startDateField = driver.findElement(By.id("start-date"));
+        WebElement vacationPlaceField = driver.findElement(By.id("vacation"));
+        WebElement resumeField = driver.findElement(By.id("upload-photo"));
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+
+        assertTrue(firstNameField.isDisplayed(), "First name field should be visible");
+        assertTrue(lastNameField.isDisplayed(), "Last name field should be visible");
+        assertTrue(genderMale.isDisplayed(), "Male gender option should be visible");
+        assertTrue(genderFemale.isDisplayed(), "Female gender option should be visible");
+        assertTrue(dobField.isDisplayed(), "Date of birth field should be visible");
+        assertTrue(addressField.isDisplayed(), "Address field should be visible");
+        assertTrue(emailField.isDisplayed(), "Email field should be visible");
+        assertTrue(passwordField.isDisplayed(), "Password field should be visible");
+        assertTrue(companyField.isDisplayed(), "Company field should be visible");
+        assertTrue(roleDropdown.isDisplayed(), "Role dropdown should be visible");
+        assertTrue(expectedSalaryField.isDisplayed(), "Expected salary field should be visible");
+        assertTrue(startDateField.isDisplayed(), "Start date field should be visible");
+        assertTrue(vacationPlaceField.isDisplayed(), "Vacation place field should be visible");
+        assertTrue(resumeField.isDisplayed(), "Resume upload field should be visible");
+        assertTrue(agreeCheckbox.isDisplayed(), "Agree checkbox should be visible");
     }
 
     @Test
     @Order(3)
-    public void form_SubmitWithInvalidEmail_ShowsNativeValidationOrError() {
-        openBase();
-        waitVisible(FIRST_NAME).clear();
-        driver.findElement(FIRST_NAME).sendKeys("Caio");
-        waitVisible(LAST_NAME).clear();
-        driver.findElement(LAST_NAME).sendKeys("Tester");
-        if (isPresent(GENDER_MALE)) safeClick(GENDER_MALE);
-        if (isPresent(DOB)) {
-            WebElement dob = driver.findElement(DOB);
-            try { dob.clear(); } catch (Exception ignored) {}
-            dob.sendKeys("01011990"); // tolerant format for many date inputs
-        }
-        if (isPresent(ADDRESS)) {
-            WebElement addr = driver.findElement(ADDRESS);
-            addr.clear(); addr.sendKeys("Rua Exemplo, 123 - São Paulo");
-        }
-        waitVisible(EMAIL).clear();
-        driver.findElement(EMAIL).sendKeys("invalid-email"); // invalid
-        waitVisible(PASSWORD).clear();
-        driver.findElement(PASSWORD).sendKeys("123456");
-        if (isPresent(COMPANY)) {
-            WebElement company = driver.findElement(COMPANY);
-            company.clear(); company.sendKeys("Katalon Co.");
-        }
-        // Submit with invalid email
-        waitClickable(SUBMIT_BUTTON).click();
+    void testSuccessfulFormSubmission() {
+        driver.get(BASE_URL);
 
-        // Check native HTML5 validation or custom error presence
-        String validationMessage = driver.findElement(EMAIL).getDomProperty("validationMessage");
-        boolean hasHtml5Validation = validationMessage != null && validationMessage.trim().length() > 0;
-        boolean hasCustomError = isPresent(ERROR_MESSAGE);
-        Assertions.assertTrue(hasHtml5Validation || hasCustomError, "Invalid email should cause validation error");
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement genderRadio = driver.findElement(By.cssSelector("input[value='Male']"));
+        if (!genderRadio.isSelected()) {
+            genderRadio.click();
+        }
+
+        WebElement dobField = driver.findElement(By.id("dob"));
+        dobField.sendKeys("1990-05-15");
+
+        WebElement addressField = driver.findElement(By.id("address"));
+        addressField.sendKeys("123 Main St, New York, NY");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio.silva@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("SecurePass123");
+
+        WebElement companyField = driver.findElement(By.id("company"));
+        companyField.sendKeys("Tech Corp");
+
+        Select roleSelect = new Select(driver.findElement(By.id("role")));
+        roleSelect.selectByVisibleText("QA Lead");
+
+        WebElement salaryField = driver.findElement(By.id("salary"));
+        salaryField.sendKeys("80000");
+
+        WebElement startDateField = driver.findElement(By.id("start-date"));
+        startDateField.sendKeys("2023-07-01");
+
+        Select vacationSelect = new Select(driver.findElement(By.id("vacation")));
+        vacationSelect.selectByVisibleText("Hawaii");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement confirmationHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".thanks>h1")));
+        assertEquals("Thank you!", confirmationHeader.getText(), "Confirmation message should appear");
     }
 
     @Test
     @Order(4)
-    public void form_FillAllAndSubmit_ShowsSuccessMessage() {
-        openBase();
-        // Fill required fields with a valid email
-        waitVisible(FIRST_NAME).clear();
-        driver.findElement(FIRST_NAME).sendKeys("Caio");
-        waitVisible(LAST_NAME).clear();
-        driver.findElement(LAST_NAME).sendKeys("Silva");
-        if (isPresent(GENDER_MALE)) safeClick(GENDER_MALE);
-        if (isPresent(DOB)) {
-            WebElement dob = driver.findElement(DOB);
-            try { dob.clear(); } catch (Exception ignored) {}
-            dob.sendKeys("02021992");
-        }
-        if (isPresent(ADDRESS)) {
-            WebElement addr = driver.findElement(ADDRESS);
-            addr.clear(); addr.sendKeys("Av. Paulista, 1000");
-        }
-        waitVisible(EMAIL).clear();
-        driver.findElement(EMAIL).sendKeys("caio.tester@example.com");
-        waitVisible(PASSWORD).clear();
-        driver.findElement(PASSWORD).sendKeys("123456");
-        if (isPresent(COMPANY)) {
-            WebElement company = driver.findElement(COMPANY);
-            company.clear(); company.sendKeys("QA Ltd");
-        }
-        if (isPresent(ROLE_SELECT)) {
-            Select role = firstSelect(ROLE_SELECT);
-            if (role.getOptions().size() > 1) role.selectByIndex(1);
-        }
-        if (isPresent(EXPECTATIONS_MULTI)) {
-            Select ex = firstSelect(EXPECTATIONS_MULTI);
-            // Try selecting up to 2 options if multiple
-            List<WebElement> opts = ex.getOptions();
-            if (opts.size() > 0) ex.selectByIndex(0);
-            if (opts.size() > 1 && ex.isMultiple()) ex.selectByIndex(1);
-        }
-        if (isPresent(DEV_CHECKBOX)) {
-            // tick first development checkbox
-            WebElement dev = driver.findElements(DEV_CHECKBOX).get(0);
-            if (!dev.isSelected()) dev.click();
-        }
-        if (isPresent(SLIDER)) {
-            try {
-                WebElement slider = driver.findElement(SLIDER);
-                slider.sendKeys(Keys.ARROW_RIGHT);
-                slider.sendKeys(Keys.ARROW_RIGHT);
-            } catch (Exception ignored) {}
+    void testFirstNameRequiredValidation() {
+        driver.get(BASE_URL);
+
+        WebElement lastNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("last-name")));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
         }
 
-        // Submit
-        waitClickable(SUBMIT_BUTTON).click();
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
 
-        // Assert success
-        boolean successBlock = isPresent(SUCCESS_MESSAGE);
-        boolean successText = driver.getPageSource().toLowerCase().contains("success");
-        Assertions.assertTrue(successBlock || successText, "A success indication should appear after valid submission");
+        WebElement firstNameField = driver.findElement(By.id("first-name"));
+        String classAttr = firstNameField.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "First name field should have error class when empty");
     }
 
     @Test
     @Order(5)
-    public void externalLinks_OnBasePage_OpenAndAreConstrainedToTheirDomains() {
-        openBase();
-        String baseHost = hostOf(BASE_URL);
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href^='http']"));
-        // Filter external only (exclude same host)
-        List<WebElement> externals = anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    String host = hostOf(href);
-                    return href != null && !host.isEmpty() && !host.contains(baseHost);
-                })
-                .collect(Collectors.toList());
+    void testLastNameRequiredValidation() {
+        driver.get(BASE_URL);
 
-        // Visit up to 3 external links one level deep
-        int visits = Math.min(3, externals.size());
-        for (int i = 0; i < visits; i++) {
-            WebElement link = externals.get(i);
-            String href = link.getAttribute("href");
-            String host = hostOf(href);
-            if (host.isEmpty()) continue;
-            assertExternalLink(link, host);
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
         }
 
-        // If none exist, at least assert no crash and page is still present
-        if (visits == 0) {
-            Assertions.assertTrue(isPresent(FORM_CONTAINER), "No external links found; base form should remain visible");
-        }
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        String classAttr = lastNameField.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Last name field should have error class when empty");
     }
 
     @Test
     @Order(6)
-    public void burgerMenu_Reset_AllItems_Logout_AreNotApplicable_ButGuarded() {
-        openBase();
-        // Since this site doesn't have a burger/menu, validate absence (guard for independence)
-        Assertions.assertTrue(driver.findElements(BURGER_BUTTON).isEmpty(), "Burger/menu button should not exist on this site");
-        Assertions.assertTrue(driver.findElements(SIDE_MENU).isEmpty(), "Side menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_ALL_ITEMS).isEmpty(), "All Items menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_ABOUT).isEmpty(), "About menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_LOGOUT).isEmpty(), "Logout menu should not exist on this site");
-        Assertions.assertTrue(driver.findElements(MENU_RESET).isEmpty(), "Reset App State menu should not exist on this site");
+    void testEmailRequiredValidation() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        String classAttr = emailField.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Email field should have error class when empty");
+    }
+
+    @Test
+    @Order(7)
+    void testPasswordRequiredValidation() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        String classAttr = passwordField.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Password field should have error class when empty");
+    }
+
+    @Test
+    @Order(8)
+    void testAgreeCheckboxRequiredValidation() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("SecurePass123");
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement agreeLabel = driver.findElement(By.cssSelector("label[for='agree']"));
+        String classAttr = agreeLabel.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Agree label should show error when not checked");
+    }
+
+    @Test
+    @Order(9)
+    void testInvalidEmailFormat() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("invalid-email");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("SecurePass123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement emailFieldAfterSubmit = driver.findElement(By.id("email"));
+        String classAttr = emailFieldAfterSubmit.getAttribute("class");
+        assertTrue(classAttr.contains("error"), "Email field should have error class on invalid format");
+    }
+
+    @Test
+    @Order(10)
+    void testGenderSelectionPersistence() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("SecurePass123");
+
+        WebElement genderRadio = driver.findElement(By.cssSelector("input[value='Male']"));
+        if (!genderRadio.isSelected()) {
+            genderRadio.click();
+        }
+
+        assertTrue(genderRadio.isSelected(), "Male gender should be selected");
+
+        // Reload and verify
+        driver.navigate().refresh();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+
+        WebElement firstNameAfterRefresh = driver.findElement(By.id("first-name"));
+        firstNameAfterRefresh.sendKeys("Caio");
+
+        WebElement lastNameAfterRefresh = driver.findElement(By.id("last-name"));
+        lastNameAfterRefresh.sendKeys("Silva");
+
+        WebElement emailAfterRefresh = driver.findElement(By.id("email"));
+        emailAfterRefresh.sendKeys("caio@example.com");
+
+        WebElement passwordAfterRefresh = driver.findElement(By.id("password"));
+        passwordAfterRefresh.sendKeys("SecurePass123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        // Reselect radio after refresh
+        WebElement genderRadioAfterRefresh = driver.findElement(By.cssSelector("input[value='Male']"));
+        genderRadioAfterRefresh.click();
+
+        WebElement submitButton = driver.findElement(By.id("submit"));
+        submitButton.click();
+
+        WebElement confirmationHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".thanks>h1")));
+        assertEquals("Thank you!", confirmationHeader.getText(), "Form should submit successfully after refresh");
+    }
+
+    @Test
+    @Order(11)
+    void testRoleDropdownOptions() {
+        driver.get(BASE_URL);
+
+        Select roleSelect = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("role"))));
+        java.util.List<WebElement> options = roleSelect.getOptions();
+
+        assertEquals(5, options.size(), "Role dropdown should have 5 options");
+
+        java.util.List<String> expectedOptions = java.util.Arrays.asList("", "QA Lead", "QA Engineer", "Developer", "Manager");
+        for (int i = 0; i < expectedOptions.size(); i++) {
+            assertEquals(expectedOptions.get(i), options.get(i).getText(), "Dropdown option should match expected");
+        }
+    }
+
+    @Test
+    @Order(12)
+    void testVacationPlaceDropdownOptions() {
+        driver.get(BASE_URL);
+
+        Select vacationSelect = new Select(wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("vacation"))));
+        java.util.List<WebElement> options = vacationSelect.getOptions();
+
+        assertEquals(4, options.size(), "Vacation dropdown should have 4 options");
+
+        java.util.List<String> expectedOptions = java.util.Arrays.asList("", "Hawaii", "Las Vegas", "California");
+        for (int i = 0; i < expectedOptions.size(); i++) {
+            assertEquals(expectedOptions.get(i), options.get(i).getText(), "Dropdown option should match expected");
+        }
+    }
+
+    @Test
+    @Order(13)
+    void testSubmitButtonDisabledUntilRequiredFilled() {
+        driver.get(BASE_URL);
+
+        WebElement submitButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("submit")));
+        assertFalse(submitButton.isEnabled(), "Submit button should be disabled initially");
+
+        WebElement firstNameField = driver.findElement(By.id("first-name"));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("SecurePass123");
+
+        WebElement agreeCheckbox = driver.findElement(By.id("agree"));
+        if (!agreeCheckbox.isSelected()) {
+            agreeCheckbox.click();
+        }
+
+        assertTrue(submitButton.isEnabled(), "Submit button should be enabled when all required fields are filled");
+    }
+
+    @Test
+    @Order(14)
+    void testFormResetButton() {
+        driver.get(BASE_URL);
+
+        WebElement firstNameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("first-name")));
+        firstNameField.sendKeys("Caio");
+
+        WebElement lastNameField = driver.findElement(By.id("last-name"));
+        lastNameField.sendKeys("Silva");
+
+        WebElement emailField = driver.findElement(By.id("email"));
+        emailField.sendKeys("caio@example.com");
+
+        Select roleSelect = new Select(driver.findElement(By.id("role")));
+        roleSelect.selectByVisibleText("QA Lead");
+
+        WebElement resetButton = driver.findElement(By.cssSelector("button.btn-reset"));
+        resetButton.click();
+
+        // Wait and verify fields are cleared
+        wait.until(ExpectedConditions.textToBe(By.id("first-name"), ""));
+        wait.until(ExpectedConditions.textToBe(By.id("last-name"), ""));
+        wait.until(ExpectedConditions.textToBe(By.id("email"), ""));
+        assertEquals("", roleSelect.getFirstSelectedOption().getText(), "Role dropdown should be reset");
     }
 }

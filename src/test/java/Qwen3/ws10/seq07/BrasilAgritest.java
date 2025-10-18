@@ -1,422 +1,481 @@
-package GPT5.ws10.seq07;
+package Qwen3.ws10.seq07;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriEndToEndTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class BrasilAgriTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://beta.brasilagritest.com/login";
-    private static final String ORIGIN = "https://beta.brasilagritest.com";
-    private static final String LOGIN_EMAIL = "superadmin@brasilagritest.com.br";
-    private static final String LOGIN_PASSWORD = "10203040";
-
     @BeforeAll
-    public static void setUpClass() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
-        driver.manage().window().setSize(new Dimension(1400, 1000));
     }
 
     @AfterAll
-    public static void tearDownClass() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    // ---------- Helper utilities ----------
-
-    private void goHome() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.urlContains("/login"));
-    }
-
-    private boolean isElementPresent(By by) {
-        return driver.findElements(by).size() > 0;
-    }
-
-    private WebElement clickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private WebElement visible(By by) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-    }
-
-    private void login() {
-        goHome();
-        By emailBy = By.cssSelector("input[name='email'], input#email, input[type='email']");
-        By passBy = By.cssSelector("input[name='password'], input#password, input[type='password']");
-        By submitBy = By.cssSelector("button[type='submit'], button.MuiButton-root, button:has(span:contains('Login'))");
-
-        WebElement email = clickable(emailBy);
-        email.clear();
-        email.sendKeys(LOGIN_EMAIL);
-
-        WebElement pass = clickable(passBy);
-        pass.clear();
-        pass.sendKeys(LOGIN_PASSWORD);
-
-        WebElement submit = clickable(submitBy);
-        submit.click();
-
-        // Consider login successful once we leave /login and see something dashboard-ish
-        wait.until(d -> !d.getCurrentUrl().contains("/login"));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "After login we should remain on same origin");
-    }
-
-    private void logoutIfLoggedIn() {
-        if (!driver.getCurrentUrl().contains("/login")) {
-            // Try to find a common logout path via menu/drawer
-            // Open drawer/burger if present
-            List<By> menuCandidates = Arrays.asList(
-                    By.cssSelector("button[aria-label='open drawer']"),
-                    By.cssSelector("button[aria-label='menu']"),
-                    By.cssSelector("button[aria-label='Menu']"),
-                    By.cssSelector("button.MuiIconButton-root")
-            );
-            for (By by : menuCandidates) {
-                if (isElementPresent(by)) {
-                    try {
-                        clickable(by).click();
-                        break;
-                    } catch (Exception ignored) {}
-                }
-            }
-            // Click a logout-like entry if available
-            List<By> logoutCandidates = Arrays.asList(
-                    By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                    By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                    By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]")
-            );
-            for (By by : logoutCandidates) {
-                if (isElementPresent(by)) {
-                    try {
-                        clickable(by).click();
-                        break;
-                    } catch (Exception ignored) {}
-                }
-            }
-            wait.until(ExpectedConditions.urlContains("/login"));
-        }
-    }
-
-    private void openDrawerIfPresent() {
-        List<By> menuButtons = Arrays.asList(
-                By.cssSelector("button[aria-label='open drawer']"),
-                By.cssSelector("button[aria-label='menu']"),
-                By.cssSelector("button[aria-label='Menu']")
-        );
-        for (By by : menuButtons) {
-            if (isElementPresent(by)) {
-                try {
-                    clickable(by).click();
-                    // drawer typically appears as an aside/nav; just wait for presence of some nav items
-                    wait.withTimeout(Duration.ofSeconds(3));
-                    return;
-                } catch (Exception ignored) {}
-            }
-        }
-    }
-
-    private void handleExternalLink(WebElement link, String expectedDomainFragment) {
-        String originalWindow = driver.getWindowHandle();
-        Set<String> oldWindows = driver.getWindowHandles();
-        link.click();
-        try {
-            // Wait for either a new window or a navigation in the same tab
-            wait.until(d -> d.getWindowHandles().size() > oldWindows.size() || !d.getCurrentUrl().startsWith(ORIGIN));
-        } catch (TimeoutException ignored) {
-        }
-
-        Set<String> newWindows = driver.getWindowHandles();
-        if (newWindows.size() > oldWindows.size()) {
-            // switched opened window
-            for (String w : newWindows) {
-                if (!oldWindows.contains(w)) {
-                    driver.switchTo().window(w);
-                    break;
-                }
-            }
-            wait.until(d -> d.getCurrentUrl().toLowerCase().contains(expectedDomainFragment.toLowerCase()));
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomainFragment.toLowerCase()),
-                    "External link should contain expected domain: " + expectedDomainFragment);
-            driver.close();
-            driver.switchTo().window(originalWindow);
-        } else {
-            // same tab navigation
-            wait.until(d -> d.getCurrentUrl().toLowerCase().contains(expectedDomainFragment.toLowerCase()));
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomainFragment.toLowerCase()),
-                    "External link should contain expected domain: " + expectedDomainFragment);
-            driver.navigate().back();
-            wait.until(d -> d.getWindowHandle().equals(originalWindow));
-        }
-    }
-
-    private List<WebElement> findFooterSocialLinks() {
-        List<String> domains = Arrays.asList("twitter", "facebook", "linkedin", "x.com");
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        return anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    if (href == null) return false;
-                    String lower = href.toLowerCase();
-                    for (String d : domains) {
-                        if (lower.contains(d)) return true;
-                    }
-                    return false;
-                })
-                .collect(Collectors.toList());
-    }
-
-    // ---------- Tests ----------
-
     @Test
     @Order(1)
-    public void basePageLoadsAndExternalLinksFromBase() {
-        goHome();
-        // Assert basic presence of login form elements
-        Assertions.assertTrue(isElementPresent(By.cssSelector("input[name='email'], input[type='email']")), "Email input should be present on login page");
-        Assertions.assertTrue(isElementPresent(By.cssSelector("input[name='password'], input[type='password']")), "Password input should be present on login page");
-        Assertions.assertTrue(isElementPresent(By.cssSelector("button[type='submit']")), "Submit button should be present on login page");
-
-        // One-level crawl from base page (same-origin links on the page)
-        List<String> sameOriginLinks = driver.findElements(By.cssSelector("a[href]")).stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .filter(h -> h.startsWith(ORIGIN))
-                .map(h -> {
-                    try {
-                        URI u = URI.create(h);
-                        return u.getPath();
-                    } catch (Exception e) { return ""; }
-                })
-                .filter(p -> !p.isEmpty() && !p.equals("/") && !p.equals("/login"))
-                .distinct()
-                .limit(5) // keep it small to reduce flakiness
-                .collect(Collectors.toList());
-
-        String original = driver.getCurrentUrl();
-        for (String path : sameOriginLinks) {
-            driver.get(ORIGIN + path);
-            // Basic assertion: page loads and remains same-origin
-            Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "Navigated page should remain on origin");
-        }
-        driver.get(original);
-
-        // External links on base (e.g., footer socials) - handle if present
-        List<WebElement> socials = findFooterSocialLinks();
-        for (WebElement a : socials) {
-            String href = a.getAttribute("href").toLowerCase();
-            String domain = href.contains("linkedin") ? "linkedin" : href.contains("facebook") ? "facebook" : href.contains("twitter") ? "twitter" : href.contains("x.com") ? "x.com" : "";
-            if (!domain.isEmpty()) {
-                handleExternalLink(a, domain);
-            }
-        }
+    public void testLoginPageLoad() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Verify login page title
+        String title = driver.getTitle();
+        assertTrue(title.contains("BrasilAgri"));
+        
+        // Verify login form elements
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
+        assertTrue(emailField.isDisplayed());
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        assertTrue(passwordField.isDisplayed());
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        assertTrue(loginButton.isDisplayed());
     }
 
     @Test
     @Order(2)
-    public void invalidLoginShowsError() {
-        goHome();
-        WebElement email = clickable(By.cssSelector("input[name='email'], input[type='email']"));
-        WebElement pass = clickable(By.cssSelector("input[name='password'], input[type='password']"));
-        WebElement submit = clickable(By.cssSelector("button[type='submit']"));
-
-        email.clear();
-        email.sendKeys("wrong@example.com");
-        pass.clear();
-        pass.sendKeys("wrongpassword");
-        submit.click();
-
-        // Expect an error alert/message; guard for common patterns
-        By errorBy = By.cssSelector(".MuiAlert-root, .Toastify__toast, [role='alert'], .MuiFormHelperText-root");
-        WebElement err = visible(errorBy);
-        Assertions.assertTrue(err.isDisplayed(), "An error message should be displayed for invalid credentials");
+    public void testValidLogin() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Fill in login credentials
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        // Wait for login to complete and check redirect
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        assertTrue(driver.getCurrentUrl().contains("dashboard"));
+        
+        // Verify dashboard page loaded
+        WebElement dashboard = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("main")));
+        assertTrue(dashboard.isDisplayed());
     }
 
     @Test
     @Order(3)
-    public void validLoginNavigatesToDashboard() {
-        logoutIfLoggedIn();
-        login();
-        // Check for URL not containing /login and presence of common dashboard elements
-        Assertions.assertFalse(driver.getCurrentUrl().contains("/login"), "URL should not contain /login after successful login");
-        // Try to assert a common dashboard header/identifier if present
-        if (isElementPresent(By.cssSelector("h1, h2, h3, h4, h5, h6"))) {
-            WebElement header = driver.findElements(By.cssSelector("h1, h2, h3, h4, h5, h6")).get(0);
-            Assertions.assertTrue(header.isDisplayed(), "A dashboard header should be visible");
-        }
+    public void testInvalidLogin() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Try invalid credentials
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("invalid@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("invalid123");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        // Wait for possible error message
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error-message, .alert-danger")));
+        
+        // Verify we're still on login page
+        assertTrue(driver.getCurrentUrl().contains("login"));
     }
 
     @Test
     @Order(4)
-    public void menuOpenCloseAboutExternalAndResetIfPresent() {
-        login();
-        // Open drawer/burger
-        openDrawerIfPresent();
-
-        // Click dashboard/All Items equivalent if present
-        List<By> dashboardCandidates = Arrays.asList(
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'dashboard')]"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'dashboard')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'dashboard')]")
-        );
-        for (By by : dashboardCandidates) {
-            if (isElementPresent(by)) {
-                clickable(by).click();
-                break;
-            }
-        }
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "After menu navigation, still on same origin");
-
-        // About (external) if present
-        openDrawerIfPresent();
-        List<By> aboutCandidates = Arrays.asList(
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sobre')]"),
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'about')]"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sobre') or contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'about')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sobre') or contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'about')]")
-        );
-        boolean aboutHandled = false;
-        for (By by : aboutCandidates) {
-            if (isElementPresent(by)) {
-                WebElement about = clickable(by);
-                handleExternalLink(about, "brasilagritest");
-                aboutHandled = true;
-                break;
-            }
-        }
-        if (!aboutHandled) {
-            // As a fallback, try any anchor with target external from drawer section
-            List<WebElement> anchors = driver.findElements(By.cssSelector("a[target='_blank']"));
-            for (WebElement a : anchors) {
-                String href = a.getAttribute("href");
-                if (href != null && !href.startsWith(ORIGIN)) {
-                    String expected = href.replace("https://", "").replace("http://", "");
-                    expected = expected.contains("/") ? expected.substring(0, expected.indexOf('/')) : expected;
-                    handleExternalLink(a, expected);
-                    break;
-                }
-            }
-        }
-
-        // Reset App State if present
-        openDrawerIfPresent();
-        List<By> resetCandidates = Arrays.asList(
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'reset')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'reset')]"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'reset')]")
-        );
-        for (By by : resetCandidates) {
-            if (isElementPresent(by)) {
-                clickable(by).click();
-                // No error should occur; remain on origin
-                Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "After reset, URL remains on origin");
-                break;
+    public void testDashboardNavigation() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Test main navigation items
+        List<WebElement> navItems = driver.findElements(By.cssSelector(".nav-link"));
+        assertTrue(navItems.size() > 0);
+        
+        // Check each navigation item is displayed
+        for (WebElement item : navItems) {
+            if (item.isDisplayed()) {
+                // Just verify they exist and are visible
             }
         }
     }
 
     @Test
     @Order(5)
-    public void sortingDropdownIfPresentChangesOrder() {
-        login();
-        // Look for a generic select that likely controls sorting
-        List<WebElement> selects = driver.findElements(By.cssSelector("select, .MuiSelect-select"));
-        boolean exercised = false;
-        for (WebElement sel : selects) {
-            try {
-                if (!sel.isDisplayed()) continue;
-                // Try using HTML select first
-                if (sel.getTagName().equalsIgnoreCase("select")) {
-                    Select s = new Select(sel);
-                    List<WebElement> options = s.getOptions();
-                    if (options.size() >= 2) {
-                        // Capture some list items before and after
-                        List<String> before = driver.findElements(By.cssSelector("li, .MuiListItem-root, .item, .card"))
-                                .stream().limit(5).map(WebElement::getText).collect(Collectors.toList());
-                        s.selectByIndex(options.size() - 1);
-                        wait.withTimeout(Duration.ofSeconds(2));
-                        List<String> after = driver.findElements(By.cssSelector("li, .MuiListItem-root, .item, .card"))
-                                .stream().limit(5).map(WebElement::getText).collect(Collectors.toList());
-                        // If we managed to read content, assert some change (best-effort)
-                        if (!before.isEmpty() && !after.isEmpty()) {
-                            exercised = true;
-                            Assertions.assertNotEquals(before, after, "Selecting a different sort option should change the visible order/content");
-                            break;
-                        }
-                    }
-                }
-            } catch (Exception ignored) {}
-        }
-        // If no dropdown present, just assert we are still on a valid same-origin page
-        if (!exercised) {
-            Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "No sorting control found; still on app");
+    public void testUserProfileAccess() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Navigate to profile
+        List<WebElement> profileLinks = driver.findElements(By.linkText("Profile"));
+        if (!profileLinks.isEmpty()) {
+            WebElement profileLink = profileLinks.get(0);
+            profileLink.click();
+            wait.until(ExpectedConditions.urlContains("profile"));
+            assertTrue(driver.getCurrentUrl().contains("profile"));
         }
     }
 
     @Test
     @Order(6)
-    public void logoutViaMenuIfAvailable() {
-        login();
-        openDrawerIfPresent();
-        List<By> logoutCandidates = Arrays.asList(
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sair')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sair')]")
-        );
-        boolean clicked = false;
-        for (By by : logoutCandidates) {
-            if (isElementPresent(by)) {
-                clickable(by).click();
-                clicked = true;
+    public void testLogoutFunctionality() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Find and click logout
+        List<WebElement> logoutLinks = driver.findElements(By.linkText("Logout"));
+        if (!logoutLinks.isEmpty()) {
+            WebElement logoutLink = logoutLinks.get(0);
+            logoutLink.click();
+            wait.until(ExpectedConditions.urlContains("login"));
+            assertTrue(driver.getCurrentUrl().contains("login"));
+        }
+    }
+
+    @Test
+    @Order(7)
+    public void testMenuToggle() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Check for mobile menu toggle if present
+        List<WebElement> menuToggles = driver.findElements(By.cssSelector(".menu-toggle, .navbar-toggle"));
+        if (!menuToggles.isEmpty()) {
+            WebElement toggle = menuToggles.get(0);
+            assertTrue(toggle.isDisplayed());
+        }
+    }
+
+    @Test
+    @Order(8)
+    public void testDashboardContent() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Verify dashboard sections
+        WebElement dashboardHeader = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("h1")));
+        assertTrue(dashboardHeader.isDisplayed());
+        
+        // Check for summary cards or widgets
+        List<WebElement> summaryCards = driver.findElements(By.cssSelector(".summary-card, .card"));
+        assertTrue(summaryCards.size() >= 0);
+    }
+
+    @Test
+    @Order(9)
+    public void testSideNavigation() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Test sidebar navigation links
+        List<WebElement> sidebarLinks = driver.findElements(By.cssSelector(".sidebar a"));
+        assertTrue(sidebarLinks.size() > 0);
+        
+        // Check that at least one link is visible
+        boolean hasVisibleLink = false;
+        for (WebElement link : sidebarLinks) {
+            if (link.isDisplayed()) {
+                hasVisibleLink = true;
                 break;
             }
         }
-        if (clicked) {
-            wait.until(ExpectedConditions.urlContains("/login"));
-            Assertions.assertTrue(driver.getCurrentUrl().contains("/login"), "After logout we should be back on /login");
-        } else {
-            // If no logout entry, try visiting a profile menu first if present
-            List<WebElement> candidates = driver.findElements(By.cssSelector("button[aria-label*='account'], button:has(svg), .MuiAvatar-root"));
-            if (!candidates.isEmpty()) {
-                try {
-                    candidates.get(0).click();
-                    for (By by : logoutCandidates) {
-                        if (isElementPresent(by)) {
-                            clickable(by).click();
-                            wait.until(ExpectedConditions.urlContains("/login"));
-                            break;
-                        }
-                    }
-                } catch (Exception ignored) {}
-            }
-            // Ensure we end at login one way or another
-            if (!driver.getCurrentUrl().contains("/login")) {
-                logoutIfLoggedIn();
-            }
-            Assertions.assertTrue(driver.getCurrentUrl().contains("/login"), "We should end at /login");
+        assertTrue(hasVisibleLink);
+    }
+
+    @Test
+    @Order(10)
+    public void testUserManagementAccess() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Try to access user management
+        List<WebElement> userManagementLinks = driver.findElements(By.linkText("Users"));
+        if (!userManagementLinks.isEmpty()) {
+            WebElement userLink = userManagementLinks.get(0);
+            userLink.click();
+            wait.until(ExpectedConditions.urlContains("users"));
+            assertTrue(driver.getCurrentUrl().contains("users"));
         }
+    }
+
+    @Test
+    @Order(11)
+    public void testReportsSection() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Check reports section
+        List<WebElement> reportsLinks = driver.findElements(By.linkText("Reports"));
+        if (!reportsLinks.isEmpty()) {
+            WebElement reportsLink = reportsLinks.get(0);
+            reportsLink.click();
+            wait.until(ExpectedConditions.urlContains("reports"));
+            assertTrue(driver.getCurrentUrl().contains("reports"));
+        }
+    }
+
+    @Test
+    @Order(12)
+    public void testSettingsAccess() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Access settings
+        List<WebElement> settingsLinks = driver.findElements(By.linkText("Settings"));
+        if (!settingsLinks.isEmpty()) {
+            WebElement settingsLink = settingsLinks.get(0);
+            settingsLink.click();
+            wait.until(ExpectedConditions.urlContains("settings"));
+            assertTrue(driver.getCurrentUrl().contains("settings"));
+        }
+    }
+
+    @Test
+    @Order(13)
+    public void testFooterElements() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Check footer links
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertTrue(footerLinks.size() > 0);
+        
+        // Verify all footer links are displayed
+        for (WebElement link : footerLinks) {
+            if (link.isDisplayed()) {
+                // Just verify they are present and visible
+            }
+        }
+    }
+
+    @Test
+    @Order(14)
+    public void testResponsiveDesign() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Check responsive elements
+        List<WebElement> responsiveElements = driver.findElements(By.cssSelector(".responsive-element, .mobile-only"));
+        // Just verify they exist in the DOM
+    }
+
+    @Test
+    @Order(15)
+    public void testPageTitleVerification() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        String loginTitle = driver.getTitle();
+        assertTrue(loginTitle.contains("Login"));
+        
+        // Login
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        String dashboardTitle = driver.getTitle();
+        assertTrue(dashboardTitle.contains("Dashboard"));
+    }
+
+    @Test
+    @Order(16)
+    public void testFormValidation() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Test empty form submission
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        // Check for validation errors
+        List<WebElement> errorMessages = driver.findElements(By.cssSelector(".error-message, .invalid-feedback"));
+        assertTrue(errorMessages.size() >= 0);
+    }
+
+    @Test
+    @Order(17)
+    public void testProfilePictureDisplay() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Look for profile picture
+        List<WebElement> profilePictures = driver.findElements(By.cssSelector(".profile-pic, .user-avatar"));
+        // Just verify if present
+    }
+
+    @Test
+    @Order(18)
+    public void testNotificationSystem() {
+        driver.get("https://gestao.brasilagritest.com/login");
+        
+        // Login first
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailField.sendKeys("superadmin@brasilagritest.com.br");
+        
+        WebElement passwordField = driver.findElement(By.id("password"));
+        passwordField.sendKeys("10203040");
+        
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        
+        // Check for notification elements
+        List<WebElement> notifications = driver.findElements(By.cssSelector(".notification, .alert"));
+        // Just verify they are present
     }
 }

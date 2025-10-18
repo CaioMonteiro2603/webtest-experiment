@@ -1,275 +1,300 @@
-package GPT5.ws06.seq09;
+package GPT20b.ws06.seq09;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Order;
+import org.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import org.junit.jupiter.api.Assertions;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessTest {
+public class AutomationIntestingOnlineTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-
     private static final String BASE_URL = "https://automationintesting.online/";
-
-    // ===== Common helpers / generic locators =====
-    private static final By ANY_CONTAINER = By.cssSelector("main, body, .container, #root");
-
-    private static final By LINK_ROOMS = By.xpath("//a[normalize-space()='Rooms' or contains(translate(.,'ROOMS','rooms'),'rooms')]");
-    private static final By ROOMS_LIST = By.cssSelector(".room, .rooms, [class*='room']");
-    private static final By BOOK_BUTTON_IN_CARD = By.xpath(".//button[contains(translate(.,'BOOK','book'),'book') or contains(translate(.,'RESERVE','reserve'),'reserve')]");
-    private static final By BOOK_FORM = By.xpath("//form[.//input[@id='firstname' or @name='firstname'] or .//button[contains(.,'Book')]]");
-    private static final By BOOK_FIRSTNAME = By.cssSelector("#firstname, input[name='firstname']");
-    private static final By BOOK_LASTNAME = By.cssSelector("#lastname, input[name='lastname']");
-    private static final By BOOK_EMAIL = By.cssSelector("#email, input[name='email'][type='email']");
-    private static final By BOOK_PHONE = By.cssSelector("#phone, input[name='phone']");
-    private static final By BOOK_CHECKIN = By.cssSelector("#checkin, input[name='checkin'], input[id*='checkin']");
-    private static final By BOOK_CHECKOUT = By.cssSelector("#checkout, input[name='checkout'], input[id*='checkout']");
-    private static final By BOOK_CONFIRM = By.xpath("//button[contains(translate(.,'BOOK','book'),'book') and not(contains(translate(.,'BOOKING','booking'),'booking'))]");
-
-    // ===== Contact form (homepage) - robust, multi-fallbacks =====
-    private static final By CONTACT_FORM = By.xpath("//form[.//textarea or .//input[@id='subject'] or .//button[contains(.,'Submit')]]");
-    private static final By CONTACT_NAME = By.cssSelector("#name, input[name='name'], input[placeholder*='Name']");
-    private static final By CONTACT_EMAIL = By.cssSelector("#email, input[type='email'][name='email'], input[type='email']");
-    private static final By CONTACT_PHONE = By.cssSelector("#phone, input[name='phone'], input[placeholder*='Phone']");
-    private static final By CONTACT_SUBJECT = By.cssSelector("#subject, input[name='subject'], input[placeholder*='Subject']");
-    private static final By CONTACT_MESSAGE = By.cssSelector("#message, textarea[name='message'], textarea[placeholder*='Message'], textarea");
-    private static final By CONTACT_SUBMIT = By.xpath("//form//button[@type='submit' or contains(translate(.,'SUBMIT','submit'),'submit')]");
-    private static final By CONTACT_SUCCESS = By.cssSelector(".alert-success, .alert.alert-success, .contact .alert-success, [data-test='contact-success']");
-    private static final By CONTACT_ERROR = By.cssSelector(".alert-danger, .alert.alert-danger, .contact .alert-danger, [data-test='contact-error']");
-
-    // ===== Non-applicable "burger/sorting/login" (guarded as absent) =====
-    private static final By BURGER_BTN = By.id("react-burger-menu-btn");
-    private static final By SIDE_MENU = By.cssSelector(".bm-menu-wrap, nav[aria-label='menu']");
-    private static final By MENU_ALL_ITEMS = By.id("inventory_sidebar_link");
-    private static final By MENU_ABOUT = By.id("about_sidebar_link");
-    private static final By MENU_LOGOUT = By.id("logout_sidebar_link");
-    private static final By MENU_RESET = By.id("reset_sidebar_link");
-    private static final By SORTING_DROPDOWN = By.cssSelector("select[data-test='product_sort_container'], select#sort, select[name*='sort']");
+    private static final String USERNAME = "caio@gmail.com";
+    private static final String PASSWORD = "123";
 
     @BeforeAll
-    public static void beforeAll() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void afterAll() {
-        if (driver != null) driver.quit();
-    }
-
-    // ===== Helper methods =====
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(ANY_CONTAINER));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith("https://automationintesting.online"), "Should be on the expected origin");
-    }
-
-    private WebElement waitVisible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement waitClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private boolean isPresent(By locator) {
-        return !driver.findElements(locator).isEmpty();
-    }
-
-    private static String hostOf(String url) {
-        try { return Optional.ofNullable(new URI(url).getHost()).orElse(""); }
-        catch (Exception e) { return ""; }
-    }
-
-    private void assertExternalLink(WebElement linkEl, String expectedDomainContains) {
-        String original = driver.getWindowHandle();
-        Set<String> old = driver.getWindowHandles();
-        linkEl.click();
-        wait.until(d -> d.getWindowHandles().size() > old.size() || d.getCurrentUrl().contains(expectedDomainContains));
-        if (driver.getWindowHandles().size() > old.size()) {
-            Set<String> diff = new HashSet<>(driver.getWindowHandles());
-            diff.removeAll(old);
-            String newHandle = diff.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains(expectedDomainContains));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomainContains), "External URL should contain: " + expectedDomainContains);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomainContains));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomainContains), "External URL should contain: " + expectedDomainContains);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(ANY_CONTAINER));
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
 
-    // ===== Tests =====
+    /* ---------- Helper Methods ---------- */
+
+    private void performLogin(String user, String pass) {
+        driver.get(BASE_URL);
+        By userFieldField = By.id("password");
+        By loginBtn = By.id("loginButton");
+
+        wait.until(ExpectedConditions.elementToBeClickable(userField)).clear();
+        driver.findElement(userField).sendKeys(user);
+        driver.findElement(passField).clear();
+        driver.findElement(passField).sendKeys(pass);
+        wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
+
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+    }
+
+    private void performLogout() {
+        By logoutBtn = By.id("logoutButton");
+        wait.until(ExpectedConditions.elementToBeClickable(logoutBtn)).click();
+        wait.until(ExpectedConditions.urlContains("login"));
+    }
+
+    private void resetAppState() {
+        By resetBtn = By.id("resetState");
+        wait.until(ExpectedConditions.elementToBeClickable(resetBtn)).click();
+        wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".product-title")));
+    }
+
+    private void closeOtherWindows(String originalHandle) {
+        Set<String> handles = driver.getWindowHandles();
+        for (String handle : handles) {
+            if (!handle.equals(originalHandle)) {
+                driver.switchTo().window(handle);
+                driver.close();
+            }
+        }
+        driver.switchTo().window(originalHandle);
+    }
+
+    /* ---------- Tests ---------- */
 
     @Test
     @Order(1)
-    public void landing_CoreElementsPresent() {
-        openBase();
-        // Home headline and contact form presence
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(isPresent(CONTACT_FORM), "Contact form should be present on landing"),
-                () -> Assertions.assertTrue(isPresent(CONTACT_NAME), "Contact name field should be present"),
-                () -> Assertions.assertTrue(isPresent(CONTACT_EMAIL), "Contact email field should be present"),
-                () -> Assertions.assertTrue(isPresent(CONTACT_MESSAGE), "Contact message field should be present"),
-                () -> Assertions.assertTrue(isPresent(CONTACT_SUBMIT), "Contact submit button should be present")
-        );
+    public void testHomePageLoads() {
+        driver.get(BASE_URL);
+        String title = driver.getTitle();
+        Assertions.assertTrue(title.toLowerCase().contains("automation"),
+                "Page title does not contain 'automation'");
     }
 
     @Test
     @Order(2)
-    public void contact_InvalidEmail_ShowsErrorOrHtml5Validation() {
-        openBase();
-        waitVisible(CONTACT_NAME).clear();
-        driver.findElement(CONTACT_NAME).sendKeys("Caio Tester");
-        waitVisible(CONTACT_EMAIL).clear();
-        driver.findElement(CONTACT_EMAIL).sendKeys("invalid-email");
-        if (isPresent(CONTACT_PHONE)) { driver.findElement(CONTACT_PHONE).clear(); driver.findElement(CONTACT_PHONE).sendKeys("11999999999"); }
-        if (isPresent(CONTACT_SUBJECT)) { driver.findElement(CONTACT_SUBJECT).clear(); driver.findElement(CONTACT_SUBJECT).sendKeys("Invalid Email Check"); }
-        waitVisible(CONTACT_MESSAGE).clear();
-        driver.findElement(CONTACT_MESSAGE).sendKeys("Testing invalid email validation.");
-        waitClickable(CONTACT_SUBMIT).click();
+    public void testLoginFormPresence() {
+        driver.get(BASE_URL);
+        By userField = By.id("username");
+        By passField = By.id("password");
+        By loginBtn = By.id("loginButton");
 
-        String validationMessage = driver.findElement(CONTACT_EMAIL).getDomProperty("validationMessage");
-        boolean html5 = validationMessage != null && validationMessage.trim().length() > 0;
-        boolean custom = isPresent(CONTACT_ERROR) || driver.getPageSource().toLowerCase().contains("invalid") || driver.getPageSource().toLowerCase().contains("required");
-        Assertions.assertTrue(html5 || custom, "Invalid email should be blocked by HTML5 or app error message");
+        Assertions.assertTrue(driver.findElements(userField).size() > 0,
+                "Username field not found");
+        Assertions.assertTrue(driver.findElements(passField).size() > 0,
+                "Password field not found");
+        Assertions.assertTrue(driver.findElements(loginBtn).size() > 0,
+                "Login button not found");
     }
 
     @Test
     @Order(3)
-    public void contact_ValidSubmission_ShowsSuccess() {
-        openBase();
-        waitVisible(CONTACT_NAME).clear();
-        driver.findElement(CONTACT_NAME).sendKeys("Maria Quality");
-        waitVisible(CONTACT_EMAIL).clear();
-        driver.findElement(CONTACT_EMAIL).sendKeys("maria.quality@example.com");
-        if (isPresent(CONTACT_PHONE)) { driver.findElement(CONTACT_PHONE).clear(); driver.findElement(CONTACT_PHONE).sendKeys("21988887777"); }
-        if (isPresent(CONTACT_SUBJECT)) { driver.findElement(CONTACT_SUBJECT).clear(); driver.findElement(CONTACT_SUBJECT).sendKeys("Booking info"); }
-        waitVisible(CONTACT_MESSAGE).clear();
-        driver.findElement(CONTACT_MESSAGE).sendKeys("Please contact me regarding availability.");
-        waitClickable(CONTACT_SUBMIT).click();
-
-        boolean successByBlock = isPresent(CONTACT_SUCCESS);
-        boolean successByText = driver.getPageSource().toLowerCase().contains("thanks") || driver.getPageSource().toLowerCase().contains("thank you") || driver.getPageSource().toLowerCase().contains("sucesso");
-        Assertions.assertTrue(successByBlock || successByText, "A success message should appear after valid contact submission");
+    public void testValidLogin() {
+        performLogin(USERNAME, PASSWORD);
+        Assertions.assertTrue(driver.getCurrentUrl().contains("dashboard"),
+                "Login did not redirect to dashboard");
     }
 
     @Test
     @Order(4)
-    public void navigate_Rooms_ListVisible() {
-        openBase();
-        // Click Rooms link (one level below within SPA)
-        Assumptions.assumeTrue(isPresent(LINK_ROOMS), "Rooms link not found on header/nav");
-        waitClickable(LINK_ROOMS).click();
-        wait.until(ExpectedConditions.or(
-                ExpectedConditions.urlContains("room"),
-                ExpectedConditions.presenceOfElementLocated(ROOMS_LIST)
-        ));
-        Assertions.assertTrue(isPresent(ROOMS_LIST), "Rooms list/cards should be visible after navigating to Rooms");
+    public void testInvalidLogin() {
+        driver.get(BASE_URL);
+        By userField = By.id("username");
+        By passField = By.id("password");
+        By loginBtn =.id("loginButton");
+
+        wait.until(ExpectedConditions.elementToBeClickable(userField)).clear();
+        driver.findElement(userField).sendKeys("invalid");
+        driver.findElement(passField).clear();
+        driver.findElement(passField).sendKeys("wrong");
+        wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
+
+        By errorMsg = By.id("errorMessage");
+        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMsg));
+        Assertions.assertTrue(error.getText().toLowerCase().contains("invalid"),
+                "Error message for invalid credentials not displayed");
     }
 
     @Test
     @Order(5)
-    public void book_FirstRoom_EndToEnd_ShowsConfirmation() {
-        openBase();
-        if (isPresent(LINK_ROOMS)) {
-            waitClickable(LINK_ROOMS).click();
-            wait.until(ExpectedConditions.or(
-                    ExpectedConditions.urlContains("room"),
-                    ExpectedConditions.presenceOfElementLocated(ROOMS_LIST)
-            ));
+    public void testSortingOptions() {
+        performLogin(USERNAME, PASSWORD By sortDropdown = By.id("sortSelect");
+        By By.cssSelector(".product-title");
+
+        String[] values = {"price_asc", " "name_asc", "name_desc"};
+        String previousFirst = "";
+
+        for (String val : values) {
+            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(sortDropdown));
+            dropdown.findElement(By.xpath(String.format(".//option[@value='%s']", val))).click();
+
+            WebElement first = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProduct));
+            String currentFirst = first.getText();
+
+            if (!previousFirstEmpty()) {
+                Assertions.assertNotEquals(previousFirst, currentFirst,
+                        "Sorting option " + val + " did not change first product");
+            }
+            previousFirst = currentFirst;
         }
-        Assumptions.assumeTrue(isPresent(ROOMS_LIST), "Rooms are not available to book right now");
-
-        WebElement firstRoom = driver.findElements(ROOMS_LIST).get(0);
-        // Try find "Book" button inside the room card
-        List<WebElement> bookBtns = firstRoom.findElements(BOOK_BUTTON_IN_CARD);
-        Assumptions.assumeTrue(!bookBtns.isEmpty(), "No 'Book' button found in the first room card");
-        WebElement bookBtn = bookBtns.get(0);
-        wait.until(ExpectedConditions.elementToBeClickable(bookBtn)).click();
-
-        // Fill booking form (either inline under card or visible globally)
-        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(BOOK_FORM));
-
-        if (isPresent(BOOK_FIRSTNAME)) { WebElement fn = driver.findElement(BOOK_FIRSTNAME); try { fn.clear(); } catch (Exception ignored) {} fn.sendKeys("Ana"); }
-        if (isPresent(BOOK_LASTNAME)) { WebElement ln = driver.findElement(BOOK_LASTNAME); try { ln.clear(); } catch (Exception ignored) {} ln.sendKeys("Tester"); }
-        if (isPresent(BOOK_EMAIL)) { WebElement em = driver.findElement(BOOK_EMAIL); try { em.clear(); } catch (Exception ignored) {} em.sendKeys("ana.tester@example.com"); }
-        if (isPresent(BOOK_PHONE)) { WebElement ph = driver.findElement(BOOK_PHONE); try { ph.clear(); } catch (Exception ignored) {} ph.sendKeys("11999990000"); }
-        // Dates - tolerant formats for common HTML5 date inputs (YYYY-MM-DD)
-        if (isPresent(BOOK_CHECKIN)) { WebElement ci = driver.findElement(BOOK_CHECKIN); try { ci.clear(); } catch (Exception ignored) {} ci.sendKeys("2030-01-10"); }
-        if (isPresent(BOOK_CHECKOUT)) { WebElement co = driver.findElement(BOOK_CHECKOUT); try { co.clear(); } catch (Exception ignored) {} co.sendKeys("2030-01-12"); }
-
-        // Submit booking
-        List<WebElement> submitCandidates = driver.findElements(BOOK_CONFIRM);
-        if (submitCandidates.isEmpty()) {
-            // fallback inside the form
-            submitCandidates = form.findElements(By.cssSelector("button[type='submit'], button"));
-        }
-        Assumptions.assumeTrue(!submitCandidates.isEmpty(), "No booking submit button found");
-        wait.until(ExpectedConditions.elementToBeClickable(submitCandidates.get(0))).click();
-
-        // Assert success indication
-        boolean successToast = !driver.findElements(By.cssSelector(".alert-success, .booking-success, .toast-success")).isEmpty();
-        boolean successText = driver.getPageSource().toLowerCase().contains("booking") && driver.getPageSource().toLowerCase().contains("success");
-        Assertions.assertTrue(successToast || successText, "Booking flow should indicate success (toast or text)");
     }
 
     @Test
     @Order(6)
-    public void externalLinks_OnVisiblePage_OpenAndClose() {
-        openBase();
-        // Collect external links on base page (one level below external only)
-        String baseHost = hostOf(BASE_URL);
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href^='http']"));
-        List<WebElement> externals = anchors.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    String host = hostOf(href);
-                    return href != null && !host.isEmpty() && !host.contains(baseHost);
-                }).collect(Collectors.toList());
+    public void testBurgerMenuAllItems() {
+        performLogin(USERNAME, PASSWORD);
 
-        int toVisit = Math.min(3, externals.size());
-        for (int i = 0; i < toVisit; i++) {
-            WebElement link = externals.get(i);
-            String host = hostOf(link.getAttribute("href"));
-            if (!host.isEmpty()) {
-                assertExternalLink(link, host);
-            }
-        }
+        By menuBtn = By.id("burgerMenu");
+        wait.until(ExpectedConditions.elementToBeClickable(menuBtn)).click();
 
-        if (toVisit == 0) {
-            Assertions.assertTrue(isPresent(ANY_CONTAINER), "No external links found; page should remain stable");
-        }
+        By allItemsLink = By.id("allItems");
+        wait.until(ExpectedConditions.elementToBeClickable(allItemsLink)).click();
+
+        wait.until(ExpectedConditions.urlContains("inventory"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory"),
+                "Burger menu 'All Items' did not navigate to inventory page");
     }
 
     @Test
     @Order(7)
-    public void burgerMenu_Sorting_Login_NotApplicable_ButGuarded() {
-        openBase();
-        Assertions.assertAll(
-                () -> Assertions.assertTrue(driver.findElements(BURGER_BTN).isEmpty(), "Burger button should not exist on this site"),
-                () -> Assertions.assertTrue(driver.findElements(SIDE_MENU).isEmpty(), "Side menu should not exist on this site"),
-                () -> Assertions.assertTrue(driver.findElements(MENU_ALL_ITEMS).isEmpty(), "All Items menu should not exist"),
-                () -> Assertions.assertTrue(driver.findElements(MENU_ABOUT).isEmpty(), "About menu should not exist"),
-                () -> Assertions.assertTrue(driver.findElements(MENU_LOGOUT).isEmpty(), "Logout menu should not exist"),
-                () -> Assertions.assertTrue(driver.findElements(MENU_RESET).isEmpty(), "Reset App State should not exist"),
-                () -> Assertions.assertTrue(driver.findElements(SORTING_DROPDOWN).isEmpty(), "Sorting dropdown should not exist on this site")
-        );
+    public void testBurgerMenuAboutExternalLink() {
+        performLogin(USERNAME, PASSWORD);
+        String originalHandle = driver.getWindowHandle();
+
+        By menuBtn = By.id("burgerMenu");
+        wait.until(ExpectedConditions.elementToBeClickable(menuBtn)).click();
+
+        By aboutLink = By.id("aboutLink");
+        wait.until(ExpectedConditions.elementToBeClickable(aboutLink)).click();
+
+        Set<String> handles = driver.getWindowHandles();
+        String newHandle = handles.stream()
+                .filter(h -> !h.equals(originalHandle))
+                .findFirst .orElseThrow(() -> new RuntimeException("No new window opened"));
+
+        driver.switchTo().window(newHandle);
+        wait.until(ExpectedConditions.urlContains("about"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("about"),
+                "About link did open expected external domain");
+
+        driver.close();
+        driver.switchTo().window(originalHandle);
+    }
+
+    @Test
+    @Order(8)
+    public void testBurgerMenuLogout() {
+        performLogin(USERNAME, PASSWORD);
+        By menuBtn = By.id("burgerMenu");
+        wait.until(ExpectedConditions.elementToBeClickable(menuBtn)).click();
+
+        By logoutLink = By.id("logoutLink");
+        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
+
+        wait.until(ExpectedConditions.urlContains("login"));
+        Assertions.assertTrue.getCurrentUrl().contains("login"),
+                "Logout did not redirect to login page");
+    }
+
+    @Test
+    @Order(9)
+    public void testBurgerMenuResetAppState() {
+        performLogin(USERNAME, PASSWORD);
+        resetAppState();
+        Assertions.assertTrue(driver.findElements(By.cssSelector(".product-title")).size() > 0,
+                "Reset App State did not refresh product list");
+    }
+
+    @Test
+    @Order(10)
+    public void testExternalLinks() {
+        performLogin(USERNAME, PASSWORD);
+        List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[target='_blank']"));
+        Assertions.assertFalse(externalLinks.isEmpty(), "No external links found on page");
+
+        String originalHandle = driver.getWindowHandle();
+        for (WebElement link : externalLinks) {
+            String href = link.getAttribute("href");
+            link.click();
+
+            Set<String> handles = driver.getWindowHandles();
+            String newHandle = handles.stream()
+                    .filter(h -> !h.equals(originalHandle))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("New window did not open"));
+
+            driver.switchTo().window(newHandle);
+            wait.until(ExpectedConditions.urlContains(href));
+            Assertions.assertTrue(driver.getCurrentUrl().contains(href),
+                    "External link did not navigate to expected domain");
+
+            driver.close();
+            driver.switchTo().window(originalHandle);
+        }
+    }
+
+    @Test
+    @Order(11)
+    public void testAddToCartAndCheckout() {
+        performLogin(USERNAME, PASSWORD);
+
+        By addButton = By.cssSelector("button[id^='add-to-cart-']");
+        List<WebElement> addButtons = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(addButton));
+        Assertions.assertFalse(addButtons.isEmpty(), "No add-to-cart buttons found");
+        addButtons.get(0).click();
+
+        By cartBadge = By.id("cartBadge");
+        WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
+        Assertions.assertEquals("1", badge.getText(),Cart badge not updated to 1);
+
+        By cartIcon = By.id("cartIcon");
+        wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
+        wait.until(ExpectedConditions.urlContains("cart.html"));
+
+        By checkoutBtn = By.id("checkoutButton");
+        wait.until(ExpectedConditions.elementToBeClickable(checkoutBtn)).click();
+        wait.until(ExpectedConditions.urlContains("checkout.html"));
+
+        By firstName = By.id("firstName");
+        By lastName = By.id("lastName");
+        By address = By.id("address");
+        By continueBtn = By.id("continueButton");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(firstName)).sendKeys("John");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(lastName)).sendKeys("Doe");
+        wait.until(ExpectedConditions.visibilityOfElementLocated(address)).sendKeys("123 Test Ave");
+        wait.until(ExpectedConditions.elementToBeClickable(continueBtn)).click();
+
+        By finishBtn = By.id("finishButton");
+        wait.until(ExpectedConditions.elementToBeClickable(finishBtn)).click();
+        wait.until(ExpectedConditions.urlContains("confirmation.html"));
+
+        By confirmationMsg = By.cssSelector(".confirmation-message");
+        WebElement msg wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationMsg));
+        Assertions.assertTrue(msg.getText().toLowerCase().contains("thank you"),
+                "Checkout confirmation message not displayed");
     }
 }

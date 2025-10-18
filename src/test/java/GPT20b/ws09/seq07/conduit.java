@@ -1,426 +1,362 @@
-package GPT5.ws09.seq07;
+package GPT20b.ws04.seq07;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
-
-/**
- * Single-file JUnit 5 + Selenium 4 test suite for https://demo.realworld.io/
- *
- * - Uses FirefoxDriver with headless argument via addArguments("--headless")
- * - Uses WebDriverWait with Duration.ofSeconds(10)
- * - Tests home load, registration/login (register or fallback to login), feed toggles,
- *   navigation menu actions, external links, and one-level internal links.
- *
- * Notes:
- * - A deterministic test account is used: testuser_e2e / testuser_e2e@example.com / Test1234!
- *   If registration fails due to existing account, the test attempts to log in with the same credentials.
- */
-@TestMethodOrder(OrderAnnotation.class)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class RealWorldDemoTest {
-    private static final String BASE_URL = "https://demo.realworld.io/";
+
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static URI baseUri;
 
-    // deterministic test credentials (not random)
-    private static final String TEST_USERNAME = "testuser_e2e";
-    private static final String TEST_EMAIL = "testuser_e2e@example.com";
-    private static final String TEST_PASSWORD = "Test1234!";
+    private static final String BASE_URL = "https://demo.realworld.io/";
+    private static final String USER_EMAIL = "standard_user@example.com";
+    private static final String USER_PASSWORD = "secret_sauce";
 
     @BeforeAll
-    public static void setup() throws URISyntaxException {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        baseUri = new URI(BASE_URL);
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    // Navigate to base and wait for ready
-    private void goToBaseAndWait() {
-        driver.navigate().to(BASE_URL);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(baseUri.getHost().toLowerCase()),
-                "After navigate, expected URL to contain host: " + baseUri.getHost());
-    }
+    /* ---------- Helper methods ---------- */
 
-    // Open URL in new tab and switch to it, returning new handle
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        for (String h : driver.getWindowHandles()) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
-    }
-
-    private void closeTabAndSwitchBack(String originalHandle) {
-        driver.close();
-        driver.switchTo().window(originalHandle);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-    }
-
-    private boolean isExternalHref(String href) {
-        if (href == null || href.trim().isEmpty()) return false;
-        try {
-            URI uri = new URI(href);
-            String host = uri.getHost();
-            if (host == null) return false;
-            return !host.equalsIgnoreCase(baseUri.getHost());
-        } catch (Exception e) {
-            return false;
-        }
-    }
-
-    private List<String> collectOneLevelInternalLinks() {
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        Set<String> result = new LinkedHashSet<>();
-        for (WebElement a : anchors) {
+    private WebElement findElementWithFallback(List<By> locators) {
+        for (By locator : locators) {
             try {
-                String href = a.getAttribute("href");
-                if (href == null || href.trim().isEmpty()) continue;
-                URI uri = new URI(href);
-                if (uri.getHost() == null || uri.getHost().equalsIgnoreCase(baseUri.getHost())) {
-                    result.add(href);
-                }
-            } catch (Exception e) {
-                String href = a.getAttribute("href");
-                if (href != null) result.add(href);
+                return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            } catch (Exception ignored) {
             }
         }
-        return new ArrayList<>(result);
+        throw new NoSuchElementException("Element not found using any of the provided locators: " + locators);
     }
+
+    private void login() {
+        driver.get(BASE_URL);
+        WebElement emailEl = findElementWithFallback(
+                List.of(By.cssSelector("input[type='email']"), By.id("email"), By.name("email")));
+        emailEl.clear();
+        emailEl.sendKeys(USER_EMAIL);
+
+        WebElement pwEl = findElementWithFallback(
+                List.of(By.cssSelector("input[type='password']"), By.id("password"), By.name("password")));
+        pwEl.clear();
+        pwEl.sendKeys(USER_PASSWORD);
+
+        WebElement loginBtn = findElementWithFallback(
+                List.of(By.cssSelector("button[type='submit']"), By.id("login-button")));
+        wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
+        loginBtn.click();
+
+        wait.until(ExpectedConditions.urlContains("/home"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/home"),
+                "Expected to land on home page after successful login");
+    }
+
+    private void logout() {
+        List<WebElement> menuItems = openBurgerMenuAndGetItems();
+        for (WebElement item : menuItems) {
+            if (item.getText().equalsIgnoreCase("Logout")) {
+                wait.until(ExpectedConditions.elementToBeClickable(item));
+                item.click();
+                break;
+            }
+        }
+        wait.until(ExpectedConditions.urlToBe(BASE_URL));
+        Assertions.assertEquals(BASE_URL, driver.getCurrentUrl(),
+                "Logout should return to the base URL");
+    }
+
+    private List<WebElement> openBurgerMenuAndGetItems() {
+        WebElement burgerBtn = findElementWithFallback(
+                List.of(By.cssSelector(".menu-toggle"), By.id("burger-menu-btn")));
+        wait.until(ExpectedConditions.elementToBeClickable(burgerBtn));
+        burgerBtn.click();
+        return wait.until(
+                ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                        By.cssSelector(".menu-list a")));
+    }
+
+    private void resetAppState() {
+        List<WebElement> menuItems = openBurgerMenuAndGetItems();
+        for (WebElement item : menuItems) {
+            if (item.getText().equalsIgnoreCase("Reset App State")) {
+                wait.until(ExpectedConditions.elementToBeClickable(item));
+                item.click();
+                break;
+            }
+        }
+        wait.until(ExpectedConditions.urlContains("/home"));
+    }
+
+    private List<String> getProductNames() {
+        List<WebElement> items = driver.findElements(By.cssSelector(".product-card .product-title"));
+        return items.stream().map(WebElement::getText).collect(Collectors.toList());
+    }
+
+    private List<Double> getProductPrices() {
+        List<WebElement> priceEls = driver.findElements(By.cssSelector(".product-card .product-price"));
+        List<Double> prices = new ArrayList<>();
+        for (WebElement el : priceEls) {
+            String text = el.getText().replace("$", "").trim();
+            try {
+                prices.add(Double.parseDouble(text));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return prices;
+    }
+
+    private WebElement getCartBadge() {
+        List<WebElement> badges = driver.findElements(By.cssSelector(".cart-count"));
+        return badges.isEmpty() ? null : badges.get(0);
+    }
+
+    /* ---------- Tests ---------- */
 
     @Test
     @Order(1)
-    public void testHomePageLoadsAndHeader() {
-        goToBaseAndWait();
-        // Header / navbar presence
-        List<WebElement> navs = driver.findElements(By.cssSelector("nav, .navbar, .container > .nav"));
-        Assertions.assertTrue(navs.size() > 0 && navs.get(0).isDisplayed(), "Expected visible navbar on home page");
-
-        // Title contains "Conduit" often used for this demo
-        String title = driver.getTitle();
-        Assertions.assertTrue(title != null && (title.toLowerCase().contains("conduit") || title.toLowerCase().contains("realworld")),
-                "Expected page title to contain 'Conduit' or 'RealWorld'. Actual: " + title);
+    public void testValidLogin() {
+        login();
+        List<WebElement> productCards = driver.findElements(By.cssSelector(".product-card"));
+        Assertions.assertFalse(productCards.isEmpty(), "Product list should not be empty after login");
     }
 
     @Test
     @Order(2)
-    public void testRegisterOrLogin_thenVerifyProfileVisible() {
-        goToBaseAndWait();
+    public void testInvalidLogin() {
+        driver.get(BASE_URL);
+        WebElement emailEl = findElementWithFallback(
+                List.of(By.cssSelector("input[type='email']"), By.id("email")));
+        emailEl.clear();
+        emailEl.sendKeys("invalid@user.com");
 
-        // Click "Sign up" (register) - robust locator by link text if present
-        List<WebElement> signUpElems = driver.findElements(By.xpath("//a[normalize-space()='Sign up' or normalize-space()='Sign Up']"));
-        if (!signUpElems.isEmpty()) {
-            WebElement signUp = signUpElems.get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(signUp));
-            signUp.click();
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        } else {
-            // fallback: click "Sign in" and navigate to register via /register
-            driver.navigate().to(BASE_URL + "register");
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        }
+        WebElement pwEl = findElementWithFallback(
+                List.of(By.cssSelector("input[type='password']"), By.id("password")));
+        pwEl.clear();
+        pwEl.sendKeys("bad_password");
 
-        // Fill registration form with deterministic values
-        // Locators robust: input[placeholder='Username'], input[placeholder='Email'], input[placeholder='Password']
-        WebElement usernameInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Username'], input[name='username']")));
-        WebElement emailInput = driver.findElement(By.cssSelector("input[placeholder='Email'], input[name='email']"));
-        WebElement passwordInput = driver.findElement(By.cssSelector("input[placeholder='Password'], input[name='password']"));
-        WebElement signUpButton = driver.findElements(By.cssSelector("button[type='submit'], button")).stream()
-                .filter(WebElement::isDisplayed)
-                .filter(e -> {
-                    String txt = e.getText() == null ? "" : e.getText().toLowerCase();
-                    return txt.contains("sign up") || txt.contains("sign-up") || txt.contains("signup");
-                })
-                .findFirst().orElse(null);
+        WebElement loginBtn = findElementWithFallback(
+                List.of(By.cssSelector("button[type='submit']"), By.id("login-button")));
+        wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
+        loginBtn.click();
 
-        usernameInput.clear();
-        usernameInput.sendKeys(TEST_USERNAME);
-        emailInput.clear();
-        emailInput.sendKeys(TEST_EMAIL);
-        passwordInput.clear();
-        passwordInput.sendKeys(TEST_PASSWORD);
-
-        boolean registeredOrLoggedIn = false;
-
-        if (signUpButton != null) {
-            wait.until(ExpectedConditions.elementToBeClickable(signUpButton));
-            signUpButton.click();
-            // After submit, either registration succeeds and navbar shows username or errors appear
-            try {
-                // wait for either nav username to appear or error messages
-                wait.until(d -> d.findElements(By.cssSelector("ul.error-messages li, .error-messages li, .error")).size() > 0
-                        || d.findElements(By.xpath("//a[normalize-space()='" + TEST_USERNAME + "']")).size() > 0
-                        || d.findElements(By.cssSelector("nav a[href*='@']")).size() > 0);
-            } catch (Exception ignored) { }
-
-            // Check for errors
-            List<WebElement> errors = driver.findElements(By.cssSelector("ul.error-messages li, .error-messages li, .error"));
-            if (errors.size() > 0) {
-                // Registration may have failed (user exists). Attempt login instead.
-                // Navigate to Sign in
-                List<WebElement> signInLinks = driver.findElements(By.xpath("//a[normalize-space()='Sign in' or normalize-space()='Sign In']"));
-                if (!signInLinks.isEmpty()) {
-                    WebElement signIn = signInLinks.get(0);
-                    wait.until(ExpectedConditions.elementToBeClickable(signIn));
-                    signIn.click();
-                } else {
-                    driver.navigate().to(BASE_URL + "login");
-                    wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                }
-
-                WebElement loginEmail = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Email'], input[name='email']")));
-                WebElement loginPassword = driver.findElement(By.cssSelector("input[placeholder='Password'], input[name='password']"));
-                WebElement loginButton = driver.findElements(By.cssSelector("button[type='submit'], button")).stream()
-                        .filter(WebElement::isDisplayed)
-                        .filter(e -> {
-                            String txt = e.getText() == null ? "" : e.getText().toLowerCase();
-                            return txt.contains("sign in");
-                        })
-                        .findFirst().orElse(null);
-
-                loginEmail.clear();
-                loginEmail.sendKeys(TEST_EMAIL);
-                loginPassword.clear();
-                loginPassword.sendKeys(TEST_PASSWORD);
-                if (loginButton != null) {
-                    wait.until(ExpectedConditions.elementToBeClickable(loginButton));
-                    loginButton.click();
-                } else {
-                    loginPassword.sendKeys(Keys.RETURN);
-                }
-
-                // wait for navbar username
-                try {
-                    wait.until(d -> d.findElements(By.xpath("//a[normalize-space()='" + TEST_USERNAME + "']")).size() > 0);
-                    registeredOrLoggedIn = true;
-                } catch (Exception ignored) { }
-            } else {
-                // no error messages; check for username in nav
-                try {
-                    wait.until(d -> d.findElements(By.xpath("//a[normalize-space()='" + TEST_USERNAME + "']")).size() > 0);
-                    registeredOrLoggedIn = true;
-                } catch (Exception ignored) { }
-            }
-        } else {
-            Assertions.fail("Could not find sign-up button to register.");
-        }
-
-        Assertions.assertTrue(registeredOrLoggedIn, "Expected to be registered or logged in with username visible in navbar.");
-
-        // Verify profile link leads to user's profile page
-        WebElement profileLink = driver.findElements(By.xpath("//a[normalize-space()='" + TEST_USERNAME + "']")).stream().findFirst().orElse(null);
-        Assertions.assertNotNull(profileLink, "Expected profile link with username after login/registration.");
-        wait.until(ExpectedConditions.elementToBeClickable(profileLink));
-        profileLink.click();
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("/@" ) || driver.getTitle().toLowerCase().contains(TEST_USERNAME.toLowerCase()),
-                "After clicking profile, expected URL to contain @username or title to contain username. Actual URL: " + driver.getCurrentUrl());
+        WebElement errorMsg = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-message")));
+        Assertions.assertTrue(errorMsg.isDisplayed(),
+                "Error message should be visible for invalid credentials");
+        Assertions.assertTrue(errorMsg.getText().toLowerCase().contains("invalid"),
+                "Error message should mention invalid login");
     }
 
     @Test
     @Order(3)
-    public void testFeedTabsAndArticleListPresence() {
-        goToBaseAndWait();
+    public void testSortingDropdown() {
+        login();
+        List<String> originalNames = getProductNames();
 
-        // If logged in, "Your Feed" may appear. We will click both "Global Feed" and "Your Feed" if present.
-        List<WebElement> feedTabs = driver.findElements(By.cssSelector(".feed-toggle, .articles-toggle, .nav-pills"));
-        // More robust: look for links with text "Global Feed" or "Your Feed"
-        List<WebElement> globalFeed = driver.findElements(By.xpath("//*[normalize-space()='Global Feed']"));
-        List<WebElement> yourFeed = driver.findElements(By.xpath("//*[normalize-space()='Your Feed']"));
+        WebElement sortSelect = findElementWithFallback(
+                List.of(By.cssSelector("select#sort"), By.name("sort")));
+        wait.until(ExpectedConditions.elementToBeClickable(sortSelect));
+        sortSelect.click();
 
-        if (!globalFeed.isEmpty()) {
-            WebElement gf = globalFeed.get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(gf));
-            gf.click();
-            // After click, assert articles list present
-            wait.until(d -> d.findElements(By.cssSelector(".article-preview, .article-list, .article")).size() > 0);
-            Assertions.assertTrue(driver.findElements(By.cssSelector(".article-preview, .article-list, .article")).size() > 0,
-                    "After clicking Global Feed expected some articles to be present.");
-        }
+        WebElement nameDescOption = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//option[@value='name_desc']")));
+        nameDescOption.click();
 
-        if (!yourFeed.isEmpty()) {
-            WebElement yf = yourFeed.get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(yf));
-            yf.click();
-            // If not logged in, "Your Feed" may not show articles; guard accordingly
-            List<WebElement> articles = driver.findElements(By.cssSelector(".article-preview, .article-list, .article"));
-            Assertions.assertTrue(true, "Clicked 'Your Feed' -- presence of articles depends on followed users; test ensures clickability.");
-        }
+        List<String> descNames = getProductNames();
+        List<String> expected = new ArrayList<>(originalNames);
+        Collections.reverse(expected);
+        Assertions.assertEquals(expected, descNames, "Sorting by name descending should reverse order");
+
+        sortSelect.click();
+        WebElement priceLowHighOption = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//option[@value='price_low_to_high']")));
+        priceLowHighOption.click();
+
+        List<Double> lowHighPrices = getProductPrices();
+        List<Double> sortedLowHigh = new ArrayList<>(lowHighPrices);
+        Collections.sort(sortedLowHigh);
+        Assertions.assertEquals(sortedLowHigh, lowHighPrices,
+                "Sorting by price low to high should order prices ascending");
+
+        sortSelect.click();
+        WebElement priceHighLowOption = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.xpath("//option[@value='price_high_to_low']")));
+        priceHighLowOption.click();
+
+        List<Double> highLowPrices = getProductPrices();
+        List<Double> sortedHighLow = new ArrayList<>(highLowPrices);
+        sortedHighLow.sort(Collections.reverseOrder());
+        Assertions.assertEquals(sortedHighLow, highLowPrices,
+                "Sorting by price high to low should order prices descending");
     }
 
     @Test
     @Order(4)
-    public void testNewArticleAndLogoutFlow() {
-        goToBaseAndWait();
+    public void testBurgerMenuInteractions() {
+        login();
 
-        // Click "New Post" / "New Article" if present
-        List<WebElement> newArticleLinks = driver.findElements(By.xpath("//a[normalize-space()='New Post' or normalize-space()='New Article' or contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'new post')]"));
-        if (!newArticleLinks.isEmpty()) {
-            WebElement newArticle = newArticleLinks.get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(newArticle));
-            newArticle.click();
-            wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        // All Items
+        List<WebElement> menuItems = openBurgerMenuAndGetItems();
+        for (WebElement item : menuItems) {
+            if (item.getText().equalsIgnoreCase("All Items")) {
+                wait.until(ExpectedConditions.elementToBeClickable(item));
+                item.click();
+                break;
+            }
+        }
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/home"),
+                "All Items should show the home/products page");
 
-            // If a new article editor is present, fill a minimal article and publish (guarded)
-            List<WebElement> titleInput = driver.findElements(By.cssSelector("input[placeholder='Article Title'], input[name='title']"));
-            if (!titleInput.isEmpty()) {
-                WebElement title = titleInput.get(0);
-                WebElement about = driver.findElements(By.cssSelector("input[placeholder='What's this article about?'], input[name='description']")).stream().findFirst().orElse(null);
-                WebElement body = driver.findElements(By.cssSelector("textarea[placeholder='Write your article (in markdown)'], textarea[name='body']")).stream().findFirst().orElse(null);
-                WebElement publishBtn = driver.findElements(By.xpath("//button[normalize-space()='Publish Article' or normalize-space()='Publish']")).stream().findFirst().orElse(null);
-
-                if (title != null && body != null && publishBtn != null) {
-                    title.clear();
-                    title.sendKeys("E2E Test Article Title");
-                    if (about != null) {
-                        about.clear();
-                        about.sendKeys("E2E about");
+        // About (external)
+        menuItems = openBurgerMenuAndGetItems();
+        for (WebElement item : menuItems) {
+            if (item.getText().equalsIgnoreCase("About")) {
+                String originalHandle = driver.getWindowHandle();
+                item.click();
+                wait.until(d -> d.getWindowHandles().size() > 1);
+                for (String handle : driver.getWindowHandles()) {
+                    if (!handle.equals(originalHandle)) {
+                        driver.switchTo().window(handle);
+                        break;
                     }
-                    body.clear();
-                    body.sendKeys("This is a test article body for automated test.");
-                    wait.until(ExpectedConditions.elementToBeClickable(publishBtn));
-                    publishBtn.click();
-
-                    // Wait for article page / URL change
-                    wait.until(d -> d.getCurrentUrl().toLowerCase().contains("/article/") || d.findElements(By.cssSelector(".article-page")).size() > 0);
-                    Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("/article/") || driver.findElements(By.cssSelector(".article-page")).size() > 0,
-                            "After publishing, expected to be on article page or URL to contain /article/");
                 }
-            } else {
-                // No editor visible (user may not be logged in); that's acceptable for this environment
+                Assertions.assertTrue(driver.getCurrentUrl().contains("about"),
+                        "About link should navigate to an external about page");
+                driver.close();
+                driver.switchTo().window(originalHandle);
+                break;
             }
         }
 
-        // Logout if logged in
-        List<WebElement> logoutLinks = driver.findElements(By.xpath("//a[normalize-space()='Log Out' or normalize-space()='Logout' or normalize-space()='Sign out']"));
-        if (!logoutLinks.isEmpty()) {
-            WebElement logout = logoutLinks.get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(logout));
-            logout.click();
-            // After logout, navbar should show "Sign in" or "Sign up"
-            wait.until(d -> d.findElements(By.xpath("//a[normalize-space()='Sign in' or normalize-space()='Sign up']")).size() > 0);
-            Assertions.assertTrue(driver.findElements(By.xpath("//a[normalize-space()='Sign in' or normalize-space()='Sign up']")).size() > 0,
-                    "After logout expected Sign in / Sign up links to be visible.");
-        } else {
-            // Not logged in - nothing to logout
-        }
+        // Reset App State
+        resetAppState();
+        Assertions.assertNull(getCartBadge(), "Cart badge should be cleared after reset");
+
+        // Logout
+        logout();
     }
 
     @Test
     @Order(5)
-    public void testFooterAndExternalLinksOpen() {
-        goToBaseAndWait();
-
-        // Collect footer links (anchor tags inside footer if present) and test external links up to a limit
-        List<WebElement> footers = driver.findElements(By.tagName("footer"));
-        List<WebElement> anchors = new ArrayList<>();
-        if (!footers.isEmpty()) {
-            anchors = footers.get(0).findElements(By.cssSelector("a[href]"));
-        } else {
-            anchors = driver.findElements(By.cssSelector("a[href]"));
-        }
-
-        List<String> hrefs = anchors.stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .distinct()
-                .collect(Collectors.toList());
-
-        String originalHandle = driver.getWindowHandle();
-        int tested = 0;
-        for (String href : hrefs) {
-            if (isExternalHref(href)) {
-                tested++;
-                if (tested > 4) break; // limit for flakiness
-                String newHandle = openUrlInNewTab(href);
-                try {
-                    try {
-                        URI u = new URI(href);
-                        String host = u.getHost();
-                        if (host != null) {
-                            wait.until(ExpectedConditions.urlContains(host));
-                            Assertions.assertTrue(driver.getCurrentUrl().contains(host),
-                                    "External link opened should contain host: " + host);
-                        }
-                    } catch (URISyntaxException ignored) {
-                        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                    }
-                } finally {
-                    closeTabAndSwitchBack(originalHandle);
+    public void testFooterExternalLinks() {
+        login();
+        List<String> domains = List.of("twitter.com", "facebook.com", "linkedin.com");
+        for (String domain : domains) {
+            List<WebElement> links = driver.findElements(
+                    By.xpath("//a[contains(@href,'" + domain + "')]"));
+            Assertions.assertFalse(links.isEmpty(), "Footer link to " + domain + " should exist");
+            WebElement link = links.get(0);
+            String originalHandle = driver.getWindowHandle();
+            link.click();
+            wait.until(d -> d.getWindowHandles().size() > 1);
+            for (String h : driver.getWindowHandles()) {
+                if (!h.equals(originalHandle)) {
+                    driver.switchTo().window(h);
+                    break;
                 }
             }
-        }
-
-        if (hrefs.stream().anyMatch(this::isExternalHref)) {
-            Assertions.assertTrue(tested > 0, "There are external links but none were tested.");
+            Assertions.assertTrue(driver.getCurrentUrl().contains(domain),
+                    "Footer link should navigate to " + domain);
+            driver.close();
+            driver.switchTo().window(originalHandle);
         }
     }
 
     @Test
     @Order(6)
-    public void testOneLevelInternalLinksNavigateAndContainContent() {
-        goToBaseAndWait();
-        List<String> internalLinks = collectOneLevelInternalLinks().stream()
-                .filter(h -> !h.equalsIgnoreCase(BASE_URL))
-                .collect(Collectors.toList());
+    public void testAddRemoveCart() {
+        login();
+        WebElement firstAddBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.cssSelector("button.add-to-cart")));
+        firstAddBtn.click();
 
-        int tested = 0;
-        for (String href : internalLinks) {
-            if (tested >= 6) break;
-            try {
-                // Limit to one-level-ish links by path segments (skip deep links)
-                URI uri = new URI(href);
-                String path = uri.getPath() == null ? "" : uri.getPath();
-                String normalized = path.replaceAll("^/+", "").replaceAll("/+$", "");
-                int segments = normalized.isEmpty() ? 0 : normalized.split("/").length;
-                if (segments > 2) continue;
+        WebElement badge = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".cart-count")));
+        Assertions.assertEquals("1", badge.getText(), "Cart badge should display count 1");
 
-                driver.navigate().to(href);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+        WebElement firstRemoveBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.cssSelector("button.remove-from-cart")));
+        firstRemoveBtn.click();
 
-                boolean hasHeader = driver.findElements(By.cssSelector("h1, h2, h3")).stream().anyMatch(WebElement::isDisplayed);
-                boolean hasBodyText = driver.findElements(By.tagName("body")).stream()
-                        .anyMatch(b -> b.getText() != null && b.getText().trim().length() > 30);
+        Assertions.assertTrue(driver.findElements(By.cssSelector(".cart-count")).isEmpty(),
+                "Cart badge should be removed after removing last item");
+    }
 
-                Assertions.assertTrue(hasHeader || hasBodyText, "Expected header or body text at internal page: " + href);
+    @Test
+    @Order(7)
+    public void testCheckoutFlow() {
+        login();
 
-                tested++;
-            } catch (Exception e) {
-                Assertions.fail("Failed to navigate or validate internal link: " + href + " -> " + e.getMessage());
-            } finally {
-                driver.navigate().to(BASE_URL);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-            }
-        }
+        List<WebElement> addButtons = driver.findElements(
+                By.cssSelector("button.add-to-cart"));
+        Assertions.assertTrue(addButtons.size() >= 2, "Expect at least two items to add");
+        addButtons.get(0).click();
+        addButtons.get(1).click();
 
-        if (!internalLinks.isEmpty()) {
-            Assertions.assertTrue(tested > 0, "Expected to test at least one one-level internal link.");
-        }
+        WebElement cartLink = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='/cart']")));
+        cartLink.click();
+
+        wait.until(ExpectedConditions.urlContains("/cart"));
+
+        WebElement checkoutBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("checkout-button")));
+        checkoutBtn.click();
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("checkout-form")));
+
+        driver.findElement(By.id("firstName")).sendKeys("John");
+        driver.findElement(By.id("lastName")).sendKeys("Doe");
+        driver.findElement(By.id("phone")).sendKeys("5551234567");
+        driver.findElement(By.id("continue")).click();
+
+        wait.until(ExpectedConditions.urlContains("/checkout/confirmation"));
+        WebElement successMsg = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".checkout-success")));
+        Assertions.assertTrue(successMsg.isDisplayed(),
+                "Checkout completion message should be visible");
+    }
+
+    @Test
+    @Order(8)
+    public void testResetAppStateIndependence() {
+        login();
+        resetAppState();
+        Assertions.assertNull(getCartBadge(), "Cart badge should be cleared after reset");
     }
 }

@@ -1,330 +1,276 @@
-package GTP5.ws04.seq07;
+package Qwen3.ws04.seq07;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.List;
+import java.util.Set;
 
-/**
- * Single-file JUnit 5 + Selenium 4 test suite.
- *
- * Notes:
- * - Uses FirefoxDriver with headless argument via addArguments("--headless").
- * - Tests operate from the BASE_URL and exercise one-level links and external links.
- * - Designed to be resilient: guards optional elements and uses explicit waits.
- *
- * File/class name must match. Package as requested.
- */
-@TestMethodOrder(OrderAnnotation.class)
+import static org.junit.jupiter.api.Assertions.*;
+
 public class KatalonFormTest {
-    private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
+
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static URI baseUri;
 
     @BeforeAll
-    public static void setup() throws URISyntaxException {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED by spec
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        baseUri = new URI(BASE_URL);
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    // Helper: navigate to base url and wait for basic load (document.readyState = complete)
-    private void goToBaseAndWait() {
-        driver.navigate().to(BASE_URL);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-        // assert we are on the expected host/path
-        Assertions.assertTrue(driver.getCurrentUrl().contains(baseUri.getHost()),
-                "After navigation, expected current URL to contain base host: " + baseUri.getHost());
-    }
-
-    // Helper: open a URL in a new tab and switch to it; returns the new window handle.
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        // wait for additional window
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        Set<String> handles = driver.getWindowHandles();
-        for (String h : handles) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
-    }
-
-    // Helper: close current tab and switch back to original
-    private void closeTabAndSwitchBack(String originalHandle) {
-        driver.close();
-        driver.switchTo().window(originalHandle);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-    }
-
-    // Helper: determine if an href is external to the base host
-    private boolean isExternalHref(String href) {
-        try {
-            URI uri = new URI(href);
-            String host = uri.getHost();
-            if (host == null) return false; // relative link -> internal
-            return !host.equalsIgnoreCase(baseUri.getHost());
-        } catch (Exception e) {
-            // malformed URIs are treated as internal to avoid flaky behavior
-            return false;
-        }
-    }
-
-    // Collect one-level internal links (same host and path depth 1 relative to base path)
-    private List<String> collectOneLevelInternalLinks() {
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        Set<String> result = new LinkedHashSet<>();
-        for (WebElement a : anchors) {
-            String href = a.getAttribute("href");
-            if (href == null || href.trim().isEmpty()) continue;
-            try {
-                URI uri = new URI(href);
-                if (uri.getHost() == null || uri.getHost().equalsIgnoreCase(baseUri.getHost())) {
-                    // same host or relative; compute path depth relative to base
-                    String path = uri.getPath();
-                    if (path == null) path = "";
-                    String basePath = baseUri.getPath();
-                    if (basePath == null) basePath = "";
-                    // Normalize: remove leading/trailing slashes
-                    String p = path.replaceAll("^/+", "").replaceAll("/+$", "");
-                    // count segments
-                    int segments = p.isEmpty() ? 0 : p.split("/").length;
-                    // Consider one-level below as exactly 1 segment different than base root,
-                    // but to be permissive include any single-segment paths or same-file links.
-                    if (segments <= 1) {
-                        result.add(href);
-                    } else {
-                        // if path is exactly one additional segment relative to basePath
-                        String bp = basePath.replaceAll("^/+", "").replaceAll("/+$", "");
-                        int baseSegments = bp.isEmpty() ? 0 : bp.split("/").length;
-                        if (segments == baseSegments + 1) result.add(href);
-                    }
-                }
-            } catch (URISyntaxException ignored) {
-                // treat as internal and include
-                result.add(href);
-            }
-        }
-        return new ArrayList<>(result);
-    }
-
     @Test
     @Order(1)
-    public void testBasePageLoadsAndHasForm() {
-        goToBaseAndWait();
-        // Prefer robust locators: look for <form>, or common named inputs
-        List<WebElement> forms = driver.findElements(By.tagName("form"));
-        Assertions.assertTrue(forms.size() > 0, "Expected at least one <form> element on the base page.");
-
-        // Check some expected inputs exist (guarded)
-        boolean hasTextInput = driver.findElements(By.cssSelector("input[type='text'], input[type='email'], textarea")).size() > 0;
-        Assertions.assertTrue(hasTextInput, "Expected at least one text input or textarea on form page.");
-
-        // Check for a submit button (type=submit or button with text submit)
-        boolean hasSubmit = driver.findElements(By.cssSelector("button[type='submit'], input[type='submit']")).size() > 0
-                || driver.findElements(By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'submit')]")).size() > 0;
-        Assertions.assertTrue(hasSubmit, "Expected a submit button on the form page.");
+    public void testPageLoad() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Verify page title
+        String title = driver.getTitle();
+        assertEquals("Katalon Forms", title);
+        
+        // Verify form present
+        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("form")));
+        assertTrue(form.isDisplayed());
     }
 
     @Test
     @Order(2)
-    public void testFillAndSubmitFormIfPossible() {
-        goToBaseAndWait();
-
-        // Attempt to fill the form in a robust manner: find visible text inputs and fill predictable values.
-        List<WebElement> textInputs = driver.findElements(By.cssSelector("input[type='text'], input[type='email'], textarea"));
-        for (int i = 0; i < textInputs.size(); i++) {
-            WebElement inp = textInputs.get(i);
-            if (!inp.isDisplayed() || !inp.isEnabled()) continue;
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(inp));
-                String value = "TestValue" + (i + 1);
-                inp.clear();
-                inp.sendKeys(value);
-            } catch (Exception ignore) {
-                // continue if can't interact
-            }
-        }
-
-        // If there are checkboxes/radios, toggle the first of each type
-        List<WebElement> checkboxes = driver.findElements(By.cssSelector("input[type='checkbox']"));
-        if (!checkboxes.isEmpty()) {
-            WebElement cb = checkboxes.get(0);
-            if (cb.isDisplayed() && cb.isEnabled()) {
-                try {
-                    wait.until(ExpectedConditions.elementToBeClickable(cb));
-                    cb.click();
-                } catch (Exception ignored) { }
-            }
-        }
-
-        List<WebElement> radios = driver.findElements(By.cssSelector("input[type='radio']"));
-        if (!radios.isEmpty()) {
-            WebElement r = radios.get(0);
-            if (r.isDisplayed() && r.isEnabled()) {
-                try {
-                    wait.until(ExpectedConditions.elementToBeClickable(r));
-                    r.click();
-                } catch (Exception ignored) { }
-            }
-        }
-
-        // Find a submit control robustly
-        List<WebElement> submitButtons = driver.findElements(By.cssSelector("button[type='submit'], input[type='submit']"));
-        if (submitButtons.isEmpty()) {
-            // fallback: look for button with text containing 'submit' (case-insensitive)
-            submitButtons = driver.findElements(By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), 'submit')]"));
-        }
-
-        Assertions.assertTrue(submitButtons.size() > 0, "No submit button available to test form submission.");
-
-        String originalUrl = driver.getCurrentUrl();
-        WebElement submit = submitButtons.get(0);
-        wait.until(ExpectedConditions.elementToBeClickable(submit));
-        submit.click();
-
-        // After submit: wait for either navigation (URL change), alert, or appearance of a "success" like text.
-        boolean success = false;
-        try {
-            wait.until(d -> !d.getCurrentUrl().equals(originalUrl) || d.switchTo().alert() != null);
-            success = !driver.getCurrentUrl().equals(originalUrl);
-        } catch (Exception ignored) {
-            // no URL change or alert within wait
-        }
-
-        if (!success) {
-            // look for success messages in body (case-insensitive)
-            WebElement body = driver.findElement(By.tagName("body"));
-            String bodyText = body.getText().toLowerCase(Locale.ROOT);
-            if (bodyText.contains("success") || bodyText.contains("thank you") || bodyText.contains("submitted")) {
-                success = true;
-            }
-        }
-
-        Assertions.assertTrue(success, "Form submission did not cause a navigational change, alert, or a visible success message.");
+    public void testTextInputFields() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test text input
+        WebElement firstNameInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName")));
+        firstNameInput.clear();
+        firstNameInput.sendKeys("John");
+        
+        WebElement lastNameInput = driver.findElement(By.id("lastName"));
+        lastNameInput.clear();
+        lastNameInput.sendKeys("Doe");
+        
+        // Verify values
+        assertEquals("John", firstNameInput.getAttribute("value"));
+        assertEquals("Doe", lastNameInput.getAttribute("value"));
     }
 
     @Test
     @Order(3)
-    public void testExternalLinksOpenAndContainDomain() {
-        goToBaseAndWait();
-
-        // Collect anchors with hrefs that are external
-        List<WebElement> anchors = driver.findElements(By.cssSelector("a[href]"));
-        List<String> hrefs = anchors.stream()
-                .map(a -> {
-                    try { return a.getAttribute("href"); } catch (Exception e) { return null; }
-                })
-                .filter(Objects::nonNull)
-                .filter(h -> !h.trim().isEmpty())
-                .distinct()
-                .collect(Collectors.toList());
-
-        // Limit number of external links to avoid flakiness; test up to 5 external links
-        int externalTested = 0;
-        String originalHandle = driver.getWindowHandle();
-
-        for (String href : hrefs) {
-            if (isExternalHref(href)) {
-                externalTested++;
-                if (externalTested > 5) break;
-
-                // Open in new tab to avoid losing the base page
-                String newHandle = openUrlInNewTab(href);
-                try {
-                    // Wait for URL to contain the host of href
-                    URI hrefUri;
-                    try {
-                        hrefUri = new URI(href);
-                        String expectedHost = hrefUri.getHost();
-                        // Wait for current URL to contain expected host
-                        wait.until(ExpectedConditions.urlContains(expectedHost));
-                        String current = driver.getCurrentUrl();
-                        Assertions.assertTrue(current.contains(expectedHost),
-                                "External link opened URL should contain expected host. Expected: " + expectedHost + " but was: " + current);
-                    } catch (URISyntaxException ue) {
-                        // If href can't be parsed, assert that page loaded (document ready)
-                        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                    }
-                } finally {
-                    // Close the new tab and switch back
-                    driver.close();
-                    driver.switchTo().window(originalHandle);
-                    wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                }
-            }
-        }
-
-        // It's acceptable if no external links were present, but if there are any, we should have tested at least one.
-        long totalExternal = hrefs.stream().filter(this::isExternalHref).count();
-        if (totalExternal > 0) {
-            Assertions.assertTrue(externalTested > 0, "There were external links but none were tested due to limits.");
-        }
+    public void testEmailField() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test email input
+        WebElement emailInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("email")));
+        emailInput.clear();
+        emailInput.sendKeys("john.doe@example.com");
+        
+        // Verify value
+        assertEquals("john.doe@example.com", emailInput.getAttribute("value"));
     }
 
     @Test
     @Order(4)
-    public void testOneLevelInternalLinksNavigateAndHaveContent() {
-        goToBaseAndWait();
+    public void testTextArea() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test textarea
+        WebElement messageArea = wait.until(ExpectedConditions.elementToBeClickable(By.id("message")));
+        messageArea.clear();
+        messageArea.sendKeys("This is a test message");
+        
+        // Verify value
+        assertEquals("This is a test message", messageArea.getText());
+    }
 
-        List<String> internalLinks = collectOneLevelInternalLinks();
+    @Test
+    @Order(5)
+    public void testRadioButtons() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test radio buttons
+        WebElement maleRadio = driver.findElement(By.id("male"));
+        WebElement femaleRadio = driver.findElement(By.id("female"));
+        
+        // Select male
+        maleRadio.click();
+        assertTrue(maleRadio.isSelected());
+        assertFalse(femaleRadio.isSelected());
+        
+        // Select female
+        femaleRadio.click();
+        assertFalse(maleRadio.isSelected());
+        assertTrue(femaleRadio.isSelected());
+    }
 
-        // Remove the base URL itself from the list
-        internalLinks = internalLinks.stream().filter(h -> !h.equalsIgnoreCase(BASE_URL)).collect(Collectors.toList());
+    @Test
+    @Order(6)
+    public void testCheckBoxes() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test checkboxes
+        WebElement checkbox1 = driver.findElement(By.id("checkbox1"));
+        WebElement checkbox2 = driver.findElement(By.id("checkbox2"));
+        WebElement checkbox3 = driver.findElement(By.id("checkbox3"));
+        
+        // Select checkboxes
+        checkbox1.click();
+        checkbox2.click();
+        checkbox3.click();
+        
+        assertTrue(checkbox1.isSelected());
+        assertTrue(checkbox2.isSelected());
+        assertTrue(checkbox3.isSelected());
+        
+        // Deselect checkboxes
+        checkbox1.click();
+        checkbox2.click();
+        checkbox3.click();
+        
+        assertFalse(checkbox1.isSelected());
+        assertFalse(checkbox2.isSelected());
+        assertFalse(checkbox3.isSelected());
+    }
 
-        // Limit to avoid heavy runs
-        int tested = 0;
-        for (String href : internalLinks) {
-            if (tested >= 6) break; // keep suite fast and stable
-            try {
-                // Use normal navigation (same tab) to validate the link target is reachable and has content
-                driver.navigate().to(href);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+    @Test
+    @Order(7)
+    public void testDropDownSelect() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test dropdown selection
+        WebElement dropdown = driver.findElement(By.id("country"));
+        Select select = new Select(dropdown);
+        select.selectByVisibleText("United States");
+        
+        // Verify selection
+        assertEquals("United States", select.getFirstSelectedOption().getText());
+        
+        // Select another option
+        select.selectByValue("CA");
+        assertEquals("Canada", select.getFirstSelectedOption().getText());
+    }
 
-                // Assert that page has at least some visible textual content or a header
-                boolean hasHeader = driver.findElements(By.cssSelector("h1, h2, h3")).stream().anyMatch(WebElement::isDisplayed);
-                boolean hasBodyText = driver.findElements(By.tagName("body")).stream()
-                        .anyMatch(b -> b.getText() != null && b.getText().trim().length() > 20);
+    @Test
+    @Order(8)
+    public void testDateInput() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Test date input
+        WebElement dateInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("date")));
+        dateInput.clear();
+        dateInput.sendKeys("2023-12-25");
+        
+        // Verify value (note: browsers may format differently)
+        String inputVal = dateInput.getAttribute("value");
+        assertNotNull(inputVal);
+    }
 
-                Assertions.assertTrue(hasHeader || hasBodyText, "Navigated page " + href + " should contain a header or body text.");
+    @Test
+    @Order(9)
+    public void testSubmitForm() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Fill out form fields
+        WebElement firstNameInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName")));
+        firstNameInput.clear();
+        firstNameInput.sendKeys("Jane");
+        
+        WebElement lastNameInput = driver.findElement(By.id("lastName"));
+        lastNameInput.clear();
+        lastNameInput.sendKeys("Smith");
+        
+        WebElement emailInput = driver.findElement(By.id("email"));
+        emailInput.clear();
+        emailInput.sendKeys("jane.smith@example.com");
+        
+        WebElement messageArea = driver.findElement(By.id("message"));
+        messageArea.clear();
+        messageArea.sendKeys("Test message");
+        
+        WebElement maleRadio = driver.findElement(By.id("male"));
+        maleRadio.click();
+        
+        WebElement checkbox1 = driver.findElement(By.id("checkbox1"));
+        checkbox1.click();
+        
+        WebElement dropdown = driver.findElement(By.id("country"));
+        Select select = new Select(dropdown);
+        select.selectByVisibleText("United States");
+        
+        // Submit form
+        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        submitButton.click();
+        
+        // Verify submission redirect (check if page has changed)
+        wait.until(ExpectedConditions.urlContains("form.html"));
+    }
 
-                tested++;
-            } catch (Exception e) {
-                // Record a failure for this particular link but continue testing others
-                Assertions.fail("Failed to navigate or validate internal link: " + href + " -> " + e.getMessage());
-            } finally {
-                // return to base for next iteration
-                driver.navigate().to(BASE_URL);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
+    @Test
+    @Order(10)
+    public void testRequiredFieldsValidation() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Try submitting without filling required fields
+        WebElement submitButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        submitButton.click();
+        
+        // Should still be on same page (validation prevents submission)
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("form.html"));
+    }
+
+    @Test
+    @Order(11)
+    public void testFormReset() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Fill some fields
+        WebElement firstNameInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName")));
+        firstNameInput.sendKeys("Test");
+        
+        WebElement lastNameInput = driver.findElement(By.id("lastName"));
+        lastNameInput.sendKeys("User");
+        
+        // Click reset button
+        WebElement resetButton = driver.findElement(By.xpath("//button[@type='reset']"));
+        resetButton.click();
+        
+        // Verify fields are cleared
+        wait.until(ExpectedConditions.textToBe(By.id("firstName"), ""));
+        wait.until(ExpectedConditions.textToBe(By.id("lastName"), ""));
+        
+        // Also check other fields are cleared
+        WebElement emailInput = driver.findElement(By.id("email"));
+        assertEquals("", emailInput.getAttribute("value"));
+    }
+
+    @Test
+    @Order(12)
+    public void testLinksAndNavigation() {
+        driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
+        
+        // Check for existing links
+        List<WebElement> links = driver.findElements(By.tagName("a"));
+        assertTrue(links.size() > 0);
+        
+        // Check anchor links
+        for (WebElement link : links) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.isEmpty()) {
+                // Just verify they exist in page structure
+                assertTrue(link.isDisplayed());
             }
-        }
-
-        // If there are internal links, at least one should have been tested
-        if (!internalLinks.isEmpty()) {
-            Assertions.assertTrue(tested > 0, "Expected to test at least one one-level internal link.");
         }
     }
 }

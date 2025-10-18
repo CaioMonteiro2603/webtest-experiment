@@ -1,7 +1,6 @@
-package GPT5.ws09.seq08;
+package Qwen3.ws09.seq08;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -12,197 +11,215 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class RealWorldConduitE2ETest {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class RealWorldTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String BASE_URL = "https://demo.realworld.io/";
 
     @BeforeAll
     public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
     public static void tearDown() {
-        if (driver != null) driver.quit();
-    }
-
-    // ----------------- Helpers -----------------
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".banner h1")));
-    }
-
-    private void handleExternalLink(String cssSelector, String expectedDomain) {
-        List<WebElement> links = driver.findElements(By.cssSelector(cssSelector));
-        Assumptions.assumeTrue(!links.isEmpty(), "External link not present: " + cssSelector);
-        String original = driver.getWindowHandle();
-        String before = driver.getCurrentUrl();
-        wait.until(ExpectedConditions.elementToBeClickable(links.get(0))).click();
-
-        try {
-            wait.until(d -> d.getWindowHandles().size() > 1 || !d.getCurrentUrl().equals(before));
-        } catch (TimeoutException ignored) { }
-
-        if (driver.getWindowHandles().size() > 1) {
-            for (String h : driver.getWindowHandles()) {
-                if (!h.equals(original)) {
-                    driver.switchTo().window(h);
-                    break;
-                }
-            }
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "Should navigate to domain: " + expectedDomain);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), "Should navigate to domain: " + expectedDomain);
-            driver.navigate().back();
+        if (driver != null) {
+            driver.quit();
         }
     }
 
-    // ----------------- Tests -----------------
-
     @Test
     @Order(1)
-    public void homePageLoads_bannerVisible() {
-        openBase();
-        WebElement banner = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".banner h1")));
-        Assertions.assertEquals("conduit", banner.getText().trim(), "Banner should display 'conduit'");
-        Assertions.assertTrue(driver.getTitle().toLowerCase().contains("conduit") || driver.getTitle().toLowerCase().contains("realworld"),
-                "Title should reference Conduit/RealWorld");
+    public void testHomePageLoad() {
+        driver.get("https://demo.realworld.io/");
+        assertEquals("Conduit", driver.getTitle());
+        assertTrue(driver.getCurrentUrl().contains("demo.realworld.io"));
     }
 
     @Test
     @Order(2)
-    public void navigateToLoginPage() {
-        openBase();
-        WebElement signIn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='#login']")));
-        signIn.click();
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.text-xs-center")));
-        Assertions.assertEquals("Sign In", header.getText().trim(), "Login header should be 'Sign In'");
-        Assertions.assertTrue(driver.getCurrentUrl().contains("#login"), "URL should contain #login");
+    public void testNavigationToArticles() {
+        driver.get("https://demo.realworld.io/");
+        WebElement articlesLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Articles")));
+        articlesLink.click();
+        assertTrue(driver.getCurrentUrl().contains("/"));
+        assertEquals("Conduit", driver.getTitle());
     }
 
     @Test
     @Order(3)
-    public void navigateToRegisterPage() {
-        openBase();
-        WebElement signUp = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='#register']")));
-        signUp.click();
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.text-xs-center")));
-        Assertions.assertEquals("Sign Up", header.getText().trim(), "Register header should be 'Sign Up'");
-        Assertions.assertTrue(driver.getCurrentUrl().contains("#register"), "URL should contain #register");
-    }
-
-    @Test
-    @Order(4)
-    public void invalidLoginShowsError() {
-        driver.get(BASE_URL + "#login");
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[type='email']")));
-        WebElement password = driver.findElement(By.cssSelector("input[type='password']"));
-        email.clear(); email.sendKeys("invalid@example.com");
-        password.clear(); password.sendKeys("wrongpassword");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        WebElement errorItem = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-messages li")));
-        Assertions.assertTrue(errorItem.getText().toLowerCase().contains("email or password"),
-                "Error should mention email or password is invalid");
-        Assertions.assertTrue(driver.getCurrentUrl().contains("#login"), "Should remain on login page after failure");
-    }
-
-    @Test
-    @Order(5)
-    public void globalFeedShowsArticlePreviewsOrEmptyMessage() {
-        openBase();
-        // Ensure Global Feed tab is selected
-        WebElement globalTab = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.nav-link[href='']")));
-        globalTab.click();
-        // Either previews exist or an empty message appears
-        List<WebElement> previews = driver.findElements(By.cssSelector(".article-preview"));
-        List<WebElement> emptyMsg = driver.findElements(By.xpath("//*[contains(.,'No articles are here')]"));
-        Assertions.assertTrue(!previews.isEmpty() || !emptyMsg.isEmpty(),
-                "Global Feed should show article previews or an empty message");
-    }
-
-    @Test
-    @Order(6)
-    public void clickFirstArticleOpensArticlePage() {
-        openBase();
-        List<WebElement> links = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".preview-link")));
-        Assumptions.assumeTrue(!links.isEmpty(), "No article previews to click");
-        WebElement first = links.get(0);
-        String previewTitle = first.findElement(By.cssSelector("h1")).getText().trim();
-        wait.until(ExpectedConditions.elementToBeClickable(first)).click();
-        WebElement articleTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1")));
-        Assertions.assertEquals(previewTitle, articleTitle.getText().trim(), "Article title should match preview title");
-        Assertions.assertTrue(driver.getCurrentUrl().contains("#/article/"), "URL should point to an article page");
-    }
-
-    @Test
-    @Order(7)
-    public void clickPopularTagFiltersFeed_oneLevel() {
-        openBase();
-        List<WebElement> tags = driver.findElements(By.cssSelector(".tag-list a.tag-default"));
-        Assumptions.assumeTrue(!tags.isEmpty(), "No popular tags available to test");
-        WebElement tag = tags.get(0);
-        String tagText = tag.getText().trim();
-        wait.until(ExpectedConditions.elementToBeClickable(tag)).click();
-        wait.until(ExpectedConditions.urlContains("tag="));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("tag=" + tagText) || driver.getCurrentUrl().contains("tag="),
-                "URL should contain tag filter");
-        // After tag click, article previews typically reload
-        List<WebElement> previews = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".article-preview")));
-        Assertions.assertFalse(previews.isEmpty(), "Tagged feed should list article previews (if any exist for the tag)");
-    }
-
-    @Test
-    @Order(8)
-    public void paginationAdvancesActivePage_ifPresent() {
-        openBase();
-        List<WebElement> pages = driver.findElements(By.cssSelector(".pagination li a.page-link"));
-        if (pages.size() >= 2) {
-            WebElement second = pages.get(1);
-            wait.until(ExpectedConditions.elementToBeClickable(second)).click();
-            // active page item gets .active class
-            WebElement active = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".pagination li.page-item.active")));
-            Assertions.assertTrue(active.getText().trim().equals("2") || active.getText().trim().length() > 0,
-                    "Active pagination item should change after clicking page 2");
-        } else {
-            Assertions.assertTrue(true, "Pagination not present; skipping without failure");
+    public void testArticleListing() {
+        driver.get("https://demo.realworld.io/");
+        List<WebElement> articleElements = driver.findElements(By.cssSelector(".article-preview"));
+        assertTrue(articleElements.size() > 0);
+        
+        for (WebElement article : articleElements) {
+            assertTrue(article.isDisplayed());
+            WebElement title = article.findElement(By.cssSelector(".article-title"));
+            WebElement description = article.findElement(By.cssSelector(".article-description"));
+            WebElement author = article.findElement(By.cssSelector(".article-author"));
+            WebElement date = article.findElement(By.cssSelector(".article-date"));
+            
+            assertTrue(title.isDisplayed());
+            assertTrue(description.isDisplayed());
+            assertTrue(author.isDisplayed());
+            assertTrue(date.isDisplayed());
         }
     }
 
     @Test
+    @Order(4)
+    public void testArticleSorting() {
+        driver.get("https://demo.realworld.io/");
+        
+        WebElement sortDropdown = driver.findElement(By.cssSelector(".filter-options select"));
+        Select select = new Select(sortDropdown);
+        
+        select.selectByValue("newest");
+        List<WebElement> articles = driver.findElements(By.cssSelector(".article-preview"));
+        assertTrue(articles.size() > 0);
+        
+        select.selectByValue("oldest");
+        articles = driver.findElements(By.cssSelector(".article-preview"));
+        assertTrue(articles.size() > 0);
+        
+        select.selectByValue("popularity");
+        articles = driver.findElements(By.cssSelector(".article-preview"));
+        assertTrue(articles.size() > 0);
+    }
+
+    @Test
+    @Order(5)
+    public void testArticleTags() {
+        driver.get("https://demo.realworld.io/");
+        List<WebElement> tags = driver.findElements(By.cssSelector(".tag-list a"));
+        assertTrue(tags.size() > 0);
+        
+        for (WebElement tag : tags) {
+            assertTrue(tag.isDisplayed());
+            String tagName = tag.getText();
+            assertFalse(tagName.isEmpty());
+        }
+    }
+
+    @Test
+    @Order(6)
+    public void testNavigationToArticle() {
+        driver.get("https://demo.realworld.io/");
+        WebElement firstArticle = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".article-preview:first-child")));
+        firstArticle.click();
+        
+        WebElement articleContent = driver.findElement(By.cssSelector(".article-page"));
+        assertTrue(articleContent.isDisplayed());
+        assertTrue(driver.getCurrentUrl().contains("/article/"));
+        
+        WebElement articleTitle = driver.findElement(By.cssSelector(".article-title"));
+        assertTrue(articleTitle.isDisplayed());
+    }
+
+    @Test
+    @Order(7)
+    public void testLoginFunctionality() {
+        driver.get("https://demo.realworld.io/");
+        WebElement signInLink = driver.findElement(By.linkText("Sign in"));
+        signInLink.click();
+        
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[type='email']")));
+        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
+        WebElement signInButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        
+        emailField.sendKeys("test@example.com");
+        passwordField.sendKeys("password");
+        signInButton.click();
+        
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error-messages")));
+        assertTrue(errorMessage.isDisplayed());
+    }
+
+    @Test
+    @Order(8)
+    public void testRegisterFunctionality() {
+        driver.get("https://demo.realworld.io/");
+        WebElement signUpLink = driver.findElement(By.linkText("Sign up"));
+        signUpLink.click();
+        
+        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("input[placeholder='Your Name']")));
+        WebElement emailField = driver.findElement(By.cssSelector("input[placeholder='Email']"));
+        WebElement passwordField = driver.findElement(By.cssSelector("input[placeholder='Password']"));
+        WebElement signUpButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        
+        usernameField.sendKeys("testuser");
+        emailField.sendKeys("test@example.com");
+        passwordField.sendKeys("password");
+        signUpButton.click();
+        
+        WebElement errorElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error-messages")));
+        assertTrue(errorElement.isDisplayed());
+    }
+
+    @Test
     @Order(9)
-    public void footerExternalGitHubLinkOpens() {
-        openBase();
-        // Footer or somewhere on the page links to the RealWorld GitHub repo
-        handleExternalLink("a[href*='github.com/gothinkster/realworld']", "github.com");
+    public void testProfileNavigation() {
+        driver.get("https://demo.realworld.io/");
+        WebElement profileLink = driver.findElement(By.cssSelector(".nav-link[href='/profile']"));
+        profileLink.click();
+        
+        assertTrue(driver.getCurrentUrl().contains("/profile"));
+        assertEquals("Conduit", driver.getTitle());
     }
 
     @Test
     @Order(10)
-    public void headerInternalLinks_navigateWithinOneLevel() {
-        openBase();
-        // Click 'Home' and 'Sign in' top-level links (internal)
-        WebElement home = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.navbar-brand, a[href='#/']")));
-        home.click();
-        wait.until(ExpectedConditions.urlContains("demo.realworld.io"));
-        WebElement signIn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='#login']")));
-        signIn.click();
-        wait.until(ExpectedConditions.urlContains("#login"));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("#login"), "Should land on Sign In page");
-        // Back to home one level
-        WebElement brand = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.navbar-brand")));
-        brand.click();
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("#login")));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("demo.realworld.io"), "Should be back on home");
+    public void testFooterLinks() {
+        driver.get("https://demo.realworld.io/");
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector(".footer a"));
+        assertTrue(footerLinks.size() >= 3);
+        
+        String originalWindow = driver.getWindowHandle();
+        
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.isEmpty() && !href.startsWith("#")) {
+                link.click();
+                
+                Set<String> windowHandles = driver.getWindowHandles();
+                String newWindow = windowHandles.stream()
+                        .filter(w -> !w.equals(originalWindow))
+                        .findFirst()
+                        .orElse(null);
+                
+                if (newWindow != null) {
+                    driver.switchTo().window(newWindow);
+                    String currentUrl = driver.getCurrentUrl();
+                    assertTrue(currentUrl.contains("github.com") || 
+                               currentUrl.contains("realworld.io") || 
+                               currentUrl.contains("twitter.com"));
+                    driver.close();
+                    driver.switchTo().window(originalWindow);
+                }
+            }
+        }
+    }
+
+    @Test
+    @Order(11)
+    public void testUserProfilePage() {
+        driver.get("https://demo.realworld.io/");
+        WebElement userMenu = driver.findElement(By.cssSelector(".navbar-user"));
+        userMenu.click();
+        
+        WebElement profileLink = driver.findElement(By.linkText("Your Profile"));
+        profileLink.click();
+        
+        WebElement profilePage = driver.findElement(By.cssSelector(".profile-page"));
+        assertTrue(profilePage.isDisplayed());
+        
+        WebElement profileName = driver.findElement(By.cssSelector(".profile-name"));
+        assertTrue(profileName.isDisplayed());
     }
 }

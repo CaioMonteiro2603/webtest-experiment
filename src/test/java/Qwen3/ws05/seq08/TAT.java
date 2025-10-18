@@ -1,7 +1,6 @@
-package GPT5.ws05.seq08;
+package Qwen3.ws05.seq08;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -12,12 +11,12 @@ import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class CacTatSiteTest {
+import static org.junit.jupiter.api.Assertions.*;
+
+public class CacTatTest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 
     @BeforeAll
     public static void setUp() {
@@ -36,120 +35,165 @@ public class CacTatSiteTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
-        driver.get(BASE_URL);
-        WebElement heading = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1")));
-        Assertions.assertTrue(heading.isDisplayed(), "Heading should be visible on homepage");
-        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("form")));
-        Assertions.assertTrue(form.isDisplayed(), "Form should be present on homepage");
+    public void testPageLoad() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        assertEquals("CAC TAT - Test Automation", driver.getTitle());
+        assertTrue(driver.getCurrentUrl().contains("index.html"));
     }
 
     @Test
     @Order(2)
-    public void testFormSubmissionSuccess() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName"))).sendKeys("John");
-        driver.findElement(By.id("lastName")).sendKeys("Doe");
-        driver.findElement(By.id("email")).sendKeys("john.doe@example.com");
-        driver.findElement(By.id("open-text-area")).sendKeys("This is a test message.");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
-        Assertions.assertTrue(success.isDisplayed(), "Success message should be displayed");
+    public void testNavigationLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About")));
+        aboutLink.click();
+        assertTrue(driver.getCurrentUrl().contains("about.html"));
+        
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        WebElement servicesLink = driver.findElement(By.linkText("Services"));
+        servicesLink.click();
+        assertTrue(driver.getCurrentUrl().contains("services.html"));
+        
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        WebElement contactLink = driver.findElement(By.linkText("Contact"));
+        contactLink.click();
+        assertTrue(driver.getCurrentUrl().contains("contact.html"));
+        
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        WebElement homeLink = driver.findElement(By.linkText("Home"));
+        homeLink.click();
+        assertTrue(driver.getCurrentUrl().contains("index.html"));
     }
 
     @Test
     @Order(3)
-    public void testFormSubmissionWithInvalidEmail() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName"))).sendKeys("John");
-        driver.findElement(By.id("lastName")).sendKeys("Doe");
-        driver.findElement(By.id("email")).sendKeys("john.doe@invalid");
-        driver.findElement(By.id("open-text-area")).sendKeys("Invalid email test.");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
-        Assertions.assertTrue(error.isDisplayed(), "Error message should be shown for invalid email");
+    public void testNavigationMenu() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".menu-toggle")));
+        menuButton.click();
+        
+        WebElement menuLinks = driver.findElement(By.cssSelector(".menu"));
+        assertTrue(menuLinks.isDisplayed());
+        
+        List<WebElement> links = menuLinks.findElements(By.tagName("a"));
+        assertEquals(4, links.size());
+        
+        WebElement aboutLink = links.get(0);
+        assertEquals("About", aboutLink.getText());
+        
+        WebElement servicesLink = links.get(1);
+        assertEquals("Services", servicesLink.getText());
+        
+        WebElement contactLink = links.get(2);
+        assertEquals("Contact", contactLink.getText());
+        
+        WebElement homeLink = links.get(3);
+        assertEquals("Home", homeLink.getText());
     }
 
     @Test
     @Order(4)
-    public void testPhoneFieldRejectsLetters() {
-        driver.get(BASE_URL);
-        WebElement phone = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("phone")));
-        phone.sendKeys("abcde");
-        String value = phone.getAttribute("value");
-        Assertions.assertEquals("", value, "Phone field should not accept letters");
+    public void testFormSubmission() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/contact.html");
+        
+        WebElement nameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("name")));
+        WebElement emailField = driver.findElement(By.id("email"));
+        WebElement messageField = driver.findElement(By.id("message"));
+        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        
+        nameField.sendKeys("John Doe");
+        emailField.sendKeys("john.doe@example.com");
+        messageField.sendKeys("Test message for contact form");
+        submitButton.click();
+        
+        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".success-message")));
+        assertTrue(successMessage.isDisplayed());
+        assertTrue(successMessage.getText().contains("Thank you for your message"));
     }
 
     @Test
     @Order(5)
-    public void testCheckboxesInteraction() {
-        driver.get(BASE_URL);
-        List<WebElement> checkboxes = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("input[type='checkbox']")));
-        for (WebElement cb : checkboxes) {
-            if (!cb.isSelected()) {
-                wait.until(ExpectedConditions.elementToBeClickable(cb)).click();
-                Assertions.assertTrue(cb.isSelected(), "Checkbox should be selected after clicking");
+    public void testSocialMediaLinks() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/index.html");
+        
+        List<WebElement> socialLinks = driver.findElements(By.cssSelector(".social-links a"));
+        assertEquals(3, socialLinks.size());
+        
+        String originalWindow = driver.getWindowHandle();
+        
+        for (int i = 0; i < socialLinks.size(); i++) {
+            WebElement link = socialLinks.get(i);
+            String href = link.getAttribute("href");
+            assertNotNull(href);
+            link.click();
+            
+            Set<String> windowHandles = driver.getWindowHandles();
+            String newWindow = windowHandles.stream()
+                    .filter(w -> !w.equals(originalWindow))
+                    .findFirst()
+                    .orElse(null);
+            
+            if (newWindow != null) {
+                driver.switchTo().window(newWindow);
+                String currentUrl = driver.getCurrentUrl();
+                assertTrue(currentUrl.contains("twitter.com") || 
+                           currentUrl.contains("facebook.com") || 
+                           currentUrl.contains("linkedin.com"));
+                driver.close();
+                driver.switchTo().window(originalWindow);
             }
         }
     }
 
     @Test
     @Order(6)
-    public void testSelectProductDropdown() {
-        driver.get(BASE_URL);
-        WebElement select = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("product")));
-        select.click();
-        WebElement option = select.findElement(By.cssSelector("option[value='blog']"));
-        option.click();
-        WebElement selected = select.findElement(By.cssSelector("option:checked"));
-        Assertions.assertEquals("blog", selected.getAttribute("value"), "Selected product should be 'blog'");
+    public void testServicesPage() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/services.html");
+        
+        assertEquals("Services - CAC TAT", driver.getTitle());
+        
+        List<WebElement> serviceCards = driver.findElements(By.cssSelector(".service-card"));
+        assertTrue(serviceCards.size() > 0);
+        
+        for (WebElement card : serviceCards) {
+            assertTrue(card.isDisplayed());
+            WebElement title = card.findElement(By.cssSelector(".service-title"));
+            assertTrue(title.isDisplayed());
+            WebElement description = card.findElement(By.cssSelector(".service-description"));
+            assertTrue(description.isDisplayed());
+        }
     }
 
     @Test
     @Order(7)
-    public void testPrivacyLinkOpensInNewTab() {
-        driver.get(BASE_URL);
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='privacy.html']")));
-        String originalWindow = driver.getWindowHandle();
-        link.click();
-
-        wait.until(d -> driver.getWindowHandles().size() > 1);
-        Set<String> allWindows = driver.getWindowHandles();
-        allWindows.remove(originalWindow);
-        String newWindow = allWindows.iterator().next();
-        driver.switchTo().window(newWindow);
-
-        wait.until(ExpectedConditions.urlContains("privacy.html"));
-        String url = driver.getCurrentUrl();
-        Assertions.assertTrue(url.contains("privacy.html"), "Should navigate to privacy.html");
-
-        driver.close();
-        driver.switchTo().window(originalWindow);
+    public void testAboutPage() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/about.html");
+        
+        assertEquals("About - CAC TAT", driver.getTitle());
+        
+        WebElement aboutContent = driver.findElement(By.cssSelector(".about-content"));
+        assertTrue(aboutContent.isDisplayed());
+        
+        WebElement teamSection = driver.findElement(By.cssSelector(".team-section"));
+        assertTrue(teamSection.isDisplayed());
     }
 
     @Test
     @Order(8)
-    public void testTextAreaLimitEnforced() {
-        driver.get(BASE_URL);
-        WebElement textArea = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("open-text-area")));
-        String longText = "A".repeat(2000);
-        textArea.sendKeys(longText);
-        Assertions.assertTrue(textArea.getAttribute("value").length() <= 2000, "Textarea should not accept more than 2000 characters");
-    }
-
-    @Test
-    @Order(9)
-    public void testUploadFileFieldPresence() {
-        driver.get(BASE_URL);
-        WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("file-upload")));
-        Assertions.assertTrue(fileInput.isDisplayed(), "File input should be present");
-    }
-
-    @Test
-    @Order(10)
-    public void testSubmitButtonIsClickable() {
-        driver.get(BASE_URL);
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
-        Assertions.assertTrue(button.isEnabled(), "Submit button should be enabled");
+    public void testContactPage() {
+        driver.get("https://cac-tat.s3.eu-central-1.amazonaws.com/contact.html");
+        
+        assertEquals("Contact - CAC TAT", driver.getTitle());
+        
+        WebElement contactForm = driver.findElement(By.cssSelector(".contact-form"));
+        assertTrue(contactForm.isDisplayed());
+        
+        List<WebElement> formFields = contactForm.findElements(By.tagName("input"));
+        assertTrue(formFields.size() >= 2);
+        
+        WebElement messageField = contactForm.findElement(By.tagName("textarea"));
+        assertTrue(messageField.isDisplayed());
     }
 }

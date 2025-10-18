@@ -1,26 +1,24 @@
-package GPT5.ws05.seq08;
+package deepseek.ws05.seq08;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatSiteTest {
-
+public class ContactFormTest {
+    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -28,7 +26,7 @@ public class CacTatSiteTest {
     }
 
     @AfterAll
-    public static void tearDown() {
+    public static void teardown() {
         if (driver != null) {
             driver.quit();
         }
@@ -36,120 +34,87 @@ public class CacTatSiteTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
+    public void testSuccessfulFormSubmission() {
         driver.get(BASE_URL);
-        WebElement heading = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1")));
-        Assertions.assertTrue(heading.isDisplayed(), "Heading should be visible on homepage");
-        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("form")));
-        Assertions.assertTrue(form.isDisplayed(), "Form should be present on homepage");
+        
+        WebElement firstName = wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName")));
+        firstName.sendKeys("John");
+        driver.findElement(By.id("lastName")).sendKeys("Doe");
+        driver.findElement(By.id("email")).sendKeys("john.doe@example.com");
+        driver.findElement(By.id("phone")).sendKeys("1234567890");
+        
+        // Select product option
+        driver.findElement(By.xpath("//input[@value='blog']/..")).click();
+        
+        // Fill contact message
+        driver.findElement(By.id("open-text-area")).sendKeys("This is a test message for the contact form");
+        
+        // Submit form
+        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        
+        // Verify success message
+        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
+        Assertions.assertTrue(success.isDisplayed(), "Success message should be displayed after form submission");
     }
 
     @Test
     @Order(2)
-    public void testFormSubmissionSuccess() {
+    public void testFormValidation() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName"))).sendKeys("John");
-        driver.findElement(By.id("lastName")).sendKeys("Doe");
-        driver.findElement(By.id("email")).sendKeys("john.doe@example.com");
-        driver.findElement(By.id("open-text-area")).sendKeys("This is a test message.");
+        
+        // Submit empty form
         driver.findElement(By.cssSelector("button[type='submit']")).click();
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".success")));
-        Assertions.assertTrue(success.isDisplayed(), "Success message should be displayed");
+        
+        // Verify error messages
+        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
+        Assertions.assertTrue(error.isDisplayed(), "Error message should be displayed for empty form submission");
     }
 
     @Test
     @Order(3)
-    public void testFormSubmissionWithInvalidEmail() {
+    public void testPhoneFieldValidation() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("firstName"))).sendKeys("John");
-        driver.findElement(By.id("lastName")).sendKeys("Doe");
-        driver.findElement(By.id("email")).sendKeys("john.doe@invalid");
-        driver.findElement(By.id("open-text-area")).sendKeys("Invalid email test.");
+        
+        // Enter invalid phone number
+        driver.findElement(By.id("phone")).sendKeys("abc");
         driver.findElement(By.cssSelector("button[type='submit']")).click();
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
-        Assertions.assertTrue(error.isDisplayed(), "Error message should be shown for invalid email");
+        
+        // Verify phone validation error
+        WebElement phoneError = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector("input#phone:invalid")));
+        Assertions.assertTrue(phoneError.isDisplayed(), "Phone field should show validation error for invalid input");
     }
 
     @Test
     @Order(4)
-    public void testPhoneFieldRejectsLetters() {
+    public void testProductOptions() {
         driver.get(BASE_URL);
-        WebElement phone = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("phone")));
-        phone.sendKeys("abcde");
-        String value = phone.getAttribute("value");
-        Assertions.assertEquals("", value, "Phone field should not accept letters");
-    }
-
-    @Test
-    @Order(5)
-    public void testCheckboxesInteraction() {
-        driver.get(BASE_URL);
-        List<WebElement> checkboxes = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("input[type='checkbox']")));
-        for (WebElement cb : checkboxes) {
-            if (!cb.isSelected()) {
-                wait.until(ExpectedConditions.elementToBeClickable(cb)).click();
-                Assertions.assertTrue(cb.isSelected(), "Checkbox should be selected after clicking");
-            }
+        
+        // Test all product options
+        String[] options = {"mentoria", "blog", "youtube", "checkbox"};
+        for (String option : options) {
+            driver.findElement(By.xpath("//input[@value='" + option + "']/..")).click();
+            Assertions.assertTrue(driver.findElement(By.xpath("//input[@value='" + option + "']")).isSelected(),
+                "Option " + option + " should be selectable");
         }
     }
 
     @Test
-    @Order(6)
-    public void testSelectProductDropdown() {
+    @Order(5)
+    public void testResetButton() {
         driver.get(BASE_URL);
-        WebElement select = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("product")));
-        select.click();
-        WebElement option = select.findElement(By.cssSelector("option[value='blog']"));
-        option.click();
-        WebElement selected = select.findElement(By.cssSelector("option:checked"));
-        Assertions.assertEquals("blog", selected.getAttribute("value"), "Selected product should be 'blog'");
-    }
-
-    @Test
-    @Order(7)
-    public void testPrivacyLinkOpensInNewTab() {
-        driver.get(BASE_URL);
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='privacy.html']")));
-        String originalWindow = driver.getWindowHandle();
-        link.click();
-
-        wait.until(d -> driver.getWindowHandles().size() > 1);
-        Set<String> allWindows = driver.getWindowHandles();
-        allWindows.remove(originalWindow);
-        String newWindow = allWindows.iterator().next();
-        driver.switchTo().window(newWindow);
-
-        wait.until(ExpectedConditions.urlContains("privacy.html"));
-        String url = driver.getCurrentUrl();
-        Assertions.assertTrue(url.contains("privacy.html"), "Should navigate to privacy.html");
-
-        driver.close();
-        driver.switchTo().window(originalWindow);
-    }
-
-    @Test
-    @Order(8)
-    public void testTextAreaLimitEnforced() {
-        driver.get(BASE_URL);
-        WebElement textArea = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("open-text-area")));
-        String longText = "A".repeat(2000);
-        textArea.sendKeys(longText);
-        Assertions.assertTrue(textArea.getAttribute("value").length() <= 2000, "Textarea should not accept more than 2000 characters");
-    }
-
-    @Test
-    @Order(9)
-    public void testUploadFileFieldPresence() {
-        driver.get(BASE_URL);
-        WebElement fileInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("file-upload")));
-        Assertions.assertTrue(fileInput.isDisplayed(), "File input should be present");
-    }
-
-    @Test
-    @Order(10)
-    public void testSubmitButtonIsClickable() {
-        driver.get(BASE_URL);
-        WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
-        Assertions.assertTrue(button.isEnabled(), "Submit button should be enabled");
+        
+        // Fill some fields
+        driver.findElement(By.id("firstName")).sendKeys("Test");
+        driver.findElement(By.id("email")).sendKeys("test@example.com");
+        
+        // Reset form
+        driver.findElement(By.cssSelector("button[type='reset']")).click();
+        
+        // Verify fields are cleared
+        Assertions.assertTrue(driver.findElement(By.id("firstName")).getText().isEmpty(),
+            "First name should be cleared after reset");
+        Assertions.assertTrue(driver.findElement(By.id("email")).getText().isEmpty(),
+            "Email should be cleared after reset");
     }
 }
