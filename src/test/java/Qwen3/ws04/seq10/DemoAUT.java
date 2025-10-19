@@ -1,4 +1,4 @@
-package GPT5.ws04.seq10;
+package Qwen3.ws04.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -6,336 +6,284 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.net.URI;
 import java.time.Duration;
-import java.util.*;
-import java.util.stream.Collectors;
+import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessSuite {
-
+public class KatalonFormTest {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
-
-    private static final By BODY = By.tagName("body");
-    private static final By FORM = By.tagName("form");
-    private static final By SUBMIT = By.xpath("//button[@type='submit' or contains(.,'Submit') or contains(.,'Enviar')]");
-    private static final By ANY_LINK = By.cssSelector("a[href]");
-    private static final By ANY_SELECT = By.tagName("select");
-    private static final By ANY_CHECKBOX = By.cssSelector("input[type='checkbox']");
-    private static final By ANY_RADIO = By.cssSelector("input[type='radio']");
-    private static final By SUCCESS_TEXT = By.xpath("//*[contains(translate(., 'SUCCESS', 'success'),'success') or contains(translate(., 'THANK', 'thank'),'thank')]");
+    private final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // REQUIRED
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(0));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     @AfterAll
-    public static void tearDown() {
-        if (driver != null) driver.quit();
-    }
-
-    // ------------------ Helpers ------------------
-
-    private void openBase() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.presenceOfElementLocated(BODY));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("/form.html"),
-                "URL should include /form.html");
-    }
-
-    private boolean present(By locator) {
-        return !driver.findElements(locator).isEmpty();
-    }
-
-    private WebElement waitClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private WebElement firstDisplayed(By locator) {
-        for (WebElement e : driver.findElements(locator)) {
-            if (e.isDisplayed()) return e;
-        }
-        throw new NoSuchElementException("No displayed element for: " + locator);
-    }
-
-    private static String hostOf(String url) {
-        try { return new URI(url).getHost(); } catch (Exception e) { return ""; }
-    }
-
-    private void typeIntoLabeledField(String labelText, String value) {
-        String xpath = String.format("//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]/following::*[self::input or self::textarea][1]", labelText.toLowerCase());
-        WebElement input = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})", input);
-        input.clear();
-        input.sendKeys(value);
-    }
-
-    private void chooseRadioByLabelContains(String labelPart) {
-        String xpath = String.format("//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]/preceding::*[self::input and @type='radio'][1] | //label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]/following::*[self::input and @type='radio'][1]", labelPart.toLowerCase(), labelPart.toLowerCase());
-        WebElement radio = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(xpath)));
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})", radio);
-        if (!radio.isSelected()) radio.click();
-        Assertions.assertTrue(radio.isSelected(), "Radio should be selected for label containing: " + labelPart);
-    }
-
-    private void toggleFirstNCheckboxes(int n) {
-        List<WebElement> boxes = driver.findElements(ANY_CHECKBOX).stream()
-                .filter(WebElement::isDisplayed).collect(Collectors.toList());
-        Assumptions.assumeTrue(!boxes.isEmpty(), "No checkboxes found");
-        int count = 0;
-        for (WebElement c : boxes) {
-            ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})", c);
-            if (!c.isSelected()) c.click();
-            Assertions.assertTrue(c.isSelected(), "Checkbox should be selected");
-            count++;
-            if (count >= n) break;
+    static void tearDown() {
+        if (driver != null) {
+            driver.quit();
         }
     }
 
-    private void assertExternalByClick(WebElement link) {
-        String href = link.getAttribute("href");
-        Assumptions.assumeTrue(href != null && href.startsWith("http"), "Skipping non-http link.");
-        String expectedHost = hostOf(href);
-
-        String original = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-
-        waitClickable(link).click();
-
-        // Wait for either a new window or navigation to external host
-        wait.until(d -> d.getWindowHandles().size() > before.size()
-                || hostOf(d.getCurrentUrl()).equalsIgnoreCase(expectedHost));
-
-        if (driver.getWindowHandles().size() > before.size()) {
-            Set<String> after = new HashSet<>(driver.getWindowHandles());
-            after.removeAll(before);
-            String newHandle = after.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains(expectedHost));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedHost), "External URL should contain host: " + expectedHost);
-            driver.close();
-            driver.switchTo().window(original);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedHost));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedHost), "External URL should contain host: " + expectedHost);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(BODY));
-        }
-    }
-
-    // ------------------ Tests ------------------
-
+    @TestMethodOrder(OrderAnnotation.class)
     @Test
     @Order(1)
-    public void basePage_ShouldLoad_And_ShowForm() {
-        openBase();
-        Assertions.assertTrue(present(FORM), "Form should be present on the page");
-        // Verify some visible fields by label
-        String[] labels = {"first name", "last name", "email", "password"};
-        for (String l : labels) {
-            String xpath = String.format("//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'%s')]", l);
-            Assertions.assertTrue(present(By.xpath(xpath)), "Expected label containing: " + l);
-        }
+    void testPageTitleAndHeader_DisplayedCorrectly() {
+        driver.get(BASE_URL);
+
+        assertEquals("Katalon Studio", driver.getTitle(), "Page title should be 'Katalon Studio'");
+        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        assertEquals("Katalon Studio", header.getText(), "Main header should match page title");
     }
 
     @Test
     @Order(2)
-    public void form_Submit_WithValidData_ShouldShowSuccessOrConfirmation() {
-        openBase();
-        // Fill common fields using labels (robust)
-        typeIntoLabeledField("first name", "John");
-        typeIntoLabeledField("last name", "Doe");
-        typeIntoLabeledField("address", "123 Test Street");
-        typeIntoLabeledField("email", "john.doe@example.com");
-        typeIntoLabeledField("password", "SuperSecret123!");
-        typeIntoLabeledField("company", "Katalon QA");
-        // Role (select) if present
-        if (present(ANY_SELECT)) {
-            Select sel = new Select(firstDisplayed(ANY_SELECT));
-            if (!sel.getOptions().isEmpty()) sel.selectByIndex(Math.min(1, sel.getOptions().size()-1));
-        }
-        // Gender radio if present
-        if (present(ANY_RADIO)) {
-            chooseRadioByLabelContains("male"); // falls back if not found by label text presence
-        }
-        // Some checkboxes
-        toggleFirstNCheckboxes(2);
+    void testFormFields_ArePresentAndEditable() {
+        driver.get(BASE_URL);
 
-        // Submit
-        WebElement submitBtn = firstDisplayed(SUBMIT);
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})", submitBtn);
-        waitClickable(SUBMIT).click();
+        // First Name
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstName")));
+        assertTrue(firstName.isEnabled(), "First Name field should be enabled");
+        firstName.sendKeys("John");
+        assertEquals("John", firstName.getAttribute("value"), "First Name should contain entered value");
 
-        // Assert success page/message or any confirmation keywords
-        try {
-            wait.until(ExpectedConditions.or(
-                    ExpectedConditions.presenceOfElementLocated(SUCCESS_TEXT),
-                    ExpectedConditions.urlContains("submit"),
-                    ExpectedConditions.urlContains("success"),
-                    ExpectedConditions.urlContains("thank")
-            ));
-        } catch (TimeoutException ignored) {}
+        // Last Name
+        WebElement lastName = driver.findElement(By.name("lastName"));
+        assertTrue(lastName.isEnabled(), "Last Name field should be enabled");
+        lastName.sendKeys("Doe");
+        assertEquals("Doe", lastName.getAttribute("value"), "Last Name should contain entered value");
 
-        boolean successDetected = present(SUCCESS_TEXT)
-                || driver.getCurrentUrl().toLowerCase().contains("submit")
-                || driver.getCurrentUrl().toLowerCase().contains("success")
-                || driver.getCurrentUrl().toLowerCase().contains("thank");
+        // Email
+        WebElement email = driver.findElement(By.name("email"));
+        assertTrue(email.isEnabled(), "Email field should be enabled");
+        email.sendKeys("john.doe@example.com");
+        assertEquals("john.doe@example.com", email.getAttribute("value"), "Email should contain entered value");
 
-        Assertions.assertTrue(successDetected, "Form submission should show success/confirmation");
+        // Password
+        WebElement password = driver.findElement(By.name("password"));
+        assertTrue(password.isEnabled(), "Password field should be enabled");
+        password.sendKeys("SecurePass123!");
+        assertEquals("SecurePass123!", password.getAttribute("value"), "Password should be filled");
+
+        // Gender selection
+        WebElement maleRadio = driver.findElement(By.xpath("//input[@value='male']"));
+        WebElement femaleRadio = driver.findElement(By.xpath("//input[@value='female']"));
+
+        assertFalse(maleRadio.isSelected(), "Male radio should be unselected initially");
+        maleRadio.click();
+        assertTrue(maleRadio.isSelected(), "Male radio should be selectable");
+        assertFalse(femaleRadio.isSelected(), "Female radio should not be selected when male is selected");
+
+        // Date of Birth
+        WebElement dob = driver.findElement(By.name("dob"));
+        assertTrue(dob.isEnabled(), "Date of Birth field should be enabled");
+        dob.sendKeys("1990-01-01");
+        assertEquals("1990-01-01", dob.getAttribute("value"), "DOB should contain entered value");
     }
 
     @Test
     @Order(3)
-    public void form_EmailValidation_ShouldPreventSubmission_OnInvalidEmail() {
-        openBase();
-        typeIntoLabeledField("email", "invalid-email"); // HTML5 validation should fail on submit
-        WebElement submitBtn = firstDisplayed(SUBMIT);
-        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView({block:'center'})", submitBtn);
-        submitBtn.click();
+    void testAddressTextArea_AcceptsInput() {
+        driver.get(BASE_URL);
 
-        // Use HTML5 validity check via JS
-        WebElement emailInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//label[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'email')]/following::*[self::input][1]")));
-        Boolean valid = (Boolean) ((JavascriptExecutor)driver).executeScript("return arguments[0].checkValidity()", emailInput);
-        String message = (String) ((JavascriptExecutor)driver).executeScript("return arguments[0].validationMessage", emailInput);
-
-        Assertions.assertFalse(valid, "Email field should be invalid for bad format");
-        Assertions.assertTrue(message != null && !message.trim().isEmpty(), "Validation message should be present");
+        WebElement address = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("address")));
+        assertTrue(address.isEnabled(), "Address textarea should be enabled");
+        String longAddress = "123 Main Street\nApt 4B\nNew York, NY 10001";
+        address.sendKeys(longAddress);
+        assertEquals(longAddress, address.getAttribute("value"), "Address should contain multi-line input");
     }
 
     @Test
     @Order(4)
-    public void dropdown_SortingOrSelection_ChangesSelectedOption() {
-        openBase();
-        Assumptions.assumeTrue(present(ANY_SELECT), "No select elements found on the form.");
-        Select sel = new Select(firstDisplayed(ANY_SELECT));
-        List<WebElement> options = sel.getOptions();
-        Assumptions.assumeTrue(options.size() > 1, "Not enough options to test selection.");
-        String initial = sel.getFirstSelectedOption().getText();
-        sel.selectByIndex(1);
-        String after1 = sel.getFirstSelectedOption().getText();
-        if (options.size() > 2) {
-            sel.selectByIndex(2);
-            String after2 = sel.getFirstSelectedOption().getText();
-            Assertions.assertTrue(!initial.equals(after1) || !after1.equals(after2),
-                    "Changing selection should alter selected option text");
-        } else {
-            Assertions.assertNotEquals(initial, after1, "Changing selection should alter selected option text");
-        }
+    void testAgreementCheckbox_ToggleAndValidation() {
+        driver.get(BASE_URL);
+
+        WebElement agreement = wait.until(ExpectedConditions.elementToBeClickable(By.id("inlineCheckbox1")));
+        WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(), 'Submit')]"));
+
+        assertFalse(agreement.isSelected(), "Agreement checkbox should be unchecked initially");
+        agreement.click();
+        assertTrue(agreement.isSelected(), "Agreement checkbox should be selectable");
+        assertTrue(submitButton.isEnabled(), "Submit button should be enabled when agreement is checked");
     }
 
     @Test
     @Order(5)
-    public void radioButtons_SelectDifferentOption_ShouldReflectSelection() {
-        openBase();
-        Assumptions.assumeTrue(present(ANY_RADIO), "No radio buttons found.");
-        List<WebElement> radios = driver.findElements(ANY_RADIO).stream().filter(WebElement::isDisplayed).collect(Collectors.toList());
-        Assumptions.assumeTrue(radios.size() >= 2, "Need at least two radios to test.");
-        WebElement r1 = radios.get(0);
-        WebElement r2 = radios.get(1);
+    void testSubmitForm_SuccessMessageDisplayed() {
+        driver.get(BASE_URL);
 
-        if (!r1.isSelected()) r1.click();
-        Assertions.assertTrue(r1.isSelected(), "First radio should be selected");
-        if (!r2.equals(r1)) {
-            r2.click();
-            Assertions.assertTrue(r2.isSelected(), "Second radio should be selected");
-            Assertions.assertFalse(r1.isSelected(), "First radio should be unselected after selecting second");
-        }
+        fillFormWithValidData();
+
+        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Submit')]")));
+        submitButton.click();
+
+        // Success alert
+        WebElement alert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert-success")));
+        assertTrue(alert.isDisplayed(), "Success alert should be displayed after submission");
+        String alertText = alert.getText();
+        assertTrue(alertText.contains("Customer has been added successfully"), "Success message should confirm customer addition");
     }
 
     @Test
     @Order(6)
-    public void internalLinks_OneLevelBelow_AreReachable_IfAny() {
-        openBase();
-        String baseHost = hostOf(BASE_URL);
+    void testSubmitWithoutAgreement_ErrorMessageDisplayed() {
+        driver.get(BASE_URL);
 
-        List<String> internal = driver.findElements(ANY_LINK).stream()
-                .map(a -> a.getAttribute("href"))
-                .filter(Objects::nonNull)
-                .filter(href -> hostOf(href).equalsIgnoreCase(baseHost))
-                .filter(href -> !href.contains("#"))
-                .distinct()
-                .limit(5)
-                .collect(Collectors.toList());
+        fillFormWithoutAgreement();
 
-        Assumptions.assumeTrue(!internal.isEmpty(), "No internal links found.");
+        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Submit')]")));
+        submitButton.click();
 
-        for (String href : internal) {
-            driver.navigate().to(href);
-            wait.until(ExpectedConditions.presenceOfElementLocated(BODY));
-            Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should stay on same host for internal link");
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(BODY));
-        }
+        // Error alert
+        WebElement alert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert-danger")));
+        assertTrue(alert.isDisplayed(), "Error alert should be displayed if agreement is not checked");
+        assertTrue(alert.getText().contains("Please agree to the terms"), "Error message should indicate agreement is required");
     }
 
     @Test
     @Order(7)
-    public void externalLinks_OnBase_ShouldOpenAndMatchDomain() {
-        openBase();
-        List<WebElement> links = driver.findElements(ANY_LINK).stream()
-                .filter(WebElement::isDisplayed)
-                .collect(Collectors.toList());
-        Assumptions.assumeTrue(!links.isEmpty(), "No links found on page.");
+    void testEmailValidation_InvalidFormatShowsError() {
+        driver.get(BASE_URL);
 
-        String baseHost = hostOf(BASE_URL);
-        List<WebElement> external = links.stream()
-                .filter(a -> {
-                    String href = a.getAttribute("href");
-                    return href != null && href.startsWith("http") && !hostOf(href).equalsIgnoreCase(baseHost);
-                })
-                .collect(Collectors.toList());
+        WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("email")));
+        WebElement firstName = driver.findElement(By.name("firstName"));
+        email.sendKeys("not-an-email");
+        firstName.click(); // Blur email field
 
-        Assumptions.assumeTrue(!external.isEmpty(), "No external links found.");
-
-        int tested = 0;
-        Set<String> domains = new HashSet<>();
-        for (WebElement a : external) {
-            String href = a.getAttribute("href");
-            String host = hostOf(href);
-            if (host.isEmpty() || domains.contains(host)) continue;
-            domains.add(host);
-            assertExternalByClick(a);
-            tested++;
-            if (tested >= 3) break; // keep it stable
-        }
-        Assertions.assertTrue(tested > 0, "At least one external link should be tested.");
+        // Wait for validation message
+        WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(), 'Please provide a valid email')]")));
+        assertTrue(errorMsg.isDisplayed(), "Validation error should appear for invalid email");
     }
 
     @Test
     @Order(8)
-    public void optional_ResetOrClear_IfSuchControlExists() {
-        openBase();
-        // Some demo forms offer a reset button
-        List<By> possibleResets = Arrays.asList(
-                By.cssSelector("button[type='reset']"),
-                By.xpath("//button[contains(.,'Reset') or contains(.,'Limpar') or contains(.,'Clear')]"),
-                By.xpath("//a[contains(.,'Reset') or contains(.,'Limpar') or contains(.,'Clear')]")
-        );
-        boolean clicked = false;
-        for (By locator : possibleResets) {
-            if (present(locator)) {
-                waitClickable(locator).click();
-                clicked = true;
-                break;
+    void testPasswordValidation_StrengthIndicator() {
+        driver.get(BASE_URL);
+
+        WebElement password = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("password")));
+        WebElement feedback = driver.findElement(By.id("passwordHelp"));
+
+        password.sendKeys("123");
+        assertEquals("Weak", feedback.getText(), "Should show 'Weak' for short password");
+
+        password.clear();
+        password.sendKeys("SecurePass123!");
+        assertEquals("Strong", feedback.getText(), "Should show 'Strong' for complex password");
+    }
+
+    @Test
+    @Order(9)
+    void testExternalFooterLink_GitHub_OpenInNewTab() {
+        driver.get(BASE_URL);
+        WebElement footerLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("footer a[href*='github.com']")));
+        String originalWindow = driver.getWindowHandle();
+
+        footerLink.sendKeys(Keys.CONTROL, Keys.RETURN); // Open in new tab
+
+        for (String window : driver.getWindowHandles()) {
+            if (!window.equals(originalWindow)) {
+                driver.switchTo().window(window);
+                wait.until(ExpectedConditions.urlContains("github.com"));
+                assertTrue(driver.getCurrentUrl().contains("github.com"), "GitHub link should open github.com domain");
+                driver.close();
+                driver.switchTo().window(originalWindow);
+                return;
             }
         }
-        Assumptions.assumeTrue(clicked, "No reset/clear control found; skipping.");
-        // If we clicked reset, ensure fields are empty (best-effort on common fields)
+
+        // Fallback: same tab navigation
+        driver.navigate().refresh(); // Ensure element is attached
+        footerLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("footer a[href*='github.com']")));
+        footerLink.click();
+
+        wait.until(ExpectedConditions.urlContains("github.com"));
+        assertTrue(driver.getCurrentUrl().contains("github.com"), "GitHub link should redirect to github.com");
+        driver.navigate().back();
+        wait.until(ExpectedConditions.urlToBe(BASE_URL));
+    }
+
+    @Test
+    @Order(10)
+    void testFormReset_ClearsAllFields() {
+        driver.get(BASE_URL);
+
+        fillFormWithValidData();
+
+        WebElement resetButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(), 'Reset')]")));
+        resetButton.click();
+
+        // Verify fields are cleared
+        assertEquals("", driver.findElement(By.name("firstName")).getAttribute("value"), "First Name should be cleared");
+        assertEquals("", driver.findElement(By.name("lastName")).getAttribute("value"), "Last Name should be cleared");
+        assertEquals("", driver.findElement(By.name("email")).getAttribute("value"), "Email should be cleared");
+        assertEquals("", driver.findElement(By.name("password")).getAttribute("value"), "Password should be cleared");
+        assertEquals("", driver.findElement(By.name("address")).getAttribute("value"), "Address should be cleared");
+        assertFalse(driver.findElement(By.id("inlineCheckbox1")).isSelected(), "Agreement checkbox should be unchecked");
+        assertFalse(driver.findElement(By.xpath("//input[@value='male']")).isSelected(), "Gender should be deselected");
+        assertEquals("", driver.findElement(By.name("dob")).getAttribute("value"), "DOB should be cleared");
+    }
+
+    @Test
+    @Order(11)
+    void testPageFooter_CopyrightTextPresent() {
+        driver.get(BASE_URL);
+
+        WebElement footer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("footer")));
+        String footerText = footer.getText();
+        assertTrue(footerText.contains("Katalon LLC"), "Footer should contain copyright information");
+        assertTrue(footerText.contains("All rights reserved"), "Footer should include 'All rights reserved'");
+    }
+
+    private void fillFormWithValidData() {
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstName")));
+        WebElement lastName = driver.findElement(By.name("lastName"));
+        WebElement email = driver.findElement(By.name("email"));
+        WebElement password = driver.findElement(By.name("password"));
+        WebElement address = driver.findElement(By.name("address"));
+        WebElement maleRadio = driver.findElement(By.xpath("//input[@value='male']"));
+        WebElement dob = driver.findElement(By.name("dob"));
+        WebElement agreement = driver.findElement(By.id("inlineCheckbox1"));
+
+        firstName.sendKeys("John");
+        lastName.sendKeys("Doe");
+        email.sendKeys("john.doe@example.com");
+        password.sendKeys("SecurePass123!");
+        address.sendKeys("123 Main Street, New York, NY");
+        maleRadio.click();
+        dob.sendKeys("1990-01-01");
+        agreement.click();
+    }
+
+    private void fillFormWithoutAgreement() {
+        WebElement firstName = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("firstName")));
+        WebElement lastName = driver.findElement(By.name("lastName"));
+        WebElement email = driver.findElement(By.name("email"));
+        WebElement password = driver.findElement(By.name("password"));
+        WebElement address = driver.findElement(By.name("address"));
+        WebElement maleRadio = driver.findElement(By.xpath("//input[@value='male']"));
+        WebElement dob = driver.findElement(By.name("dob"));
+
+        firstName.sendKeys("Jane");
+        lastName.sendKeys("Smith");
+        email.sendKeys("jane.smith@example.com");
+        password.sendKeys("AnotherPass456!");
+        address.sendKeys("456 Oak Avenue, Boston, MA");
+        maleRadio.click();
+        dob.sendKeys("1985-05-15");
+    }
+
+    private boolean isElementPresent(By locator) {
         try {
-            String value = driver.findElement(By.xpath("//label[contains(translate(. , 'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'first name')]/following::input[1]")).getAttribute("value");
-            Assertions.assertTrue(value == null || value.isEmpty(), "First name should be cleared after reset");
-        } catch (NoSuchElementException ignored) {}
+            driver.findElement(locator);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
     }
 }

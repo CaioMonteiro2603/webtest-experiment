@@ -1,160 +1,144 @@
-# Repository with Experiments evaluating [Suna](https://github.com/kortix-ai/suna)
+# Repository with experiments evaluating GPT5 Thinking, GPT4, Gemini Pro 2.5, OpenRouter and Suna.
 
 ## Folder Naming
 
 ```bash
 reports/
-├── claudesonnet4
+├── GPT5 Thinking/GPT4/GeminiPro 2.5/OpenRouter/Suna 
 │   ├── ws01
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws02
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws03
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws04
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws05
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws06
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws07
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 │   ├── ws08
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
 │   │   └── seq05
-│   └── ws09
-│       ├── seq01
-│       ├── seq02
-│       ├── seq03
-│       ├── seq04
-│       └── seq05
-└── deepseek
-    ├── ws01
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws02
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws03
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws04
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws05
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws06
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws07
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    ├── ws08
-    │   ├── seq01
-    │   ├── seq02
-    │   ├── seq03
-    │   ├── seq04
-    │   └── seq05
-    └── ws09
-        ├── seq01
-        ├── seq02
-        ├── seq03
-        ├── seq04
-        └── seq05
-
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
+│   ├── ws09
+│   │   ├── seq01
+│   │   ├── seq02
+│   │   ├── seq03
+│   │   ├── seq04
+│   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
+│   ├── ws10
+│   │   ├── seq01
+│   │   ├── seq02
+│   │   ├── seq03
+│   │   ├── seq04
+│   │   └── seq05
+│   │   ├── seq06
+│   │   ├── seq07
+│   │   ├── seq08
+│   │   └── seq09
+│   │   └── seq10
 ```
 
-
-### The folders named `ws01`, `ws02`, ..., `ws09` correspond to nive web sites, generally used for web testing tools:
-
-- [`ws01`](https://wavingtest.github.io/Test_Healing/)
-- [`ws02`](https://www.saucedemo.com/v1/index.html)
-- [`ws03`](https://parabank.parasoft.com/parabank/index.htm)
-- [`ws04`](https://bugbank.netlify.app/)
-- [`ws05`](https://selectorshub.com/xpath-practice-page/)
-- [`ws06`](https://katalon-test.s3.amazonaws.com/aut/html/form.html)
-- [`ws07`](http://select2.github.io/select2/)
-- [`ws08`](https://wavingtest.github.io/system-healing-test/)
-- [`ws09`](https://cac-tat.s3.eu-central-1.amazonaws.com/index.html)
-
+### The folders named `ws01`, `ws02`, ..., `ws09` correspond to nine web sites, generally used for web testing tools. An exception is `ws10`, which is a real website we use for testing:
+- [`ws01`](https://www.saucedemo.com/v1/index.html)
+- [`ws02`](https://parabank.parasoft.com/parabank/index.htm)
+- [`ws03`](https://bugbank.netlify.app/)
+- [`ws04`](https://katalon-test.s3.amazonaws.com/aut/html/form.html)
+- [`ws05`](https://cac-tat.s3.eu-central-1.amazonaws.com/index.html)
+- [`ws06`](https://jsfiddle.net/)
+- [`ws07`](https://jsfiddle.net/)
+- [`ws08`](https://jpetstore.aspectran.com/)
+- [`ws09`](https://demo.realworld.io/)
+- [`ws10`](https://gestao.brasilagritest.com/login)
 
 ### Different test sequences
 
-`seq01` to `seq05` correspond to different test sets. The goal is to perform five sequences per folder to evaluate the code patterns generated by the DeepSeek V3 free model (`deepseek/deepseek-chat-v3-0324:free`) and the Claude Sonnet 4 paid model (`anthropic/claude-sonnet-4`). Both are accessed through [OpenRouter API](https://openrouter.ai/).
+`seq01` to `seq10` correspond to different test sets. The goal is to perform ten sequences per folder to evaluate the code patterns generated by different LLMs and interfaces.
+
+The DeepSeek V3 (`deepseek/deepseek-chat-v3-0324`), the gpt-oss-20b (`OpenAI: gpt-oss-20b`) and the 
+Qwen3 235B A22B model (`Qwen: Qwen3 235B A22B Instruct 2507`) all the models are paid models and were tested through [OpenRouter API](https://openrouter.ai/). 
 
 Each sequence is generated on a different day for each model.
 
 ---
 ## 🤖 How the Tests Were Generated
 
-### The test cases in these folders were automatically generated by the **Suna** AI platform, which orchestrates multiple AI agents to automate complex tasks.
-
----
-
-The generation was carried out with the following infrastructure:
-
-- 🐍 **Python** – main programming language used
-- 🐳 **Docker + Docker Compose** – to isolate and manage services
-- 🐇 **RabbitMQ** – messaging between agents
-- 🛑 **Redis** – for caching and state management
-- ⚙️ **Multiple backend/frontend workers and services**
-
-> The entire setup was configured and executed locally to ensure full control over test generation.
-
----
-## 💻 Where to Run These Test Cases
-
-Each folder contains a set of automated test files, ready to be analyzed, executed, and expanded. The test cases were run in **Eclipse IDE** using JUnit.
+### The test cases in these folders were automatically generated by the **Suna** AI platform, OpenRouter API, GPT5 Thinking, GPT4 and GeminiPro 2.5 which orchestrates multiple AI agents to automate complex tasks.
