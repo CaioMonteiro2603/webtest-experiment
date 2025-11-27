@@ -1,0 +1,1 @@
+//foram realizadas 6 tentativas e o gpt nao conseguiu gerar o casos de teste nas 6
