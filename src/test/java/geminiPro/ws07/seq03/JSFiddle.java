@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq03;
+package geminiPro.ws07.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -25,7 +25,7 @@ import java.util.Set;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleE2ETest {
+public class JSFiddle {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://jsfiddle.net/";

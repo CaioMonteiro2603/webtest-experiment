@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq02;
+package geminiPro.ws07.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.time.Duration;
  * It handles the complexities of iframes for code input and output rendering.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     // Constants for configuration
     private static final String BASE_URL = "https://jsfiddle.net/";

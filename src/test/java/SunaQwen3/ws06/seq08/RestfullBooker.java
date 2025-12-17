@@ -1,26 +1,26 @@
-package deepseek.ws06.seq08;
+package SunaQwen3.ws06.seq08;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class HotelBookingTest {
-    private static final String BASE_URL = "https://automationintesting.online/";
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://automationintesting.online/";
+    private static final String USERNAME = "admin";
+    private static final String PASSWORD = "password";
 
     @BeforeAll
-    public static void setup() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -28,7 +28,7 @@ public class HotelBookingTest {
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -36,151 +36,220 @@ public class HotelBookingTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoading() {
+    public void testValidLogin() {
         driver.get(BASE_URL);
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".hotel-header")));
-        Assertions.assertTrue(header.getText().contains("Shady Meadows"),
-            "Hotel name should be displayed in header");
+        assertEquals("https://automationintesting.online/#/admin", driver.getCurrentUrl());
+        
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.id("doLogin"));
+
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
+
+        WebElement welcomeText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h2[contains(text(), 'Welcome')]")));
+        assertTrue(welcomeText.isDisplayed(), "Welcome text should be displayed after login");
+        assertTrue(driver.getCurrentUrl().contains("#/admin"), "URL should contain #/admin after login");
     }
 
     @Test
     @Order(2)
-    public void testRoomInformation() {
+    public void testInvalidLogin() {
         driver.get(BASE_URL);
-        List<WebElement> rooms = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-            By.cssSelector(".room")));
-        Assertions.assertTrue(rooms.size() > 0, "At least one room should be displayed");
         
-        WebElement firstRoom = rooms.get(0);
-        String roomDescription = firstRoom.findElement(By.cssSelector(".room-desc")).getText();
-        Assertions.assertFalse(roomDescription.isEmpty(), "Room should have description");
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.id("doLogin"));
+
+        usernameField.sendKeys("invalid");
+        passwordField.sendKeys("invalid");
+        loginButton.click();
+
+        WebElement errorAlert = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
+        assertTrue(errorAlert.isDisplayed(), "Error alert should be displayed for invalid credentials");
+        assertTrue(errorAlert.getText().contains("Invalid"), "Error message should indicate invalid credentials");
     }
 
     @Test
     @Order(3)
-    public void testBookingForm() {
-        driver.get(BASE_URL);
+    public void testMenuAllItems() {
+        navigateToAdminPage();
         
-        // Open booking form for first room
-        WebElement bookBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".room .btn-outline-primary")));
-        bookBtn.click();
-        
-        // Fill booking form
-        WebElement form = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".form")));
-        form.findElement(By.name("firstname")).sendKeys("John");
-        form.findElement(By.name("lastname")).sendKeys("Doe");
-        form.findElement(By.name("email")).sendKeys("john.doe@example.com");
-        form.findElement(By.name("phone")).sendKeys("1234567890");
-        
-        // Submit form
-        form.findElement(By.cssSelector(".btn-primary")).click();
-        
-        // Verify success message
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".alert-success")));
-        Assertions.assertTrue(success.getText().contains("Booking Successful"),
-            "Booking success message should be displayed");
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".navbar-toggler")));
+        menuButton.click();
+
+        WebElement allItemsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("All Items")));
+        allItemsLink.click();
+
+        wait.until(ExpectedConditions.urlContains("#/admin"));
+        assertTrue(driver.getCurrentUrl().contains("#/admin"), "URL should contain #/admin after clicking All Items");
     }
 
     @Test
     @Order(4)
-    public void testInvalidBookingForm() {
-        driver.get(BASE_URL);
+    public void testMenuAboutExternalLink() {
+        navigateToAdminPage();
         
-        // Open booking form
-        WebElement bookBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".room .btn-outline-primary")));
-        bookBtn.click();
-        
-        // Submit empty form
-        WebElement form = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".form")));
-        form.findElement(By.cssSelector(".btn-primary")).click();
-        
-        // Verify errors
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".alert-danger")));
-        Assertions.assertTrue(error.isDisplayed(), 
-            "Error message should be displayed for invalid form");
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".navbar-toggler")));
+        menuButton.click();
+
+        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About")));
+        String originalWindow = driver.getWindowHandle();
+        aboutLink.click();
+
+        wait.until(d -> driver.getWindowHandles().size() > 1);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        assertTrue(driver.getCurrentUrl().contains("github.com"), "About link should open GitHub page");
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(5)
-    public void testContactForm() {
-        driver.get(BASE_URL);
-        driver.findElement(By.cssSelector("#collapseBanner")).click();
+    public void testMenuLogout() {
+        navigateToAdminPage();
         
-        WebElement contactForm = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".contact-form")));
-        contactForm.findElement(By.name("name")).sendKeys("Test User");
-        contactForm.findElement(By.name("email")).sendKeys("test@example.com");
-        contactForm.findElement(By.name("phone")).sendKeys("1234567890");
-        contactForm.findElement(By.name("subject")).sendKeys("Test Subject");
-        contactForm.findElement(By.name("description")).sendKeys("Test message");
-        contactForm.findElement(By.cssSelector("button[type='submit']")).click();
-        
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".alert-success")));
-        Assertions.assertTrue(success.isDisplayed(), 
-            "Contact form success message should be displayed");
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".navbar-toggler")));
+        menuButton.click();
+
+        WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Logout")));
+        logoutLink.click();
+
+        WebElement loginForm = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginForm")));
+        assertTrue(loginForm.isDisplayed(), "Login form should be displayed after logout");
+        assertTrue(driver.getCurrentUrl().contains("#/login"), "URL should contain #/login after logout");
     }
 
     @Test
     @Order(6)
-    public void testNavigationLinks() {
-        driver.get(BASE_URL);
+    public void testMenuResetAppState() {
+        navigateToAdminPage();
         
-        // Test Admin link
-        driver.findElement(By.linkText("Admin")).click();
-        wait.until(ExpectedConditions.urlContains("admin"));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("admin"), 
-            "Should navigate to admin page");
-        
-        // Test API link
-        driver.findElement(By.linkText("API")).click();
-        wait.until(ExpectedConditions.urlContains("docs/index"));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("docs/index"), 
-            "Should navigate to API docs");
-            
-        // Test Report link
-        driver.findElement(By.linkText("Report")).click();
-        Assertions.assertTrue(driver.getCurrentUrl().contains("test-report"), 
-            "Should navigate to test report");
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".navbar-toggler")));
+        menuButton.click();
+
+        WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Reset App State")));
+        resetLink.click();
+
+        driver.switchTo().alert().accept();
+
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("alert")));
+        assertTrue(successMessage.isDisplayed(), "Success message should appear after reset");
+        assertTrue(successMessage.getText().contains("success"), "Success message should confirm reset");
     }
 
     @Test
     @Order(7)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
+    public void testFooterTwitterLink() {
+        navigateToAdminPage();
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        WebElement twitterLink = null;
+        for (WebElement link : footerLinks) {
+            if (link.getAttribute("href").contains("twitter.com")) {
+                twitterLink = link;
+                break;
+            }
+        }
+        assertNotNull(twitterLink, "Twitter link should be present in footer");
+
         String originalWindow = driver.getWindowHandle();
-        
-        // GitHub link
-        driver.findElement(By.cssSelector("a[href*='github']")).click();
-        switchToNewWindow(originalWindow);
-        Assertions.assertTrue(driver.getCurrentUrl().contains("github.com"),
-            "Should open GitHub link in new tab");
-        driver.close();
-        driver.switchTo().window(originalWindow);
-        
-        // Twitter link
-        driver.findElement(By.cssSelector("a[href*='twitter']")).click();
-        switchToNewWindow(originalWindow);
-        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"),
-            "Should open Twitter link in new tab");
+        twitterLink.click();
+
+        wait.until(d -> driver.getWindowHandles().size() > 1);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        assertTrue(driver.getCurrentUrl().contains("twitter.com"), "Twitter link should open Twitter domain");
         driver.close();
         driver.switchTo().window(originalWindow);
     }
 
-    private void switchToNewWindow(String originalWindow) {
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+    @Test
+    @Order(8)
+    public void testFooterFacebookLink() {
+        navigateToAdminPage();
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        WebElement facebookLink = null;
+        for (WebElement link : footerLinks) {
+            if (link.getAttribute("href").contains("facebook.com")) {
+                facebookLink = link;
                 break;
             }
+        }
+        assertNotNull(facebookLink, "Facebook link should be present in footer");
+
+        String originalWindow = driver.getWindowHandle();
+        facebookLink.click();
+
+        wait.until(d -> driver.getWindowHandles().size() > 1);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        assertTrue(driver.getCurrentUrl().contains("facebook.com"), "Facebook link should open Facebook domain");
+        driver.close();
+        driver.switchTo().window(originalWindow);
+    }
+
+    @Test
+    @Order(9)
+    public void testFooterLinkedInLink() {
+        navigateToAdminPage();
+        
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        WebElement linkedinLink = null;
+        for (WebElement link : footerLinks) {
+            if (link.getAttribute("href").contains("linkedin.com")) {
+                linkedinLink = link;
+                break;
+            }
+        }
+        assertNotNull(linkedinLink, "LinkedIn link should be present in footer");
+
+        String originalWindow = driver.getWindowHandle();
+        linkedinLink.click();
+
+        wait.until(d -> driver.getWindowHandles().size() > 1);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+
+        assertTrue(driver.getCurrentUrl().contains("linkedin.com"), "LinkedIn link should open LinkedIn domain");
+        driver.close();
+        driver.switchTo().window(originalWindow);
+    }
+
+    private void navigateToAdminPage() {
+        driver.get(BASE_URL);
+        if (driver.getCurrentUrl().contains("#/login")) {
+            WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+            WebElement passwordField = driver.findElement(By.name("password"));
+            WebElement loginButton = driver.findElement(By.id("doLogin"));
+
+            usernameField.sendKeys(USERNAME);
+            passwordField.sendKeys(PASSWORD);
+            loginButton.click();
+
+            wait.until(ExpectedConditions.urlContains("#/admin"));
         }
     }
 }

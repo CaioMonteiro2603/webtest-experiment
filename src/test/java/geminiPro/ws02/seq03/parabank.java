@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq03;
+package geminiPro.ws02.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -17,16 +17,13 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * A complete JUnit 5 test suite for the ParaBank website using Selenium WebDriver
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankE2ETest {
+public class parabank {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
@@ -63,7 +60,6 @@ public class ParaBankE2ETest {
     private static final By TRANSFER_FUNDS_LINK = By.linkText("Transfer Funds");
     private static final By ACCOUNT_OPENED_TITLE = By.xpath("//h1[text()='Account Opened!']");
     private static final By NEW_ACCOUNT_ID_LINK = By.id("newAccountId");
-    private static final By ACCOUNT_TABLE = By.id("accountTable");
     private static final By TRANSFER_AMOUNT_INPUT = By.id("amount");
     private static final By FROM_ACCOUNT_DROPDOWN = By.id("fromAccountId");
     private static final By TO_ACCOUNT_DROPDOWN = By.id("toAccountId");

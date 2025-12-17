@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebAppTestSuite {
+public class BrasilAgritest{
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String VALID_USER = "superadmin@brasilagritest.com.br";
@@ -54,16 +54,6 @@ public class WebAppTestSuite {
         loginBtn.click();
     }
 
-    private void logoutIfLoggedIn() {
-        try {
-            WebElement menuBtn = driver.findElement(By.id("react-burger-menu-btn"));
-            menuBtn.click();
-            WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-item-logout")));
-            logoutLink.click();
-            wait.until(ExpectedConditions.urlContains("/login"));
-        } catch (NoSuchElementException ignored) {
-        }
-    }
 
     private void openMenu() {
         WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));

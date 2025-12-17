@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -112,9 +112,7 @@ public class JSFiddleTest {
         driver.get(BASE_URL);
         WebElement jsTab = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".tab.js-tab")));
         WebElement htmlTab = driver.findElement(By.cssSelector(".tab.html-tab"));
-        WebElement cssTab = driver.findElement(By.cssSelector(".tab.css-tab"));
-        WebElement resultTab = driver.findElement(By.cssSelector(".tab.result-tab"));
-        
+  
         jsTab.click();
         Assertions.assertTrue(jsTab.getAttribute("class").contains("active"), "JS tab should be active");
         

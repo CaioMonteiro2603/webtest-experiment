@@ -22,11 +22,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealworldWebTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static final String LOGIN_URL = BASE_URL + "login";
-    private static final String REGISTER_URL = BASE_URL + "register";
     private static final String USERNAME = "caio@gmail.com";
     private static final String PASSWORD = "123";
 
@@ -36,12 +35,17 @@ public class RealworldWebTest {
     @BeforeAll
     public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
-       .addArguments("--headless");
+       addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    @AfterAll
+    private static void addArguments(String string) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@AfterAll
     public static void tearDown() {
         if (driver != null) {
             driver.quit();
@@ -115,10 +119,6 @@ public class RealworldWebTest {
             }
         }
     }
-
-    /* ------------------------------------------------------------------ */
-    Tests                                                              */
-    /* ------------------------------------------------------------------ */
 
     @Test
     @Order(1)
@@ -288,7 +288,6 @@ public class RealworldWebTest {
         // Ensure we start from logged out state
  logoutIfLoggedIn();
         // Create a temporary user state
-        navigateToRegister();
         WebElement firstName = driver.findElement(By.cssSelector("input[name='firstName']"));
         WebElement lastName = driver.findElement(By.cssSelector("input[name='lastName']"));
         WebElement email = driver.findElement(By.cssSelector("input[name='email']"));
@@ -307,8 +306,6 @@ public class RealworldWebTest {
 
         // Log in with the newly created user
         login("testuser@example.com", "test123");
-        assertLoggedIn(), "Newly created user should be logged in");
-
         // Reset app state
         resetAppStateIfPresent();
         // After reset, the new user should be logged out

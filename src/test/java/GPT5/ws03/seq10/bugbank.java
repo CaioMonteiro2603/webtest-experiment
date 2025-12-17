@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -143,8 +143,9 @@ public class BugBankHeadlessSuite {
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
 
-        waitClickable(link).click();
-
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link));
+        el.click();
+        
         try {
             wait.until(d -> d.getWindowHandles().size() > before.size() || hostOf(d.getCurrentUrl()).equalsIgnoreCase(expectedDomain));
         } catch (TimeoutException te) {

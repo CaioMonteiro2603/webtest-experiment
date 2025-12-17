@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldDemoTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -69,16 +69,6 @@ public class RealWorldDemoTest {
         return driver.getWindowHandle();
     }
 
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
-    }
 
     private int getArticleCount() {
         List<WebElement> articles = driver.findElements(By.cssSelector(".article-preview"));
@@ -248,7 +238,6 @@ public class RealWorldDemoTest {
         Assertions.assertFalse(authors.isEmpty(),
                 "No authors found on article list");
         WebElement firstAuthorLink = authors.get(0);
-        String authorName = firstAuthorLink.getText();
         firstAuthorLink.click();
 
         wait.until(ExpectedConditions.urlContains("/@"));

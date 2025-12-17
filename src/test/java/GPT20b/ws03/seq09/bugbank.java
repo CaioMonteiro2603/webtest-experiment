@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugbankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -48,7 +48,7 @@ public class BugbankTest {
 
     private void performLogin() {
         driver.get(BASE_URL);
-        By userInput = By.id");
+        By userInput = By.id(null);
         By passInput = By.id("password");
         By loginBtn = By.id("login-button");
 
@@ -65,14 +65,6 @@ public class BugbankTest {
                 "Inventory items not found after login");
     }
 
-    private void performLogout() {
-        By logoutLink = By.id("logout_sidebar_link");
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
-        wait.until(ExpectedConditions.urlContains("login"));
-        Assertions.assertTrue(driver.getCurrentUrl().contains("login"),
-                "Logout did not redirect to login page");
-    }
-
     private void resetAppStateAndConfirm() {
         By resetLink = By.id("reset_sidebar_link");
         wait.until(ExpectedConditions.elementToBeClickable(resetLink)).click();
@@ -87,14 +79,17 @@ public class BugbankTest {
 
     private void closeOtherWindows(String originalHandle) {
         Set<String> handles = driver.getWindowHandles();
+
         for (String handle : handles) {
             if (!handle.equals(originalHandle)) {
-               .switchTo().window(handle);
+                driver.switchTo().window(handle);
                 driver.close();
             }
         }
+
         driver.switchTo().window(originalHandle);
     }
+
 
     /* ---------- Tests ---------- */
 
@@ -119,9 +114,14 @@ public class BugbankTest {
         wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
 
         By errorMsg = By.cssSelector("p[data-test='error']");
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(errorMsg));
-        Assertions.assertTrue(error.getText().("Epic sadface"),
-                "Error message not displayed for invalid credentials");
+        WebElement error = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(errorMsg)
+        );
+
+        Assertions.assertTrue(
+                error.getText().contains("Epic sadface"),
+                "Error message not displayed for invalid credentials"
+        );
     }
 
     @Test

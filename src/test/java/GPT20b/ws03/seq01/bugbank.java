@@ -15,17 +15,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
-
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugbankTests {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -88,8 +82,10 @@ public class BugbankTests {
         try {
             WebElement burger = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
             burger.click();
+
             WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Logout")));
             logout.click();
+
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
         } catch (NoSuchElementException | TimeoutException ignored) {
         }
@@ -97,6 +93,49 @@ public class BugbankTests {
 
     private void resetAppState() {
         try {
-            WebElement burger = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+            WebElement burger = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn"))
+            );
             burger.click();
-            WebElement reset = wait.until(ExpectedConditions
+
+            WebElement reset = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.linkText("Reset App State"))
+            );
+            reset.click();
+
+            // Fecha o menu lateral
+            WebElement closeMenu = wait.until(
+                    ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn"))
+            );
+            closeMenu.click();
+
+        } catch (NoSuchElementException | TimeoutException ignored) {
+        }
+    }
+
+    /* ---------- Example Test ---------- */
+
+    @Test
+    @Order(1)
+    public void testLoginSuccessfully() {
+        navigateToLoginPage();
+        performLogin(USERNAME, PASSWORD);
+        Assertions.assertTrue(isLoggedIn(), "User should be logged in.");
+    }
+
+    @Test
+    @Order(2)
+    public void testResetState() {
+        ensureLoggedIn();
+        resetAppState();
+        Assertions.assertTrue(isLoggedIn(), "User should remain logged in after reset.");
+    }
+
+    @Test
+    @Order(3)
+    public void testLogout() {
+        ensureLoggedIn();
+        logout();
+        Assertions.assertFalse(isLoggedIn(), "User should be logged out.");
+    }
+}

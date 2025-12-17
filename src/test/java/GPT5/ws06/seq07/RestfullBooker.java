@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
     private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -54,22 +54,6 @@ public class AutomationInTestingTest {
             return false;
         }
     }
-
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        Set<String> handles = driver.getWindowHandles();
-        for (String h : handles) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
-    }
-
     private void closeTabAndSwitchBack(String originalHandle) {
         driver.close();
         driver.switchTo().window(originalHandle);
@@ -147,7 +131,6 @@ public class AutomationInTestingTest {
         for (String href : hrefs) {
             if (isExternalHref(href)) {
                 if (tested >= 3) break;
-                String newHandle = openUrlInNewTab(href);
                 try {
                     URI u = new URI(href);
                     String host = u.getHost();

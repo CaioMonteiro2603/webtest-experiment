@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class GestionBrasilagriWebTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USERNAME = "superadmin@brasilagritest.com.br";
@@ -238,7 +238,7 @@ public class GestionBrasilagriWebTest {
                 for (WebElement option : options) {
                     wait.until(ExpectedConditions.elementToBeClickable(option)).click();
                     // Wait for list reload
-                    wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("tbody tr")));
+                    wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector("tbody tr"))));
                     WebElement firstRow = driver.findElement(By.cssSelector("tbody tr"));
                     firstItems.add(firstRow.getText());
                 }

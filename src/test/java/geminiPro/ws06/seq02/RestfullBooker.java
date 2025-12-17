@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq02;
+package geminiPro.ws06.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -10,14 +10,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * A complete JUnit 5 test suite for the AutomationInTesting.online booking platform.
  * This test uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     // Constants for configuration
     private static final String BASE_URL = "https://automationintesting.online/";

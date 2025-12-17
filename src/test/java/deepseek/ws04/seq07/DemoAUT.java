@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FormTest {
+public class DemoAUT{
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";

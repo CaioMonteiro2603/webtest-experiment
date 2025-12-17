@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://bugbank.netlify.app/";

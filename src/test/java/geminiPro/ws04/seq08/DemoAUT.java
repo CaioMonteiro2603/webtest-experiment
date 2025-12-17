@@ -1,4 +1,4 @@
-package geminiPRO.ws04.seq08;
+package geminiPro.ws04.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonDemoFormTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static final Duration TIMEOUT = Duration.ofSeconds(10);

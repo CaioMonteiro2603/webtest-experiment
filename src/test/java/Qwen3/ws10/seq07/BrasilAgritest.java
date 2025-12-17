@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BrasilAgriTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -392,9 +391,6 @@ public class BrasilAgriTest {
         
         wait.until(ExpectedConditions.urlContains("dashboard"));
         
-        // Check responsive elements
-        List<WebElement> responsiveElements = driver.findElements(By.cssSelector(".responsive-element, .mobile-only"));
-        // Just verify they exist in the DOM
     }
 
     @Test
@@ -452,9 +448,6 @@ public class BrasilAgriTest {
         
         wait.until(ExpectedConditions.urlContains("dashboard"));
         
-        // Look for profile picture
-        List<WebElement> profilePictures = driver.findElements(By.cssSelector(".profile-pic, .user-avatar"));
-        // Just verify if present
     }
 
     @Test
@@ -474,8 +467,5 @@ public class BrasilAgriTest {
         
         wait.until(ExpectedConditions.urlContains("dashboard"));
         
-        // Check for notification elements
-        List<WebElement> notifications = driver.findElements(By.cssSelector(".notification, .alert"));
-        // Just verify they are present
     }
 }

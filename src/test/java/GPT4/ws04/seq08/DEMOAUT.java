@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DEMOAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

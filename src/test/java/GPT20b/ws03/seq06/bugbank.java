@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTestSuite {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USER_EMAIL = "caio@gmail.com";
@@ -65,15 +65,6 @@ public class BugBankTestSuite {
         // Wait for an element that is only visible after successful login
         wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.xpath("//h1[contains(text(),'Dashboard') or @class='header']")));
-    }
-
-    private void logout() {
-        List<WebElement> logoutLinks = driver.findElements(By.linkText("Logout"));
-        if (!logoutLinks.isEmpty()) {
-            wait.until(ExpectedConditions.elementToBeClickable(logoutLinks.get(0))).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                    By.xpath("//input[@type='email' or @name='email' or @id='email']")));
-        }
     }
 
     private void resetAppState() {

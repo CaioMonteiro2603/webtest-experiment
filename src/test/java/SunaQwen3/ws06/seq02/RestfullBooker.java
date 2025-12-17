@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -16,14 +15,13 @@ import java.util.Set;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTestSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String LOGIN_PAGE_URL = BASE_URL + "login";
     private static final String INVENTORY_PAGE_URL = BASE_URL + "inventory";
-    private static final String ABOUT_PAGE_URL = "https://saucelabs.com/";
     private static final String USERNAME = "admin";
     private static final String PASSWORD = "password";
 
@@ -153,7 +151,6 @@ public class SiteTestSuite {
         menuButton.click();
 
         String originalWindow = driver.getWindowHandle();
-        Set<String> beforeTabs = driver.getWindowHandles();
 
         WebElement aboutLink = wait.until(elementToBeClickable(By.id("about_sidebar_link")));
         aboutLink.click();
@@ -222,8 +219,6 @@ public class SiteTestSuite {
         navigateToInventoryPage();
 
         String originalWindow = driver.getWindowHandle();
-        Set<String> beforeTabs = driver.getWindowHandles();
-
         WebElement twitterLink = wait.until(elementToBeClickable(By.cssSelector("a[href*='twitter.com']")));
         twitterLink.click();
 
@@ -246,7 +241,6 @@ public class SiteTestSuite {
         navigateToInventoryPage();
 
         String originalWindow = driver.getWindowHandle();
-        Set<String> beforeTabs = driver.getWindowHandles();
 
         WebElement facebookLink = wait.until(elementToBeClickable(By.cssSelector("a[href*='facebook.com']")));
         facebookLink.click();
@@ -270,7 +264,6 @@ public class SiteTestSuite {
         navigateToInventoryPage();
 
         String originalWindow = driver.getWindowHandle();
-        Set<String> beforeTabs = driver.getWindowHandles();
 
         WebElement linkedinLink = wait.until(elementToBeClickable(By.cssSelector("a[href*='linkedin.com']")));
         linkedinLink.click();

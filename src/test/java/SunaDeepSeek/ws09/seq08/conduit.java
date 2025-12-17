@@ -1,24 +1,20 @@
-package deepseek.ws09.seq08;
+package SunaDeepSeek.ws09.seq08;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
-    private static final String BASE_URL = "https://demo.realworld.io/";
-    private static final String USERNAME = "testuser";
-    private static final String PASSWORD = "testpass123";
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://demo.realworld.io/";
+    private static final String USERNAME = "testuser123";
+    private static final String PASSWORD = "testpass123";
 
     @BeforeAll
     public static void setup() {
@@ -37,143 +33,148 @@ public class RealWorldTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoading() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement banner = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".banner")));
-        Assertions.assertTrue(banner.isDisplayed(), "Home page banner should be visible");
+        wait.until(ExpectedConditions.urlContains(BASE_URL));
+        Assertions.assertTrue(driver.getTitle().contains("Conduit"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("a.navbar-brand")).isDisplayed());
     }
 
     @Test
     @Order(2)
-    public void testSuccessfulLogin() {
-        driver.get(BASE_URL);
-        
-        WebElement signIn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("Sign in")));
-        signIn.click();
-        
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[type='email']")));
-        email.sendKeys(USERNAME);
-        
-        driver.findElement(By.cssSelector("input[type='password']")).sendKeys(PASSWORD);
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        
-        WebElement userProfile = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("a[href*='@" + USERNAME + "']")));
-        Assertions.assertTrue(userProfile.isDisplayed(), "User profile link should appear after login");
+    public void testLoginFunctionality() {
+        driver.get(BASE_URL + "login");
+        wait.until(ExpectedConditions.urlContains("login"));
+
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[type='email']")));
+        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+
+        emailField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
+
+        wait.until(ExpectedConditions.urlContains("/"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("a[href*='@" + USERNAME + "']")).isDisplayed());
     }
 
     @Test
     @Order(3)
     public void testInvalidLogin() {
-        driver.get(BASE_URL);
-        driver.findElement(By.linkText("Sign in")).click();
-        
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[type='email']")));
-        email.sendKeys("invalid@user.com");
-        
-        driver.findElement(By.cssSelector("input[type='password']")).sendKeys("wrongpass");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
-        
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".error-messages")));
-        Assertions.assertTrue(error.isDisplayed(), "Error message should appear for invalid login");
+        driver.get(BASE_URL + "login");
+        wait.until(ExpectedConditions.urlContains("login"));
+
+        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[type='email']")));
+        WebElement passwordField = driver.findElement(By.cssSelector("input[type='password']"));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
+
+        emailField.sendKeys("invalid@user.com");
+        passwordField.sendKeys("wrongpassword");
+        loginButton.click();
+
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".error-messages li")));
+        Assertions.assertTrue(errorMessage.getText().contains("email or password is invalid"));
     }
 
     @Test
     @Order(4)
     public void testArticleNavigation() {
-        loginIfNeeded();
-        
-        // Click on first article
-        WebElement firstArticle = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".article-preview h1")));
-        firstArticle.click();
-        
-        WebElement articleContent = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".article-page .banner")));
-        Assertions.assertTrue(articleContent.isDisplayed(), "Article page should load");
+        driver.get(BASE_URL);
+        wait.until(ExpectedConditions.urlContains(BASE_URL));
+
+        WebElement articleLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector(".article-preview:first-child h1")));
+        String articleTitle = articleLink.getText();
+        articleLink.click();
+
+        wait.until(ExpectedConditions.urlContains("/article/"));
+        WebElement articleTitleElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".article-page h1")));
+        Assertions.assertEquals(articleTitle, articleTitleElement.getText());
     }
 
     @Test
     @Order(5)
-    public void testCreateArticle() {
-        loginIfNeeded();
-        
-        driver.findElement(By.linkText("New Article")).click();
-        
-        WebElement title = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[placeholder='Article Title']")));
-        title.sendKeys("Test Article");
-        
-        driver.findElement(By.cssSelector("input[placeholder='What\\'s this article about?']"))
-            .sendKeys("Test Description");
-        
-        driver.findElement(By.cssSelector("textarea[placeholder='Write your article (in markdown)']"))
-            .sendKeys("Test content");
-        
-        driver.findElement(By.cssSelector("input[placeholder='Enter tags']"))
-            .sendKeys("test");
-        
-        driver.findElement(By.cssSelector("button[type='button']")).click();
-        
-        WebElement articleTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".article-page h1")));
-        Assertions.assertEquals("Test Article", articleTitle.getText(), 
-            "Created article title should match");
+    public void testProfilePage() {
+        driver.get(BASE_URL + "profile/" + USERNAME);
+        wait.until(ExpectedConditions.urlContains("/profile/" + USERNAME));
+
+        WebElement profileName = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".user-info h4")));
+        Assertions.assertTrue(profileName.getText().contains(USERNAME));
     }
 
     @Test
     @Order(6)
-    public void testProfilePage() {
-        loginIfNeeded();
-        
-        driver.findElement(By.cssSelector("a[href*='@" + USERNAME + "']")).click();
-        
-        WebElement profileHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".profile-page h4")));
-        Assertions.assertTrue(profileHeader.getText().contains(USERNAME), 
-            "Profile page should display username");
+    public void testSettingsPage() {
+        driver.get(BASE_URL + "settings");
+        wait.until(ExpectedConditions.urlContains("settings"));
+
+        WebElement settingsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".settings-page h1")));
+        Assertions.assertEquals("Your Settings", settingsHeader.getText());
     }
 
     @Test
     @Order(7)
+    public void testEditorPage() {
+        driver.get(BASE_URL + "editor");
+        wait.until(ExpectedConditions.urlContains("editor"));
+
+        WebElement editorHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".editor-page h1")));
+        Assertions.assertTrue(editorHeader.getText().contains("New Article"));
+    }
+
+    @Test
+    @Order(8)
     public void testExternalLinks() {
         driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
-        
+        wait.until(ExpectedConditions.urlContains(BASE_URL));
+
         // Test Twitter link
-        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='twitter']")));
-        twitterLink.click();
-        
+        testExternalLink(By.cssSelector("a[href*='twitter.com']"), "twitter.com");
+
+        // Test GitHub link
+        testExternalLink(By.cssSelector("a[href*='github.com']"), "github.com");
+    }
+
+    private void testExternalLink(By locator, String expectedDomain) {
+        String originalWindow = driver.getWindowHandle();
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        link.click();
+
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.equals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"),
-            "Twitter link should open in new tab");
+
+        wait.until(ExpectedConditions.urlContains(expectedDomain));
+        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain));
         driver.close();
         driver.switchTo().window(originalWindow);
     }
 
-    private void loginIfNeeded() {
-        if (!driver.getCurrentUrl().contains("/#/")) {
-            driver.get(BASE_URL);
-            driver.findElement(By.linkText("Sign in")).click();
-            WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("input[type='email']")));
-            email.sendKeys(USERNAME);
-            driver.findElement(By.cssSelector("input[type='password']")).sendKeys(PASSWORD);
-            driver.findElement(By.cssSelector("button[type='submit']")).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector("a[href*='@" + USERNAME + "']")));
-        }
+    @Test
+    @Order(9)
+    public void testLogout() {
+        driver.get(BASE_URL);
+        wait.until(ExpectedConditions.urlContains(BASE_URL));
+
+        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='settings']")));
+        settingsLink.click();
+
+        wait.until(ExpectedConditions.urlContains("settings"));
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector(".btn-outline-danger")));
+        logoutButton.click();
+
+        wait.until(ExpectedConditions.urlContains(BASE_URL));
+        Assertions.assertTrue(driver.findElements(By.cssSelector("a[href*='login']")).size() > 0);
     }
 }

@@ -9,13 +9,14 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoWebTests {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
@@ -113,31 +114,51 @@ public class SauceDemoWebTests {
     @Order(3)
     public void testSortingOptions() {
         login();
-        List<WebElement> itemsBefore = driver.findElements(By.cssSelector(".inventory_item_name"));
+
+        By itemsLocator = By.cssSelector(".inventory_item_name");
+
+        // Garante que os itens estão carregados
+        List<WebElement> itemsBefore = wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(itemsLocator)
+        );
         Assertions.assertFalse(itemsBefore.isEmpty(), "Inventory items should be present");
 
-        // Sort ascending by name
-        WebElement sortSelect = driver.findElement(By.id("product_sort_container"));
-        wait.until(ExpectedConditions.elementToBeClickable(sortSelect)).click();
-        sortSelect.findElement(By.cssSelector("option[value='az']")).click();
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(sortSelect, "Featured (A to Z)"));
-        String firstAsc = driver.findElement(By.cssSelector(".inventory_item_name")).getText();
+        // Select de ordenação
+        WebElement sortDropdown = wait.until(
+                ExpectedConditions.elementToBeClickable(By.id("product_sort_container"))
+        );
+        Select sortSelect = new Select(sortDropdown);
 
-        // Sort descending by name
-        sortSelect.findElement(By.cssSelector("option[value='za']")).click();
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(sortSelect, "Featured (Z to A)"));
-        String firstDesc = driver.findElement(By.cssSelector(".inventory_item_name")).getText();
+        // Sort ascending by name (A → Z)
+        sortSelect.selectByValue("az");
+        wait.until(driver ->
+                !driver.findElements(itemsLocator).get(0).getText()
+                        .equals(itemsBefore.get(0).getText())
+        );
+        String firstAsc = driver.findElements(itemsLocator).get(0).getText();
 
-        // Sort by price low to high
-        sortSelect.findElement(By.cssSelector("option[value='lo']")).click();
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(sortSelect, "Price (low to high)"));
-        String firstLow = driver.findElement(By.cssSelector(".inventory_item_name")).getText();
+        // Sort descending by name (Z → A)
+        sortSelect.selectByValue("za");
+        wait.until(driver ->
+                !driver.findElements(itemsLocator).get(0).getText().equals(firstAsc)
+        );
+        String firstDesc = driver.findElements(itemsLocator).get(0).getText();
 
-        // Sort by price high to low
-        sortSelect.findElement(By.cssSelector("option[value='hi']")).click();
-        wait.until(ExpectedConditions.textToBePresentInElementLocated(sortSelect, "Price (high to low)"));
-        String firstHigh = driver.findElement(By.cssSelector(".inventory_item_name")).getText();
+        // Sort by price low → high
+        sortSelect.selectByValue("lo");
+        wait.until(driver ->
+                !driver.findElements(itemsLocator).get(0).getText().equals(firstDesc)
+        );
+        String firstLow = driver.findElements(itemsLocator).get(0).getText();
 
+        // Sort by price high → low
+        sortSelect.selectByValue("hi");
+        wait.until(driver ->
+                !driver.findElements(itemsLocator).get(0).getText().equals(firstLow)
+        );
+        String firstHigh = driver.findElements(itemsLocator).get(0).getText();
+
+        // Asserts finais
         Assertions.assertNotEquals(firstAsc, firstDesc, "Name sorting should change order");
         Assertions.assertNotEquals(firstLow, firstHigh, "Price sorting should change order");
     }

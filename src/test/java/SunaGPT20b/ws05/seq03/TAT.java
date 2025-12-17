@@ -16,12 +16,14 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WebAppTestSuite {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static WebDriver driver;
@@ -135,7 +137,7 @@ public class WebAppTestSuite {
         // All Items
         WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(By.id("inventory_sidebar_link")));
         allItems.click();
-       .assertTrue(driver.getCurrentUrl().contains("inventory.html"),
+        assertTrue(driver.getCurrentUrl().contains("inventory.html"),
                 "Clicking All Items should stay on inventory page");
 
         // Open menu again for other actions

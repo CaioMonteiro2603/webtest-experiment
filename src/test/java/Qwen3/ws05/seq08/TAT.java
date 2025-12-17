@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

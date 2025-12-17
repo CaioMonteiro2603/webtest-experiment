@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -77,8 +77,9 @@ public class BugBankHeadlessTest {
     private boolean tryClick(By locator) {
         List<WebElement> els = driver.findElements(locator);
         if (els.isEmpty()) return false;
-        waitClickable(els.get(0));
-        els.get(0).click();
+
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(els.get(0)));
+        el.click();
         return true;
     }
 
@@ -105,14 +106,6 @@ public class BugBankHeadlessTest {
         boolean hasShell = isPresent(DASHBOARD_SHELL) || isPresent(LOGOUT_BUTTON);
         boolean loginGone = !isPresent(LOGIN_FORM_CONTAINER);
         return hasShell && loginGone;
-    }
-
-    private void logoutIfPossible() {
-        if (isPresent(LOGOUT_BUTTON)) {
-            tryClick(LOGOUT_BUTTON);
-            // After logout, login form should come back
-            wait.until(ExpectedConditions.presenceOfElementLocated(LOGIN_FORM_CONTAINER));
-        }
     }
 
     private void openMenuIfAvailable() {

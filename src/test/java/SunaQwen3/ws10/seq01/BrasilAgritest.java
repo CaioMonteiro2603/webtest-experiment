@@ -11,7 +11,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgritestTestSuite {
+public class BrasilAgritest {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
@@ -144,7 +144,6 @@ public class BrasilAgritestTestSuite {
         WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Resetar Estado")));
         resetLink.click();
 
-        Alert alert = wait.until(ExpectedConditions.alertIsPresent());
         driver.switchTo().alert().accept();
 
         wait.until(ExpectedConditions.urlContains("/dashboard"));

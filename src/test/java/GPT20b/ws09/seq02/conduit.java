@@ -21,7 +21,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTestSuite {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -78,7 +78,8 @@ public class RealWorldTestSuite {
 
     @Test
     @Order(3)
-    public void testInvalidLogin()        driver.navigate().to(BASE_URL);
+    public void testInvalidLogin() {        
+    	driver.navigate().to(BASE_URL);
         clickLoginModal();
         WebElement userField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='username']")));
         WebElement passField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='password']")));
@@ -231,3 +232,4 @@ public class RealWorldTestSuite {
             }
         }
     }
+}

@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq06;
+package geminiPro.ws08.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -27,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * user login, the full checkout process, and external link validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/catalog/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);
@@ -44,7 +43,6 @@ public class JPetStoreTest {
     private static final By USERNAME_INPUT = By.name("username");
     private static final By PASSWORD_INPUT = By.name("password");
     private static final By LOGIN_BUTTON = By.name("signon");
-    private static final By CART_LINK = By.xpath("//div[@id='MenuContent']/a[contains(@href, 'viewCart')]");
 
     @BeforeAll
     static void setupAll() {

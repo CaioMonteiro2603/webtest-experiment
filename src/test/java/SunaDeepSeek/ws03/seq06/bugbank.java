@@ -10,10 +10,9 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

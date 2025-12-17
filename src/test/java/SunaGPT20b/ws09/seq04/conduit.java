@@ -20,7 +20,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriver driver;

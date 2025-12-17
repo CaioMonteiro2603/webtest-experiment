@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebAppTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

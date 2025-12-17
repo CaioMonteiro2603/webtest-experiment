@@ -24,7 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
@@ -86,7 +86,6 @@ public class JsFiddleTestSuite {
     @Order(1)
     public void testBasePageLoads() {
         driver.get(BASE_URL);
-        String title = wait.until(ExpectedConditions.titleIs(driver.getTitle()));
         Assertions.assertTrue(driver.getTitle().toLowerCase().contains("jsfiddle"),
                 "Base page title should contain 'jsfiddle'");
     }

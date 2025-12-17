@@ -1,4 +1,4 @@
-package GTP4.ws05.seq03;
+package GPT4.ws05.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

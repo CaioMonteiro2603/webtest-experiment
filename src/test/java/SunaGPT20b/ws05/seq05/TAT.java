@@ -6,12 +6,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -107,10 +108,11 @@ public class SiteTest {
         }
     }
 
-    /** Test 3 – Verify external links open in new tab and have correct domain */
+    /** Test 3 – Verify external links open in new tab and have correct domain 
+     * @throws MalformedURLException */
     @Test
     @Order(3)
-    public void testExternalLinks() {
+    public void testExternalLinks() throws MalformedURLException {
         open(BASE_URL);
         String originalHandle = driver.getWindowHandle();
 
@@ -185,10 +187,11 @@ public class SiteTest {
         btn.click();
     }
 
-    /** Test 6 – Verify footer social links (Twitter, Facebook, LinkedIn) */
+    /** Test 6 – Verify footer social links (Twitter, Facebook, LinkedIn) 
+     * @throws MalformedURLException */
     @Test
     @Order(6)
-    public void testFooterSocialLinks() {
+    public void testFooterSocialLinks() throws MalformedURLException {
         open(BASE_URL);
         String originalHandle = driver.getWindowHandle();
 

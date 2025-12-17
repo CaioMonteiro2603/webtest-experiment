@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -142,7 +142,6 @@ public class BugBankTest {
             String firstItemAfter = driver.findElements(By.cssSelector(".inventory_item_name")).get(0).getText();
             Assertions.assertNotEquals(firstItemBefore, firstItemAfter,
                     "Sorting option '" + option.getText() + "' should change the order of items");
-            firstItemBefore = firstItemAfter; // update for next iteration
         }
     }
 

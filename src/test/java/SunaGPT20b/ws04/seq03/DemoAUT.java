@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static WebDriver driver;
@@ -26,7 +26,7 @@ public class FormPageTest {
     }
 
     @AfterAll
-    public static tearDownAll() {
+    public static void tearDownAll() {
         if (driver != null) {
             driver.quit();
         }
@@ -87,24 +87,28 @@ public class FormPageTest {
         navigateToBase();
 
         List<WebElement> links = driver.findElements(By.cssSelector("a[href]"));
+        String basePrefix = BASE_URL.substring(0, BASE_URL.lastIndexOf('/') + 1);
+
         List<String> internalHrefs = links.stream()
                 .map(e -> e.getAttribute("href"))
-                .filter(href -> href != null && href.startsWith(BASE_URL.substring(0, BASE_URL.lastIndexOf('/') + 1))
+                .filter(href -> href != null && href.startsWith(basePrefix))
                 .collect(Collectors.toList());
 
         for (String href : internalHrefs) {
-            // Open link
             driver.get(href);
-            // Verify page loads (body present)
+
             wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-            // Simple sanity check: URL contains the href path
-            Assertions.assertTrue(driver.getCurrentUrl().contains(href),
-                    "Navigated URL should contain the internal link href.");
-            // Return to base for next iteration
+
+            Assertions.assertTrue(
+                    driver.getCurrentUrl().startsWith(basePrefix),
+                    "Navigated URL should be an internal link: " + href
+            );
+
             driver.navigate().back();
             wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
         }
     }
+
 
     @Test
     @Order(4)

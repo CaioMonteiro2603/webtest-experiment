@@ -1,7 +1,8 @@
-package deepseek.ws08.seq08;
+package SunaDeepSeek.ws08.seq08;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,12 +11,14 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
-    private static final String BASE_URL = "https://jpetstore.aspectran.com/";
+public class JPetStore {
+
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://jpetstore.aspectran.com/";
 
     @BeforeAll
     public static void setup() {
@@ -34,134 +37,155 @@ public class JPetStoreTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoading() {
+    public void testHomePageNavigation() {
         driver.get(BASE_URL);
-        WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".navbar-brand")));
-        Assertions.assertTrue(header.getText().contains("JPetStore"),
-            "JPetStore header should be displayed");
+        wait.until(ExpectedConditions.titleContains("JPetStore Demo"));
+
+        // Verify main sections
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.container")).isDisplayed());
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.category")).isDisplayed());
     }
 
     @Test
     @Order(2)
     public void testCategoryNavigation() {
         driver.get(BASE_URL);
-        
-        // Navigate to Dogs category
-        WebElement dogsLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("Dogs")));
-        dogsLink.click();
-        
-        WebElement dogsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".page-header")));
-        Assertions.assertTrue(dogsHeader.getText().contains("Dogs"), 
-            "Dogs category page should load");
+        WebElement fishCategory = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("div.category a[href*='categoryId=FISH']")));
+        fishCategory.click();
+
+        wait.until(ExpectedConditions.urlContains("categoryId=FISH"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.product")).isDisplayed());
     }
 
     @Test
     @Order(3)
-    public void testProductDetails() {
-        driver.get(BASE_URL);
-        
-        // Navigate to Dogs category
-        driver.findElement(By.linkText("Dogs")).click();
-        
-        // Click on first product
-        WebElement firstProduct = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".product-item a")));
-        firstProduct.click();
-        
-        WebElement productDetails = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".product-details")));
-        Assertions.assertTrue(productDetails.isDisplayed(), 
-            "Product details page should load");
+    public void testProductNavigation() {
+        driver.get(BASE_URL + "catalog/categories/FISH");
+        WebElement productLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("div.product a[href*='productId=FI-SW-01']")));
+        productLink.click();
+
+        wait.until(ExpectedConditions.urlContains("productId=FI-SW-01"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.item")).isDisplayed());
     }
 
     @Test
     @Order(4)
-    public void testAddToCart() {
-        driver.get(BASE_URL);
-        
-        // Navigate to Dogs category
-        driver.findElement(By.linkText("Dogs")).click();
-        
-        // Click on first product
-        driver.findElement(By.cssSelector(".product-item a")).click();
-        
-        // Add to cart
-        WebElement addToCartBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".btn-add-to-cart")));
-        addToCartBtn.click();
-        
-        WebElement cartBadge = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".badge")));
-        Assertions.assertTrue(cartBadge.getText().contains("1"), 
-            "Cart badge should show 1 item added");
+    public void testItemPageNavigation() {
+        driver.get(BASE_URL + "catalog/products/FI-SW-01");
+        WebElement itemLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("div.item a[href*='itemId=EST-1']")));
+        itemLink.click();
+
+        wait.until(ExpectedConditions.urlContains("itemId=EST-1"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.detail")).isDisplayed());
     }
 
     @Test
     @Order(5)
-    public void testViewCart() {
-        driver.get(BASE_URL);
-        
-        // Navigate to Dogs category and add to cart
-        driver.findElement(By.linkText("Dogs")).click();
-        driver.findElement(By.cssSelector(".product-item a")).click();
-        driver.findElement(By.cssSelector(".btn-add-to-cart")).click();
-        
-        // View cart
-        WebElement viewCartBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".btn-view-cart")));
-        viewCartBtn.click();
-        
-        WebElement cartTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".cart-table")));
-        Assertions.assertTrue(cartTable.isDisplayed(), 
-            "Cart page should display items added");
+    public void testAddToCart() {
+        driver.get(BASE_URL + "catalog/items/EST-1");
+        WebElement addToCartBtn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("button[onclick*='addItemToCart']")));
+        addToCartBtn.click();
+
+        wait.until(ExpectedConditions.urlContains("viewCart"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.cart")).isDisplayed());
     }
 
     @Test
     @Order(6)
-    public void testRemoveFromCart() {
-        driver.get(BASE_URL);
-        
-        // Navigate to Dogs category and add to cart
-        driver.findElement(By.linkText("Dogs")).click();
-        driver.findElement(By.cssSelector(".product-item a")).click();
-        driver.findElement(By.cssSelector(".btn-add-to-cart")).click();
-        
-        // View cart and remove item
-        driver.findElement(By.cssSelector(".btn-view-cart")).click();
-        WebElement removeBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".btn-remove")));
-        removeBtn.click();
-        
-        WebElement emptyCart = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".empty-cart")));
-        Assertions.assertTrue(emptyCart.isDisplayed(), 
-            "Cart should be empty after removing item");
+    public void testCheckoutProcess() {
+        driver.get(BASE_URL + "cart/viewCart");
+        WebElement proceedBtn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='newOrderForm']")));
+        proceedBtn.click();
+
+        wait.until(ExpectedConditions.urlContains("newOrderForm"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("form[action*='newOrder']")).isDisplayed());
     }
 
     @Test
     @Order(7)
     public void testExternalLinks() {
         driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
         
-        // Test GitHub link
-        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='github']")));
-        githubLink.click();
+        // Test Twitter link
+        testExternalLink(By.cssSelector("a[href*='twitter.com']"), "twitter.com");
+        
+        // Test Facebook link
+        testExternalLink(By.cssSelector("a[href*='facebook.com']"), "facebook.com");
+    }
+
+    private void testExternalLink(By locator, String expectedDomain) {
+        String originalWindow = driver.getWindowHandle();
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        link.click();
+
+        // Switch to new window
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.equals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("github.com"),
-            "GitHub link should open in new tab");
+
+        // Verify domain and close
+        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain));
         driver.close();
         driver.switchTo().window(originalWindow);
+    }
+
+    @Test
+    @Order(8)
+    public void testLoginFunctionality() {
+        driver.get(BASE_URL + "account/signonForm");
+        
+        // Valid login
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.name("signon"));
+        
+        usernameField.sendKeys("j2ee");
+        passwordField.sendKeys("j2ee");
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("main"));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.welcome")).isDisplayed());
+    }
+
+    @Test
+    @Order(9)
+    public void testInvalidLogin() {
+        driver.get(BASE_URL + "account/signonForm");
+        
+        // Invalid login
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.name("signon"));
+        
+        usernameField.sendKeys("invalid");
+        passwordField.sendKeys("invalid");
+        loginButton.click();
+        
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.error")));
+        Assertions.assertTrue(driver.findElement(By.cssSelector("div.error")).isDisplayed());
+    }
+
+    @Test
+    @Order(10)
+    public void testSearchFunctionality() {
+        driver.get(BASE_URL);
+        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(By.name("keyword")));
+        WebElement searchButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        
+        searchField.sendKeys("fish");
+        searchButton.click();
+        
+        wait.until(ExpectedConditions.urlContains("searchProducts"));
+        List<WebElement> products = driver.findElements(By.cssSelector("div.product"));
+        Assertions.assertTrue(products.size() > 0);
     }
 }

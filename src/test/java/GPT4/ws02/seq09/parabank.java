@@ -8,11 +8,10 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -42,14 +41,6 @@ public class ParabankTest {
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys(password);
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input.button[value='Log In']"))).click();
-    }
-
-    private void logoutIfLoggedIn() {
-        List<WebElement> logoutLinks = driver.findElements(By.linkText("Log Out"));
-        if (!logoutLinks.isEmpty()) {
-            logoutLinks.get(0).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
-        }
     }
 
     private void switchToNewTabAndAssert(String expectedDomain) {

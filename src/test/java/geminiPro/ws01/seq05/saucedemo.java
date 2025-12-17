@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq05;
+package geminiPro.ws01.seq05;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
+import java.util.Collections;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
  * This suite covers login, product sorting, cart management, checkout, and external link validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoE2ETest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -1,11 +1,10 @@
-package SunaQweb3.ws02.seq03;
+package SunaQwen3.ws02.seq03;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankTestSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

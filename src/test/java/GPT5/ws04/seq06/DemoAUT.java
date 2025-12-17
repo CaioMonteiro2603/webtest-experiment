@@ -11,10 +11,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessSuite {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

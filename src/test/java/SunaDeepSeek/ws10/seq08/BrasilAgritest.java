@@ -1,23 +1,21 @@
-package deepseek.ws10.seq08;
+package SunaDeepSeek.ws10.seq08;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class BrasilAgritest {
+    private static WebDriver driver;
+    private static WebDriverWait wait;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USERNAME = "superadmin@brasilagritest.com.br";
     private static final String PASSWORD = "10203040";
-    private static WebDriver driver;
-    private static WebDriverWait wait;
 
     @BeforeAll
     public static void setup() {
@@ -39,19 +37,16 @@ public class BrasilAgriTest {
     public void testSuccessfulLogin() {
         driver.get(BASE_URL);
         
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[name='email']")));
-        email.sendKeys(USERNAME);
+        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("email")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
         
-        WebElement password = driver.findElement(By.cssSelector("input[name='password']"));
-        password.sendKeys(PASSWORD);
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
         
-        WebElement loginBtn = driver.findElement(By.cssSelector("button[type='submit']"));
-        loginBtn.click();
-        
-        WebElement dashboard = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".dashboard-header")));
-        Assertions.assertTrue(dashboard.isDisplayed(), "Dashboard should be visible after login");
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("dashboard"), "Login failed - not redirected to dashboard");
     }
 
     @Test
@@ -59,123 +54,84 @@ public class BrasilAgriTest {
     public void testInvalidLogin() {
         driver.get(BASE_URL);
         
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[name='email']")));
-        email.sendKeys("invalid@email.com");
+        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("email")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
         
-        WebElement password = driver.findElement(By.cssSelector("input[name='password']"));
-        password.sendKeys("wrongpassword");
+        usernameField.sendKeys("invalid@email.com");
+        passwordField.sendKeys("wrongpassword");
+        loginButton.click();
         
-        WebElement loginBtn = driver.findElement(By.cssSelector("button[type='submit']"));
-        loginBtn.click();
-        
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".alert-danger")));
-        Assertions.assertTrue(error.isDisplayed(), "Error message should appear for invalid login");
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector(".alert.alert-danger")));
+        Assertions.assertTrue(errorMessage.isDisplayed(), "Error message not displayed for invalid login");
     }
 
     @Test
     @Order(3)
-    public void testNavigationMenu() {
-        loginIfNeeded();
+    public void testMenuNavigation() {
+        testSuccessfulLogin();
         
-        // Test Farms navigation
-        WebElement farmsMenu = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='farms']")));
-        farmsMenu.click();
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("button.navbar-toggler")));
+        menuButton.click();
         
-        WebElement farmsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".page-header")));
-        Assertions.assertTrue(farmsHeader.getText().contains("Farms"),
-            "Farms page should load");
+        List<WebElement> menuItems = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+            By.cssSelector(".navbar-collapse.show .nav-link"), 0));
+        Assertions.assertTrue(menuItems.size() > 0, "Menu items not displayed");
         
-        // Test Reports navigation
-        WebElement reportsMenu = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='reports']")));
-        reportsMenu.click();
-        
-        WebElement reportsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".page-header")));
-        Assertions.assertTrue(reportsHeader.getText().contains("Reports"),
-            "Reports page should load");
+        // Test menu close
+        menuButton.click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.cssSelector(".navbar-collapse.show")));
     }
 
     @Test
     @Order(4)
-    public void testFarmCreation() {
-        loginIfNeeded();
-        driver.findElement(By.cssSelector("a[href*='farms']")).click();
+    public void testExternalLinks() {
+        testSuccessfulLogin();
         
-        WebElement createBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".btn-primary")));
-        createBtn.click();
-        
-        WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[name='name']")));
-        nameField.sendKeys("Test Farm");
-        
-        WebElement saveBtn = driver.findElement(By.cssSelector("button[type='submit']"));
-        saveBtn.click();
-        
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".alert-success")));
-        Assertions.assertTrue(success.isDisplayed(),
-            "Success message should appear after farm creation");
+        // Example test for an external link (adjust selector as needed)
+        List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[href*='http']"));
+        if (externalLinks.size() > 0) {
+            String originalWindow = driver.getWindowHandle();
+            
+            for (WebElement link : externalLinks) {
+                String href = link.getAttribute("href");
+                if (!href.contains("brasilagritest")) {
+                    link.click();
+                    
+                    wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+                    for (String windowHandle : driver.getWindowHandles()) {
+                        if (!originalWindow.equals(windowHandle)) {
+                            driver.switchTo().window(windowHandle);
+                            Assertions.assertTrue(driver.getCurrentUrl().contains(
+                                href.split("//")[1].split("/")[0]), 
+                                "External link domain mismatch");
+                            driver.close();
+                            driver.switchTo().window(originalWindow);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Test
     @Order(5)
     public void testLogout() {
-        loginIfNeeded();
+        testSuccessfulLogin();
         
-        WebElement userMenu = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".user-menu")));
-        userMenu.click();
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("button.navbar-toggler")));
+        menuButton.click();
         
-        WebElement logoutBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='logout']")));
-        logoutBtn.click();
+        WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//a[contains(text(),'Sair')]")));
+        logoutLink.click();
         
-        WebElement loginForm = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("form[action*='login']")));
-        Assertions.assertTrue(loginForm.isDisplayed(),
-            "Login form should appear after logout");
-    }
-
-    @Test
-    @Order(6)
-    public void testExternalLinks() {
-        loginIfNeeded();
-        String originalWindow = driver.getWindowHandle();
-        
-        // Test Help link
-        WebElement helpLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='help']")));
-        helpLink.click();
-        
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
-                break;
-            }
-        }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("brasilagritest"),
-            "Help link should open correct URL");
-        driver.close();
-        driver.switchTo().window(originalWindow);
-    }
-
-    private void loginIfNeeded() {
-        if (!driver.getCurrentUrl().contains("dashboard")) {
-            driver.get(BASE_URL);
-            WebElement email = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("input[name='email']")));
-            email.sendKeys(USERNAME);
-            driver.findElement(By.cssSelector("input[name='password']")).sendKeys(PASSWORD);
-            driver.findElement(By.cssSelector("button[type='submit']")).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".dashboard-header")));
-        }
+        wait.until(ExpectedConditions.urlContains("login"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("login"), "Logout failed - not redirected to login page");
     }
 }

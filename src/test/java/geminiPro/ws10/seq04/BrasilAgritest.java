@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq04;
+package geminiPro.ws10.seq04;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.time.Duration;
  * main dashboard navigation, page verification, and logout functionalities.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTestHeadlessFirefoxTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

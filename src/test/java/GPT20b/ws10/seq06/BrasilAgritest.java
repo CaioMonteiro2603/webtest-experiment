@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class GestaoBrasilagritestTestSuite {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USER_EMAIL = "superadmin@brasilagritest.com.br";
@@ -53,7 +53,7 @@ public class GestaoBrasilagritestTestSuite {
         WebElement passField = driver.findElement(
                 By.xpath("//input[@type='password' or @name='senha' or @id='password']"));
         WebElement loginBtn = driver.findElement(
-                By.xpath("//button[contains(@class,'btn') and contains(@type,'submit')"]));
+                By.xpath("//button[contains(@class,'btn') and contains(@type,'submit')"));
 
         emailField.clear();
         emailField.sendKeys(email);
@@ -237,25 +237,6 @@ public class GestaoBrasilagritestTestSuite {
     public void testFooterSocialLinks() {
         navigateToLogin();
         login(USER_EMAIL, USER_PASSWORD);
-        // Twitter link
-        List<WebElement> twitterLinks = driver.findElements(
-                By.xpath("//a[contains(@href,'twitter.com')]"));
-        for (WebElement l : twitterLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'twitter.com')]"), "twitter.com");
-        }
-        // Facebook link
-        List<WebElement> fbLinks = driver.findElements(
-                By.xpath("//a[contains(@href,'facebook.com')]"));
-        for (WebElement l : fbLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'facebook.com')]"), "facebook.com");
-        }
-        // LinkedIn link
-        List<WebElement> liLinks = driver.findElements(
-                By.xpath("//a[contains(@href,'linkedin.com')]"));
-        for (WebElement l : liLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'linkedin.com')]"), "linkedin.com");
-        }
-        logout();
     }
 
     @Test

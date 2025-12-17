@@ -1,24 +1,30 @@
-package deepseek.ws09.seq10;
+package SunaQwen3.ws09.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.junit.jupiter.api.Assertions;
+
 import java.time.Duration;
+import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
+
     private static WebDriver driver;
-    private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://demo.realworld.io/";
+    private static final String USERNAME = "testuser";
+    private static final String PASSWORD = "testpass";
 
     @BeforeAll
-    public static void setup() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -26,7 +32,7 @@ public class RealWorldTest {
     }
 
     @AfterAll
-    public static void teardown() {
+    static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -34,168 +40,197 @@ public class RealWorldTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoad() {
+    void testLoginPageLoadsSuccessfully() {
         driver.get(BASE_URL);
-        WebElement homePage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h1[contains(text(), 'conduit')]")));
-        Assertions.assertTrue(homePage.isDisplayed(), "Home page did not load");
+        String title = driver.getTitle();
+        assertTrue(title.contains("Conduit"), "Page title should contain 'Conduit'");
+        Assertions.assertEquals(BASE_URL, driver.getCurrentUrl(), "Current URL should match base URL");
     }
 
     @Test
     @Order(2)
-    public void testSignUp() {
-        driver.get(BASE_URL + "register");
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@placeholder='Username']")));
-        username.sendKeys("testuser");
-        
-        WebElement email = driver.findElement(By.xpath("//input[@placeholder='Email']"));
-        email.sendKeys("testuser@example.com");
-        
-        WebElement password = driver.findElement(By.xpath("//input[@placeholder='Password']"));
-        password.sendKeys("testpassword");
-        
-        WebElement signUpButton = driver.findElement(By.xpath("//button[contains(text(), 'Sign up')]"));
-        signUpButton.click();
-        
-        WebElement settingsLink = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//a[contains(text(), 'Settings')]")));
-        Assertions.assertTrue(settingsLink.isDisplayed(), "Sign up failed");
+    void testValidLoginRedirectsToHomePage() {
+        driver.get(BASE_URL);
+        By signInLink = By.linkText("Sign in");
+        WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(signInLink));
+        signInButton.click();
+
+        By emailField = By.cssSelector("input[placeholder='Email']");
+        By passwordField = By.cssSelector("input[placeholder='Password']");
+        By submitButton = By.cssSelector("button[type='submit']");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).sendKeys(USERNAME);
+        driver.findElement(passwordField).sendKeys(PASSWORD);
+        driver.findElement(submitButton).click();
+
+        By homeHeader = By.cssSelector("h1");
+        String headerText = wait.until(ExpectedConditions.visibilityOfElementLocated(homeHeader)).getText();
+        assertEquals("Your Feed", headerText, "Should be redirected to home feed after login");
+        assertTrue(driver.getCurrentUrl().contains("#/"), "URL should indicate home route");
     }
 
     @Test
     @Order(3)
-    public void testLogin() {
-        driver.get(BASE_URL + "login");
-        WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@placeholder='Email']")));
-        email.sendKeys("testuser@example.com");
-        
-        WebElement password = driver.findElement(By.xpath("//input[@placeholder='Password']"));
-        password.sendKeys("testpassword");
-        
-        WebElement signInButton = driver.findElement(By.xpath("//button[contains(text(), 'Sign in')]"));
-        signInButton.click();
-        
-        WebElement settingsLink = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//a[contains(text(), 'Settings')]")));
-        Assertions.assertTrue(settingsLink.isDisplayed(), "Login failed");
+    void testInvalidLoginShowsError() {
+        driver.get(BASE_URL + "#/login");
+        By emailField = By.cssSelector("input[placeholder='Email']");
+        By passwordField = By.cssSelector("input[placeholder='Password']");
+        By submitButton = By.cssSelector("button[type='submit']");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).sendKeys("invalid@example.com");
+        driver.findElement(passwordField).sendKeys("wrongpass");
+        driver.findElement(submitButton).click();
+
+        By errorList = By.cssSelector(".error-messages li");
+        String errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(errorList)).getText();
+        assertTrue(errorMessage.contains("email or password is invalid"), "Error message should indicate invalid credentials");
     }
 
     @Test
     @Order(4)
-    public void testInvalidLogin() {
-        driver.get(BASE_URL + "login");
-        WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@placeholder='Email']")));
-        email.sendKeys("invalid@example.com");
-        
-        WebElement password = driver.findElement(By.xpath("//input[@placeholder='Password']"));
-        password.sendKeys("wrongpassword");
-        
-        WebElement signInButton = driver.findElement(By.xpath("//button[contains(text(), 'Sign in')]"));
-        signInButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'email or password is invalid')]")));
-        Assertions.assertTrue(errorMessage.isDisplayed(), "Error message not shown for invalid login");
+    void testNavigationMenuAllItems() {
+        navigateToHomeIfNecessary();
+        By menuButton = By.cssSelector(".navbar-burger");
+        WebElement menu = wait.until(ExpectedConditions.elementToBeClickable(menuButton));
+        menu.click();
+
+        By allItemsLink = By.linkText("All Articles");
+        WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(allItemsLink));
+        allItems.click();
+
+        By articleList = By.cssSelector(".article-preview");
+        wait.until(ExpectedConditions.presenceOfElementLocated(articleList));
+        List<WebElement> articles = driver.findElements(articleList);
+        assertTrue(articles.size() > 0, "At least one article should be displayed");
     }
 
     @Test
     @Order(5)
-    public void testArticleCreation() {
-        loginIfNeeded();
-        
-        WebElement newArticleLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'New Article')]")));
-        newArticleLink.click();
-        
-        WebElement articleTitle = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@placeholder='Article Title']")));
-        articleTitle.sendKeys("Test Article Title");
-        
-        WebElement articleDescription = driver.findElement(By.xpath("//input[@placeholder='What's this article about?']"));
-        articleDescription.sendKeys("This is a test article description");
-        
-        WebElement articleBody = driver.findElement(By.xpath("//textarea[@placeholder='Write your article (in markdown)']"));
-        articleBody.sendKeys("This is the body of the test article.");
-        
-        WebElement publishButton = driver.findElement(By.xpath("//button[contains(text(), 'Publish Article')]"));
-        publishButton.click();
-        
-        WebElement articlePageTitle = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h1[contains(text(), 'Test Article Title')]")));
-        Assertions.assertTrue(articlePageTitle.isDisplayed(), "Article creation failed");
+    void testNavigationMenuAboutExternalLink() {
+        navigateToHomeIfNecessary();
+        By menuButton = By.cssSelector(".navbar-burger");
+        WebElement menu = wait.until(ExpectedConditions.elementToBeClickable(menuButton));
+        menu.click();
+
+        By aboutLink = By.linkText("About");
+        WebElement about = wait.until(ExpectedConditions.elementToBeClickable(aboutLink));
+        about.click();
+
+        String originalWindow = driver.getWindowHandle();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        String newWindow = null;
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(originalWindow)) {
+                newWindow = handle;
+                break;
+            }
+        }
+
+        assertNotNull(newWindow, "New window should have been opened");
+        driver.switchTo().window(newWindow);
+
+        String newUrl = driver.getCurrentUrl();
+        assertTrue(newUrl.contains("realworld.io"), "External About link should open realworld.io domain");
+
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(6)
-    public void testExternalLinks() {
+    void testFooterSocialLinks() {
         driver.get(BASE_URL);
-        
-        // Test Twitter link
-        testExternalLink("Twitter", "twitter.com");
-        
-        // Test GitHub link
-        testExternalLink("GitHub", "github.com");
+        By twitterLink = By.cssSelector("a[href*='twitter.com']");
+        By facebookLink = By.cssSelector("a[href*='facebook.com']");
+        By linkedinLink = By.cssSelector("a[href*='linkedin.com']");
+
+        String originalWindow = driver.getWindowHandle();
+
+        // Test Twitter
+        WebElement twitter = wait.until(ExpectedConditions.elementToBeClickable(twitterLink));
+        twitter.click();
+        assertNewWindowAndClose(originalWindow, "twitter.com");
+
+        // Test Facebook
+        driver.switchTo().window(originalWindow);
+        WebElement facebook = wait.until(ExpectedConditions.elementToBeClickable(facebookLink));
+        facebook.click();
+        assertNewWindowAndClose(originalWindow, "facebook.com");
+
+        // Test LinkedIn
+        driver.switchTo().window(originalWindow);
+        WebElement linkedin = wait.until(ExpectedConditions.elementToBeClickable(linkedinLink));
+        linkedin.click();
+        assertNewWindowAndClose(originalWindow, "linkedin.com");
     }
 
     @Test
     @Order(7)
-    public void testLogout() {
-        loginIfNeeded();
-        
-        WebElement settingsLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'Settings')]")));
-        settingsLink.click();
-        
-        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(text(), 'Or click here to logout')]")));
-        logoutButton.click();
-        
-        WebElement signInLink = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//a[contains(text(), 'Sign in')]")));
-        Assertions.assertTrue(signInLink.isDisplayed(), "Logout failed");
+    void testLogoutFunctionality() {
+        // Ensure logged in
+        loginIfNotLoggedIn();
+
+        By menuButton = By.cssSelector(".navbar-burger");
+        WebElement menu = wait.until(ExpectedConditions.elementToBeClickable(menuButton));
+        menu.click();
+
+        By logoutLink = By.linkText("Log out");
+        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(logoutLink));
+        logout.click();
+
+        By signInLink = By.linkText("Sign in");
+        wait.until(ExpectedConditions.elementToBeClickable(signInLink));
+        assertTrue(driver.getCurrentUrl().contains("#/"), "Should be redirected to home after logout");
+        assertTrue(driver.findElement(signInLink).isDisplayed(), "Sign in link should be visible after logout");
     }
 
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, '" + expectedDomain + "')]")));
-        link.click();
-        
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
-                }
+    private void navigateToHomeIfNecessary() {
+        if (!driver.getCurrentUrl().contains("#/")) {
+            driver.get(BASE_URL);
+            loginIfNotLoggedIn();
+        }
+    }
+
+    private void loginIfNotLoggedIn() {
+        try {
+            By menuButton = By.cssSelector(".navbar-burger");
+            if (driver.findElements(menuButton).size() > 0) {
+                return; // Already logged in
             }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
+        } catch (NoSuchElementException ignored) {
         }
+
+        driver.get(BASE_URL + "#/login");
+        By emailField = By.cssSelector("input[placeholder='Email']");
+        By passwordField = By.cssSelector("input[placeholder='Password']");
+        By submitButton = By.cssSelector("button[type='submit']");
+
+        wait.until(ExpectedConditions.visibilityOfElementLocated(emailField)).sendKeys(USERNAME);
+        driver.findElement(passwordField).sendKeys(PASSWORD);
+        driver.findElement(submitButton).click();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".navbar-burger")));
     }
 
-    private void loginIfNeeded() {
-        if (driver.findElements(By.xpath("//a[contains(text(), 'Settings')]")).size() == 0) {
-            driver.get(BASE_URL + "login");
-            WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//input[@placeholder='Email']")));
-            email.sendKeys("testuser@example.com");
-            
-            WebElement password = driver.findElement(By.xpath("//input[@placeholder='Password']"));
-            password.sendKeys("testpassword");
-            
-            WebElement signInButton = driver.findElement(By.xpath("//button[contains(text(), 'Sign in')]"));
-            signInButton.click();
-            
-            wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.xpath("//a[contains(text(), 'Settings')]")));
+    private void assertNewWindowAndClose(String originalWindow, String expectedDomain) {
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
+        String newWindow = null;
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(originalWindow)) {
+                newWindow = handle;
+                break;
+            }
         }
+
+        assertNotNull(newWindow, "New window should have been opened");
+        driver.switchTo().window(newWindow);
+
+        String newUrl = driver.getCurrentUrl();
+        assertTrue(newUrl.contains(expectedDomain), "External link should open expected domain: " + expectedDomain);
+
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 }

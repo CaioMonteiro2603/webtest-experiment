@@ -9,15 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle{
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";
-    private static final String LOGIN_PAGE_URL = BASE_URL;
-    private static final String INVENTORY_PAGE_URL = BASE_URL;
 
     @BeforeAll
     public static void setUp() {

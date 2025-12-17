@@ -1,4 +1,4 @@
-package GTP4.ws06.seq04;
+package GPT4.ws06.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RESTFULL {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

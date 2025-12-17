@@ -6,12 +6,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
-
+import java.util.Set;
 import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatHeadlessTest {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
 

@@ -6,13 +6,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class HotelBookingTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -171,7 +170,7 @@ public class HotelBookingTest {
         // Test Facebook link
         WebElement facebookLink = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href*='facebook']")));
-        testExternalLink(facebookLink,.facebook.com");
+        testExternalLink(facebookLink,"facebook.com");
     }
 
     private void testExternalLink(WebElement link, String expectedDomain) {

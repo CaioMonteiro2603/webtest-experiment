@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTest {
+public class saucedemo {
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
     private static final String PASSWORD = "secret_sauce";

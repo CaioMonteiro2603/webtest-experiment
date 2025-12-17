@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq09;
+package geminiPro.ws09.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +22,6 @@ import java.time.Duration;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -33,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static String testUsername;
@@ -61,7 +60,6 @@ public class RealWorldAppTest {
     private final By deleteArticleButton = By.xpath("//button[contains(text(), 'Delete Article')]");
     private final By commentTextarea = By.cssSelector("textarea[placeholder='Write a comment...']");
     private final By postCommentButton = By.xpath("//button[text()='Post Comment']");
-    private final By commentCard = By.cssSelector(".card.comment-form");
 
     @BeforeAll
     static void setup() {

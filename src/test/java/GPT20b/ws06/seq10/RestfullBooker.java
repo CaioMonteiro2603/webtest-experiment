@@ -24,7 +24,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationTestingOnlineTests {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -85,9 +85,15 @@ public class AutomationTestingOnlineTests {
     }
 
     private static void login() {
-        Assertions.assertTrue(elementPresent(By.xpath("//input[@placeholder='Username']") ||
-                driver.findElements(By.name("username")).size() > 0 ||
-                driver.findElements(By.id("username")).size() > 0, "Username field not found");
+    	 boolean usernamePresent =
+    	            !driver.findElements(By.xpath("//input[@placeholder='Username']")).isEmpty()
+    	         || !driver.findElements(By.name("username")).isEmpty()
+    	         || !driver.findElements(By.id("username")).isEmpty();
+
+    	    Assertions.assertTrue(
+    	            usernamePresent,
+    	            "Username field not found"
+    	    );
 
         By usernameLocator = locateFirst(By.xpath("//input[@placeholder='Username']"),
                 By.name("username"), By.id("username"));

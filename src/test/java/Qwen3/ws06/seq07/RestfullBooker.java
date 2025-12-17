@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AutomationTestingTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

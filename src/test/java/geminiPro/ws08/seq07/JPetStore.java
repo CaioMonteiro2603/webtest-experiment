@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq07;
+package geminiPro.ws08.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreComprehensiveTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);

@@ -1,4 +1,4 @@
-package geminiPro.ws0.seq01;
+package geminiPro.ws10.seq01;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.time.Duration;
  * navigation through the main dashboard modules, and the logout functionality.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTest {
+public class BrasilAgritest{
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -9,16 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";
-    private static final String EXTERNAL_TWITTER = "https://twitter.com/js_fiddle";
-    private static final String EXTERNAL_FACEBOOK = "https://www.facebook.com/jsfiddle";
-    private static final String EXTERNAL_LINKEDIN = "https://www.linkedin.com/company/jsfiddle";
 
     @BeforeAll
     public static void setUp() {

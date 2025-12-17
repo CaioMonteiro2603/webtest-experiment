@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq04;
+package geminiPro.ws03.seq04;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -17,7 +17,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Set;
  * This test suite targets SauceDemo to align with the detailed functional scope.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ECommerceHeadlessTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriHeadlessSuite {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -68,11 +68,6 @@ public class BrasilAgriHeadlessSuite {
 
     private WebElement waitClickable(By locator) {
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private Optional<WebElement> findFirst(By locator) {
-        List<WebElement> els = driver.findElements(locator);
-        return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
     }
 
     private static String hostOf(String url) {

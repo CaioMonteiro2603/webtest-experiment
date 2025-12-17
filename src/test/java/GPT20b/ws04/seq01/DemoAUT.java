@@ -10,7 +10,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WindowType;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -23,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormTests {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -218,7 +217,7 @@ public class KatalonFormTests {
             if (!after.isEmpty()) {
                 String newHandle = after.iterator().next();
                 driver.switchTo().window(newHandle);
-                wait.until(ExpectedConditions.urlToBePresent());
+                wait.until(ExpectedConditions.urlContains("hhtp"));
                 String url = driver.getCurrentUrl();
                 Assertions.assertFalse(url.contains("katalon-test.s3.amazonaws.com"),
                         "External link should not contain base domain");

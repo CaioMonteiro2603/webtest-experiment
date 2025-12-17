@@ -1,7 +1,6 @@
-package geminiPRO.ws09.seq05;
+package geminiPro.ws09.seq05;
 
 import org.junit.jupiter.api.*;
-import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,10 +10,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-
 /**
  * JUnit 5 test suite for the RealWorld demo application "Conduit".
  * This suite uses Selenium WebDriver with headless Firefox to test the full lifecycle of
@@ -22,7 +18,7 @@ import java.util.Set;
  * creating, editing, and deleting articles.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppE2ETest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -49,7 +45,7 @@ public class RealWorldAppE2ETest {
     static void setupAll() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
-        driver = new Firefox-Driver(options);
+        driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
         // Generate unique credentials for this test run

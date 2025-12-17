@@ -18,9 +18,11 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
+import org.openqa.selenium.support.ui.Select;
+
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTestSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

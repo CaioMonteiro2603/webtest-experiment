@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq05;
+package geminiPro.ws05.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -20,7 +20,7 @@ import java.util.Set;
  * and navigation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatE2ETest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

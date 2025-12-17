@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BetaBrasilAgritestSuite {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -78,14 +78,6 @@ public class BetaBrasilAgritestSuite {
             return true;
         }
         return false;
-    }
-
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        throw new NoSuchElementException("None matched: " + Arrays.toString(locators));
     }
 
     private void type(By by, String text) {

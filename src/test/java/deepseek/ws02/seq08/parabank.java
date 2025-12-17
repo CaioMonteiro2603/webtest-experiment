@@ -8,13 +8,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankTest {
+public class parabank{
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USERNAME = "caio@gmail.com";
     private static final String PASSWORD = "123";

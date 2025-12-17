@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationTestingSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -36,7 +36,6 @@ public class RealWorldHeadlessTest {
     private static final By ARTICLE_PREVIEW = By.cssSelector(".article-preview, .preview-link");
     private static final By ARTICLE_TITLE_LINK = By.cssSelector(".article-preview a.preview-link, .preview-link, .article-preview h1 a, .article-preview h1");
     private static final By ARTICLE_PAGE_TITLE = By.cssSelector("h1, .article-page h1");
-    private static final By ARTICLE_AUTHOR_LINK = By.cssSelector(".article-meta a.author, .author, .article-page .article-meta a");
     private static final By PROFILE_BIO = By.cssSelector(".user-info, .profile-page, .articles-toggle");
     private static final By FOOTER = By.tagName("footer");
 

@@ -11,10 +11,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessSuite {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

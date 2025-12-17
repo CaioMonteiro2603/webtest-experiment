@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq04;
+package geminiPro.ws06.seq04;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * including contact form submission, room booking, and admin panel authentication.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingOnlineTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

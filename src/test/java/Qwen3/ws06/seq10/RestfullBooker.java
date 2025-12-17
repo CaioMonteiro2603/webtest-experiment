@@ -1,7 +1,6 @@
 package Qwen3.ws06.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -10,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class HotelAppTest {
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -30,8 +29,7 @@ public class HotelAppTest {
             driver.quit();
         }
     }
-
-    @TestMethodOrder(OrderAnnotation.class)
+    
     @Test
     @Order(1)
     void testPageTitleAndHeader_DisplayedCorrectly() {
@@ -144,7 +142,7 @@ public class HotelAppTest {
         descriptionField.sendKeys("I would like to know more about your services.");
         sendMessageButton.click();
 
-        WebElement successModal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("success"));
+        WebElement successModal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("success")));
         assertTrue(successModal.isDisplayed(), "Success modal should appear after contact form submission");
         assertTrue(successModal.getText().contains("Thanks"), "Success message should contain 'Thanks'");
         

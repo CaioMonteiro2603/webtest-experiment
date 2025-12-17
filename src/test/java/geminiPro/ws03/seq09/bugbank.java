@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq09;
+package geminiPro.ws03.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * This suite covers user registration, login, funds transfer, and statement validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static String registeredEmail;

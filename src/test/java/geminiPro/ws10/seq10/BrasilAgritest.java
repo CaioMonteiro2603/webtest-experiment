@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq10;
+package geminiPro.ws10.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * It uses Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTestE2ETest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -135,7 +135,12 @@ public class BrasilAgriTestE2ETest {
         
         // --- Test Sort ---
         searchInput.clear();
-        wait.until(ExpectedConditions.numberOfElementsToBeGreaterThan(TABLE_BODY_ROWS, rowsAfterSearch.size())); // Wait for table to reload
+        wait.until(
+        	    ExpectedConditions.numberOfElementsToBeLessThan(
+        	        TABLE_BODY_ROWS,
+        	        rowsAfterSearch.size()
+        	    )
+        	);
 
         WebElement nameHeader = wait.until(ExpectedConditions.elementToBeClickable(NAME_COLUMN_HEADER));
 

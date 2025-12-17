@@ -6,12 +6,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebAppTestSuite {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USERNAME = "superadmin@brasilagritest.com.br";
@@ -215,7 +216,7 @@ public class WebAppTestSuite {
 
     @Test
     @Order(9)
-    public void testExternalLinksOnInventoryPage() {
+    public void testExternalLinksOnInventoryPage() throws MalformedURLException {
         loginIfNeeded();
 
         // Gather external links on the current page (one level below base)

@@ -1,10 +1,7 @@
 package GPT20b.ws08.seq07;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
@@ -25,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreWebTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -38,7 +35,7 @@ public class JPetStoreWebTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
@@ -83,21 +80,6 @@ public class JPetStoreWebTest {
                 "User should land on Home page after login");
     }
 
-    private void logout() {
-        WebElement accountMenu = findElementWithFallback(
-                List.of(By.id("accountMenu"), By.cssSelector(".header .userMenu")));
-        wait.until(ExpectedConditions.elementToBeClickable(accountMenu));
-        accountMenu.click();
-
-        WebElement logoutLink = findElementWithFallback(
-                List.of(By.linkText("Logout"), By.xpath("//a[contains(text(),'Logout')]")));
-        wait.until(ExpectedConditions.elementToBeClickable(logoutLink));
-        logoutLink.click();
-
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        Assertions.assertEquals(BASE_URL, driver.getCurrentUrl(),
-                "Logout should bring back to base URL");
-    }
 
     private void resetAppState() {
         // Simple implementation: empty the cart
@@ -115,21 +97,8 @@ public class JPetStoreWebTest {
         return nameEls.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
-    private List<Double> getProductPrices() {
-        List<WebElement> priceEls = driver.findElements(By.cssSelector(".itemPrice, .price"));
-        List<Double> prices = new ArrayList<>();
-        for (WebElement el : priceEls) {
-            String txt = el.getText().replace("$", "").replace(",", "").trim();
-            try {
-                prices.add(Double.parseDouble(txt));
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        return prices;
-    }
-
     private int getCartCount() {
-        List<WebElement> counts = driver.findElements(By.cssSelector(".cart-count, #shoppingCart")));
+        List<WebElement> counts = driver.findElements(By.cssSelector(".cart-count, #shoppingCart"));
         return counts.isEmpty() ? 0 : Integer.parseInt(counts.get(0).getText());
     }
 

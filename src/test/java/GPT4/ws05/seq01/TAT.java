@@ -9,10 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -39,23 +38,6 @@ public class CacTatTest {
         driver.findElement(By.id("lastName")).sendKeys("Montes");
         driver.findElement(By.id("email")).sendKeys("caio@teste.com");
         driver.findElement(By.id("open-text-area")).sendKeys("Mensagem de teste");
-    }
-
-    private void switchToNewTabAndVerify(String expectedDomain) {
-        String originalWindow = driver.getWindowHandle();
-        wait.until(driver -> driver.getWindowHandles().size() > 1);
-        Set<String> allWindows = driver.getWindowHandles();
-        for (String window : allWindows) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
-                wait.until(ExpectedConditions.urlContains(expectedDomain));
-                Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                        "Expected domain not found in URL: " + expectedDomain);
-                driver.close();
-                driver.switchTo().window(originalWindow);
-                break;
-            }
-        }
     }
 
     @Test

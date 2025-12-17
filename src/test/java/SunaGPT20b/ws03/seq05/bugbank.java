@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USERNAME = "caio@gmail.com";
@@ -59,7 +59,7 @@ public class BugBankTest {
         WebElement loginBtn = driver.findElement(By.id("login-button"));
 
         userField.clear();
-        userField(USERNAME);
+        userField.sendKeys(USERNAME);
         passField.clear();
         passField.sendKeys(PASSWORD);
         loginBtn.click();
@@ -86,14 +86,6 @@ public class BugBankTest {
         closeBtn.click();
     }
 
-    private void openMenuAndClose() {
-        WebElement menuBtn = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-        menuBtn.click();
-        WebElement closeBtn = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
-        closeBtn.click();
-    }
 
     private void switchToNewTabAndValidate(String expectedDomain) {
         String originalWindow = driver.getWindowHandle();
@@ -205,7 +197,7 @@ public class BugBankTest {
                 ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
         logoutLink.click();
         wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        Assertions.assertEquals(BASE_URL, driver(),
+        Assertions.assertEquals(BASE_URL,
                 "Logout should return to base URL");
     }
 

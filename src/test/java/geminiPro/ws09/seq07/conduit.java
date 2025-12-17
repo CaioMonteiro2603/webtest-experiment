@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq07;
+package geminiPro.ws09.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppComprehensiveTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15); // Increased for this slow app

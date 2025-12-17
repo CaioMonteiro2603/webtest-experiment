@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";
-    private static final String LOGIN_PAGE_URL = BASE_URL;
     private static final String HOME_PAGE_URL = BASE_URL;
 
     @BeforeAll

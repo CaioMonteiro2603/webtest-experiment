@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreEndToEndTest {
+public class JPetStore {
 
     // BASE URL under test
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";

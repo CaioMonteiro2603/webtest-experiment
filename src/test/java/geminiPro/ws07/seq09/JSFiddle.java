@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq09;
+package geminiPro.ws07.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
@@ -46,8 +46,6 @@ public class JSFiddleTest {
     private final By jsFrame = By.name("javascript");
     private final By resultFrame = By.name("result");
     
-    // Locators inside the CodeMirror iFrames
-    private final By codeMirrorEditor = By.cssSelector(".CodeMirror-scroll");
 
     @BeforeAll
     static void setup() {
@@ -96,7 +94,6 @@ public class JSFiddleTest {
 
         // Enter HTML code
         wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(htmlFrame));
-        WebElement htmlEditor = wait.until(ExpectedConditions.visibilityOfElementLocated(codeMirrorEditor));
         ((JavascriptExecutor)driver).executeScript(script, htmlContent);
         driver.switchTo().defaultContent();
 

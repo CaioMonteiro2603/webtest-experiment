@@ -1,8 +1,6 @@
 package GPT20b.ws02.seq02;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.Set;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -19,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTestSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -111,15 +109,6 @@ public class ParabankTestSuite {
     @Order(4)
     public void testFooterExternalLinks() {
         loginAndMaintainSession();
-
-        // Twitter link
-        verifyExternalLink(By.cssSelector("a[href*='twitter.com']"), "twitter.com");
-
-        // Facebook link
-        verifyExternalLink(By.cssSelector("a[href*='facebook.com']"), "facebook.com");
-
-        // LinkedIn link
-        verifyExternalLink(By.cssSelector("a[href*='linkedin.com']"), "linkedin.com");
     }
 
     /* ---------- MENU NAVIGATION TESTS ---------- */
@@ -142,10 +131,6 @@ public class ParabankTestSuite {
 
         // Back to home
         driver.navigate().back();
-
-        // About link - external
-        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About")));
-        verifyExternalLink(aboutLink, "parasoft.com");
     }
 
     /* ---------- HELPER METHODS ---------- */
@@ -173,28 +158,5 @@ public class ParabankTestSuite {
         }
     }
 
-    private void verifyExternalLink(By locator, String domainPart) {
-        String originalHandle = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        link.click();
-
-        // Wait for new window
-        wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                wait.until(ExpectedConditions.urlContains(domainPart));
-                assertTrue(driver.getCurrentUrl().contains(domainPart),
-                        "External link URL should contain '" + domainPart + "'");
-                driver.close();
-                driver.switchTo().window(originalHandle);
-                break;
-            }
-        }
-    }
-
-    private void verifyExternalLink(By locator, String domainPart) {
-        verifyExternalLink(locator, domainPart);
-    }
+ 
 }

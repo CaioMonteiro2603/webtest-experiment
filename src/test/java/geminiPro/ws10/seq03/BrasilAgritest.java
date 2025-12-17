@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq03;
+package geminiPro.ws10.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -22,7 +22,7 @@ import java.time.Duration;
  * using Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTestE2ETest {
+public class BrasilAgritest {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://beta.brasilagritest.com/login";

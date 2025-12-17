@@ -8,13 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -72,9 +70,7 @@ public class SauceDemoTest {
         driver.get("https://www.saucedemo.com/v1/inventory.html");
 
         WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[data-test='product_sort_container']")));
-        sortDropdown.click();
-
-        List<WebElement> sortOptions = driver.findElements(By.cssSelector("[data-test='product_sort_container'] option"));
+        sortDropdown.click(); 
 
         // Test sorting by price low to high
         WebElement priceLowHighOption = driver.findElement(By.cssSelector("[value='lohi']"));

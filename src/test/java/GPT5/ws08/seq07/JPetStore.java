@@ -1,4 +1,4 @@
-package GTP5.ws08.seq07;
+package GPT5.ws08.seq07;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreAspectranHeadlessSuite {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -43,8 +43,8 @@ public class JPetStoreAspectranHeadlessSuite {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
 
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
+    private WebElement waitClickable(WebElement webElement) {
+        return wait.until(ExpectedConditions.elementToBeClickable(webElement));
     }
 
     private WebElement waitVisible(By by) {
@@ -68,7 +68,8 @@ public class JPetStoreAspectranHeadlessSuite {
     private void openExternalAndAssertDomain(WebElement link, String expectedDomainFragment) {
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
-        waitClickable(link).click();
+        WebElement webb = wait.until(ExpectedConditions.elementToBeClickable(link));
+        webb.click();
         // Wait for either navigation in same tab or a new tab
         try {
             wait.until(d -> d.getWindowHandles().size() != before.size() ||
@@ -123,7 +124,8 @@ public class JPetStoreAspectranHeadlessSuite {
         // Open the first category
         List<WebElement> cats = driver.findElements(By.cssSelector("a[href*='/category/'], a[href*='categoryId='], a[href*='/catalog/categories/']"));
         Assertions.assertTrue(!cats.isEmpty(), "There should be at least one category link");
-        waitClickable(cats.get(0)).click();
+        WebElement webb = wait.until(ExpectedConditions.elementToBeClickable(cats.get(0)));
+        webb.click(); 
         // Assert product list visible
         boolean listVisible = exists(By.cssSelector("table, .product, .product-list, .catalog")) &&
                 driver.findElements(By.cssSelector("a[href*='/product/'], a[href*='productId=']")).size() > 0;
@@ -131,7 +133,8 @@ public class JPetStoreAspectranHeadlessSuite {
 
         // Open a product
         WebElement prodLink = driver.findElements(By.cssSelector("a[href*='/product/'], a[href*='productId=']")).get(0);
-        waitClickable(prodLink).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(prodLink));
+        web.click();
         Assertions.assertTrue(exists(By.cssSelector("h1, h2, .name, .product-name")), "Product detail header should be visible");
 
         // Add to cart (best-effort)
@@ -143,7 +146,8 @@ public class JPetStoreAspectranHeadlessSuite {
         for (By by : addLocators) {
             List<WebElement> btns = driver.findElements(by);
             if (!btns.isEmpty()) {
-                waitClickable(btns.get(0)).click();
+            	 WebElement el = wait.until(ExpectedConditions.elementToBeClickable(btns.get(0)));
+                 el.click();
                 added = true;
                 break;
             }
@@ -153,7 +157,8 @@ public class JPetStoreAspectranHeadlessSuite {
         // Open cart page
         Optional<WebElement> cartLink = findTopNavLink("cart");
         if (cartLink.isPresent()) {
-            waitClickable(cartLink.get()).click();
+        	 WebElement webEl = wait.until(ExpectedConditions.elementToBeClickable(cartLink.get()));
+             webEl.click();
         } else {
             // Fallback: try common cart URL
             driver.get("https://jpetstore.aspectran.com/cart/");
@@ -166,7 +171,8 @@ public class JPetStoreAspectranHeadlessSuite {
         // Remove item if a remove control exists to reset state
         List<WebElement> removes = driver.findElements(By.cssSelector("a[href*='remove'], input[type='submit'][value*='Remove']"));
         if (!removes.isEmpty()) {
-            waitClickable(removes.get(0)).click();
+        	 WebElement webEle = wait.until(ExpectedConditions.elementToBeClickable(removes.get(0)));
+             webEle.click(); 
         }
     }
 
@@ -204,7 +210,8 @@ public class JPetStoreAspectranHeadlessSuite {
             signIn = findTopNavLink("login");
         }
         Assertions.assertTrue(signIn.isPresent(), "Sign In/Login link should exist");
-        waitClickable(signIn.get()).click();
+        WebElement webb = wait.until(ExpectedConditions.elementToBeClickable(signIn.get()));
+        webb.click(); 
 
         // Fill and submit invalid creds
         By userBy = exists(By.name("username")) ? By.name("username") : By.id("username");
@@ -213,7 +220,8 @@ public class JPetStoreAspectranHeadlessSuite {
         type(passBy, "invalid_pass");
         List<WebElement> submitBtns = driver.findElements(By.cssSelector("input[type='submit'], button[type='submit']"));
         Assertions.assertFalse(submitBtns.isEmpty(), "Submit button should exist on sign-in page");
-        waitClickable(submitBtns.get(0)).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(submitBtns.get(0)));
+        web.click();
 
         // Expect an error or remain on sign-in page
         boolean errorShown = exists(By.cssSelector(".error, .alert, .message-error")) ||
@@ -230,13 +238,15 @@ public class JPetStoreAspectranHeadlessSuite {
         Optional<WebElement> signIn = findTopNavLink("sign in");
         if (signIn.isEmpty()) signIn = findTopNavLink("login");
         if (signIn.isPresent()) {
-            waitClickable(signIn.get()).click();
+        	 WebElement webb = wait.until(ExpectedConditions.elementToBeClickable(signIn.get()));
+             webb.click();
             By userBy = exists(By.name("username")) ? By.name("username") : By.id("username");
             By passBy = exists(By.name("password")) ? By.name("password") : By.id("password");
             // Common JPetStore demo credentials
             type(userBy, "j2ee");
             type(passBy, "j2ee");
-            waitClickable(driver.findElements(By.cssSelector("input[type='submit'], button[type='submit']")).get(0)).click();
+            WebElement web = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[type='submit'], button[type='submit']")));
+            web.click();
 
             // Success if "Sign Out" or "My Account" appears
             boolean loggedIn = findTopNavLink("sign out").isPresent() || findTopNavLink("my account").isPresent();

@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessSuite {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -66,11 +66,6 @@ public class RealWorldHeadlessSuite {
             }
         }
     }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
     private String hostOf(String url) {
         try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
     }
@@ -97,7 +92,8 @@ public class RealWorldHeadlessSuite {
         Set<String> before = driver.getWindowHandles();
         String baseHost = hostOf(driver.getCurrentUrl());
 
-        waitClickable(link).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link));
+        web.click();
 
         // wait for new tab or navigation
         try {
@@ -151,20 +147,23 @@ public class RealWorldHeadlessSuite {
         // Sign in
         WebElement signIn = firstPresent(By.linkText("Sign in"), By.cssSelector("a[href*='#/login']"));
         Assumptions.assumeTrue(signIn != null, "Sign in link not found; skipping");
-        waitClickable(signIn).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(signIn));
+        web.click();
         wait.until(ExpectedConditions.urlContains("#/login"));
         Assertions.assertTrue(driver.getCurrentUrl().contains("#/login"), "Should be on login route");
 
         // Sign up
         WebElement signUp = firstPresent(By.linkText("Need an account?"), By.linkText("Sign up"), By.cssSelector("a[href*='#/register']"));
         Assumptions.assumeTrue(signUp != null, "Sign up link not found; skipping");
-        waitClickable(signUp).click();
+        WebElement webb = wait.until(ExpectedConditions.elementToBeClickable(signUp));
+        webb.click();
         wait.until(ExpectedConditions.urlContains("#/register"));
         Assertions.assertTrue(driver.getCurrentUrl().contains("#/register"), "Should be on register route");
 
         // Back Home
         WebElement home = firstPresent(By.linkText("Home"), By.cssSelector("a.navbar-brand"));
-        waitClickable(home).click();
+        WebElement webEl = wait.until(ExpectedConditions.elementToBeClickable(home));
+        webEl.click();
         waitDocumentReady();
         Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should return to base");
     }
@@ -179,7 +178,8 @@ public class RealWorldHeadlessSuite {
 
         WebElement firstPreview = firstPresent(By.cssSelector(".article-preview .preview-link"));
         Assumptions.assumeTrue(firstPreview != null, "No article preview link; skipping");
-        waitClickable(firstPreview).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(firstPreview));
+        web.click();
         waitDocumentReady();
 
         // Article detail
@@ -206,7 +206,8 @@ public class RealWorldHeadlessSuite {
         Assumptions.assumeTrue(!tags.isEmpty(), "No tags available; skipping");
         WebElement firstTag = tags.get(0);
         String tagText = firstTag.getText().trim();
-        waitClickable(firstTag).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(firstTag));
+        web.click();
 
         // Wait until the feed toggle shows the tag pill or list refreshes
         boolean tagApplied = false;
@@ -232,7 +233,8 @@ public class RealWorldHeadlessSuite {
         List<WebElement> pages = driver.findElements(By.cssSelector(".pagination li a"));
         Assumptions.assumeTrue(pages.size() > 1, "No pagination available; skipping");
         WebElement page2 = pages.get(1); // second link is usually page 2
-        waitClickable(page2).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(page2));
+        web.click();
 
         // Wait for articles to refresh (first title likely changes)
         String firstAfter = "";
@@ -240,7 +242,6 @@ public class RealWorldHeadlessSuite {
             wait.until(d -> {
                 String t = getFirstArticleTitle();
                 if (!t.isEmpty() && !t.equals(firstTitle)) {
-                    firstAfter = t;
                     return true;
                 }
                 return false;
@@ -257,7 +258,8 @@ public class RealWorldHeadlessSuite {
         openBase();
         WebElement signIn = firstPresent(By.linkText("Sign in"), By.cssSelector("a[href*='#/login']"));
         Assumptions.assumeTrue(signIn != null, "Sign in link not found; skipping");
-        waitClickable(signIn).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(signIn));
+        web.click();
         wait.until(ExpectedConditions.urlContains("#/login"));
 
         WebElement email = firstPresent(By.cssSelector("input[type='email']"), By.cssSelector("input[placeholder='Email']"));
@@ -267,7 +269,8 @@ public class RealWorldHeadlessSuite {
 
         email.clear(); email.sendKeys("invalid@example.com");
         password.clear(); password.sendKeys("wrongpassword");
-        waitClickable(submit).click();
+        WebElement webEl = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        webEl.click();
 
         // Expect error list or remain on login
         boolean errorShown = false;
@@ -313,7 +316,8 @@ public class RealWorldHeadlessSuite {
             if (anchor.isEmpty()) continue;
             String before = driver.getCurrentUrl();
             try {
-                waitClickable(anchor.get()).click();
+            	WebElement web = wait.until(ExpectedConditions.elementToBeClickable(anchor.get()));
+                web.click(); 
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 waitDocumentReady();
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should stay within same host");

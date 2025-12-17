@@ -13,11 +13,10 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
-    private static final String INVENTORY_URL = "https://www.saucedemo.com/v1/inventory.html";
 
     @BeforeAll
     public static void setup() {

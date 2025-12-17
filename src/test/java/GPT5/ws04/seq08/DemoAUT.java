@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormSuiteTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -57,10 +57,6 @@ public class KatalonFormSuiteTest {
         return Optional.empty();
     }
 
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
     private void typeIfPresent(String logicalName, String value, By... candidates) {
         Optional<WebElement> el = firstPresent(candidates);
         el.ifPresent(e -> {
@@ -69,10 +65,6 @@ public class KatalonFormSuiteTest {
             e.sendKeys(value);
         });
         Assertions.assertTrue(el.isPresent(), "Expected input for " + logicalName + " to be present");
-    }
-
-    private void clickIfPresent(By by) {
-        if (exists(by)) waitClickable(by).click();
     }
 
     private void selectIfPresent(By selectLocator, String visibleText) {

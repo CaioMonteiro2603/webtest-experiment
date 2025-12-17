@@ -23,7 +23,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;
     private static WebDriverWait wait;

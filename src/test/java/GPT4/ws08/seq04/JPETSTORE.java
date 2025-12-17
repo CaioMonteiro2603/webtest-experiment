@@ -1,4 +1,4 @@
-package GTP4.ws08.seq04;
+package GPT4.ws08.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPETSTORE {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

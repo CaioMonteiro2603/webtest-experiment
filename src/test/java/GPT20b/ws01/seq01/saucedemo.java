@@ -27,7 +27,7 @@ import java.util.Set;
  * Uses Selenium 4 with Firefox in headless mode and JUnit 5.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SaucedemoTests {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

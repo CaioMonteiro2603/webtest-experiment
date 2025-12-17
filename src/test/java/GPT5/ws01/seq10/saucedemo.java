@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Important: this single file is intended to compile as-is with Selenium 4 and JUnit 5 on classpath.
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoSmokeTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USER = "standard_user";

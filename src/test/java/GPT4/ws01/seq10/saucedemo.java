@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

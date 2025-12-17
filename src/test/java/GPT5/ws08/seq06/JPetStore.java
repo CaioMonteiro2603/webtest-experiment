@@ -1,4 +1,4 @@
-package GTP5.ws08.seq06;
+package GPT5.ws08.seq06;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreHeadlessSuite {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -55,13 +55,6 @@ public class JPetStoreHeadlessSuite {
         return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
     }
 
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
-    }
 
     private static Optional<WebElement> waitClickable(By by) {
         try {
@@ -79,15 +72,6 @@ public class JPetStoreHeadlessSuite {
 
     private static boolean elementExists(By by) {
         return driver.findElements(by).size() > 0;
-    }
-
-    private static void clearAndType(By locator, String value) {
-        Optional<WebElement> el = first(locator);
-        el.ifPresent(e -> {
-            wait.until(ExpectedConditions.visibilityOf(e));
-            e.clear();
-            e.sendKeys(value);
-        });
     }
 
     private static String hostOf(String url) {

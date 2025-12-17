@@ -1,7 +1,6 @@
 package Qwen3.ws04.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -10,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KatalonFormTest {
+public class DemoAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -31,7 +30,6 @@ public class KatalonFormTest {
         }
     }
 
-    @TestMethodOrder(OrderAnnotation.class)
     @Test
     @Order(1)
     void testPageTitleAndHeader_DisplayedCorrectly() {
@@ -276,14 +274,5 @@ public class KatalonFormTest {
         address.sendKeys("456 Oak Avenue, Boston, MA");
         maleRadio.click();
         dob.sendKeys("1985-05-15");
-    }
-
-    private boolean isElementPresent(By locator) {
-        try {
-            driver.findElement(locator);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -263,7 +263,6 @@ public class JsFiddleTest {
         // Try to handle alert if present
         try {
             Alert alert = wait.until(ExpectedConditions.alertIsPresent());
-            String alertText = alert.getText();
             alert.accept(); // Accept the alert
         } catch (TimeoutException e) {
             // Alert may not appear, which is fine for this test

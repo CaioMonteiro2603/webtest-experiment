@@ -6,12 +6,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
-
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsfiddleHeadlessTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
 
@@ -78,10 +79,13 @@ public class JsfiddleHeadlessTest {
     @Order(1)
     public void testHomePageLoads() {
         driver.navigate().to(BASE_URL);
-        // Verify that the main container and search bar are visible
+
+        // Verifica se o main container e a search bar estão visíveis
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("main")));
-        assertTrue(driver.findElements(By.cssSelector("input[data-automation='search'])).size() > 0,
-                "Search field should be present on the home page");
+
+        // Verifique se o campo de pesquisa está presente
+        List<WebElement> searchField = driver.findElements(By.cssSelector("input[data-automation='search']"));
+        assertTrue(searchField.size() > 0, "Search field should be present on the home page");
     }
 
     @Test

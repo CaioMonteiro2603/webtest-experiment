@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class TAT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";

@@ -12,13 +12,12 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebUITestSuite {
+public class DemoAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static final String LOGIN_PAGE_URL = BASE_URL;
     private static final String INVENTORY_PAGE_URL = "https://katalon-test.s3.amazonaws.com/aut/inventory.html";
-    private static final String ABOUT_PAGE_URL = "https://saucelabs.com/";
     private static final String USERNAME = "katalon";
     private static final String PASSWORD = "katalon123";
 

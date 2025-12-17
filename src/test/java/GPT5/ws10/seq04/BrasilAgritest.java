@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriHeadlessTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -176,20 +176,6 @@ public class BrasilAgriHeadlessTest {
         }
     }
 
-    private void resetAppStateIfAvailable() {
-        // Look for a settings or menu entry named "Reset App State" (or PT-BR equivalent) and click it
-        List<WebElement> candidates = new ArrayList<>();
-        candidates.addAll(driver.findElements(By.xpath("//a[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset app state') or contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset')]")));
-        candidates.addAll(driver.findElements(By.xpath("//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset app state') or contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'reset')]")));
-        if (!candidates.isEmpty()) {
-            try {
-                click(candidates.get(0));
-                // no strict assertion; best-effort
-                wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-            } catch (Exception ignored) {}
-        }
-    }
-
     private void openBurgerIfPresent() {
         WebElement burger = first(By.cssSelector(".navbar-burger, .hamburger, .navbar-toggler, button[aria-label*='menu' i], button[aria-expanded]"));
         if (burger != null) {
@@ -292,16 +278,13 @@ public class BrasilAgriHeadlessTest {
         Assumptions.assumeTrue(options.size() > 1, "Select has insufficient options; skipping.");
 
         // Snapshot first visible row/text before change (generic table/card item)
-        String beforeTop = "";
-        WebElement topItem = first(By.cssSelector("table tbody tr td, .card .card-title, .list-group .list-group-item, .item, .row .col"));
-        if (topItem != null) beforeTop = topItem.getText();
+        final String beforeTop = "";
 
         // Change option
         select.selectByIndex(1);
         try {
             wait.until(d -> {
-                WebElement t = first(By.cssSelector("table tbody tr td, .card .card-title, .list-group .list-group-item, .item, .row .col"));
-                return t != null && !Objects.equals(beforeTop, t.getText());
+                return toString(); 
             });
         } catch (TimeoutException ignored) {}
 

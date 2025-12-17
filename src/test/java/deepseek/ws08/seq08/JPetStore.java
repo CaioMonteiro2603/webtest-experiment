@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;
     private static WebDriverWait wait;

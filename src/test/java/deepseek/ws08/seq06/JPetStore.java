@@ -5,13 +5,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetstoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";

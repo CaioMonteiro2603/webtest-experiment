@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq10;
+package geminiPro.ws09.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.UUID;
  * It uses Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -57,7 +57,6 @@ public class RealWorldAppTest {
     private static final By DELETE_ARTICLE_BUTTON = By.xpath("//button[contains(text(), 'Delete Article')]");
     private static final By COMMENT_TEXTAREA = By.cssSelector("textarea[placeholder='Write a comment...']");
     private static final By POST_COMMENT_BUTTON = By.xpath("//button[text()='Post Comment']");
-    private static final By COMMENT_CARD = By.className("card-text");
 
     // Settings
     private static final By LOGOUT_BUTTON = By.xpath("//button[contains(text(),'Or click here to logout.')]");

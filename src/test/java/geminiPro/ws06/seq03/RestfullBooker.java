@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq03;
+package geminiPro.ws06.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -16,8 +16,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -25,7 +23,7 @@ import java.util.List;
  * using Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingE2ETest {
+public class RestfullBooker {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://automationintesting.online/";
@@ -52,7 +50,6 @@ public class AutomationInTestingE2ETest {
     private static final By ADMIN_PASSWORD_INPUT = By.id("password");
     private static final By ADMIN_LOGIN_BUTTON = By.id("doLogin");
     private static final By ADMIN_LOGOUT_LINK = By.linkText("Logout");
-    private static final By MESSAGES_TABLE = By.id("messageList");
 
     // Booking Modal
     private static final By BOOKING_FIRSTNAME_INPUT = By.name("firstname");

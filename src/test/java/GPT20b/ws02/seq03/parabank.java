@@ -28,7 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * Uses Selenium 4 with Firefox in headless mode.
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USER_NAME = "caio@gmail.com";

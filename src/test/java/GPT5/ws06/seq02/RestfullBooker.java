@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -42,10 +42,6 @@ public class AutomationInTestingHeadlessTest {
 
     private WebElement visible(By locator) {
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement clickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     private void safeClick(WebElement el) {
@@ -189,9 +185,6 @@ public class AutomationInTestingHeadlessTest {
         By email = By.id("email");
         By phone = By.id("phone");
         By bookAction = By.id("book");
-
-        // Some fields might be re-used IDs; scope to modal if present
-        WebElement modal = firstDisplayed(By.id("booking"), By.cssSelector("#booking, .modal"));
 
         // Set values via JS to avoid datepicker flakiness
         setValueJS(checkin, "2099-12-20");

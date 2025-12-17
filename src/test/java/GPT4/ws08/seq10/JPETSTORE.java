@@ -13,7 +13,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPETSTORE {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

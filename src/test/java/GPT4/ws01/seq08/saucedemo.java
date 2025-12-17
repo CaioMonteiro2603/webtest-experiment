@@ -1,4 +1,4 @@
-package GPT4.ws01.seq07;
+package GPT4.ws01.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq07;
+package geminiPro.ws02.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -31,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankComprehensiveTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String PASSWORD = "123";
@@ -158,12 +158,11 @@ public class ParaBankComprehensiveTest {
 
         Select fromAccountDropdown = new Select(driver.findElement(By.id("fromAccountId")));
         fromAccountDropdown.selectByIndex(0);
-        String fromAccountId = fromAccountDropdown.getFirstSelectedOption().getText();
+       
         
         Select toAccountDropdown = new Select(driver.findElement(By.id("toAccountId")));
         // Select the other account. If there's only one, this will fail as expected.
         toAccountDropdown.selectByIndex(1);
-        String toAccountId = toAccountDropdown.getFirstSelectedOption().getText();
 
         driver.findElement(By.xpath("//input[@value='Transfer']")).click();
         

@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class AutomationTestingTest {
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
 

@@ -1,4 +1,4 @@
-package SunaDeepSeek.ws5.seq03;
+package SunaDeepSeek.ws05.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WebAppTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

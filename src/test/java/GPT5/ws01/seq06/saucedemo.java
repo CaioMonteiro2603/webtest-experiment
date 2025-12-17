@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoV1HeadlessTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -90,15 +90,6 @@ public class SauceDemoV1HeadlessTest {
                 "After Reset App State, cart badge should be cleared");
     }
 
-    private void logoutIfNeeded() {
-        if (isOnInventory()) {
-            openMenu();
-            WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
-            logout.click();
-            wait.until(ExpectedConditions.urlContains("index.html"));
-        }
-    }
-
     private void assertSorted(List<String> values, boolean ascending) {
         List<String> sorted = new ArrayList<>(values);
         sorted.sort(ascending ? Comparator.naturalOrder() : Comparator.reverseOrder());
@@ -109,34 +100,6 @@ public class SauceDemoV1HeadlessTest {
         List<Double> sorted = new ArrayList<>(prices);
         sorted.sort(ascending ? Comparator.naturalOrder() : Comparator.reverseOrder());
         Assertions.assertEquals(sorted, prices, "Prices should be sorted " + (ascending ? "low to high" : "high to low"));
-    }
-
-    private void openExternalAndVerify(String expectedDomainContains) {
-        String original = driver.getWindowHandle();
-        Set<String> before = driver.getWindowHandles();
-        // Some links require JS to open reliably in headless when target=_blank
-        // Try normal click first; if no new window appears, fallback to JS open with href.
-        WebElement focused = driver.switchTo().activeElement();
-        focused.sendKeys(Keys.ENTER);
-
-        boolean openedNew = wait.until(d -> d.getWindowHandles().size() > before.size());
-        if (!openedNew) {
-            // fallback: try opening the href explicitly
-            WebElement link = (WebElement) ((JavascriptExecutor) driver).executeScript("return document.activeElement;");
-            String href = link.getAttribute("href");
-            ((JavascriptExecutor) driver).executeScript("window.open(arguments[0],'_blank')", href);
-            wait.until(d -> d.getWindowHandles().size() > before.size());
-        }
-
-        Set<String> after = driver.getWindowHandles();
-        after.removeAll(before);
-        String newHandle = after.iterator().next();
-        driver.switchTo().window(newHandle);
-        wait.until(ExpectedConditions.urlContains(expectedDomainContains));
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomainContains),
-                "External URL should contain domain: " + expectedDomainContains);
-        driver.close();
-        driver.switchTo().window(original);
     }
 
     // ---------- Tests ----------

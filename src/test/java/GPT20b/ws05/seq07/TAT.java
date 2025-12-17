@@ -3,7 +3,7 @@ package GPT20b.ws05.seq07;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatWebsiteTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -34,7 +34,7 @@ public class CacTatWebsiteTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, java.time.Duration.ofSeconds(10));
     }
 
@@ -122,7 +122,6 @@ public class CacTatWebsiteTest {
     @Order(4)
     public void testSortingDropdown() {
         driver.get(BASE_URL);
-        login();
 
         List<WebElement> sortDropdowns = driver.findElements(By.cssSelector("select.sort-dropdown, select#sort"));
         Assumptions.assumeTrue(!sortDropdowns.isEmpty(), "Sorting dropdown not present on the page");
@@ -156,7 +155,6 @@ public class CacTatWebsiteTest {
     @Order(5)
     public void testBurgerMenuInteraction() {
         driver.get(BASE_URL);
-        login();
 
         // Open burger menu
         List<WebElement> burgerBtns = driver.findElements(By.cssSelector(".burger-menu, #burgerMenuBtn"));
@@ -226,7 +224,6 @@ public class CacTatWebsiteTest {
     @Order(6)
     public void testFooterExternalLinks() {
         driver.get(BASE_URL);
-        login();
 
         List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[href^='http']"));
         Assumptions.assumeTrue(!externalLinks.isEmpty(), "No external links found in footer");
@@ -256,7 +253,6 @@ public class CacTatWebsiteTest {
     @Order(7)
     public void testCartAddRemove() {
         driver.get(BASE_URL);
-        login();
 
         WebElement addBtn = wait.until(
                 ExpectedConditions.elementToBeClickable(By.cssSelector(".add-to-cart, button.add")));
@@ -278,7 +274,6 @@ public class CacTatWebsiteTest {
     @Order(8)
     public void testCheckoutFlow() {
         driver.get(BASE_URL);
-        login();
 
         // Add two items
         List<WebElement> addButtons = driver.findElements(By.cssSelector(".add-to-cart, button.add"));
@@ -314,7 +309,6 @@ public class CacTatWebsiteTest {
     @Order(9)
     public void testResetAppState() {
         driver.get(BASE_URL);
-        login();
 
         // Open burger menu
         List<WebElement> burgerBtns = driver.findElements(By.cssSelector(".burger-menu, #burgerMenuBtn"));

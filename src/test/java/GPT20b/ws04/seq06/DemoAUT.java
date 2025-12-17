@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 

@@ -1,4 +1,4 @@
-package GTP4.ws05.seq04;
+package GPT4.ws05.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";

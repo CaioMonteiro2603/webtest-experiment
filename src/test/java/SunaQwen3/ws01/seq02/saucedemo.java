@@ -14,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SwagLabsTestSuite {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";

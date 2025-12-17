@@ -7,12 +7,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.*;
 
+import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleHeadlessTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -43,19 +44,6 @@ public class JsFiddleHeadlessTest {
 
     private void waitUntilPageReady() {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-    }
-
-    private WebElement visible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement clickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
-    private void safeClick(By locator) {
-        WebElement el = clickable(locator);
-        el.click();
     }
 
     private void safeClick(WebElement el) {
@@ -262,7 +250,7 @@ public class JsFiddleHeadlessTest {
 
     @Test
     @Order(6)
-    public void docsOrAbout_ExternalPolicyLinks_WorkAndReturn() {
+    public void docsOrAbout_ExternalPolicyLinks_WorkAndReturn() throws URISyntaxException {
         goHome();
         // Look for typical legal/help/doc links and open them (one level/external)
         List<By> linkLocators = Arrays.asList(
@@ -282,7 +270,8 @@ public class JsFiddleHeadlessTest {
                 if (href == null) continue;
                 boolean isExternal = !href.startsWith(BASE_URL) && href.startsWith("http");
                 if (isExternal) {
-                    openExternalAndAssert(by, new java.net.URI(href).getHost());
+                    String host = java.net.URI.create(href).getHost();
+                    openExternalAndAssert(by, host);
                 } else {
                     // same-origin, one level below
                     safeClick(links.get(0));

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

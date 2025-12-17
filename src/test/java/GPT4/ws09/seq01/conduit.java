@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

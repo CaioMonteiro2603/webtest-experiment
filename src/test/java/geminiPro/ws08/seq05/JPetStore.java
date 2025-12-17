@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq05;
+package geminiPro.ws08.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -10,7 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 /**
  * JUnit 5 test suite for the JPetStore demo application.
@@ -19,7 +18,7 @@ import java.util.List;
  * end-to-end checkout process.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreE2ETest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -32,7 +31,6 @@ public class JPetStoreE2ETest {
     // --- Locators ---
     private final By signInLink = By.linkText("Sign In");
     private final By signOutLink = By.linkText("Sign Out");
-    private final By myAccountLink = By.linkText("My Account");
     private final By usernameInput = By.name("username");
     private final By passwordInput = By.name("password");
     private final By loginButton = By.name("signon");

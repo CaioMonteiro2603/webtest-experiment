@@ -1,4 +1,4 @@
-package GTP5.ws04.seq02;
+package GPT5.ws04.seq02;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessE2ETest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -39,14 +39,6 @@ public class KatalonFormHeadlessE2ETest {
     private void goHome() {
         driver.get(BASE_URL);
         wait.until(d -> d.getTitle() != null && !d.getTitle().isEmpty());
-    }
-
-    private WebElement visible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement clickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     private WebElement firstDisplayed(By... locators) {

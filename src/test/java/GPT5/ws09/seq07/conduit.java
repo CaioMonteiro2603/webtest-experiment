@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  *   If registration fails due to existing account, the test attempts to log in with the same credentials.
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldDemoTest {
+public class conduit {
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -60,21 +60,6 @@ public class RealWorldDemoTest {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
         Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(baseUri.getHost().toLowerCase()),
                 "After navigate, expected URL to contain host: " + baseUri.getHost());
-    }
-
-    // Open URL in new tab and switch to it, returning new handle
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        for (String h : driver.getWindowHandles()) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
     }
 
     private void closeTabAndSwitchBack(String originalHandle) {
@@ -249,7 +234,6 @@ public class RealWorldDemoTest {
         goToBaseAndWait();
 
         // If logged in, "Your Feed" may appear. We will click both "Global Feed" and "Your Feed" if present.
-        List<WebElement> feedTabs = driver.findElements(By.cssSelector(".feed-toggle, .articles-toggle, .nav-pills"));
         // More robust: look for links with text "Global Feed" or "Your Feed"
         List<WebElement> globalFeed = driver.findElements(By.xpath("//*[normalize-space()='Global Feed']"));
         List<WebElement> yourFeed = driver.findElements(By.xpath("//*[normalize-space()='Your Feed']"));
@@ -268,8 +252,6 @@ public class RealWorldDemoTest {
             WebElement yf = yourFeed.get(0);
             wait.until(ExpectedConditions.elementToBeClickable(yf));
             yf.click();
-            // If not logged in, "Your Feed" may not show articles; guard accordingly
-            List<WebElement> articles = driver.findElements(By.cssSelector(".article-preview, .article-list, .article"));
             Assertions.assertTrue(true, "Clicked 'Your Feed' -- presence of articles depends on followed users; test ensures clickability.");
         }
     }
@@ -358,7 +340,6 @@ public class RealWorldDemoTest {
             if (isExternalHref(href)) {
                 tested++;
                 if (tested > 4) break; // limit for flakiness
-                String newHandle = openUrlInNewTab(href);
                 try {
                     try {
                         URI u = new URI(href);

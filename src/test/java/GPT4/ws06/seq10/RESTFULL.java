@@ -11,10 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationIntestingHeadlessTest {
+public class RESTFULL {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

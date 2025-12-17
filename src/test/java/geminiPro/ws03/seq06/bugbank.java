@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq06;
+package geminiPro.ws03.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * A primary user is created and its state is used across ordered tests.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankComprehensiveTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15); // Increased for this React app

@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq10;
+package geminiPro.ws07.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.time.Duration;
  * A key feature of this test is its handling of multiple iframes for code input and results.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -33,7 +33,6 @@ public class JsFiddleTest {
     private static final By RESULT_IFRAME = By.name("result");
 
     // Locator for the text area inside the CodeMirror iframe
-    private static final By CODE_MIRROR_TEXTAREA = By.className("CodeMirror-line");
 
     // Locators for external links
     private static final By DOCS_LINK = By.linkText("Docs");

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParabankHeadlessTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USERNAME = "caio@gmail.com";

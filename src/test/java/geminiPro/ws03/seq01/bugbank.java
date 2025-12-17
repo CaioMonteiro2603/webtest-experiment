@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * login, fund transfers, statement viewing, and logout functionality.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankComprehensiveTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

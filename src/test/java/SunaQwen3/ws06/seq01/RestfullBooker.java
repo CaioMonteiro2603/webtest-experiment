@@ -11,12 +11,10 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTest {
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://automationintesting.online/";
-    private static final String USERNAME = "admin";
-    private static final String PASSWORD = "password";
 
     @BeforeAll
     public static void setUp() {

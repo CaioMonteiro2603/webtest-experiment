@@ -20,11 +20,12 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import static org.junit.jupiter.api.Assertions.*;
 
+
+
 @TestMethodOrder(OrderAnnotation.class)
-public class FrmTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static final String HOST = "katalon-test.s3.amazonaws.com";
@@ -205,9 +206,10 @@ public class FrmTest {
                         "Did not return to base after closing external link");
 
                 tested.add(href);
-            } catch (URISyntaxException | InterruptedException e) {
-                // Skip malformed URLs or interrupted waits
+            } catch (URISyntaxException  e) {
+                fail("Unexpected exception while testing external link: " + e.getMessage());
             }
+
         }
 
         assertFalse(tested.isEmpty(), "No external links were found and tested on the page");

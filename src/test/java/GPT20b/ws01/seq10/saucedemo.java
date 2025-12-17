@@ -13,17 +13,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
 
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 import java.util.Set;
-import java.util.Iterator;
+import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTests {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -77,15 +76,6 @@ public class SauceDemoTests {
                 "https://www.saucedemo.com/v1/inventory.html",
                 driver.getCurrentUrl(),
                 "Login did not navigate to inventory page");
-    }
-
-    private static void resetAppState() {
-        ensureLoggedIn();
-        WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-        menuBtn.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("reset_sidebar_link")));
-        driver.findElement(By.id("reset_sidebar_link")).click();
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("react-burger-menu-btn")));
     }
 
     private static void openExternalLink(By locator, String expectedDomain) {
@@ -145,12 +135,6 @@ public class SauceDemoTests {
         WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(sortDropdown));
 
         String[] options = {"Name (A-Z)", "Name (Z-A)", "Price (lo-hi)", "Price (hi-lo)"};
-        String[][] valueMappings = {
-                {"name-za", "name-za"},
-                {"name-a-z", "name-a-z"},
-                {"price-accordion", "price-accordion"},
-                {"price-reverse-accordion", "price-reverse-accordion"}
-        };
 
         for (String option : options) {
             List<WebElement> list = driver.findElements(By.cssSelector(".inventory_item"));

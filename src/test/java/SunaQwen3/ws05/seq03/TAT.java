@@ -12,13 +12,11 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTest {
+public class TAT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
-    private static final String LOGIN_PAGE_URL = BASE_URL;
-    private static final String INVENTORY_PAGE_URL = BASE_URL.replace("index.html", "inventory.html");
-    private static final String ABOUT_PAGE_URL = "https://saucelabs.com/";
+    private static final String LOGIN_PAGE_URL = BASE_URL;;
     private static final String USERNAME = "standard_user";
     private static final String PASSWORD = "secret_sauce";
 

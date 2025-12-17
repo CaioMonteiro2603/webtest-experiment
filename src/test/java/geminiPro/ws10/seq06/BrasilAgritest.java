@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq06;
+package geminiPro.ws10.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,15 +13,10 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 /**
  * JUnit 5 test suite for the BrasilAgriTest beta application.
@@ -29,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * workflow for a "Cliente" (Client) entity.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://beta.brasilagritest.com/login";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15);

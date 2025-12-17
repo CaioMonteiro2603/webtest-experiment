@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq05;
+package geminiPro.ws10.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -10,9 +10,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * JUnit 5 test suite for the Brasil Agrimest beta platform.
@@ -21,7 +18,7 @@ import java.util.stream.Collectors;
  * lifecycle for a "Client" entity.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgritestE2ETest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

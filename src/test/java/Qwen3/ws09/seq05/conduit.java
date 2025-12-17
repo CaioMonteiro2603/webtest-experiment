@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RealWorldDemoTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -104,7 +104,6 @@ public class RealWorldDemoTest {
             List<WebElement> articleLinks = driver.findElements(By.cssSelector(".article-preview a"));
             if (!articleLinks.isEmpty()) {
                 WebElement firstArticleLink = articleLinks.get(0);
-                String articleUrl = firstArticleLink.getAttribute("href");
                 
                 firstArticleLink.click();
                 

@@ -1,4 +1,4 @@
-package GPT4.ws09.seq01;
+package geminiPro.ws09.seq01;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -17,7 +17,7 @@ import java.util.UUID;
  * A unique user is created for each test run to ensure idempotency.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ConduitRealWorldTest {
+public class conduit{
 
     private static WebDriver driver;
     private static WebDriverWait wait;

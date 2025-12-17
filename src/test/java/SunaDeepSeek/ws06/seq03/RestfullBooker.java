@@ -1,4 +1,4 @@
-package SunaDeepSeek.ws6.seq03;
+package SunaDeepSeek.ws06.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

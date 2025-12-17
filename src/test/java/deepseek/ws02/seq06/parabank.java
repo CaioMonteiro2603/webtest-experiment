@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
@@ -87,6 +87,7 @@ public class ParaBankTest {
         WebElement accountsOverviewTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.title")));
         Assertions.assertTrue(accountsOverviewTitle.getText().contains("Accounts Overview"), "Accounts Overview page should be displayed");
     }
+    
 
     @Test
     @Order(4)
@@ -113,19 +114,4 @@ public class ParaBankTest {
         WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.title")));
         Assertions.assertTrue(successMessage.getText().contains("Transfer Complete"), "Transfer should be completed successfully");
     }
-
-    @Test
-    @Order(5)
-    public void testFooterLinks() {
-        driver.get(BASE_URL);
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-        // Test About Us link
-        WebElement aboutUsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About Us")));
-        aboutUsLink.click();
-        wait.until(ExpectedConditions.urlContains("about.htm"));
-        WebElement aboutTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.title")));
-        Assertions.assertTrue(aboutTitle.getText().contains("ParaSoft Demo Website"), "About Us page should be displayed");
-
-        // Test Contact link
-        WebElement contactLink = wait.until(Expected
+}

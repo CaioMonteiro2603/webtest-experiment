@@ -10,12 +10,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -126,7 +125,6 @@ public class SauceDemoTest {
     @Order(5)
     public void testExternalLinksInFooter() {
         driver.get("https://www.saucedemo.com/v1/index.html");
-        WebElement footerContainer = driver.findElement(By.className("footer_copy"));
 
         // Twitter link
         WebElement twitterLink = driver.findElement(By.cssSelector("a[href*='twitter']"));

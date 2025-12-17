@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreHeadlessTest {
+public class JPetStore{
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;
@@ -177,7 +177,9 @@ public class JPetStoreHeadlessTest {
         WebElement resetBtn = findElement("a[href*='resetShoppingCart'], button#resetCart");
         if (resetBtn != null) {
             resetBtn.click();
-            wait.until(ExpectedConditions.invisibilityOf(cartCount));
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.cssSelector(".cartCount, .shopping_cart_badge")
+            ));
             // Cart should be empty
             List<WebElement> badges = driver.findElements(By.cssSelector(".cartCount, .shopping_cart_badge"));
             assertTrue(badges.isEmpty() || badges.get(0).getText().equals("0"),

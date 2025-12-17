@@ -14,13 +14,12 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoV1Test {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
-    private static final String INVENTORY_URL = "https://www.saucedemo.com/v1/inventory.html";
     private static final String LOGIN = "standard_user";
     private static final String PASSWORD = "secret_sauce";
 

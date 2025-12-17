@@ -1,4 +1,4 @@
-package deepseek.ws03.seq07;
+package SunaDeepSeek.ws03.seq07;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -10,12 +10,13 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
+
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://bugbank.netlify.app/";
-    private static final String USERNAME = "caio@gmail.com";
-    private static final String PASSWORD = "123";
+    private static final String LOGIN_EMAIL = "caio@gmail.com";
+    private static final String LOGIN_PASSWORD = "123";
 
     @BeforeAll
     public static void setup() {
@@ -34,108 +35,147 @@ public class BugBankTest {
 
     @Test
     @Order(1)
-    public void testLoginSuccess() {
+    public void testLogin() {
         driver.get(BASE_URL);
-        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-        WebElement passwordField = driver.findElement(By.cssSelector("input[name='password']"));
-        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
-        emailField.sendKeys(USERNAME);
-        passwordField.sendKeys(PASSWORD);
+        
+        // Fill login form
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login"));
+        
+        emailField.sendKeys(LOGIN_EMAIL);
+        passwordField.sendKeys(LOGIN_PASSWORD);
         loginButton.click();
-
-        wait.until(ExpectedConditions.urlContains("home"));
-        WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1")));
-        Assertions.assertTrue(welcomeMessage.getText().contains("Olá"), "Home page should be displayed after login");
+        
+        // Verify successful login
+        WebElement accountNumber = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".account-number")));
+        Assertions.assertTrue(accountNumber.isDisplayed(), "Account number should be visible after login");
     }
 
     @Test
     @Order(2)
     public void testInvalidLogin() {
         driver.get(BASE_URL);
-        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-        WebElement passwordField = driver.findElement(By.cssSelector("input[name='password']"));
-        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
+        
+        // Fill login form with invalid credentials
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login"));
+        
         emailField.sendKeys("invalid@email.com");
         passwordField.sendKeys("wrongpassword");
         loginButton.click();
-
-        WebElement errorElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.alert-error")));
-        Assertions.assertTrue(errorElement.getText().contains("Usuário ou senha inválido"), 
-            "Error message should be displayed");
+        
+        // Verify error message
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error-message")));
+        Assertions.assertTrue(errorMessage.isDisplayed(), "Error message should be displayed for invalid login");
     }
 
     @Test
     @Order(3)
-    public void testAccountCreation() {
-        driver.get(BASE_URL + "register");
-        WebElement nameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='name']")));
-        WebElement emailField = driver.findElement(By.cssSelector("input[name='email']"));
-        WebElement passwordField = driver.findElement(By.cssSelector("input[name='password']"));
-        WebElement confirmPasswordField = driver.findElement(By.cssSelector("input[name='passwordConfirmation']"));
-        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
-        String timestamp = String.valueOf(System.currentTimeMillis());
-        nameField.sendKeys("Test User " + timestamp);
-        emailField.sendKeys("test" + timestamp + "@email.com");
-        passwordField.sendKeys("123456");
-        confirmPasswordField.sendKeys("123456");
-        submitButton.click();
-
-        wait.until(ExpectedConditions.urlContains("home"));
-        WebElement balanceElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p.balance-value")));
-        Assertions.assertTrue(balanceElement.getText().contains("R$"), "Account created and home page should show balance");
+    public void testMenuNavigation() {
+        login();
+        
+        // Open menu
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("menu-button")));
+        menuButton.click();
+        
+        // Test All Items
+        WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(By.id("inventory_sidebar_link")));
+        allItems.click();
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory"), "Should be on inventory page");
+        
+        // Test About (external)
+        menuButton.click();
+        WebElement about = wait.until(ExpectedConditions.elementToBeClickable(By.id("about_sidebar_link")));
+        about.click();
+        
+        String originalWindow = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("saucelabs.com"), "Should be on external about page");
+        driver.close();
+        driver.switchTo().window(originalWindow);
+        
+        // Test Logout
+        menuButton.click();
+        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+        logout.click();
+        Assertions.assertTrue(driver.getCurrentUrl().contains("login"), "Should be back on login page");
     }
 
     @Test
     @Order(4)
-    public void testTransferBetweenAccounts() {
-        driver.get(BASE_URL);
+    public void testSocialLinks() {
         login();
-
-        WebElement transferButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href*='transfer']")));
-        transferButton.click();
-
-        wait.until(ExpectedConditions.urlContains("transfer"));
-        WebElement accountNumberField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='accountNumber']")));
-        WebElement amountField = driver.findElement(By.cssSelector("input[name='value']"));
-        WebElement descriptionField = driver.findElement(By.cssSelector("input[name='description']"));
-        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
-        accountNumberField.sendKeys("1234");
-        amountField.sendKeys("100");
-        descriptionField.sendKeys("Test transfer");
-        submitButton.click();
-
-        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.alert-success")));
-        Assertions.assertTrue(successMessage.getText().contains("Transferência realizada com sucesso"),
-            "Transfer should be successful");
+        
+        // Test Twitter link
+        testExternalLink("Twitter", "twitter.com");
+        
+        // Test Facebook link
+        testExternalLink("Facebook", "facebook.com");
+        
+        // Test LinkedIn link
+        testExternalLink("LinkedIn", "linkedin.com");
     }
 
     @Test
     @Order(5)
-    public void testLogout() {
-        driver.get(BASE_URL);
+    public void testResetAppState() {
         login();
-
-        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.logout")));
-        logoutButton.click();
-
-        wait.until(ExpectedConditions.urlContains("login"));
-        WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit']")));
-        Assertions.assertTrue(loginButton.isDisplayed(), "Should be back on login page after logout");
+        
+        // Add item to cart to create state
+        WebElement addToCart = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".btn_inventory")));
+        addToCart.click();
+        
+        // Verify cart has item
+        WebElement cartBadge = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".shopping_cart_badge")));
+        Assertions.assertTrue(cartBadge.isDisplayed(), "Cart should have items");
+        
+        // Reset app state
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("menu-button")));
+        menuButton.click();
+        WebElement reset = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
+        reset.click();
+        menuButton.click(); // Close menu
+        
+        // Verify cart is empty
+        List<WebElement> cartBadges = driver.findElements(By.cssSelector(".shopping_cart_badge"));
+        Assertions.assertEquals(0, cartBadges.size(), "Cart should be empty after reset");
     }
 
     private void login() {
-        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-        WebElement passwordField = driver.findElement(By.cssSelector("input[name='password']"));
-        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
-        emailField.sendKeys(USERNAME);
-        passwordField.sendKeys(PASSWORD);
+        driver.get(BASE_URL);
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login"));
+        
+        emailField.sendKeys(LOGIN_EMAIL);
+        passwordField.sendKeys(LOGIN_PASSWORD);
         loginButton.click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".account-number")));
+    }
 
-        wait.until(ExpectedConditions.urlContains("home"));
+    private void testExternalLink(String linkText, String expectedDomain) {
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.linkText(linkText)));
+        link.click();
+        
+        String originalWindow = driver.getWindowHandle();
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
+            "Should be on " + expectedDomain + " domain");
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 }

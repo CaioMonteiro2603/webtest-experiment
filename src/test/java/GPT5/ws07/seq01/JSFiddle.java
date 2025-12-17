@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleE2ETest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -67,14 +67,6 @@ public class JsFiddleE2ETest {
                 } catch (Exception ignored) {}
             }
         }
-    }
-
-    private WebElement firstPresent(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        throw new NoSuchElementException("None of the locators matched: " + Arrays.toString(locators));
     }
 
     private boolean clickIfPresent(By by) {

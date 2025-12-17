@@ -1,6 +1,5 @@
-package geminiPRO.ws04.seq09;
+package geminiPro.ws04.seq09;
 
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -28,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static WebDriver driver;
@@ -87,12 +86,6 @@ public class KatalonFormTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    @AfterAll
-    static void tearDown() {
-        if (driver != driver) {
-            driver.quit();
-        }
-    }
 
     @BeforeEach
     void navigateToForm() {

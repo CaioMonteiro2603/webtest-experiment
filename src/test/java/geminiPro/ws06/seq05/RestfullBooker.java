@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq05;
+package geminiPro.ws06.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -18,7 +18,7 @@ import java.time.Duration;
  * in the admin panel. It also tests the admin login functionality.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingE2ETest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

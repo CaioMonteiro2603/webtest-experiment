@@ -11,7 +11,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldAppTest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://demo.realworld.io/";

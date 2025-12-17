@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankHeadlessTests {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -224,7 +224,7 @@ public class ParaBankHeadlessTests {
             if (href == null) continue;
             // Only same-site and one level below /parabank/
             if (href.contains("/parabank/") && href.split("/parabank/").length > 1) {
-                String path = href.substring(href.indexOf("/parabank/") + "/parabank/".length);
+                String path = href.substring(href.indexOf("/parabank/"));
                 if (path.contains("/") && path.indexOf('/') != path.lastIndexOf('/')) {
                     // deeper than one slash -> skip (more than one level)
                     continue;

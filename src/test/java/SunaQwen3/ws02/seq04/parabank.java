@@ -1,4 +1,4 @@
-package SunaQweb3.ws02.seq04;
+package SunaQwen3.ws02.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -11,7 +11,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

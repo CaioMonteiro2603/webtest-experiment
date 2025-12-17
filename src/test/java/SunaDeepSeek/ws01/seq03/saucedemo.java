@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

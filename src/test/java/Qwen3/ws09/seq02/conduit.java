@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -177,7 +177,7 @@ public class RealWorldTest {
         driver.get("https://demo.realworld.io/register");
         
         // Fill registration form
-        WebElementusernameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[placeholder='Username']")));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[placeholder='Username']")));
         usernameField.sendKeys("testuser" + System.currentTimeMillis());
         WebElement emailField = driver.findElement(By.cssSelector("input[placeholder='Email']"));
         emailField.sendKeys("testuser" + System.currentTimeMillis() + "@example.com");

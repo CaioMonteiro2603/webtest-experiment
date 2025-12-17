@@ -26,7 +26,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WebFormTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static final String BASE_DOMAIN;

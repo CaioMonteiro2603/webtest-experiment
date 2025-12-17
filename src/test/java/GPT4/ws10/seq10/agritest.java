@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriTest {
+public class agritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

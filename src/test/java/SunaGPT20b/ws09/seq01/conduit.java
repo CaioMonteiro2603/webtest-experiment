@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -24,7 +23,7 @@ import java.util.Set;
 import java.util.Iterator;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldTestSuite {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriver driver;

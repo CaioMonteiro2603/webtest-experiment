@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTestSuite {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -39,12 +39,6 @@ public class SaucedemoTestSuite {
         driver.findElement(By.id("password")).sendKeys(pass);
         driver.findElement(By.id("login-button")).click();
         wait.until(ExpectedConditions.urlContains("/inventory.html"));
-    }
-
-    private void logoutViaMenu() {
-        openMenu();
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link"))).click();
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
     }
 
     private void openMenu() {

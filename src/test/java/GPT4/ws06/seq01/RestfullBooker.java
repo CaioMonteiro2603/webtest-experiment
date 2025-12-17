@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

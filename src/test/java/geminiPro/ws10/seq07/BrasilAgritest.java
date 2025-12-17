@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq07;
+package geminiPro.ws10.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTestComprehensiveTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://beta.brasilagritest.com/login";
     private static final String LOGIN_EMAIL = "superadmin@brasilagritest.com.br";

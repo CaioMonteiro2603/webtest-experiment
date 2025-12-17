@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq09;
+package geminiPro.ws08.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/catalog/";
     private static final String VALID_USERNAME = "j2ee";
@@ -40,7 +40,6 @@ public class JPetStoreTest {
     private static WebDriverWait wait;
 
     // --- Locators ---
-    private final By enterStoreLink = By.linkText("Enter the Store");
     private final By signInLink = By.linkText("Sign In");
     private final By signOutLink = By.linkText("Sign Out");
     private final By usernameInput = By.name("username");

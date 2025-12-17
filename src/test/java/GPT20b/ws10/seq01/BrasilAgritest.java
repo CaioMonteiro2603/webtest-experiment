@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilagriTests {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -88,15 +88,6 @@ public class BrasilagriTests {
         }
     }
 
-    private void resetAppState() {
-        // The actual control may differ; attempt to locate a reset link
-        By resetLinkSel = By.linkText("Reset App State");
-        if (elementExists(resetLinkSel)) {
-            WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(resetLinkSel));
-            resetLink.click();
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("cartContents")));
-        }
-    }
 
     private List<String> getItemNames() {
         List<WebElement> items = driver.findElements(By.cssSelector(".item-name, .product-title, .product-name"));
@@ -177,8 +168,6 @@ public class BrasilagriTests {
                     previousOrder,
                     currentOrder,
                     "Item order should change after selecting sort option: " + optText);
-
-            previousOrder = currentOrder;
         }
     }
 

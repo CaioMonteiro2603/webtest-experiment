@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
     private static WebDriverWait wait;

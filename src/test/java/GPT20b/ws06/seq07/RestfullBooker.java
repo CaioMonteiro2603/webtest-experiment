@@ -4,7 +4,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assumptions;
@@ -24,7 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -37,7 +36,7 @@ public class AutomationInTestingTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
@@ -105,17 +104,6 @@ public class AutomationInTestingTest {
                         By.cssSelector(".menu-list a, .menu-item")));
     }
 
-    private void resetAppState() {
-        List<WebElement> menuItems = openBurgerMenuAndGetItems();
-        for (WebElement item : menuItems) {
-            if (item.getText().equalsIgnoreCase("Reset App State")) {
-                wait.until(ExpectedConditions.elementToBeClickable(item));
-                item.click();
-                break;
-            }
-        }
-        wait.until(ExpectedConditions.urlContains("inventory"));
-    }
 
     private List<String> getProductNames() {
         List<WebElement> nameEls = driver.findElements(By.cssSelector(".product-title, .item-name"));
@@ -137,11 +125,6 @@ public class AutomationInTestingTest {
             }
         }
         return prices;
-    }
-
-    private WebElement getCartBadge() {
-        List<WebElement> badges = driver.findElements(By.cssSelector(".cart-count, #cartBadge"));
-        return badges.isEmpty() ? null : badges.get(0);
     }
 
     /* ---------- Tests ---------- */
@@ -340,7 +323,7 @@ public class AutomationInTestingTest {
         wait.until(ExpectedConditions.urlContains("/cart"));
 
         WebElement checkoutBtn = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id("checkout"), By.cssSelector(".checkout-button")));
+                ExpectedConditions.elementToBeClickable(By.id("checkout")));
         checkoutBtn.click();
 
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#checkout-form, .checkout-form")));

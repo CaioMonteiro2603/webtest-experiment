@@ -2,7 +2,6 @@ package GPT20b.ws02.seq05;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.URI;
 import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankWebTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USERNAME = "caio@gmail.com";

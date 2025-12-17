@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationIntTestingWebTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String INVENTORY_URL = BASE_URL + "inventory.html";

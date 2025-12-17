@@ -1,4 +1,4 @@
-package GTP5.ws05.seq06;
+package GPT5.ws05.seq06;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -11,10 +11,11 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessSuite {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -52,14 +53,6 @@ public class CacTatHeadlessSuite {
     private static Optional<WebElement> first(By by) {
         List<WebElement> els = driver.findElements(by);
         return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
-    }
-
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
     }
 
     private static Optional<WebElement> waitClickable(By by) {

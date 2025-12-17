@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -47,11 +47,7 @@ public class AutomationInTestingHeadlessSuite {
             wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
         } catch (Exception ignored) {}
     }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
+    
     private WebElement firstPresent(By... locators) {
         for (By by : locators) {
             List<WebElement> els = driver.findElements(by);
@@ -90,7 +86,8 @@ public class AutomationInTestingHeadlessSuite {
         String href = link.getAttribute("href");
         if (href == null || href.isBlank()) return;
 
-        waitClickable(link).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link)); 
+        web.click();
         Set<String> after = driver.getWindowHandles();
 
         if (after.size() > before.size()) {
@@ -169,7 +166,8 @@ public class AutomationInTestingHeadlessSuite {
                 if (destDepth > baseDepth + 1) continue; // skip deeper than one level
 
                 String before = driver.getCurrentUrl();
-                waitClickable(link).click();
+                WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link));
+                web.click();
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 waitUntilReady();
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on same host");
@@ -211,7 +209,8 @@ public class AutomationInTestingHeadlessSuite {
         clearAndType(subject, "Booking inquiry");
         clearAndType(description, "Automation test message for contact form.");
 
-        waitClickable(submit).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        web.click();
 
         // Expect a success indication on page
         boolean success =
@@ -244,7 +243,8 @@ public class AutomationInTestingHeadlessSuite {
         clearAndType(subject, "X");
         clearAndType(description, "Y");
 
-        waitClickable(submit).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        web.click();
 
         // Look for field errors or error alert
         boolean fieldError = waitVisible(By.cssSelector(".error, .help-block, .invalid-feedback, input:invalid"));
@@ -335,7 +335,8 @@ public class AutomationInTestingHeadlessSuite {
         if (deposit != null) {
             List<WebElement> radios = driver.findElements(By.cssSelector("input[name='depositpaid'][type='radio']"));
             if (!radios.isEmpty()) {
-                waitClickable(radios.get(0)).click();
+            	WebElement web = wait.until(ExpectedConditions.elementToBeClickable(radios.get(0)));
+                web.click();
                 Assertions.assertTrue(radios.get(0).isSelected(), "Deposit radio should toggle");
             }
         }

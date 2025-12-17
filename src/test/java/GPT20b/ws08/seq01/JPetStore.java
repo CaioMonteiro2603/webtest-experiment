@@ -10,7 +10,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -24,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTests {
+public class JPetStore{
 
 
 private static WebDriver driver;
@@ -175,7 +174,7 @@ public void testSortingDropdown() {
                 previous,
                 current,
                 "Item order should change after selecting sort option: " + opt.getText());
-        previous = current;
+        
     }
 }
 
@@ -299,4 +298,5 @@ public void testFooterSocialLinks() {
             }
         }
     }
+}
 }

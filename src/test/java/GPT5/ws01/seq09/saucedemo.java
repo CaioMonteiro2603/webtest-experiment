@@ -12,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoV1E2ETest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -43,7 +43,6 @@ public class SauceDemoV1E2ETest {
     private static final By CART_BADGE = By.cssSelector(".shopping_cart_badge");
     private static final By CART_LIST = By.cssSelector(".cart_list");
     private static final By CHECKOUT_BUTTON = By.cssSelector(".checkout_button");
-    private static final By CONTINUE_SHOPPING_BUTTON = By.cssSelector(".cart_footer .btn_secondary, .cart_footer .cart_button");
     private static final By FIRST_NAME_INPUT = By.id("first-name");
     private static final By LAST_NAME_INPUT = By.id("last-name");
     private static final By POSTAL_CODE_INPUT = By.id("postal-code");
@@ -87,14 +86,6 @@ public class SauceDemoV1E2ETest {
         }
     }
 
-    private void logoutIfPossible() {
-        if (driver.getCurrentUrl().contains("inventory.html")) {
-            openMenu();
-            clickWhenClickable(MENU_LOGOUT);
-            wait.until(ExpectedConditions.urlContains("index.html"));
-        }
-    }
-
     private void openMenu() {
         if (driver.findElements(SIDE_MENU).isEmpty() || !driver.findElement(SIDE_MENU).isDisplayed()) {
             clickWhenClickable(BURGER_BUTTON);
@@ -134,7 +125,6 @@ public class SauceDemoV1E2ETest {
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
         link.click();
         // Either new tab appears or URL changes
-        boolean openedNewTab = wait.until(d -> d.getWindowHandles().size() > old.size() || !driver.getCurrentUrl().contains("saucedemo.com"));
         if (driver.getWindowHandles().size() > old.size()) {
             Set<String> diff = new HashSet<>(driver.getWindowHandles());
             diff.removeAll(old);

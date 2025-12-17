@@ -1,23 +1,21 @@
-package deepseek.ws06.seq10;
+package SunaDeepSeek.ws06.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class HotelBookingTest {
+public class RestfullBooker {
+
     private static WebDriver driver;
-    private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://automationintesting.online/";
 
     @BeforeAll
     public static void setup() {
@@ -36,162 +34,148 @@ public class HotelBookingTest {
 
     @Test
     @Order(1)
-    public void testRoomBooking() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        
-        // Book a room
-        WebElement bookButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(text(), 'Book this room')]")));
-        bookButton.click();
-        
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='firstname']")));
-        firstName.sendKeys("John");
-        
-        WebElement lastName = driver.findElement(By.xpath("//input[@name='lastname']"));
-        lastName.sendKeys("Doe");
-        
-        WebElement email = driver.findElement(By.xpath("//input[@name='email']"));
-        email.sendKeys("john.doe@example.com");
-        
-        WebElement phone = driver.findElement(By.xpath("//input[@name='phone']"));
-        phone.sendKeys("1234567890");
-        
-        WebElement bookDate = driver.findElement(By.xpath("//input[@name='bookDate']"));
-        bookDate.sendKeys("2024-01-01");
-        
-        WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(), 'Book')]"));
-        submitButton.click();
-        
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Booking Successful!')]")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Room booking failed");
+        wait.until(ExpectedConditions.titleContains("Restful-booker-platform demo"));
+        Assertions.assertTrue(driver.getCurrentUrl().equals(BASE_URL), "Should be on homepage");
     }
 
     @Test
     @Order(2)
-    public void testContactFormSubmission() {
+    public void testNavigationLinks() {
         driver.get(BASE_URL);
         
-        // Navigate to contact page
-        WebElement contactLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'Contact')]")));
-        contactLink.click();
+        // Test Rooms link
+        WebElement roomsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/room/']")));
+        roomsLink.click();
+        wait.until(ExpectedConditions.urlContains("/room/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/room/"), "Should be on rooms page");
         
-        // Fill contact form
-        WebElement name = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='name']")));
-        name.sendKeys("Test User");
+        // Test Admin link
+        WebElement adminLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/admin/']")));
+        adminLink.click();
+        wait.until(ExpectedConditions.urlContains("/admin/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/admin/"), "Should be on admin page");
         
-        WebElement contactEmail = driver.findElement(By.xpath("//input[@name='email']"));
-        contactEmail.sendKeys("test@example.com");
-        
-        WebElement phone = driver.findElement(By.xpath("//input[@name='phone']"));
-        phone.sendKeys("1234567890");
-        
-        WebElement subject = driver.findElement(By.xpath("//input[@name='subject']"));
-        subject.sendKeys("Test Subject");
-        
-        WebElement message = driver.findElement(By.xpath("//textarea[@name='description']"));
-        message.sendKeys("This is a test message");
-        
-        WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(), 'Submit')]"));
-        submitButton.click();
-        
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Thanks for getting in touch')]")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Contact form submission failed");
+        // Test Report link
+        WebElement reportLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href='/report/']")));
+        reportLink.click();
+        wait.until(ExpectedConditions.urlContains("/report/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/report/"), "Should be on report page");
     }
 
     @Test
     @Order(3)
-    public void testAdminLogin() {
-        driver.get(BASE_URL + "#/admin");
+    public void testExternalLinks() {
+        driver.get(BASE_URL);
+        String originalWindow = driver.getWindowHandle();
         
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='username']")));
-        username.sendKeys("admin");
+        // Test Twitter link
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='twitter.com']")));
+        twitterLink.click();
+        switchToNewWindow(originalWindow);
+        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"), "Should be on Twitter");
+        driver.close();
+        driver.switchTo().window(originalWindow);
         
-        WebElement password = driver.findElement(By.xpath("//input[@name='password']"));
-        password.sendKeys("password");
-        
-        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Login')]"));
-        loginButton.click();
-        
-        WebElement dashboard = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(), 'Dashboard')]")));
-        Assertions.assertTrue(dashboard.isDisplayed(), "Admin login failed");
+        // Test GitHub link
+        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='github.com']")));
+        githubLink.click();
+        switchToNewWindow(originalWindow);
+        Assertions.assertTrue(driver.getCurrentUrl().contains("github.com"), "Should be on GitHub");
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(4)
-    public void testInvalidAdminLogin() {
-        driver.get(BASE_URL + "#/admin");
+    public void testRoomBookingForm() {
+        driver.get(BASE_URL + "room/");
         
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='username']")));
-        username.sendKeys("wrong");
+        // Fill out booking form
+        WebElement firstName = wait.until(ExpectedConditions.elementToBeClickable(By.id("firstname")));
+        firstName.sendKeys("Test");
         
-        WebElement password = driver.findElement(By.xpath("//input[@name='password']"));
-        password.sendKeys("wrong");
+        WebElement lastName = driver.findElement(By.id("lastname"));
+        lastName.sendKeys("User");
         
-        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Login')]"));
-        loginButton.click();
+        WebElement email = driver.findElement(By.id("email"));
+        email.sendKeys("test@example.com");
         
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Bad credentials')]")));
-        Assertions.assertTrue(errorMessage.isDisplayed(), "Invalid login error not shown");
+        WebElement phone = driver.findElement(By.id("phone"));
+        phone.sendKeys("1234567890");
+        
+        WebElement bookButton = driver.findElement(By.cssSelector("button[type='submit']"));
+        bookButton.click();
+        
+        // Verify success message
+        WebElement successMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".alert-success")));
+        Assertions.assertTrue(successMessage.getText().contains("Booking Successful!"), 
+            "Should show booking success message");
     }
 
     @Test
     @Order(5)
-    public void testRoomDetails() {
-        driver.get(BASE_URL);
+    public void testAdminLogin() {
+        driver.get(BASE_URL + "admin/");
         
-        WebElement roomDetails = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(text(), 'View Details')]")));
-        roomDetails.click();
+        // Valid login
+        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+        username.sendKeys("admin");
         
-        WebElement roomDescription = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'room-details')]")));
-        Assertions.assertTrue(roomDescription.isDisplayed(), "Room details not shown");
+        WebElement password = driver.findElement(By.id("password"));
+        password.sendKeys("password");
+        
+        WebElement loginButton = driver.findElement(By.id("doLogin"));
+        loginButton.click();
+        
+        // Verify login success
+        wait.until(ExpectedConditions.urlContains("/admin/"));
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout")));
+        Assertions.assertTrue(logoutButton.isDisplayed(), "Logout button should be visible after login");
+        
+        // Test logout
+        logoutButton.click();
+        wait.until(ExpectedConditions.urlContains("/admin/"));
+        WebElement loginForm = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginForm")));
+        Assertions.assertTrue(loginForm.isDisplayed(), "Should be back to login form after logout");
     }
 
     @Test
     @Order(6)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
+    public void testInvalidLogin() {
+        driver.get(BASE_URL + "admin/");
         
-        // Test Twitter link
-        testExternalLink("Twitter", "twitter.com");
+        // Invalid login attempt
+        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+        username.sendKeys("wronguser");
         
-        // Test Facebook link
-        testExternalLink("Facebook", "facebook.com");
+        WebElement password = driver.findElement(By.id("password"));
+        password.sendKeys("wrongpass");
         
-        // Test LinkedIn link
-        testExternalLink("LinkedIn", "linkedin.com");
+        WebElement loginButton = driver.findElement(By.id("doLogin"));
+        loginButton.click();
+        
+        // Verify error message
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
+            By.cssSelector(".alert-danger")));
+        Assertions.assertTrue(errorMessage.getText().contains("Bad credentials"), 
+            "Should show login error message");
     }
 
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, '" + expectedDomain + "')]")));
-        link.click();
-        
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
-                }
+    private void switchToNewWindow(String originalWindow) {
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
             }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
         }
     }
 }

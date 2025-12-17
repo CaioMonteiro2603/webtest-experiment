@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankHeadlessSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

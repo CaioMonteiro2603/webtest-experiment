@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq08;
+package geminiPro.ws08.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -14,7 +14,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreComprehensiveTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static final Duration TIMEOUT = Duration.ofSeconds(10);

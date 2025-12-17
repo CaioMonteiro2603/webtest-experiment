@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq06;
+package geminiPro.ws07.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * such as code execution within an iframe, menu navigation, and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15); // Increased for this complex app

@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankHeadlessE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -82,7 +82,6 @@ public class ParaBankHeadlessE2ETest {
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        String href = link.getAttribute("href");
         link.click();
         // Either new tab/window or same tab
         wait.until(d -> d.getWindowHandles().size() > before.size() || !d.getCurrentUrl().equals(BASE_URL));

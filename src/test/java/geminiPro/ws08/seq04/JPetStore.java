@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq04;
+package geminiPro.ws08.seq04;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.Set;
  * including login, product browsing, cart management, checkout, and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreHeadlessFirefoxTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

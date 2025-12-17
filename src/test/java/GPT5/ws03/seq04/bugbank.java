@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessE2ETest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -456,4 +456,3 @@ public class BugBankHeadlessE2ETest {
         Assertions.assertNotEquals(initialSelected, nowSelected, "Selected sorting option should change.");
     }
 }
-s

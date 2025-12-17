@@ -1,28 +1,39 @@
-package deepseek.ws02.seq10;
+package SunaGPT20b.ws02.seq10;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.WindowType;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
-import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class ParaBankTest {
+import java.net.MalformedURLException;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class parabank {
+
     private static WebDriver driver;
-    private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
-    private static final String LOGIN = "caio@gmail.com";
-    private static final String PASSWORD = "123";
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
+    private static final String VALID_USER = "caio@gmail.com";
+    private static final String VALID_PASS = "123";
 
     @BeforeAll
-    public static void setup() {
+    public static void setUpAll() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -30,144 +41,98 @@ public class ParaBankTest {
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDownAll() {
         if (driver != null) {
             driver.quit();
         }
     }
 
+    private void login(String username, String password) {
+        driver.get(BASE_URL);
+        WebElement userField = wait.until(
+                ExpectedConditions.elementToBeClickable(By.name("username")));
+        WebElement passField = wait.until(
+                ExpectedConditions.elementToBeClickable(By.name("password")));
+        WebElement loginBtn = wait.until(
+                ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Log In']")));
+
+        userField.clear();
+        userField.sendKeys(username);
+        passField.clear();
+        passField.sendKeys(password);
+        loginBtn.click();
+    }
+
     @Test
     @Order(1)
     public void testValidLogin() {
-        driver.get(BASE_URL);
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
-        WebElement password = driver.findElement(By.name("password"));
-        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
+        login(VALID_USER, VALID_PASS);
+        // Successful login redirects to overview page
+        wait.until(ExpectedConditions.urlContains("/parabank/overview.htm"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/parabank/overview.htm"),
+                "URL should contain '/parabank/overview.htm' after successful login");
 
-        username.sendKeys(LOGIN);
-        password.sendKeys(PASSWORD);
-        loginButton.click();
-
-        wait.until(ExpectedConditions.urlContains("overview.htm"));
-        WebElement welcomeMessage = driver.findElement(By.xpath("//h1[contains(text(), 'Accounts Overview')]"));
-        Assertions.assertTrue(welcomeMessage.isDisplayed(), "Login failed - accounts overview not displayed");
+        // Verify a known element on the overview page
+        WebElement welcomeMsg = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.id("rightPanel")));
+        Assertions.assertTrue(welcomeMsg.getText().contains("Welcome"),
+                "Overview page should contain a welcome message");
     }
 
     @Test
     @Order(2)
     public void testInvalidLogin() {
-        driver.get(BASE_URL);
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
-        WebElement password = driver.findElement(By.name("password"));
-        WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
-
-        username.sendKeys("invalid@email.com");
-        password.sendKeys("wrongpass");
-        loginButton.click();
-
-        WebElement errorElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//p[contains(text(), 'The username and password could not be verified.')]")));
-        Assertions.assertTrue(errorElement.isDisplayed(), "Error message not displayed for invalid login");
+        login("invalid_user@example.com", "wrongpass");
+        // Expect to stay on login page and see an error message
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("rightPanel")));
+        WebElement errorMsg = driver.findElement(By.id("rightPanel"));
+        Assertions.assertTrue(errorMsg.getText().toLowerCase().contains("error"),
+                "Error message should be displayed for invalid credentials");
     }
 
     @Test
     @Order(3)
-    public void testAccountServicesNavigation() {
-        loginIfNeeded();
-        
-        // Test Accounts Overview
-        navigateAndVerify("//a[text()='Accounts Overview']", "overview.htm", "Accounts Overview");
-        
-        // Test Transfer Funds
-        navigateAndVerify("//a[text()='Transfer Funds']", "transfer.htm", "Transfer Funds");
-        
-        // Test Bill Pay
-        navigateAndVerify("//a[text()='Bill Pay']", "billpay.htm", "Bill Payment Service");
-        
-        // Test Find Transactions
-        navigateAndVerify("//a[text()='Find Transactions']", "findtrans.htm", "Find Transactions");
-        
-        // Test Update Contact Info
-        navigateAndVerify("//a[text()='Update Contact Info']", "updateprofile.htm", "Profile Updated");
-    }
+    public void testHomePageLinksOneLevelDeep() throws MalformedURLException {
+        // Ensure we are logged in
+        login(VALID_USER, VALID_PASS);
+        wait.until(ExpectedConditions.urlContains("/parabank/overview.htm"));
 
-    @Test
-    @Order(4)
-    public void testFooterLinks() {
-        loginIfNeeded();
-        
-        // Test About Us
-        testExternalLink("About Us", "parasoft.com");
-        
-        // Test Services
-        testExternalLink("Services", "parasoft.com");
-        
-        // Test Products
-        testExternalLink("Products", "parasoft.com");
-        
-        // Test Locations
-        testExternalLink("Locations", "parasoft.com");
-        
-        // Test Admin Page
-        navigateAndVerify("//a[text()='Admin Page']", "admin.htm", "Administration");
-    }
-
-    @Test
-    @Order(5)
-    public void testLogout() {
-        loginIfNeeded();
-        
-        WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[text()='Log Out']")));
-        logoutLink.click();
-        
-        wait.until(ExpectedConditions.urlContains("index.htm"));
-        WebElement loginPanel = driver.findElement(By.id("leftPanel"));
-        Assertions.assertTrue(loginPanel.isDisplayed(), "Logout failed - login panel not visible");
-    }
-
-    private void navigateAndVerify(String linkXpath, String expectedUrlPart, String expectedTitle) {
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(linkXpath)));
-        link.click();
-        
-        wait.until(ExpectedConditions.urlContains(expectedUrlPart));
-        WebElement titleElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h1[contains(text(), '" + expectedTitle + "')]")));
-        Assertions.assertTrue(titleElement.isDisplayed(), expectedTitle + " page not displayed");
-    }
-
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[text()='" + linkText + "']")));
-        link.click();
-        
-        // Switch to new window
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(mainWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
+        // Collect all unique hrefs from the current page
+        List<String> hrefs = new ArrayList<>();
+        List<WebElement> linkElements = driver.findElements(By.tagName("a"));
+        for (WebElement link : linkElements) {
+            String href = link.getAttribute("href");
+            if (href != null && !href.trim().isEmpty() && !hrefs.contains(href)) {
+                hrefs.add(href);
             }
         }
-        
-        wait.until(ExpectedConditions.urlContains(expectedDomain));
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-            linkText + " link failed - wrong domain");
-        driver.close();
-        driver.switchTo().window(mainWindow);
-    }
 
-    private void loginIfNeeded() {
-        if (!driver.getCurrentUrl().contains("overview.htm")) {
-            driver.get(BASE_URL);
-            WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(By.name("username")));
-            WebElement password = driver.findElement(By.name("password"));
-            WebElement loginButton = driver.findElement(By.xpath("//input[@value='Log In']"));
+        String baseDomain = "parabank.parasoft.com";
 
-            username.sendKeys(LOGIN);
-            password.sendKeys(PASSWORD);
-            loginButton.click();
-            wait.until(ExpectedConditions.urlContains("overview.htm"));
+        for (String href : hrefs) {
+            if (href.contains(baseDomain)) {
+                // Internal link – navigate and verify page loads
+                driver.navigate().to(href);
+                wait.until(ExpectedConditions.titleContains("parabank"));
+                Assertions.assertFalse(driver.getTitle().isEmpty(),
+                        "Internal page title should not be empty for URL: " + href);
+                // Return to overview page for next iteration
+                driver.navigate().back();
+                wait.until(ExpectedConditions.urlContains("/parabank/overview.htm"));
+            } else {
+                // External link – open in new tab, verify domain, then close
+                String originalWindow = driver.getWindowHandle();
+                ((JavascriptExecutor) driver).executeScript("window.open(arguments[0]);", href);
+                Set<String> windows = driver.getWindowHandles();
+                windows.remove(originalWindow);
+                String newWindow = windows.iterator().next();
+                driver.switchTo().window(newWindow);
+                wait.until(ExpectedConditions.titleContains("parabank"));
+                Assertions.assertTrue(driver.getCurrentUrl().contains(new java.net.URL(href).getHost()),
+                        "External link should navigate to expected domain: " + href);
+                driver.close();
+                driver.switchTo().window(originalWindow);
+            }
         }
     }
 }

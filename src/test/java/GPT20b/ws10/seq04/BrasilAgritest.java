@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAGriTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USERNAME = "superadmin@brasilagritest.com.br";
@@ -43,13 +43,14 @@ public class BrasilAGriTest {
     /** Find the first element matching any of the provided CSS selectors. */
     private WebElement findElement(String... cssSelectors) {
         for (String sel : cssSelectors) {
-            List<WebElement els = driver.findElements(By.cssSelector(sel));
-            if (!els.isEmpty()) {
-                return els.get(0);
+            List<WebElement> lista = driver.findElements(By.cssSelector(sel));
+            if (!lista.isEmpty()) {
+                return lista.get(0);
             }
         }
         throw new NoSuchElementException("No element found for selectors: " + String.join(", ", cssSelectors));
     }
+    
 
     /** Open a link that contains the specified fragment, verify the URL contains the expected domain, then close and return. */
     private void openAndVerifyExternalLink(String hrefFragment, String expectedDomain) {
@@ -75,7 +76,7 @@ public class BrasilAGriTest {
         }
     }
 
-    Perform login with given credentials and wait until logged in. */
+   
     private void performLogin() {
         driver.navigate().to(BASE_URL);
         WebElement emailField = findElement("input#email", "input[name='email']", "input[type='email']");
@@ -124,7 +125,6 @@ public class BrasilAGriTest {
         WebElement emailField = findElement("input#email", "input[name='email']", "input[type='email']");
         WebElement passwordField = findElement("input#password", "input[name='password']", "input[type='password']");
         emailField.clear();
-        emailField.sendinvalid@example.com");
         passwordField.clear();
         passwordField.sendKeys("wrongpass");
 
@@ -155,7 +155,7 @@ public class BrasilAGriTest {
     public void testSortingDropdown() {
         performLogin();
 
-        List<WebElement> sortDrop = driver.findElements(By.cssSelector("select#sort", "select[name='sort']"));
+        List<WebElement> sortDrop = driver.findElements(By.cssSelector("select#sort"));
         if (sortDrop.isEmpty()) {
             // No sorting available; treat as passed
             return;
@@ -164,10 +164,10 @@ public class BrasilAGriTest {
         List<WebElement> options = sortDropdown.findElements(By.tagName(""));
         assertTrue(options.size() > 1, "Sorting dropdown should contain multiple options");
 
-        String initialValue = options.get(0).value");
+       
         options.get(1).click();
         String changedValue = sortDropdown.getAttribute("value");
-        assertNotEquals(initialValue, changedValue, "Selecting a different sorting option should change the value");
+        assertNotEquals(changedValue, "Selecting a different sorting option should change the value");
 
         // Verify list order changed
         List<WebElement> itemsBefore = driver.findElements(By.cssSelector(".item-card, .product-item"));
@@ -197,7 +197,7 @@ public class BrasilAGriTest {
 
         // All Items (usually Home)
         WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("a[href='/'"], "a[href*='home']")));
+                By.cssSelector("a[href='/']")));
         allItems.click();
         wait.until(driver1 -> driver1.getCurrentUrl().contains("/home") || driver1.getCurrentUrl().contains("/"));
         assertTrue(driver.getCurrentUrl().contains("/home") || driver.getCurrentUrl().contains("/"),
@@ -224,7 +224,7 @@ public class BrasilAGriTest {
                 By.cssSelector(".navbar-toggler, button#menu-toggle, button.burger-menu")));
         burger.click();
         WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("a[href*='logout'], button#logout", "button.logout")));
+                By.cssSelector("a[href*='logout'], button#logout")));
         logout.click();
         wait.until(driver1 -> driver1.getCurrentUrl().contains("/login"));
         assertTrue(driver.getCurrentUrl().contains("/login"), "Logout should redirect to login page");

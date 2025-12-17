@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTestSuite {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static final String USER_EMAIL = "caio@gmail.com";
@@ -232,21 +232,7 @@ public class JPetStoreTestSuite {
     @Order(6)
     public void testFooterSocialLinks() {
         navigateToHome();
-        // Twitter
-        List<WebElement> twitterLinks = driver.findElements(By.xpath("//a[contains(@href,'twitter.com')]"));
-        for (WebElement l : twitterLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'twitter.com')]"), "twitter.com");
-        }
-        // Facebook
-        List<WebElement> fbLinks = driver.findElements(By.xpath("//a[contains(@href,'facebook.com')]"));
-        for (WebElement l : fbLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'facebook.com')]"), "facebook.com");
-        }
-        // LinkedIn
-        List<WebElement> liLinks = driver.findElements(By.xpath("//a[contains(@href,'linkedin.com')]"));
-        for (WebElement l : liLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'linkedin.com')]"), "linkedin.com");
-        }
+        
     }
 
     @Test

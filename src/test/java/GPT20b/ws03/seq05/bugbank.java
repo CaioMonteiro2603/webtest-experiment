@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugbankWebTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USERNAME = "caio@gmail.com";

@@ -27,7 +27,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;

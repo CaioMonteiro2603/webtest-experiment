@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static final String BASE_URL = "https://jsfiddle.net/";

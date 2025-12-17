@@ -12,10 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriHeadlessSuite {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -139,7 +140,8 @@ public class BrasilAgriHeadlessSuite {
 
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
-        waitClickable(link).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link)); 
+        web.click();
 
         try {
             wait.until(drv -> drv.getWindowHandles().size() > before.size() || drv.getCurrentUrl().contains(expectedDomain));

@@ -7,10 +7,13 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.openqa.selenium.interactions.Actions;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -1,4 +1,4 @@
-package GTP4.ws09.seq04;
+package GPT4.ws09.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldUITest {
+public class Conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -151,7 +151,6 @@ public class RealWorldUITest {
     public void testArticlePreviewNavigation() {
         driver.get(BASE_URL);
         WebElement preview = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a.preview-link")));
-        String previewHref = preview.getAttribute("href");
         preview.click();
 
         wait.until(ExpectedConditions.urlContains("#/article/"));

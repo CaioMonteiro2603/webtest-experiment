@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldE2ETest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://demo.realworld.io/";
@@ -185,7 +185,7 @@ public class RealWorldE2ETest {
         }
         
         // Verify domain and close tab
-        wait.until(ExpectedConditions.not(ExpectedConditions.urlIs("about:blank")));
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("about:blank")));
         Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain));
         driver.close();
         driver.switchTo().window(originalWindow);

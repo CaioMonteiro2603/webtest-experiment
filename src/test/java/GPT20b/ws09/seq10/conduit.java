@@ -24,7 +24,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealworldTests {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

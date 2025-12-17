@@ -17,13 +17,13 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
+import org.openqa.selenium.support.ui.Select;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static WebDriver driver;
@@ -109,12 +109,18 @@ public class CacTatTest {
         Assertions.assertTrue(options.size() > 1,
                 "Sorting dropdown should contain multiple options.");
 
+        Select select = new Select(sortDropdown);
         for (WebElement option : options) {
-            sortDropdown.selectByVisibleText(option.getText());
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(By.cssSelector(".loading")));
+            select.selectByVisibleText(option.getText());
+
+            wait.until(ExpectedConditions.invisibilityOfElementLocated(
+                    By.cssSelector(".loading"))
+            );
+
             List<WebElement> items = driver.findElements(By.cssSelector(".product .name"));
             Assertions.assertFalse(items.isEmpty(),
                     "Items should be present after sorting.");
+
             String firstItem = items.get(0).getText();
             Assertions.assertFalse(firstItem.isBlank(),
                     "First item name should not be blank after sorting.");

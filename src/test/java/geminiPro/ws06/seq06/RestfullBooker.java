@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq06;
+package geminiPro.ws06.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -14,6 +14,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+
 import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -25,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * and the admin panel login and message verification.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String ADMIN_URL = BASE_URL + "#/admin";
@@ -103,7 +104,7 @@ public class AutomationInTestingTest {
         driver.findElement(By.name("phone")).sendKeys("09876543210");
 
         // Click the final Book button
-        wait.until(ExpectedСonditions.elementToBeClickable(By.cssSelector(".book-room"))).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".book-room"))).click();
         
         // Assert booking success
         WebElement successModal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".confirmation-modal")));

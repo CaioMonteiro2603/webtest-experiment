@@ -16,7 +16,7 @@ import java.time.Duration;
  * and validates the success message and data submission.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT{
 
     private static WebDriver driver;
     private static WebDriverWait wait;

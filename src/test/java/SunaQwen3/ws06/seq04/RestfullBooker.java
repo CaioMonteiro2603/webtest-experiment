@@ -11,12 +11,11 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTestSuite {
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String LOGIN_PAGE_URL = BASE_URL + "login";
-    private static final String INVENTORY_PAGE_URL = BASE_URL + "inventory";
     private static final String ABOUT_PAGE_URL = "https://saucelabs.com/";
     private static final String TWITTER_URL = "https://twitter.com/";
     private static final String FACEBOOK_URL = "https://www.facebook.com/";

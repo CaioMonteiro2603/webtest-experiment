@@ -11,11 +11,10 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://demo.realworld.io/";
-    private static final String USERNAME = "testuser";
     private static final String PASSWORD = "password123";
 
     @BeforeAll
@@ -169,7 +168,7 @@ public class RealWorldTest {
             By.xpath("//a[@href='#/settings']")));
         settingsLink.click();
         
-        WebElement settingsHeader = wait.until(ExpectedVisibilityOfElementLocated(
+        WebElement settingsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(
             By.xpath("//h1[contains(text(),'Settings')]")));
         Assertions.assertTrue(settingsHeader.isDisplayed());
     }
@@ -191,7 +190,7 @@ public class RealWorldTest {
     private void login() {
         driver.get(BASE_URL);
         if (driver.findElements(By.xpath("//a[contains(@class,'nav-link') and contains(text(),'testuser')]")).size() == 0) {
-            WebElement signInLink = wait.until(ExpecteConditions.elementToBeClickable(
+            WebElement signInLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//a[contains(@href,'login')]")));
             signInLink.click();
             

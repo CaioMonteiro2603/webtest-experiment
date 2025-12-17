@@ -8,12 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(org.junit.jupiter.api.MethodOrderer.OrderAnnotation.class)
-public class ParaBankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -128,8 +127,7 @@ public class ParaBankTest {
     @Test
     @Order(4)
     public void testExternalLinksInFooter() {
-        driver.get("https://parabank.parasoft.com/parabank/index.htm");
-        WebElement footerContainer = driver.findElement(By.className("footer"));
+        driver.get("https://parabank.parasoft.com/parabank/index.htm"); 
         
         // Twitter link
         WebElement twitterLink = driver.findElement(By.cssSelector("a[href*='twitter']"));

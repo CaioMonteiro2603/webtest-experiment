@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTestSuite {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriver driver;

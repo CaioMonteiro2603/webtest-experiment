@@ -3,14 +3,14 @@ package deepseek.ws10.seq02;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FFirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriAdminTest {
+public class BrasilAgritest {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";

@@ -1,4 +1,4 @@
-package Qwen3.ws03.seq08;
+package Qwen3.ws03.seq09;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -12,7 +12,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

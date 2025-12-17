@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

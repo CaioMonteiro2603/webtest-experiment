@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.ArrayList;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
@@ -210,8 +210,6 @@ public class SauceDemoTest {
     @Order(8)
     public void testFooterSocialLinks() {
         login(USERNAME, PASSWORD);
-        // Scroll to footer (ensure links are present)
-        WebElement footer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("footer_copy")));
         // Social links selectors
         By[] socialLinkLocators = new By[]{
                 By.cssSelector("a[href*='twitter.com']"),

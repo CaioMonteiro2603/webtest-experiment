@@ -12,7 +12,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatFormTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

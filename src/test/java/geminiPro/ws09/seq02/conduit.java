@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq02;
+package geminiPro.ws09.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -17,7 +17,7 @@ import java.util.UUID;
  * user registration, login, article creation/editing/deletion, and commenting.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppTest {
+public class conduit {
 
     // Constants for configuration
     private static final String BASE_URL = "https://demo.realworld.io/";

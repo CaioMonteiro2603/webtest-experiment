@@ -7,11 +7,10 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JPetStoreTest {
+public class JPetStore {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -110,7 +109,6 @@ public class JPetStoreTest {
         List<WebElement> productLinks = driver.findElements(By.cssSelector(".product-link"));
         if (!productLinks.isEmpty()) {
             WebElement firstProduct = productLinks.get(0);
-            String originalUrl = driver.getCurrentUrl();
             firstProduct.click();
             
             wait.until(ExpectedConditions.urlContains("product"));
@@ -222,7 +220,7 @@ public class JPetStoreTest {
                 
                 // Wait for navigation to complete
                 try {
-                    wait.until(ExpectedConditions.urlChanges(originalUrl));
+                    wait.until(ExpectedConditions.urlMatches(originalUrl));
                 } catch (Exception e) {
                     // Continue even if URL doesn't change significantly in headless mode
                 }
@@ -242,8 +240,6 @@ public class JPetStoreTest {
         // Get footer links
         List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
         assertTrue(footerLinks.size() >= 2);
-        
-        String originalHandle = driver.getWindowHandle();
         
         // Test a couple of footer links to verify they exist and are functional
         for (int i = 0; i < Math.min(2, footerLinks.size()); i++) {

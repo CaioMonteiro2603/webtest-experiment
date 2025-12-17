@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTestSuite {
+public class JPetStore{
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static final String USERNAME = "j2ee";

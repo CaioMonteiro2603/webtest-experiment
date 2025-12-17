@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq05;
+package geminiPro.ws03.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
  * It creates a new, unique user for each test suite run to ensure independence and a clean state.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankE2ETest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

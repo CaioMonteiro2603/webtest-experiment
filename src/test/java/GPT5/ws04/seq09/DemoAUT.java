@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -94,11 +94,12 @@ public class KatalonFormHeadlessTest {
         return new Select(selects.get(0));
     }
 
-    private void assertExternalLink(By linkEl, String expectedDomainContains) {
+    private void assertExternalLink(WebElement link, String expectedDomainContains) {
         String original = driver.getWindowHandle();
         Set<String> old = driver.getWindowHandles();
         waitClickable(By.xpath(".")); // NOP, ensure DOM stable
-        linkEl.click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link)); 
+        el.click();
         // Wait for either new tab or same-tab nav
         wait.until(d -> d.getWindowHandles().size() > old.size() || driver.getCurrentUrl().contains(expectedDomainContains));
         if (driver.getWindowHandles().size() > old.size()) {

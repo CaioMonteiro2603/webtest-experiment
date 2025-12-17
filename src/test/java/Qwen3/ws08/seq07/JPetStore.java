@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -182,7 +181,6 @@ public class JPetStoreTest {
         List<WebElement> productLinks = driver.findElements(By.cssSelector(".product-link"));
         if (!productLinks.isEmpty()) {
             WebElement productLink = productLinks.get(0);
-            String productUrl = productLink.getAttribute("href");
             
             // Click on the product link
             productLink.click();

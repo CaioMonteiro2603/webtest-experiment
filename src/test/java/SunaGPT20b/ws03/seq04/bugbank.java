@@ -1,4 +1,4 @@
-ackage SunaGPT20b.ws03.seq04;
+package SunaGPT20b.ws03.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTestSuite {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USERNAME = "caio@gmail.com";
@@ -36,7 +36,7 @@ public class BugBankTestSuite {
     }
 
     private void login(String user, String pass) {
-       .get(BASE_URL);
+        driver.get(BASE_URL);
         WebElement userInput = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
         WebElement passInput = driver.findElement(By.id("password"));
         WebElement loginBtn = driver.findElement(By.id("login-button"));
@@ -57,20 +57,6 @@ public class BugBankTestSuite {
             WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
             logoutLink.click();
             wait.until(ExpectedConditions.urlContains("login"));
-        }
-    }
-
-    private void resetAppStateIfNeeded() {
-        List<WebElement> menuButtons = driver.findElements(By.id("react-burger-menu-btn"));
-        if (!menuButtons.isEmpty()) {
-            menuButtons.get(0).click();
-            WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
-            resetLink.click();
-            // Ensure cart badge disappears
-            wait.until(driver -> driver.findElements(By.className("shopping_cart_badge")).isEmpty());
-            // Close menu
-            WebElement closeBtn = driver.findElement(By.id("react-burger-cross-btn"));
-            closeBtn.click();
         }
     }
 
@@ -240,7 +226,7 @@ public class BugBankTestSuite {
             if (links.isEmpty()) {
                 continue; // Skip if link not present
             }
-            WebElement link = links(0);
+            WebElement link = wait.until(ExpectedConditions.elementToBeClickable(links.get(0))); 
             String originalWindow = driver.getWindowHandle();
             link.click();
 

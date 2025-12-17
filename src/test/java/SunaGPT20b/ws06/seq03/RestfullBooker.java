@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationTestingOnlineTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriver driver;
@@ -68,13 +68,6 @@ public class AutomationTestingOnlineTest {
                 ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
         menuBtn.click();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("react-burger-menu")));
-    }
-
-    private void closeMenu() {
-        WebElement closeBtn = wait.until(
-                ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
-        closeBtn.click();
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.id("react-burger-menu")));
     }
 
     private void resetAppState() {

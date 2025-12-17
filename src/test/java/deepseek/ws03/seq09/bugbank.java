@@ -6,13 +6,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -41,6 +40,7 @@ public class BugBankTest {
         driver.get(BASE_URL);
         WebElement registerButton = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.xpath("//button[contains(text(),'Registrar')]")));
+        
         assertTrue(registerButton.isDisplayed(), "Register button should be visible");
     }
 

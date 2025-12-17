@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://automationintesting.online/";

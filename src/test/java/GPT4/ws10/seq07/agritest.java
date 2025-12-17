@@ -1,4 +1,4 @@
-package GPT5.ws10.seq07;
+package GPT4.ws10.seq07;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriTest {
+public class agritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

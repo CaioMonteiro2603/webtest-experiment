@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreHeadlessSuite {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -66,11 +66,6 @@ public class JPetStoreHeadlessSuite {
             }
         }
     }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
     private String hostOf(String url) {
         try { return URI.create(url).getHost(); } catch (Exception e) { return ""; }
     }
@@ -97,7 +92,8 @@ public class JPetStoreHeadlessSuite {
         Set<String> before = driver.getWindowHandles();
         String baseHost = hostOf(driver.getCurrentUrl());
 
-        waitClickable(link).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link));
+        web.click();
 
         // wait for new tab or navigation
         try {
@@ -184,7 +180,8 @@ public class JPetStoreHeadlessSuite {
         );
         Assumptions.assumeTrue(signIn != null, "Sign In link not found; skipping");
         String start = driver.getCurrentUrl();
-        waitClickable(signIn).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(signIn));
+        web.click();
         waitDocumentReady();
 
         // Fill credentials (invalid on purpose)
@@ -196,7 +193,8 @@ public class JPetStoreHeadlessSuite {
         Assumptions.assumeTrue(user != null && pass != null && loginBtn != null, "Login form not found; skipping");
         user.clear(); user.sendKeys("invalid_user");
         pass.clear(); pass.sendKeys("invalid_pass");
-        waitClickable(loginBtn).click();
+        WebElement webA = wait.until(ExpectedConditions.elementToBeClickable(loginBtn));
+        webA.click();
         waitDocumentReady();
 
         // Either show error, or remain on sign-in
@@ -218,7 +216,8 @@ public class JPetStoreHeadlessSuite {
                 By.cssSelector("a[href*='/catalog']")
         );
         Assumptions.assumeTrue(category != null, "No category link found; skipping");
-        waitClickable(category).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(category));
+        web.click();
         waitDocumentReady();
 
         // Click first product in list
@@ -228,8 +227,8 @@ public class JPetStoreHeadlessSuite {
                 By.cssSelector("a[href*='/items/']")
         );
         Assumptions.assumeTrue(firstProduct != null, "No product link found in category; skipping");
-        String productName = firstProduct.getText();
-        waitClickable(firstProduct).click();
+        WebElement webA = wait.until(ExpectedConditions.elementToBeClickable(firstProduct));
+        webA.click();
         waitDocumentReady();
 
         // Add to cart: click first "Add to Cart"
@@ -239,7 +238,8 @@ public class JPetStoreHeadlessSuite {
                 By.cssSelector("input[type='submit'][value*='Add']")
         );
         Assumptions.assumeTrue(addBtn != null, "Add to Cart control not found; skipping");
-        waitClickable(addBtn).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(addBtn));
+        el.click();
         waitDocumentReady();
 
         // Verify cart page
@@ -255,7 +255,8 @@ public class JPetStoreHeadlessSuite {
         // Cleanup: remove items if remove link present, otherwise set qty 0 and update
         List<WebElement> removeLinks = driver.findElements(By.xpath("//a[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'remove')]"));
         if (!removeLinks.isEmpty()) {
-            waitClickable(removeLinks.get(0)).click();
+        	WebElement list = wait.until(ExpectedConditions.elementToBeClickable(removeLinks.get(0)));
+            list.click();
             waitDocumentReady();
         } else {
             List<WebElement> qtyInputs = driver.findElements(By.cssSelector("input[name*='quantity'], input.qty, input[name*='qty']"));
@@ -268,7 +269,8 @@ public class JPetStoreHeadlessSuite {
                         By.xpath("//button[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'update')]")
                 );
                 if (updateBtn != null) {
-                    waitClickable(updateBtn).click();
+                	WebElement upd = wait.until(ExpectedConditions.elementToBeClickable(updateBtn));
+                    upd.click();
                     waitDocumentReady();
                 }
             }
@@ -309,7 +311,8 @@ public class JPetStoreHeadlessSuite {
             if (anchor.isEmpty()) continue;
             String before = driver.getCurrentUrl();
             try {
-                waitClickable(anchor.get()).click();
+            	WebElement web = wait.until(ExpectedConditions.elementToBeClickable(anchor.get()));
+                web.click();
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 waitDocumentReady();
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should stay within same host");

@@ -1,4 +1,4 @@
-package deepseek.ws06.seq10;
+package SunaGPT20b.ws06.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,184 +14,219 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class HotelBookingTest {
+public class RestfullBooker {
     private static WebDriver driver;
-    private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://automationintesting.online";
 
-    @BeforeAll
-    public static void setup() {
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless");
-        driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+@BeforeAll
+public static void setUpAll() {
+    FirefoxOptions options = new FirefoxOptions();
+    options.addArguments("--headless");
+    driver = new FirefoxDriver(options);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+}
+
+@AfterAll
+public static void tearDownAll() {
+    if (driver != null) {
+        driver.quit();
     }
+}
 
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
+/** Helper to perform login */
+private void login(String username, String password) {
+    driver.get(BASE_URL + "/admin");
+    WebElement userField = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+    WebElement passField = wait.until(ExpectedConditions.elementToBeClickable(By.id("password")));
+    WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button")));
+
+    userField.clear();
+    userField.sendKeys(username);
+    passField.clear();
+    passField.sendKeys(password);
+    loginBtn.click();
+
+    // Verify successful login by checking URL contains /booking or presence of a known element
+    wait.until(ExpectedConditions.urlContains("/booking"));
+    Assertions.assertTrue(driver.getCurrentUrl().contains("/booking"),
+            "Login should navigate to the booking page");
+}
+
+/** Helper to reset app state via the side menu */
+private void resetAppState() {
+    // Open side menu (burger)
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+
+    // Click Reset App State
+    WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
+    resetLink.click();
+
+    // Close menu
+    WebElement closeBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
+    closeBtn.click();
+
+    // Verify that the cart badge is gone (state reset)
+    List<WebElement> badge = driver.findElements(By.className("shopping_cart_badge"));
+    Assertions.assertTrue(badge.isEmpty(), "Cart badge should be cleared after reset");
+}
+
+/** Helper to navigate to a page one level below the base URL */
+private void navigateTo(String path) {
+    driver.get(BASE_URL + path);
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+}
+
+@Test
+@Order(1)
+public void testValidLogin() {
+    login("admin", "password");
+    // Verify inventory list is displayed
+    List<WebElement> items = driver.findElements(By.className("inventory_item"));
+    Assertions.assertFalse(items.isEmpty(), "Inventory items should be visible after login");
+    resetAppState();
+}
+
+@Test
+@Order(2)
+public void testInvalidLogin() {
+    driver.get(BASE_URL + "/admin");
+    WebElement userField = wait.until(ExpectedConditions.elementToBeClickable(By.id("username")));
+    WebElement passField = wait.until(ExpectedConditions.elementToBeClickable(By.id("password")));
+    WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button")));
+
+    userField.sendKeys("invalid_user");
+    passField.sendKeys("wrong_pass");
+    loginBtn.click();
+
+    WebElement errorMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='error']")));
+    Assertions.assertTrue(errorMsg.isDisplayed(), "Error message should be displayed for invalid credentials");
+    Assertions.assertTrue(errorMsg.getText().toLowerCase().contains("invalid"),
+            "Error message should indicate invalid credentials");
+}
+
+@Test
+@Order(3)
+public void testSortingDropdown() {
+    login("admin", "password");
+    // Locate sorting dropdown
+    WebElement sortSelect = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("select[data-test='product_sort_container']")));
+    Select select = new Select(sortSelect);
+
+    // Verify each option changes order
+    String[] options = {"Name (A to Z)", "Name (Z to A)", "Price (low to high)", "Price (high to low)"};
+    for (String opt : options) {
+        select.selectByVisibleText(opt);
+        // Wait for items to be reordered
+        wait.until(ExpectedConditions.stalenessOf(driver.findElements(By.className("inventory_item")).get(0)));
+        List<WebElement> items = driver.findElements(By.className("inventory_item"));
+        Assertions.assertFalse(items.isEmpty(), "Items should still be present after sorting by " + opt);
+    }
+    resetAppState();
+}
+
+@Test
+@Order(4)
+public void testSideMenuNavigation() {
+    login("admin", "password");
+
+    // Open side menu
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+
+    // All Items (should stay on inventory page)
+    WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(By.id("inventory_sidebar_link")));
+    allItems.click();
+    Assertions.assertTrue(driver.getCurrentUrl().contains("/inventory") || driver.getCurrentUrl().contains("/booking"),
+            "All Items should navigate to inventory/booking page");
+
+    // About (external link)
+    WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("about_sidebar_link")));
+    aboutLink.click();
+
+    // Switch to new tab/window
+    String originalWindow = driver.getWindowHandle();
+    wait.until(driver -> driver.getWindowHandles().size() > 1);
+    for (String handle : driver.getWindowHandles()) {
+        if (!handle.equals(originalWindow)) {
+            driver.switchTo().window(handle);
+            break;
         }
     }
+    Assertions.assertTrue(driver.getCurrentUrl().contains("automationintesting.com"),
+            "About link should open external domain containing automationintesting.com");
+    driver.close();
+    driver.switchTo().window(originalWindow);
 
-    @Test
-    @Order(1)
-    public void testRoomBooking() {
-        driver.get(BASE_URL);
-        
-        // Book a room
-        WebElement bookButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(text(), 'Book this room')]")));
-        bookButton.click();
-        
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='firstname']")));
-        firstName.sendKeys("John");
-        
-        WebElement lastName = driver.findElement(By.xpath("//input[@name='lastname']"));
-        lastName.sendKeys("Doe");
-        
-        WebElement email = driver.findElement(By.xpath("//input[@name='email']"));
-        email.sendKeys("john.doe@example.com");
-        
-        WebElement phone = driver.findElement(By.xpath("//input[@name='phone']"));
-        phone.sendKeys("1234567890");
-        
-        WebElement bookDate = driver.findElement(By.xpath("//input[@name='bookDate']"));
-        bookDate.sendKeys("2024-01-01");
-        
-        WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(), 'Book')]"));
-        submitButton.click();
-        
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Booking Successful!')]")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Room booking failed");
-    }
+    // Reset App State (already tested in helper)
+    resetAppState();
 
-    @Test
-    @Order(2)
-    public void testContactFormSubmission() {
-        driver.get(BASE_URL);
-        
-        // Navigate to contact page
-        WebElement contactLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'Contact')]")));
-        contactLink.click();
-        
-        // Fill contact form
-        WebElement name = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='name']")));
-        name.sendKeys("Test User");
-        
-        WebElement contactEmail = driver.findElement(By.xpath("//input[@name='email']"));
-        contactEmail.sendKeys("test@example.com");
-        
-        WebElement phone = driver.findElement(By.xpath("//input[@name='phone']"));
-        phone.sendKeys("1234567890");
-        
-        WebElement subject = driver.findElement(By.xpath("//input[@name='subject']"));
-        subject.sendKeys("Test Subject");
-        
-        WebElement message = driver.findElement(By.xpath("//textarea[@name='description']"));
-        message.sendKeys("This is a test message");
-        
-        WebElement submitButton = driver.findElement(By.xpath("//button[contains(text(), 'Submit')]"));
-        submitButton.click();
-        
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Thanks for getting in touch')]")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Contact form submission failed");
-    }
+    // Logout
+    menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+    WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+    logoutLink.click();
+    wait.until(ExpectedConditions.urlContains("/admin"));
+    Assertions.assertTrue(driver.getCurrentUrl().contains("/admin"), "Logout should return to login page");
+}
 
-    @Test
-    @Order(3)
-    public void testAdminLogin() {
-        driver.get(BASE_URL + "#/admin");
-        
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='username']")));
-        username.sendKeys("admin");
-        
-        WebElement password = driver.findElement(By.xpath("//input[@name='password']"));
-        password.sendKeys("password");
-        
-        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Login')]"));
-        loginButton.click();
-        
-        WebElement dashboard = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(), 'Dashboard')]")));
-        Assertions.assertTrue(dashboard.isDisplayed(), "Admin login failed");
-    }
-
-    @Test
-    @Order(4)
-    public void testInvalidAdminLogin() {
-        driver.get(BASE_URL + "#/admin");
-        
-        WebElement username = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//input[@name='username']")));
-        username.sendKeys("wrong");
-        
-        WebElement password = driver.findElement(By.xpath("//input[@name='password']"));
-        password.sendKeys("wrong");
-        
-        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(), 'Login')]"));
-        loginButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Bad credentials')]")));
-        Assertions.assertTrue(errorMessage.isDisplayed(), "Invalid login error not shown");
-    }
-
-    @Test
-    @Order(5)
-    public void testRoomDetails() {
-        driver.get(BASE_URL);
-        
-        WebElement roomDetails = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//button[contains(text(), 'View Details')]")));
-        roomDetails.click();
-        
-        WebElement roomDescription = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'room-details')]")));
-        Assertions.assertTrue(roomDescription.isDisplayed(), "Room details not shown");
-    }
-
-    @Test
-    @Order(6)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        
-        // Test Twitter link
-        testExternalLink("Twitter", "twitter.com");
-        
-        // Test Facebook link
-        testExternalLink("Facebook", "facebook.com");
-        
-        // Test LinkedIn link
-        testExternalLink("LinkedIn", "linkedin.com");
-    }
-
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, '" + expectedDomain + "')]")));
+@Test
+@Order(5)
+public void testFooterSocialLinks() {
+    // Visit home page (one level below base is just "/")
+    navigateTo("/");
+    // Footer links are expected to have identifiable selectors or alt text
+    String[] socialSelectors = {
+            "a[href*='twitter.com']",
+            "a[href*='facebook.com']",
+            "a[href*='linkedin.com']"
+    };
+    for (String selector : socialSelectors) {
+        List<WebElement> links = driver.findElements(By.cssSelector(selector));
+        if (links.isEmpty()) {
+            continue; // If a social link is missing, skip to avoid false failure
+        }
+        WebElement link = links.get(0);
+        String originalWindow = driver.getWindowHandle();
         link.click();
-        
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
-                }
+
+        // Wait for new window/tab
+        wait.until(driver -> driver.getWindowHandles().size() > 1);
+        for (String handle : driver.getWindowHandles()) {
+            if (!handle.equals(originalWindow)) {
+                driver.switchTo().window(handle);
+                break;
             }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
         }
+        // Verify domain contains expected social network
+        String currentUrl = driver.getCurrentUrl().toLowerCase();
+        Assertions.assertTrue(currentUrl.contains(selector.split("://")[1].split("\\.")[0]),
+                "Social link should navigate to correct domain: " + selector);
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
+}
+
+@Test
+@Order(6)
+public void testBookingFlowOneLevelBelow() {
+    // The site provides a booking page at /booking (one level below base)
+    navigateTo("/booking");
+    // Verify booking form is present
+    WebElement checkIn = wait.until(ExpectedConditions.elementToBeClickable(By.id("checkin_date")));
+    WebElement checkOut = wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout_date")));
+    WebElement bookBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("book_button")));
+
+    // Fill dates (use future dates)
+    checkIn.sendKeys("2025-12-10");
+    checkOut.sendKeys("2025-12-12");
+    bookBtn.click();
+
+    // Expect a confirmation message
+    WebElement confirmation = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("booking_confirmation")));
+    Assertions.assertTrue(confirmation.isDisplayed(), "Booking confirmation should be displayed");
+    Assertions.assertTrue(confirmation.getText().toLowerCase().contains("booking"),
+            "Confirmation text should mention booking");
+}
 }

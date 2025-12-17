@@ -1,4 +1,4 @@
-package GTP5.ws09.seq03;
+package GPT5.ws09.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -8,10 +8,9 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldHeadlessTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -44,10 +43,6 @@ public class RealWorldHeadlessTest {
     }
 
     // ===== Helpers =====
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
 
     private WebElement first(By by) {
         List<WebElement> list = driver.findElements(by);
@@ -316,7 +311,6 @@ public class RealWorldHeadlessTest {
                 });
                 List<String> newOrder = captureFirstArticleTitles(3);
                 Assertions.assertNotEquals(originalOrder, newOrder, "Selecting sort option should change feed order.");
-                originalOrder = newOrder;
             }
         } else {
             Assertions.assertTrue(true, "No sort dropdown present; skipping.");

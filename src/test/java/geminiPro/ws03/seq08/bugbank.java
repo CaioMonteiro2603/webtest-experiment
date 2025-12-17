@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq08;
+package geminiPro.ws03.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankComprehensiveTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final Duration TIMEOUT = Duration.ofSeconds(15); // Increased timeout for this app

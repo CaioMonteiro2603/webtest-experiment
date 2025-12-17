@@ -1,17 +1,17 @@
-package deepseek.ws08.seq07;
+package SunaDeepSeek.ws08.seq07;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
+
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
@@ -35,128 +35,249 @@ public class JPetStoreTest {
 
     @Test
     @Order(1)
-    public void testStoreNavigation() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement fishCategory = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Fish")));
-        fishCategory.click();
-
-        wait.until(ExpectedConditions.urlContains("FISH"));
-        WebElement productTable = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("Catalog")));
-        Assertions.assertTrue(productTable.isDisplayed(), "Fish category page should be displayed");
+        Assertions.assertEquals("JPetStore Demo", driver.getTitle());
+        Assertions.assertTrue(driver.getCurrentUrl().contains("jpetstore.aspectran.com"));
     }
 
     @Test
     @Order(2)
-    public void testProductSelection() {
-        driver.get(BASE_URL + "actions/Catalog.action?viewCategory=&categoryId=FISH");
-        WebElement productLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("FI-SW-01")));
-        productLink.click();
-
-        wait.until(ExpectedConditions.urlContains("FI-SW-01"));
-        WebElement addToCartButton = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("input[value='Add to Cart']")));
-        Assertions.assertTrue(addToCartButton.isDisplayed(), "Product details page should be displayed");
+    public void testNavigationToCategories() {
+        driver.get(BASE_URL);
+        List<WebElement> categoryLinks = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector("#SidebarContent a")
+        ));
+        
+        for (WebElement categoryLink : categoryLinks) {
+            categoryLink.click();
+            
+            wait.until(ExpectedConditions.urlContains("categoryId="));
+            Assertions.assertTrue(driver.getCurrentUrl().contains("categoryId="));
+            
+            WebElement productTable = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("#Catalog table")
+            ));
+            Assertions.assertTrue(productTable.isDisplayed());
+            
+            driver.navigate().back();
+        }
     }
 
     @Test
     @Order(3)
-    public void testCartOperations() {
-        driver.get(BASE_URL + "actions/Catalog.action?viewProduct=&productId=FI-SW-01");
-        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[value='Add to Cart']")));
-        addToCartButton.click();
-
-        wait.until(ExpectedConditions.urlContains("viewCart"));
-        WebElement cartTable = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("h2")));
-        Assertions.assertTrue(cartTable.getText().contains("Shopping Cart"), "Cart page should be displayed");
-
-        WebElement removeButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("Remove")));
-        removeButton.click();
+    public void testProductDetailsNavigation() {
+        driver.get(BASE_URL);
+        WebElement fishCategory = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#SidebarContent a[href*='FISH']")
+        ));
+        fishCategory.click();
         
-        WebElement emptyCartMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".messages")));
-        Assertions.assertTrue(emptyCartMessage.getText().contains("Your cart is empty"));
+        WebElement firstProduct = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#Catalog table tr:nth-child(3) a")
+        ));
+        firstProduct.click();
+        
+        wait.until(ExpectedConditions.urlContains("productId="));
+        WebElement itemTable = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("#Catalog table")
+        ));
+        Assertions.assertTrue(itemTable.isDisplayed());
     }
 
     @Test
     @Order(4)
-    public void testUserLogin() {
+    public void testLoginFunctionality() {
         driver.get(BASE_URL);
-        WebElement signInButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("Sign In")));
-        signInButton.click();
-
-        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
-        WebElement passwordField = driver.findElement(By.name("password"));
-        WebElement loginButton = driver.findElement(By.name("signon"));
-
-        usernameField.clear();
+        WebElement signInLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.linkText("Sign In")
+        ));
+        signInLink.click();
+        
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("username")
+        ));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("password")
+        ));
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("signon")
+        ));
+        
         usernameField.sendKeys(USERNAME);
-        passwordField.clear();
         passwordField.sendKeys(PASSWORD);
         loginButton.click();
-
+        
         wait.until(ExpectedConditions.urlContains("main"));
-        WebElement welcomeMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.id("WelcomeContent")));
-        Assertions.assertTrue(welcomeMessage.getText().contains("Welcome"), "Login should be successful");
+        WebElement welcomeMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("#WelcomeContent")
+        ));
+        Assertions.assertTrue(welcomeMessage.getText().contains(USERNAME));
     }
 
     @Test
     @Order(5)
     public void testInvalidLogin() {
-        driver.get(BASE_URL + "actions/Account.action?signonForm=");
-        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.name("username")));
-        WebElement passwordField = driver.findElement(By.name("password"));
-        WebElement loginButton = driver.findElement(By.name("signon"));
-
-        usernameField.sendKeys("invaliduser");
-        passwordField.sendKeys("wrongpass");
+        driver.get(BASE_URL + "account/signonForm");
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("username")
+        ));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("password")
+        ));
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("signon")
+        ));
+        
+        usernameField.sendKeys("invalid");
+        passwordField.sendKeys("invalid");
         loginButton.click();
-
-        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".messages li")));
-        Assertions.assertTrue(errorMessage.getText().contains("Invalid"), "Should show invalid login message");
+        
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("#Content ul li")
+        ));
+        Assertions.assertTrue(errorMessage.getText().contains("Invalid username or password"));
     }
 
     @Test
     @Order(6)
-    public void testSearchFunctionality() {
+    public void testExternalLinks() {
         driver.get(BASE_URL);
-        WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(By.name("keyword")));
-        WebElement searchButton = driver.findElement(By.name("searchProducts"));
-
-        searchInput.sendKeys("fish");
-        searchButton.click();
-
-        wait.until(ExpectedConditions.urlContains("keyword=fish"));
-        List<WebElement> products = driver.findElements(By.cssSelector("table td a"));
-        Assertions.assertTrue(products.size() > 0, "Search should return results");
+        String mainWindow = driver.getWindowHandle();
+        
+        // Test Twitter link
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='twitter.com']")
+        ));
+        twitterLink.click();
+        
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(mainWindow)) {
+                driver.switchTo().window(windowHandle);
+                Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"));
+                driver.close();
+                break;
+            }
+        }
+        driver.switchTo().window(mainWindow);
+        
+        // Test Facebook link
+        WebElement facebookLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='facebook.com']")
+        ));
+        facebookLink.click();
+        
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(mainWindow)) {
+                driver.switchTo().window(windowHandle);
+                Assertions.assertTrue(driver.getCurrentUrl().contains("facebook.com"));
+                driver.close();
+                break;
+            }
+        }
+        driver.switchTo().window(mainWindow);
     }
 
     @Test
     @Order(7)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
+    public void testAddToCart() {
+        // Login first
+        driver.get(BASE_URL + "account/signonForm");
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("username")
+        ));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("password")
+        ));
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("signon")
+        ));
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
+        
+        // Navigate to a product
+        WebElement fishCategory = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#SidebarContent a[href*='FISH']")
+        ));
+        fishCategory.click();
+        
+        WebElement firstProduct = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#Catalog table tr:nth-child(3) a")
+        ));
+        firstProduct.click();
+        
+        // Add to cart
+        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[value='Add to Cart']")
+        ));
+        addToCartButton.click();
+        
+        // Verify cart
+        wait.until(ExpectedConditions.urlContains("viewCart"));
+        WebElement cartTable = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("#Cart table")
+        ));
+        Assertions.assertTrue(cartTable.isDisplayed());
+    }
 
-        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("img[src*='twitter']")));
-        twitterLink.click();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+    @Test
+    @Order(8)
+    public void testCheckoutProcess() {
+        // Login first
+        driver.get(BASE_URL + "account/signonForm");
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("username")
+        ));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("password")
+        ));
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.name("signon")
+        ));
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
         
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
+        // Add item to cart
+        WebElement fishCategory = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#SidebarContent a[href*='FISH']")
+        ));
+        fishCategory.click();
         
-        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"));
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        WebElement firstProduct = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("#Catalog table tr:nth-child(3) a")
+        ));
+        firstProduct.click();
+        
+        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[value='Add to Cart']")
+        ));
+        addToCartButton.click();
+        
+        // Proceed to checkout
+        WebElement proceedToCheckout = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[value='Proceed to Checkout']")
+        ));
+        proceedToCheckout.click();
+        
+        // Complete order
+        WebElement continueButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[value='Continue']")
+        ));
+        continueButton.click();
+        
+        WebElement confirmButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[value='Confirm']")
+        ));
+        confirmButton.click();
+        
+        // Verify order confirmation
+        WebElement confirmationMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("#Content ul li")
+        ));
+        Assertions.assertTrue(confirmationMessage.getText().contains("Thank you"));
     }
 }

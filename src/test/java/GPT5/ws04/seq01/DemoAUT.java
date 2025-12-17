@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -68,22 +68,6 @@ public class KatalonFormTest {
             }
         }
         Assertions.fail("No new tab opened.");
-    }
-
-    private void clickExternalOrSameTab(By locator, String expectedDomain) {
-        int before = driver.getWindowHandles().size();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", link);
-        link.click();
-        if (driver.getWindowHandles().size() > before) {
-            switchToNewTabAndVerify(expectedDomain);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                    "Expected navigation to: " + expectedDomain);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("form")));
-        }
     }
 
     private void fillMinimalValidFormData() {

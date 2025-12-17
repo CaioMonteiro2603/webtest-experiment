@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriHeadlessSuite {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -56,14 +56,6 @@ public class BrasilAgriHeadlessSuite {
         return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
     }
 
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
-    }
-
     private static Optional<WebElement> waitClickable(By by) {
         try {
             return Optional.of(wait.until(ExpectedConditions.elementToBeClickable(by)));
@@ -80,15 +72,6 @@ public class BrasilAgriHeadlessSuite {
 
     private static boolean elementExists(By by) {
         return driver.findElements(by).size() > 0;
-    }
-
-    private static void clearAndType(By locator, String value) {
-        Optional<WebElement> el = first(locator);
-        el.ifPresent(e -> {
-            wait.until(ExpectedConditions.visibilityOf(e));
-            e.clear();
-            e.sendKeys(value);
-        });
     }
 
     private static String hostOf(String url) {

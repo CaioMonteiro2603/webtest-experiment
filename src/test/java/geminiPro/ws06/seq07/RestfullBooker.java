@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq07;
+package geminiPro.ws06.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -21,7 +21,7 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
+
 
 /**
  * A comprehensive JUnit 5 end-to-end test suite for the Restful Booker Platform.
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookingPlatformE2ETest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String ADMIN_URL = BASE_URL + "#/admin";

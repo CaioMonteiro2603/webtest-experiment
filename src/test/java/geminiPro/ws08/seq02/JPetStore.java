@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq02;
+package geminiPro.ws08.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.time.Duration;
  * and covers the full end-to-end purchase flow.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore{
 
     // Constants for configuration
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";

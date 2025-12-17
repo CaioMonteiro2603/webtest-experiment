@@ -3,8 +3,6 @@ package GPT20b.ws06.seq02;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
@@ -23,7 +21,7 @@ import org.openqa.selenium.support.ui.Select;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationTestingAppTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -84,7 +82,7 @@ public class AutomationTestingAppTest {
                 ExpectedConditions.urlContains("dashboard"),
                 ExpectedConditions.urlContains("home"),
                 ExpectedConditions.urlContains("account"),
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(".profile"), By.cssSelector(".account-summary"))
+                ExpectedConditions.presenceOfElementLocated(By.cssSelector(".profile"))
         ));
 
         assertTrue(driver.getCurrentUrl().contains("dashboard") || driver.getCurrentUrl().contains("home") || driver.getCurrentUrl().contains("account"),
@@ -264,7 +262,7 @@ public class AutomationTestingAppTest {
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.urlContains("dashboard"),
                 ExpectedConditions.urlContains("home"),
-                ExpectedConditions.presenceOfElementLocated(By.cssSelector(".profile"), By.cssSelector(".account-summary"))
+                ExpectedConditions.presenceOfElementLocated(By.cssSelector(".profile"))
         ));
     }
 

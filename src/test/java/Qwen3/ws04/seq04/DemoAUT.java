@@ -10,7 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class KatalonFormTest {
+public class DemoAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
 

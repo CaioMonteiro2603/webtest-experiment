@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq10;
+package geminiPro.ws05.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -19,7 +19,7 @@ import java.time.Duration;
  * error handling, and navigation to its privacy policy page.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatFormTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

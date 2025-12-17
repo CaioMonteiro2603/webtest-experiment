@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTest {
+public class JSFiddle{
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;

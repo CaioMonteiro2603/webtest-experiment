@@ -18,8 +18,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.Map;
 @TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

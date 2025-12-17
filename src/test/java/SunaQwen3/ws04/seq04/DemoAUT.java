@@ -12,12 +12,10 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebUITestSuite {
+public class DemoAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
-    private static final String USERNAME = "katalon";
-    private static final String PASSWORD = "katalon";
 
     @BeforeAll
     static void setUp() {
@@ -218,7 +216,6 @@ public class WebUITestSuite {
     void testTermsAndConditionsCheckboxValidation() {
         driver.get(BASE_URL);
         
-        By acceptCheckbox = By.cssSelector("input[type='checkbox'][name='accept']");
         By submitButton = By.cssSelector("button[type='submit']");
         By errorMessages = By.cssSelector(".invalid-feedback");
 

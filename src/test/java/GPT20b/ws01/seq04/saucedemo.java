@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoHeadlessTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";

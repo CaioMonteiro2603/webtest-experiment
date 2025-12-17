@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq09;
+package geminiPro.ws01.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * This suite covers login, product sorting, cart management, checkout, navigation, and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String VALID_USERNAME = "standard_user";

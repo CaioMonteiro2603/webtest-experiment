@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

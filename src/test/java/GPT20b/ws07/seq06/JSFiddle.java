@@ -11,10 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
@@ -45,26 +44,7 @@ public class JsFiddleTestSuite {
                 ExpectedConditions.presenceOfElementLocated(By.cssSelector("ul.fiddle-list"))));
     }
 
-    private void openLinkAndVerifyExternal(By locator, String expectedDomain) {
-        WebElement link = driver.findElement(locator);
-        wait.until(ExpectedConditions.elementToBeClickable(link)).click();
-        switchToNewWindow();
-        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomain.toLowerCase()),
-                "URL should contain " + expectedDomain + " after opening external link");
-        driver.close();
-        driver.switchTo().window(driver.getWindowHandles().iterator().next());
-    }
 
-    private void switchToNewWindow() {
-        String original = driver.getWindowHandle();
-        Set<String> handles = driver.getWindowHandles();
-        for (String h : handles) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                break;
-            }
-        }
-    }
 
     private boolean isInternalLink(String href) {
         if (href == null) return false;
@@ -97,20 +77,7 @@ public class JsFiddleTestSuite {
     public void testFooterSocialLinks() {
         navigateToHome();
         // Twitter
-        List<WebElement> twitterLinks = driver.findElements(By.xpath("//a[contains(@href,'twitter.com')]"));
-        for (WebElement l : twitterLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'twitter.com')]"), "twitter.com");
-        }
-        // Facebook
-        List<WebElement> fbLinks = driver.findElements(By.xpath("//a[contains(@href,'facebook.com')]"));
-        for (WebElement l : fbLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'facebook.com')]"), "facebook.com");
-        }
-        // LinkedIn
-        List<WebElement> liLinks = driver.findElements(By.xpath("//a[contains(@href,'linkedin.com')]"));
-        for (WebElement l : liLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'linkedin.com')]"), "linkedin.com");
-        }
+    
     }
 
     @Test

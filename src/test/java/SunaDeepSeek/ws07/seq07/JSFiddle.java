@@ -1,17 +1,16 @@
-package deepseek.ws07.seq07;
+package SunaDeepSeek.ws07.seq07;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTest {
+public class JSFiddle {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";
@@ -24,118 +23,84 @@ public class JsFiddleTest {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
-
     @Test
     @Order(1)
-    public void testHomePageLoad() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement editorWrapper = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("editor-wrapper")));
-        Assertions.assertTrue(editorWrapper.isDisplayed(), "Editor wrapper should be visible");
+        wait.until(ExpectedConditions.titleContains("JSFiddle"));
+        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL));
     }
 
     @Test
     @Order(2)
-    public void testBasicFiddleExecution() {
+    public void testEditorPage() {
         driver.get(BASE_URL);
-        
-        WebElement htmlInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#editor-html textarea")));
-        WebElement runButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".button.button-green.run")));
-        
-        htmlInput.clear();
-        htmlInput.sendKeys("<h1>Hello World</h1>");
-        runButton.click();
-        
-        WebElement resultFrame = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#result")));
-        driver.switchTo().frame(resultFrame);
-        
-        WebElement h1 = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.tagName("h1")));
-        Assertions.assertEquals("Hello World", h1.getText(), "Output should match input HTML");
-        
-        driver.switchTo().defaultContent();
+        WebElement editorLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/show/']")));
+        editorLink.click();
+        wait.until(ExpectedConditions.urlContains("/show/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/show/"));
     }
 
     @Test
     @Order(3)
-    public void testDarkThemeSwitch() {
+    public void testDocumentationLink() {
         driver.get(BASE_URL);
-        WebElement themeButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".theme-chooser")));
-        themeButton.click();
-        
-        WebElement darkThemeOption = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//li[contains(text(),'Dark')]")));
-        darkThemeOption.click();
-        
-        WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.tagName("body")));
-        String themeClass = body.getAttribute("class");
-        Assertions.assertTrue(themeClass.contains("dark"), "Dark theme should be applied");
+        WebElement docsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/documentation/']")));
+        docsLink.click();
+        wait.until(ExpectedConditions.urlContains("/documentation/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/documentation/"));
     }
 
     @Test
     @Order(4)
-    public void testNewFiddleCreation() {
+    public void testExternalLinks() {
         driver.get(BASE_URL);
-        WebElement newButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".new")));
-        newButton.click();
+        List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[href^='http']:not([href*='jsfiddle.net'])"));
         
-        WebElement confirmButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".new-green")));
-        confirmButton.click();
-        
-        WebElement htmlInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#editor-html textarea")));
-        Assertions.assertEquals("", htmlInput.getText(), "Editor should be cleared for new fiddle");
+        for (WebElement link : externalLinks) {
+            String href = link.getAttribute("href");
+            if (href.contains("twitter.com") || href.contains("facebook.com") || href.contains("linkedin.com")) {
+                String originalWindow = driver.getWindowHandle();
+                link.click();
+                
+                wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+                for (String windowHandle : driver.getWindowHandles()) {
+                    if (!windowHandle.equals(originalWindow)) {
+                        driver.switchTo().window(windowHandle);
+                        break;
+                    }
+                }
+                
+                Assertions.assertTrue(driver.getCurrentUrl().contains(href.split("/")[2]));
+                driver.close();
+                driver.switchTo().window(originalWindow);
+            }
+        }
     }
 
     @Test
     @Order(5)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
+    public void testLoginForm() {
+        driver.get(BASE_URL + "login/");
+        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("login")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
 
-        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[title='Twitter']")));
-        twitterLink.click();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
-        
-        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"));
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        usernameField.sendKeys("testuser");
+        passwordField.sendKeys("wrongpassword");
+        loginButton.click();
+
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector(".alert.alert-danger")));
+        Assertions.assertTrue(errorMessage.isDisplayed());
     }
 
-    @Test
-    @Order(6)
-    public void testEditorLayoutSelection() {
-        driver.get(BASE_URL);
-        WebElement layoutButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".layout-chooser")));
-        layoutButton.click();
-        
-        WebElement bottomLayoutOption = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//li[contains(text(),'Bottom results')]")));
-        bottomLayoutOption.click();
-        
-        WebElement resultContainer = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".vertical #result-container")));
-        Assertions.assertTrue(resultContainer.isDisplayed(), "Bottom layout should be visible");
+    @AfterAll
+    public static void tearDown() {
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

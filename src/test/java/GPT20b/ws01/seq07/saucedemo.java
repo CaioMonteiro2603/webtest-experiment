@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -23,7 +22,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoWebTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -67,7 +66,7 @@ public class SauceDemoWebTest {
 
     private void openBurgerMenu(int menuIndex) {
         // menuIndex: 0 All Items, 1 About, 2 Logout, 3 Reset, 4 Close
-        WebElement burgerBtn = wait.until ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+        WebElement burgerBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
         burgerBtn.click();
         List<WebElement> menuItems = wait.until(
                 ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".bm-item-list li a")));

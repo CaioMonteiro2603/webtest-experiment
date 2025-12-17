@@ -21,12 +21,10 @@ import java.time.Duration;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
-import java.util.Iterator;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTestSuite {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final String VALID_USERNAME = "standard_user";

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -16,7 +15,7 @@ import java.util.Set;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -84,7 +83,6 @@ public class JsFiddleTestSuite {
         wait.until(frameToBeAvailableAndSwitchToIt(resultFrame));
 
         // Check if console output appears (if default fiddle logs)
-        By consoleOutput = By.cssSelector("body:contains('Hello')");
         boolean hasConsole = driver.findElements(By.tagName("body")).size() > 0 &&
                 driver.findElement(By.tagName("body")).getText().contains("Hello");
 

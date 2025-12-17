@@ -8,10 +8,11 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankHeadlessTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -173,8 +174,6 @@ public class BugBankHeadlessTest {
                 // assert order change if options imply sorting; if not, just ensure no error
                 List<String> newOrder = getSiblingItemTexts(select);
                 if (!initialOrder.isEmpty() && !newOrder.isEmpty()) {
-                    boolean orderChanged = !newOrder.equals(initialOrder);
-                    // Not all dropdowns are sorters; assert that at least selection is applied (value changed)
                     Assertions.assertTrue(sel.getAllSelectedOptions().size() == 1, "A single option should be selected.");
                     // If the new order didn't change for any option, that's acceptable; keep stability.
                 }

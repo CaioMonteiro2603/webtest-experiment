@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

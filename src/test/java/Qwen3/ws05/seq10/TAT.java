@@ -1,7 +1,6 @@
 package Qwen3.ws05.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -10,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class CacTatFormTest {
+public class TAT {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -30,8 +29,7 @@ public class CacTatFormTest {
             driver.quit();
         }
     }
-
-    @TestMethodOrder(OrderAnnotation.class)
+    
     @Test
     @Order(1)
     void testPageTitleAndHeader_DisplayedCorrectly() {
@@ -272,14 +270,5 @@ public class CacTatFormTest {
         product.sendKeys("mouse");
         opensource.click();
         message.sendKeys("Gostaria de mais informações sobre o produto solicitado.");
-    }
-
-    private boolean isElementPresent(By locator) {
-        try {
-            driver.findElement(locator);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
     }
 }

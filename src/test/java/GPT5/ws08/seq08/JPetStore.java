@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreAspectranE2ETest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -73,15 +73,6 @@ public class JPetStoreAspectranE2ETest {
                     ExpectedConditions.presenceOfElementLocated(By.linkText("Sign Out")),
                     ExpectedConditions.presenceOfElementLocated(By.cssSelector("ul.messages li"))
             ));
-        }
-    }
-
-    private void signOutIfLoggedIn() {
-        openBase();
-        List<WebElement> outs = driver.findElements(By.linkText("Sign Out"));
-        if (!outs.isEmpty()) {
-            wait.until(ExpectedConditions.elementToBeClickable(outs.get(0))).click();
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.linkText("Sign In")));
         }
     }
 

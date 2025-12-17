@@ -7,11 +7,10 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class RealWorldDemoTest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -107,7 +106,6 @@ public class RealWorldDemoTest {
         List<WebElement> articleLinks = driver.findElements(By.cssSelector(".article-preview a"));
         if (!articleLinks.isEmpty()) {
             WebElement firstArticleLink = articleLinks.get(0);
-            String originalUrl = driver.getCurrentUrl();
             firstArticleLink.click();
             
             // Wait for article details to load
@@ -203,7 +201,6 @@ public class RealWorldDemoTest {
         List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
         assertTrue(footerLinks.size() >= 2);
         
-        String originalHandle = driver.getWindowHandle();
         
         // Test some footer links (check for existence rather than navigation which may not be reliable)
         for (int i = 0; i < Math.min(2, footerLinks.size()); i++) {
@@ -274,7 +271,6 @@ public class RealWorldDemoTest {
         List<WebElement> tagLinks = driver.findElements(By.cssSelector(".tag-list a"));
         if (!tagLinks.isEmpty()) {
             WebElement firstTag = tagLinks.get(0);
-            String originalUrl = driver.getCurrentUrl();
             firstTag.click();
             
             // Wait for tag page to load
@@ -306,9 +302,5 @@ public class RealWorldDemoTest {
         // Try to find main navigation
         List<WebElement> navLinks = driver.findElements(By.cssSelector("nav a"));
         assertTrue(navLinks.size() >= 2);
-        
-        // Verify social sharing elements (can appear on home page)
-        List<WebElement> socialLinks = driver.findElements(By.cssSelector(".social-links a"));
-        // Not required to pass, but good to verify structure
     }
 }

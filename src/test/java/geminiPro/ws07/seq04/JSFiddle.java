@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq04;
+package geminiPro.ws07.seq04;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.Set;
  * like running code, changing settings, navigating menus, and verifying external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleHeadlessFirefoxTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

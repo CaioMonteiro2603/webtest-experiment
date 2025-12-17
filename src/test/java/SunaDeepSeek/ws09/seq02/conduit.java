@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldWebTest {
+public class conduit {
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static WebDriver driver;
     private static WebDriverWait wait;

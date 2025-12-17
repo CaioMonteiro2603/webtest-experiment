@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank  {
 
     private static WebDriver driver;
     private static final String BASE_URL = "https://bugbank.netlify.app/";

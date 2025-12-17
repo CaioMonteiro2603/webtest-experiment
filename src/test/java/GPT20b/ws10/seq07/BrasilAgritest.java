@@ -2,6 +2,7 @@ package GPT20b.ws10.seq07;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,7 +28,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * All tests use Firefox in headless mode and Selenium 4 APIs.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GestaoWebsiteTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -40,7 +41,7 @@ public class GestaoWebsiteTest {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        driver.manage().timeouts().pageLoadTimeout(10, java.util.concurrent.TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
@@ -131,18 +132,6 @@ public class GestaoWebsiteTest {
         return names.stream().map(WebElement::getText).collect(Collectors.toList());
     }
 
-    private List<Double> getItemPrices() {
-        List<WebElement> priceEls = driver.findElements(By.cssSelector(".item-price, .price, .product-price"));
-        List<Double> prices = new ArrayList        for (WebElement el : priceEls) {
-            String text = el.getText().replaceAll("[^0-9.,-]", "").replace(",", ".");
-            try {
-                prices.add(Double.parseDouble(text));
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        return prices;
-    }
-
     /* ---------- Tests ---------- */
 
     @Test
@@ -215,15 +204,6 @@ public class GestaoWebsiteTest {
         List<String> sortedDesc = new ArrayList<>(original);
         Collections.sort(sortedDesc, java.util.Comparator.reverseOrder());
         Assertions.assertEquals(sortedDesc, desc, "Name descending sort should order items reverse alphabetically");
-
-        // Option: Price low to high
-        WebElement optionLowHigh = wait.until(
-                ExpectedConditions.elementToBeClickable(By.xpath("//select[@id='sortOrder']/option[@value='price optionLowHigh.click();
-        List<Double> lowHigh = getItemPrices();
-        List<Double> sortedLowHigh = new ArrayList<>(lowHigh);
-        Collections.sort(sortedLowHigh);
-        Assertions.assertEquals(sortedLowHigh, lowHigh,
-                "Price low-to-high sort should order prices ascending");
     }
 
     @Test

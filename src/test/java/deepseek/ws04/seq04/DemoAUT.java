@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";

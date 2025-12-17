@@ -1,4 +1,4 @@
-package GPT20b.ws04.seq07;
+package GPT20b.ws09.seq07;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldDemoTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

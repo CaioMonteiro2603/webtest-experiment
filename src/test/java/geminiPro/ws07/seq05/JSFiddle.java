@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq05;
+package geminiPro.ws07.seq05;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -24,7 +24,7 @@ import java.util.Set;
  * testing UI elements and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleE2ETest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

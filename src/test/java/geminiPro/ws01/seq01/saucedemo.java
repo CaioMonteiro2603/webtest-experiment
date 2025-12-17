@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * This suite covers login, product sorting, cart management, menu actions, external links, and the full checkout process.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoComprehensiveTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

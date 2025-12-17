@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormHtmlTest {
+public class DEMOAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

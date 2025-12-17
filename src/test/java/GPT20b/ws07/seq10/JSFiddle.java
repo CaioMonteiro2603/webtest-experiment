@@ -24,7 +24,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTests {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

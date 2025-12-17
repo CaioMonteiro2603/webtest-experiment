@@ -6,13 +6,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
 
+import java.net.MalformedURLException;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTestSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -123,7 +124,7 @@ public class ParabankTestSuite {
 
     @Test
     @Order(5)
-    public void testExternalFooterLinks() {
+    public void testExternalFooterLinks() throws MalformedURLException {
         login(USERNAME, PASSWORD);
         // Footer social links (Twitter, Facebook, LinkedIn) are identified by their href domains
         List<WebElement> footerLinks = driver.findElements(By.xpath("//footer//a[@href]"));

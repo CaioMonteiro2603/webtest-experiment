@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
@@ -147,7 +147,6 @@ public class SauceDemoTest {
         List<WebElement> socialLinks = driver.findElements(By.cssSelector(".social_link a"));
         String originalWindow = driver.getWindowHandle();
         for (WebElement link : socialLinks) {
-            String expectedDomain = link.getAttribute("href");
             link.click();
             wait.until(driver -> driver.getWindowHandles().size() > 1);
             Set<String> allWindows = driver.getWindowHandles();

@@ -9,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://demo.realworld.io/";

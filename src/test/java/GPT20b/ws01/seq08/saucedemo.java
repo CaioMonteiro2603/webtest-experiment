@@ -18,17 +18,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
-    private static final String USERNAME = "standard_user";
-    private static final String PASSWORD = "secret_sauce";
-
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -72,19 +67,6 @@ public class SaucedemoTest {
         wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
     }
 
-    // Helper: reset app state via burger menu
-    private void resetAppState() {
-        By menuBtn = By.id("react-burger-menu-btn");
-        wait.until(ExpectedConditions.elementToBeClickable(menuBtn)).click();
-
-        By resetBtn = By.id("reset_sidebar_link");
-        wait.until(ExpectedConditions.elementToBeClickable(resetBtn)).click();
-
-        // Verify inventory page reloaded
-        By inventoryContainer = By.id("inventory_container");
-        wait.until(ExpectedConditions.visibilityOfElementLocated(inventoryContainer));
-    }
-
     // Helper: open burger menu and perform click on specified id
     private void clickMenuItem(String itemId) {
         By menuBtn = By.id("react-burger-menu-btn");
@@ -101,17 +83,6 @@ public class SaucedemoTest {
             return 0;
         }
         return Integer.parseInt(badges.get(0).getText());
-    }
-
-    // Helper: add all items to cart
-    private void addAllItemsToCart() {
-        List<WebElement> addButtons = wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
-                By.cssSelector("button[data-test^='add-to-cart']"), 0));
-        for (WebElement btn : addButtons) {
-            if (btn.isDisplayed()) {
-                wait.until(ExpectedConditions.elementToBeClickable(btn)).click();
-            }
-        }
     }
 
     // TEST 1: Login with valid credentials

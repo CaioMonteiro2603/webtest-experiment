@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

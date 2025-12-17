@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq03;
+package geminiPro.ws09.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +23,7 @@ import java.util.Set;
  * using Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppE2ETest {
+public class conduit {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://demo.realworld.io/";
@@ -32,7 +32,7 @@ public class RealWorldAppE2ETest {
     private static String testUsername;
     private static String testEmail;
     private static final String TEST_PASSWORD = "Password123!";
-    private static String articleSlug;
+  
 
     // --- Selenium WebDriver ---
     private static WebDriver driver;
@@ -152,8 +152,6 @@ public class RealWorldAppE2ETest {
         Assertions.assertTrue(postedComment.isDisplayed(), "Posted comment not found.");
 
         // --- 4. Clean Up: Delete Article ---
-        // The URL slug is needed to verify the article doesn't exist later.
-        articleSlug = driver.getCurrentUrl().substring(driver.getCurrentUrl().lastIndexOf('/') + 1);
         
         driver.findElement(By.xpath("//button[contains(text(),'Delete Article')]")).click();
         

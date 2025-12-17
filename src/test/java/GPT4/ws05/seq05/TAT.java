@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -70,7 +70,6 @@ public class CacTatTest {
     @Order(4)
     public void testExternalPrivacyLink() {
         driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
         WebElement privacyLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='privacy.html']")));
         privacyLink.click();
         wait.until(ExpectedConditions.urlContains("privacy.html"));

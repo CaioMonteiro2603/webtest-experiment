@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriHeadlessTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -47,10 +47,6 @@ public class BrasilAgriHeadlessTest {
 
     private void waitForPageReady() {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-    }
-
-    private WebElement visible(By by) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
     }
 
     private WebElement clickable(By by) {
@@ -270,7 +266,8 @@ public class BrasilAgriHeadlessTest {
         );
         Optional<WebElement> burger = findFirstVisible(burgerLocs);
         if (burger.isPresent()) {
-            clickable(burger.get()).click();
+        	WebElement web = wait.until(ExpectedConditions.elementToBeClickable(burger.get())); 
+        	web.clear();
             // After open, a nav link should be visible
             boolean anyNavLink = !displayedAll(By.cssSelector("nav a, .offcanvas a, .collapse.show a, .ant-menu a, .MuiListItem-button")).isEmpty();
             Assertions.assertTrue(anyNavLink, "Nav links should be visible after opening burger/offcanvas");

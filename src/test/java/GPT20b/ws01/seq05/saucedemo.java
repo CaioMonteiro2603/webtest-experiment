@@ -18,10 +18,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoWebTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
@@ -88,7 +87,6 @@ public class SaucedemoWebTest {
 
     private void switchToNewWindowAndReturn(String expectedDomain) {
         String original = driver.getWindowHandle();
-        Set<String> handles = driver.getWindowHandles();
         wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
         for (String handle : driver.getWindowHandles()) {
             if (!handle.equals(original)) {
@@ -173,7 +171,7 @@ public class SaucedemoWebTest {
         Assertions.assertTrue(driver.getCurrentUrl().contains("index.html"), "Did not return to login after logout");
     }
 
-   Test
+   @Test
     @Order(5)
     public void testFooterSocialLinks() {
         doLogin(USERNAME, PASSWORD);

@@ -13,7 +13,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleHeadlessTest {
+public class JSFIDDLE {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

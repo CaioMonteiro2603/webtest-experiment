@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParaBankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -136,7 +136,7 @@ public class ParaBankTest {
     @Order(5)
     public void testAccountServices() {
         driver.get("https://parabank.parasoft.com/parabank/overview.htm");
-        WebElement accountsLink = driver.findElement(By.linkText("Accounts"]);
+        WebElement accountsLink = driver.findElement(By.linkText("Accounts"));
         accountsLink.click();
         assertTrue(driver.getCurrentUrl().contains("/parabank/bank/accounts.htm"));
 

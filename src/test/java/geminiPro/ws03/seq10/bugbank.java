@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq10;
+package geminiPro.ws03.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -17,7 +17,7 @@ import java.util.regex.Pattern;
  * Tests are ordered to follow a logical user flow, with each step building upon the previous one.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankE2ETest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

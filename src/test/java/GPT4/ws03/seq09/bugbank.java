@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankBetaE2ETest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

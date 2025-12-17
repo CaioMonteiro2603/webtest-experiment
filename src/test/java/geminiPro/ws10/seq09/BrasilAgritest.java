@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq09;
+package geminiPro.ws10.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://beta.brasilagritest.com/login";
     private static final String VALID_USERNAME = "superadmin@brasilagritest.com.br";

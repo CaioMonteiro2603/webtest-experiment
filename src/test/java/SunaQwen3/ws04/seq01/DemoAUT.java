@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -112,7 +112,7 @@ public class FormPageTest {
         WebElement experienceCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.id("exp-1")));
         if (EXPERIENCE && !experienceCheckbox.isSelected()) {
             experienceCheckbox.click();
-        } else if (!EXPERIENCE && experienceCheckbox.isSelected()) {
+        } else if (!EXPERIENCE) {
             experienceCheckbox.click();
         }
 

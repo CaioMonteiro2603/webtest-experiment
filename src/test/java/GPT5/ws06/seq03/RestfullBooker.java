@@ -1,4 +1,4 @@
-package GTP5.ws06.seq03;
+package GPT5.ws06.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -8,10 +8,9 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingHeadlessTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

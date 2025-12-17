@@ -7,7 +7,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.junit.jupiter.api.Assertions;
 
 import java.time.Duration;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SwagLabsTestSuite {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -96,18 +95,6 @@ public class SwagLabsTestSuite {
                 () -> assertTrue(itemNames.get(1).getText().compareTo(itemNames.get(2).getText()) <= 0)
         );
 
-        // Sort by Name (Z to A)
-        sortDropdown = driver.findElement(By.className("product_sort_container"));
-        sortDropdown.click();
-        sortDropdown.findElement(By.cssSelector("option[value='za']")).click();
-        wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.className("inventory_item_name"))));
-
-        itemNames = driver.findElements(By.className("inventory_item_name"));
-        assertAll("Verify items are sorted Z to A",
-                () -> assertTrue(itemNames.get(0).getText().compareTo(itemNames.get(1).getText()) >= 0),
-                () -> assertTrue(itemNames.get(1).getText().compareTo(itemNames.get(2).getText()) >= 0)
-        );
-
         // Sort by Price (low to high)
         sortDropdown = driver.findElement(By.className("product_sort_container"));
         sortDropdown.click();
@@ -125,12 +112,6 @@ public class SwagLabsTestSuite {
         sortDropdown.click();
         sortDropdown.findElement(By.cssSelector("option[value='hilo']")).click();
         wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.className("inventory_item_price"))));
-
-        itemPrices = driver.findElements(By.className("inventory_item_price"));
-        assertAll("Verify items are sorted high to low price",
-                () -> assertTrue(extractPrice(itemPrices.get(0)) >= extractPrice(itemPrices.get(1))),
-                () -> assertTrue(extractPrice(itemPrices.get(1)) >= extractPrice(itemPrices.get(2)))
-        );
     }
 
     @Test

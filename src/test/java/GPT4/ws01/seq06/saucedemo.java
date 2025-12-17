@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -89,7 +89,6 @@ public class SauceDemoTest {
         dropdown.click();
 
         List<WebElement> options = driver.findElements(By.cssSelector(".product_sort_container option"));
-        String initialFirstItem = driver.findElement(By.className("inventory_item_name")).getText();
 
         for (WebElement option : options) {
             option.click();

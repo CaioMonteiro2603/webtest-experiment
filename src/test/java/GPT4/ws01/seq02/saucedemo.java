@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -49,15 +49,6 @@ public class SauceDemoTest {
         passwordInput.clear();
         passwordInput.sendKeys(password);
         loginButton.click();
-    }
-
-    private void resetAppState() {
-        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-        menuButton.click();
-        WebElement resetButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
-        resetButton.click();
-        WebElement closeMenu = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
-        closeMenu.click();
     }
 
     @Test

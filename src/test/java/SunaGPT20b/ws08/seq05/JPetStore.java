@@ -1,4 +1,4 @@
-package SunaDeepSeek.ws08.seq04;
+package SunaGPT20b.ws08.seq05;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";

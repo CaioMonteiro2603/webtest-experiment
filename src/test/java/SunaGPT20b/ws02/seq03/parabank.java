@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -136,9 +136,9 @@ public class ParabankTest {
         List<WebElement> footerLinks = driver.findElements(By.xpath("//footer//a[contains(@href,'parasoft.com')]"));
         Assertions.assertFalse(footerLinks.isEmpty(), "Expected at least one external footer link to parasoft.com");
 
-        WebElementLink = footerLinks.get(0);
+        WebElement Link = footerLinks.get(0);
         String originalWindow = driver.getWindowHandle();
-        externalLink.click();
+        Link.click();
 
         // Switch to new window/tab
         wait.until(driver1 -> driver1.getWindowHandles().size() > 1);

@@ -11,7 +11,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SauceDemoTest {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
 

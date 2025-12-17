@@ -9,9 +9,10 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationIntestingHeadlessTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
 
@@ -107,14 +108,19 @@ public class AutomationIntestingHeadlessTest {
         findElement("button#login, button.login").click();
 
         // Verify we are on the inventory page
-        wait.until(ExpectedConditions.urlContains("/inventory.html")
-                .or(ExpectedConditions.urlContains("/overview")));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.urlContains("/inventory.html"),
+                ExpectedConditions.urlContains("/overview")
+        ));
         List<WebElement> items = driver.findElements(By.cssSelector(".product-card, .inventory_item"));
         assertFalse(items.isEmpty(), "Inventory items should be visible after successful login");
 
         // Logout
         findElement("a#logout, button#logout, button.logout").click();
-        wait.until(ExpectedConditions.urlContains("/login") .or(ExpectedConditions.urlContains("/index.html")));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.urlContains("/login"),
+                ExpectedConditions.urlContains("/index.html")
+        ));
         assertTrue(driver.getCurrentUrl().contains("/login") || driver.getCurrentUrl().contains("/index.html"),
                 "Should be back on login screen after logout");
     }
@@ -182,7 +188,10 @@ public class AutomationIntestingHeadlessTest {
         WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("a#logout, a[href*='logout'], button#logout")));
         logoutLink.click();
-        wait.until(ExpectedConditions.urlContains("/login") .or(ExpectedConditions.urlContains("/index.html")));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.urlContains("/login"),
+                ExpectedConditions.urlContains("/index.html")
+        ));
     }
 
     @Test

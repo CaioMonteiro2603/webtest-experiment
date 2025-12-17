@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ParaBankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

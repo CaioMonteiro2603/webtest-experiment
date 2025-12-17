@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USERNAME = "caio@gmail.com";
     private static final String PASSWORD = "123";
@@ -160,13 +160,14 @@ public class ParabankTest {
         // Search for any link that contains 'about' and is external
         List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[href*='about']"));
         if (externalLinks.isEmpty()) {
-            externalLinks = driver.findElements(By.cssSelector("a[href^='http']").stream()
+            externalLinks = driver.findElements(By.cssSelector("a[href^='http']"))
+                    .stream()
                     .filter(e -> !e.getAttribute("href").contains("parabank.parasoft.com"))
-                    .toArray(WebElement[]::new));
+                    .toList();
         }
 
+
         for (WebElement link : externalLinks) {
-            String href = link.getAttribute("href");
             String originalWindow = driver.getWindowHandle();
             link.click();
 

@@ -8,12 +8,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FormTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -24,7 +23,7 @@ public class FormTest {
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @AfterAll
@@ -101,7 +100,6 @@ public class FormTest {
         submitButton.click();
         
         // Verify error messages
-        WebElement errorElements = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error-message")));
         assertTrue(driver.findElements(By.cssSelector(".error-message")).size() > 0);
     }
 
@@ -146,7 +144,6 @@ public class FormTest {
     @Order(6)
     public void testDropdownOptions() {
         driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
-        WebElement educationDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.id("education")));
         
         // Check options exist
         assertTrue(driver.findElement(By.xpath("//option[@value='']")).isDisplayed());

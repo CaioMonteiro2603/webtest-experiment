@@ -1,4 +1,4 @@
-package GTP5.ws06.seq06;
+package GPT5.ws06.seq06;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -51,14 +51,6 @@ public class AutomationInTestingHeadlessSuite {
     private static Optional<WebElement> first(By by) {
         List<WebElement> els = driver.findElements(by);
         return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
-    }
-
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
     }
 
     private static Optional<WebElement> waitClickable(By by) {

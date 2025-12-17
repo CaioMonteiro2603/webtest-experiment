@@ -11,7 +11,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class HotelTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -322,8 +322,6 @@ public class HotelTest {
 
         WebElement firstRoom = wait.until(ExpectedConditions.elementToBeClickable(By.className("room")));
         firstRoom.click();
-
-        WebElement modal = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("exampleModal")));
 
         WebElement firstNameField = driver.findElement(By.id("firstName"));
         firstNameField.sendKeys("Caio");

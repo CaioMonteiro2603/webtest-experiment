@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

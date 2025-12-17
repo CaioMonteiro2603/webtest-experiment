@@ -1,4 +1,4 @@
-package geminiPRO.ws10.seq02;
+package geminiPro.ws10.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.util.UUID;
  * login, navigation, and a full CRUD (Create, Read, Delete) flow for a product.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTest {
+public class BrasilAgritest {
 
     // Constants for configuration
     private static final String BASE_URL = "https://beta.brasilagritest.com/login";

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -49,17 +49,6 @@ public class CacTatTest {
     private void reloadPage() {
         driver.navigate().refresh();
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-    }
-
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
     }
 
     private void performLogin(String user, String pass) {

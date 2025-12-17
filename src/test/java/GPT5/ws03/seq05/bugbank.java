@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -45,10 +45,6 @@ public class BugBankHeadlessSuite {
         // Wait for either login form or main landing hero
         wait.until(driver1 -> driver1.findElements(By.cssSelector("input[type='email'], button, a")).size() > 0);
         Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should load base URL");
-    }
-
-    private WebElement waitClickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
 
     private boolean isPresent(By locator) {

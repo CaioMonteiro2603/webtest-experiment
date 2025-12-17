@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.net.URISyntaxException;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -23,7 +24,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatWebTest {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final String HOST = "cac-tat.s3.eu-central-1.amazonaws.com";
@@ -151,7 +152,7 @@ public class CacTatWebTest {
 
     @Test
     @Order(5)
-    public void testExternalLinksHandling() {
+    public void testExternalLinksHandling() throws URISyntaxException {
         navigateToBase();
         List<WebElement> anchorElements = driver.findElements(By.tagName("a"));
         assertFalse(anchorElements.isEmpty(), "No link elements found on the page");

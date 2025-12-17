@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AgritestWebTest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -47,14 +46,6 @@ public class AgritestWebTest {
         passwordField.clear();
         passwordField.sendKeys(USER_PASSWORD);
         loginButton.click();
-    }
-
-    private void resetAppStateIfAvailable() {
-        List<WebElement> resetButtons = driver.findElements(By.xpath("//button[contains(text(), 'Reset App State')]"));
-        if (!resetButtons.isEmpty()) {
-            WebElement resetButton = wait.until(ExpectedConditions.elementToBeClickable(resetButtons.get(0)));
-            resetButton.click();
-        }
     }
 
     private void switchToNewTabAndVerify(String expectedDomain) {

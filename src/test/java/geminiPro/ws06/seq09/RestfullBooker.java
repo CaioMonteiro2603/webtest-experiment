@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq09;
+package geminiPro.ws06.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +16,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with headless Firefox.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String ADMIN_USERNAME = "admin";

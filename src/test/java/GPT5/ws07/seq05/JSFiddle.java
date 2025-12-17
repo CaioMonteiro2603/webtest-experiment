@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleHeadlessSuite {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -74,18 +74,6 @@ public class JSFiddleHeadlessSuite {
         }
     }
 
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
-    private boolean visible(By by) {
-        try {
-            return wait.until(ExpectedConditions.visibilityOfElementLocated(by)).isDisplayed();
-        } catch (TimeoutException e) {
-            return false;
-        }
-    }
-
     private boolean present(By by) {
         return driver.findElements(by).size() > 0;
     }
@@ -109,7 +97,8 @@ public class JSFiddleHeadlessSuite {
         String baseHost = hostOf(driver.getCurrentUrl());
 
         // open link
-        waitClickable(link).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(link));
+        web.click();
 
         // determine if new window opened
         try {
@@ -220,7 +209,8 @@ public class JSFiddleHeadlessSuite {
                 Optional<WebElement> linkOpt = driver.findElements(By.cssSelector("a[href]")).stream()
                         .filter(a -> h.equals(a.getAttribute("href"))).findFirst();
                 if (linkOpt.isEmpty()) continue;
-                waitClickable(linkOpt.get()).click();
+                WebElement web = wait.until(ExpectedConditions.elementToBeClickable(linkOpt.get()));
+                web.click();
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 waitDocumentReady();
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on jsfiddle.net host");
@@ -301,7 +291,8 @@ public class JSFiddleHeadlessSuite {
         Assumptions.assumeTrue(authLink != null, "Auth-related link not found; skipping");
 
         String before = driver.getCurrentUrl();
-        waitClickable(authLink).click();
+        WebElement web = wait.until(ExpectedConditions.elementToBeClickable(authLink));
+        web.click(); 
         try {
             wait.until(d -> !d.getCurrentUrl().equals(before));
         } catch (TimeoutException ignored) {}

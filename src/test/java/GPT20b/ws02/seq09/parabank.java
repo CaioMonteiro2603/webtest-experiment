@@ -1,4 +1,3 @@
-```java
 package GPT20b.ws02.seq09;
 
 import org.junit.jupiter.api.AfterAll;
@@ -22,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -75,18 +74,6 @@ public class ParabankTest {
     private String getCurrentWindowHandle() {
         return driver.getWindowHandle();
     }
-
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
-    }
-
     /* ---------- Tests ---------- */
 
     @Test

@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq04;
+package geminiPro.ws01.seq04;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @DisplayName("SauceDemo Full Test Suite (Firefox Headless)")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoFirefoxTestSuite {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

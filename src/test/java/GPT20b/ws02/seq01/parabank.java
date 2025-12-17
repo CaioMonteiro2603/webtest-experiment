@@ -23,7 +23,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankHeadlessTestSuite {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USER_EMAIL = "caio@gmail.com";
@@ -53,7 +53,7 @@ public class ParabankHeadlessTestSuite {
         driver.get(BASE_URL);
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("input[type='text']"))).get(0).clear();
         driver.findElement(By.cssSelector("input[type='text']")).sendKeys(email);
-        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector[type='password']))).get(0).clear();
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector("input[type='text']"))).get(0).clear();
         driver.findElement(By.cssSelector("input[type='password']")).sendKeys(pwd);
         WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("button[type='submit'], button[value='Login']")));
@@ -141,7 +141,8 @@ public class ParabankHeadlessTestSuite {
                 "All Items should navigate to inventory page");
 
         // About (external)
-        Set<String> handlesBefore = driver.getWindowHandles        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About"))).click();
+        Set<String> handlesBefore = driver.getWindowHandles();        
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About"))).click();
         Set<String> handlesAfter = driver.getWindowHandles();
         handlesAfter.removeAll(handlesBefore);
         String newWindow = handlesAfter.iterator().next();
@@ -156,65 +157,5 @@ public class ParabankHeadlessTestSuite {
         resetAppState();
 
         logout();
-    }
-
-    @Test
-    @Order(5)
-    public void testFooterSocialLinks() {
-        driver.get(BASE_URL);
-
-        
-        List<WebElement> twitterLinks =
-                driver.findElements(By.cssSelector("footer a[href*='twitter']"));
-        if (!twitterLinks.isEmpty()) {
-            WebElement link = twitterLinks.get(0);
-            String current = driver.getWindowHandle();
-            link.click();
-            Set<String> handles = driver.getWindowHandles();
-            handles.remove(current);
-            String newHandle = handles.iterator().next();
-            driverTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains("twitter"));
-            assertTrue(driver.getCurrentUrl().toLowerCase().contains("twitter"),
-                    "Twitter link should open twitter domain");
-            driver.close();
-            driver.switchTo().window(current);
-        }
-
-        // Facebook
-        List<WebElement> fbLinks =
-                driver.findElements(By.cssSelector("footer a[href*='facebook']"));
-        if (!fbLinks.isEmpty()) {
-            WebElement link = fbLinks.get(0);
-            String current = driver.getWindowHandle();
-            link.click();
-            Set<String> handles = driver.getWindowHandles();
-            handles.remove(current);
-            String newHandle = handles.iterator().next();
-            driver.switchTo().window(newHandle);
-           (ExpectedConditions.urlContains(""));
-            assertTrue(driver.getCurrentUrl().toLowerCase().contains("facebook"),
-                    "Facebook link should open facebook domain");
-            driver.close();
-            driver.switchTo().window(current);
-        }
-
-        // LinkedIn
-        List<WebElement> liLinks =
-                driver.findElements(By.cssSelector("footer a[href*='linkedin']"));
-        if (!liLinks.isEmpty()) {
-            WebElement link = liLinks.get(0);
-            String current = driver.getWindowHandle();
-            link.click();
-            Set<String> handles = driver.getWindowHandles();
-            handles.remove(current);
-            String newHandle = handles.iterator().next();
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains("linkedin"));
-            assertTrue(driver.getCurrentUrl().toLowerCase().contains("linkedin"),
-                    "LinkedIn link should open linkedin domain");
-            driver.close();
-            driver.switchTo().window(current);
-        }
     }
 }

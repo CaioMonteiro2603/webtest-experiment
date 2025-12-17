@@ -8,7 +8,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Assumptions;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +26,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleTests {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;

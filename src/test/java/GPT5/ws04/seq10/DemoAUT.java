@@ -12,10 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessSuite {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -111,7 +112,8 @@ public class KatalonFormHeadlessSuite {
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
 
-        waitClickable(link).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link));
+        el.click();
 
         // Wait for either a new window or navigation to external host
         wait.until(d -> d.getWindowHandles().size() > before.size()

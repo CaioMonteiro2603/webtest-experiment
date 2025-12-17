@@ -10,10 +10,9 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
+public class conduit {
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static final String USERNAME = "testuser";
     private static final String PASSWORD = "testpass123";

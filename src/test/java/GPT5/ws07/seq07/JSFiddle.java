@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * - Tests base page, external links, and one-level internal links (limited to avoid flakiness)
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class JsfiddleNetTest {
+public class JSFiddle {
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -61,20 +61,6 @@ public class JsfiddleNetTest {
         } catch (Exception e) {
             return false;
         }
-    }
-
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        for (String h : driver.getWindowHandles()) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
     }
 
     private void closeTabAndSwitchBack(String originalHandle) {
@@ -141,7 +127,6 @@ public class JsfiddleNetTest {
                 try {
                     if (!e.isDisplayed()) continue;
                     wait.until(ExpectedConditions.elementToBeClickable(e));
-                    String href = e.getAttribute("href");
                     e.click();
                     // Wait for either URL change or editor area present
                     wait.until(d -> !d.getCurrentUrl().equals(originalUrl)
@@ -186,7 +171,6 @@ public class JsfiddleNetTest {
             if (isExternalHref(href)) {
                 tested++;
                 if (tested > 4) break; // limit to avoid flakiness
-                String newHandle = openUrlInNewTab(href);
                 try {
                     try {
                         URI u = new URI(href);

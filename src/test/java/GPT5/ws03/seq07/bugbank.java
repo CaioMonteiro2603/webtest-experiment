@@ -14,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankHeadlessSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -59,10 +59,19 @@ public class BugBankHeadlessSuite {
     }
 
     private void openExternalAndAssertDomain(WebElement link, String expectedDomainFragment) {
-        String original = driver.getWindowHandle();
+    	String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
-        waitClickable(link).click();
-        wait.until(d -> d.getWindowHandles().size() != before.size() || !Objects.equals(((JavascriptExecutor) d).executeScript("return document.readyState"), "loading"));
+
+        // waitClickable expects By, so just click the WebElement directly
+        wait.until(ExpectedConditions.elementToBeClickable(link)).click();
+
+        wait.until(d ->
+                d.getWindowHandles().size() != before.size()
+                || "complete".equals(
+                        ((JavascriptExecutor) d).executeScript("return document.readyState")
+                )
+        );
+
         Set<String> after = new HashSet<>(driver.getWindowHandles());
         after.removeAll(before);
         if (!after.isEmpty()) {

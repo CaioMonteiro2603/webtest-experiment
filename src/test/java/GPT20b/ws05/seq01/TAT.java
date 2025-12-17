@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CACTATTests {
+public class TAT {
 
 
 private static WebDriver driver;
@@ -77,11 +77,16 @@ public void testSortingDropdown() {
     WebElement sortElement = wait.until(ExpectedConditions.elementToBeClickable(sortDiff));
     sortElement.click();
 
-    List<WebElement> options = wait.await(
-            ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//select[@id='sortDropdown']/option")),
-            Duration.ofSeconds(5));
-    Assumptions.assumeTrue(options.size() > 1,
-            "Sorting dropdown has insufficient options; skipping.");
+    List<WebElement> options = wait.until(
+            ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                    By.xpath("//select[@id='sortDropdown']/option")
+            )
+    );
+
+    Assumptions.assumeTrue(
+            options.size() > 1,
+            "Sorting dropdown has insufficient options; skipping."
+    );
 
     for (WebElement option : options) {
         sortElement.click(); // re-open dropdown
@@ -218,7 +223,7 @@ public void testExternalLinksOnPage() {
         if (!after.isEmpty()) {
             String newHandle = after.iterator().next();
             driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlToBePresent());
+            wait.until(ExpectedConditions.urlContains("/"));
             Assertions.assertNotEquals(href, driver.getCurrentUrl(),
                     "URL should load after click – a new window/tab was opened.");
             driver.close();
@@ -231,4 +236,5 @@ public void testExternalLinksOnPage() {
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
         }
     }
+}
 }

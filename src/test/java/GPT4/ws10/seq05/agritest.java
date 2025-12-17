@@ -9,11 +9,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriTestSuite {
+public class agritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -48,20 +47,6 @@ public class BrasilAgriTestSuite {
         passwordInput.sendKeys(password);
         loginButton.click();
     }
-
-    private void logoutIfLoggedIn() {
-        driver.get("https://beta.brasilagritest.com/dashboard");
-        if (driver.getCurrentUrl().contains("/dashboard")) {
-            List<WebElement> menuButtons = driver.findElements(By.cssSelector("button[aria-label='menu']"));
-            if (!menuButtons.isEmpty()) {
-                menuButtons.get(0).click();
-                WebElement logoutBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[contains(text(), 'Logout')]")));
-                logoutBtn.click();
-                wait.until(ExpectedConditions.urlContains("/login"));
-            }
-        }
-    }
-
     @Test
     @Order(1)
     public void testLoginPageLoads() {

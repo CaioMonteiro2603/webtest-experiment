@@ -8,11 +8,10 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTest {
+public class BrasilAgritest {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";

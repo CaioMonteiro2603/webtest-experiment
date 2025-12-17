@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq04;
+package geminiPro.ws05.seq04;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +27,7 @@ import java.util.Set;
  * This test suite targets SauceDemo to align with the detailed functional scope.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ECommerceHeadlessSuite {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

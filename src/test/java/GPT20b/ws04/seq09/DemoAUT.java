@@ -15,23 +15,24 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
+    private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
 
     @BeforeAll
     public static void setUpDriver() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
-        driverDriver(options);
+        driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         driver.get(BASE_URL);
     }
@@ -50,16 +51,6 @@ public class KatalonFormTest {
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
     }
 
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
-    }
 
     /* ---------- Tests ---------- */
 
@@ -90,7 +81,7 @@ public class KatalonFormTest {
         WebElement submitBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
         submitBtn.click();
 
-        Web error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
+        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
         Assertions.assertTrue(error.getText().toLowerCase().contains("please fill"),
                 "Expected error message for missing fields not displayed");
     }
@@ -118,7 +109,7 @@ public class KatalonFormTest {
     public void testExternalLinks() {
         reloadPage();
         List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[target='_blank']"));
-       .assertFalse(externalLinks.isEmpty(),
+       assertFalse(externalLinks.isEmpty(),
                 "No external links found on the page");
 
         String originalHandle = driver.getWindowHandle();

@@ -10,7 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FormTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
@@ -39,8 +39,6 @@ public class FormTest {
         WebElement firstName = wait.until(ExpectedConditions.elementToBeClickable(By.id("first-name")));
         WebElement lastName = driver.findElement(By.id("last-name"));
         WebElement genderMale = driver.findElement(By.id("radio-button-1"));
-        WebElement genderFemale = driver.findElement(By.id("radio-button-2"));
-        WebElement genderOther = driver.findElement(By.id("radio-button-3"));
         WebElement dob = driver.findElement(By.id("dob"));
         WebElement address = driver.findElement(By.id("address"));
         WebElement email = driver.findElement(By.id("email"));

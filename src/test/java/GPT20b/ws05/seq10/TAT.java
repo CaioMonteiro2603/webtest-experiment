@@ -21,9 +21,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BooleanSupplier;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CrapeTaTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -77,7 +78,7 @@ public class CrapeTaTest {
 
     @Test
     @Order(1)
-    public void testLoginValid() {
+    public static void testLoginValid() {
         driver.get(BASE_URL);
         Assumptions.assumeTrue(elementPresent(By.id("userid")), "User id field not found");
         Assumptions.assumeTrue(elementPresent(By.id("password")), "Password field not found");
@@ -122,7 +123,7 @@ public class CrapeTaTest {
         loginBtn.click();
 
         Assumptions.assumeTrue(
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error"))),
+                (BooleanSupplier) wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error"))),
                 "Error message not displayed");
         Assertions.assertTrue(true, "Invalid login produced error");
     }

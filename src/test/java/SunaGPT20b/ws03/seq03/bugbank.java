@@ -1,4 +1,4 @@
-package SunaGPT20bws03.seq03;
+package SunaGPT20b.ws03.seq03;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTestSuite {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -26,7 +26,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USER_EMAIL = "caio@gmail.com";
@@ -76,23 +76,6 @@ public class BugBankTest {
         // wait for logged‑in indicator (e.g., logout button or account overview)
         By logoutLink = new By.ByLinkText("Logout");
         wait.until(ExpectedConditions.visibilityOfElementLocated(logoutLink));
-    }
-
-    private static void logout() {
-        By logoutLink = new By.ByLinkText("Logout");
-        WebElement logoutBtn = wait.until(ExpectedConditions.elementToBeClickable(logoutLink));
-        logoutBtn.click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("button[type='submit'], button[id='loginBtn']")));
-    }
-
-    private static void resetAppState() {
-        By resetLink = new By.ByLinkText("Reset");
-        if (driver.findElements(resetLink).size() > 0) {
-            WebElement resetBtn = wait.until(ExpectedConditions.elementToBeClickable(resetLink));
-            resetBtn.click();
-            // wait for any acknowledgement
-            wait.until(ExpectedConditions.invisibilityOfElementLocated(resetLink));
-        }
     }
 
     private static void openBurgerMenu() {
@@ -276,7 +259,6 @@ public class BugBankTest {
     void testFooterSocialLinks() {
         login();
 
-        @SuppressWarnings("unchecked")
         List<By> links = List.of(
                 By.cssSelector("a[href*='twitter.com']"),
                 By.cssSelector("a[href*='facebook.com']"),

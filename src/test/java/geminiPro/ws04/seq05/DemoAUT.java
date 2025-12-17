@@ -1,4 +1,4 @@
-package geminiPRO.ws04.seq05;
+package geminiPro.ws04.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -21,7 +21,7 @@ import java.time.Duration;
  * the correctness of the submitted data in the resulting URL.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormE2ETest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

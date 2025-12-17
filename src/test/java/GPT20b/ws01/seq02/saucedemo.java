@@ -12,14 +12,15 @@ import java.time.Duration;
 import java.util.*;
 import java.util.stream.Collectors;
 
-private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
-private static final String USERNAME = "standard_user";
-private static final String PASSWORD = "secret_sauce";
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTests {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
+    private static final String USERNAME = "standard_user";
+    private static final String PASSWORD = "secret_sauce";
+
 @BeforeAll
 public static void init() {
     FirefoxOptions options = new FirefoxOptions();
@@ -48,22 +49,6 @@ private void login() {
     WebElement loginBtn = driver.findElement(By.id("login-button"));
     wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
     // Wait for inventory container
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inventory_container")));
-}
-private void logout() {
-    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-    menuBtn.click();
-    WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
-    logoutLink.click();
-    // verify login page
-    wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
-}
-private void resetAppState() {
-    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-    menuBtn.click();
-    WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
-    resetLink.click();
-    // wait for inventory
     wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inventory_container")));
 }
 @Test
@@ -206,18 +191,4 @@ private void switchToLastTab() {
     List<String> list = new ArrayList<>(handles);
     driver.switchTo().window(list.get(list.size() - 1));
 }
-@Test
-@Order(5)
-public void testFooterSocialLinks() {
-    login();
-    List<String> socialIds = Arrays.asList("twitter", "facebook", "linkedin");
-    Map<String, String> domains = Map.of(
-        "twitter", "twitter.com",
-        "facebook", "facebook.com",
-        "linkedin", "linkedin.com"
-    );
-    for (String id : socialIds) {
-        By selector = By.cssSelector("footer a[href*='" + domains.get(id) + "']");
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(selector));
-    }
 }

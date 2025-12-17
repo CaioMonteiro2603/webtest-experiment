@@ -3,7 +3,6 @@ package GPT20b.ws08.seq02;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
-import java.util.Optional;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Assumptions;
@@ -22,7 +21,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.Select;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTestSuite {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -64,8 +63,8 @@ public class JPetStoreTestSuite {
     public void testValidLogin() {
         driver.navigate().to(BASE_URL);
         // Locate login form
-        WebElement usernameField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='uid']")));
-        WebElement passwordField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='pass']")));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='uid']")));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='pass']")));
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='Login'], button[name='Login'], button[type='submit']")));
 
         usernameField.clear();
@@ -97,8 +96,8 @@ public class JPetStoreTestSuite {
     @Order(3)
     public void testInvalidLogin() {
         driver.navigate().to(BASE_URL);
-        WebElement usernameField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='uid']")));
-        WebElement passwordField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='pass']")));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='uid']")));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='pass']")));
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='Login'], button[name='Login'], button[type='submit']")));
 
         usernameField.clear();
@@ -235,8 +234,8 @@ public class JPetStoreTestSuite {
             return; // already logged in
         }
         driver.navigate().to(BASE_URL);
-        WebElement usernameField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='uid']")));
-        WebElement passwordField = wait.until(ExpectedConditions.inputToBeClickable(By.cssSelector("input[name='pass']")));
+        WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='uid']")));
+        WebElement passwordField = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='pass']")));
         WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='Login'], button[name='Login'], button[type='submit']")));
 
         usernameField.clear();
@@ -277,7 +276,7 @@ public class JPetStoreTestSuite {
         Set<String> handles = driver.getWindowHandles();
         for (String handle : handles) {
             if (!handle.equals(originalHandle)) {
-                driver.switchTo().(handle);
+                driver.switchTo();
                 wait.until(ExpectedConditions.urlContains(expectedDomain));
                 assertTrue(driver.getCurrentUrl().contains(expectedDomain),
                         "External link URL should contain: " + expectedDomain);

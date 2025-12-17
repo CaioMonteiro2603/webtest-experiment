@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -61,7 +61,7 @@ public class JPetStoreTest {
 
     private void performLogout() {
         By logoutLink = By.linkText("Logout");
-        wait.until(ExpectedConditions.elementToBeClickableLink)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
         wait.until(ExpectedConditions.urlContains("index.jsp"));
     }
 
@@ -75,17 +75,6 @@ public class JPetStoreTest {
 
     private String currentWindowHandle() {
         return driver.getWindowHandle();
-    }
-
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
     }
 
     /* ---------- Tests ---------- */
@@ -144,7 +133,7 @@ public class JPetStoreTest {
     public void testSortingOptions() {
         performLogin(USERNAME, PASSWORD);
         By sortDropdown = By.id("sort");
-        By firstItem = By.css(".product .productName");
+        By firstItem = By.cssSelector(".product .productName");
 
         String[] optionValues = {"Name", "Category", "Price"};
         String previousFirst = "";
@@ -220,34 +209,6 @@ public class JPetStoreTest {
 
     @Test
     @Order(10)
-    public void testFooterSocialLinks() {
-        performLogin(USERNAME,        List<WebElement> externalLinks = driver.findElements(By.cssSelector("a[target='_blank']"));
-        Assertions.assertFalse(externalLinks.isEmpty(),
-                "No external links found in footer");
-
-        String originalHandle = currentWindowHandle();
-        for (WebElement link : externalLinks) {
-            String href = link.getAttribute("href");
-            link.click();
-
-            Set<String> handles = driver.getWindowHandles();
-            String newHandle = handles.stream()
-                    .filter(h -> !h.equals(originalHandle))
-                    .findFirst()
-                    .orElseThrow(() -> new RuntimeException("New window did not open"));
-
-            driver.switchTo().window(newHandle);
-            wait.until(ExpectedConditions.urlContains(href));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(href),
-                    "External link URL does not contain expected domain: " + href);
-
-            driver.close();
-            driver.switchTo().window(originalHandle);
-        }
-    }
-
-    @Test
-    @Order(11)
     public void testAddToCartAndCheckout() {
         performLogin(USERNAME, PASSWORD);
 

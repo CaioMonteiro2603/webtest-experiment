@@ -7,10 +7,9 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
-import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldIOTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -85,7 +84,7 @@ public class RealWorldIOTest {
         // Logout
         WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href='#settings']")));
         logoutLink.click();
-        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn-outline-danger"));
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button.btn-outline-danger")));
         logoutButton.click();
         wait.until(ExpectedConditions.urlContains("/"));
     }

@@ -1,4 +1,4 @@
-package GTP4.ws07.seq03;
+package GPT4.ws07.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFIDDLE {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

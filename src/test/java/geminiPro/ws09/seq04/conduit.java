@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq04;
+package geminiPro.ws09.seq04;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.util.UUID;
  * login, article creation/editing/deletion, feed navigation, and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldAppHeadlessFirefoxTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -26,7 +26,6 @@ public class RealWorldAppHeadlessFirefoxTest {
     private static String testUsername;
     private static String testEmail;
     private static final String TEST_PASSWORD = "Password123!";
-    private static String articleUrlSlug; // To store the slug for the created article
 
     @BeforeAll
     static void setupAll() {

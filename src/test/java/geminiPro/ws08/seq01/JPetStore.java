@@ -18,7 +18,7 @@ import java.util.UUID;
  * A unique user is created for each test run to ensure idempotency.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

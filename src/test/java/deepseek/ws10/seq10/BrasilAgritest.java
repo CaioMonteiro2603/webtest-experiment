@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriTest {
+public class BrasilAgritest {
     private static WebDriver driver;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String LOGIN = "superadmin@brasilagritest.com.br";

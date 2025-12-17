@@ -26,7 +26,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationIntTestingTests {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriver driver;
@@ -96,7 +96,7 @@ public class AutomationIntTestingTests {
         submitBtn.click();
 
         // Wait for successful login indication (URL or element)
-        wait.until(ExpectedConditions.urlMatches(".*(login|home|dashboard).*", true));
+        wait.until(ExpectedConditions.urlMatches(".*(login|home|dashboard).*"));
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("login") || currentUrl.contains("home") || currentUrl.contains("dashboard"),
                 "Login did not redirect to expected page. URL: " + currentUrl);
@@ -175,7 +175,11 @@ public class AutomationIntTestingTests {
         List<WebElement> allItems = driver.findElements(By.linkText("All Items"));
         if (!allItems.isEmpty()) {
             allItems.get(0).click();
-            wait.until(ExpectedConditions.urlContains("products") || ExpectedConditions.urlContains("inventory"));
+            wait.until(ExpectedConditions.or(
+                    ExpectedConditions.urlContains("products"),
+                    ExpectedConditions.urlContains("inventory")
+            ));
+
             assertTrue(driver.getCurrentUrl().contains("products") || driver.getCurrentUrl().contains("inventory"),
                     "Failed to navigate to All Items page");
             driver.navigate().back();

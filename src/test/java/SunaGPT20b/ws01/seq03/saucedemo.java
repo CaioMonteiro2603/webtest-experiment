@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTestSuite {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -129,7 +129,7 @@ public class SaucedemoTestSuite {
     public void testMenuAllItems() {
         login(USERNAME, PASSWORD);
         openMenu();
-        Web allItems = driver.findElement(By.id("inventory_sidebar_link"));
+        WebElement allItems = driver.findElement(By.id("inventory_sidebar_link"));
         allItems.click();
         wait.until(ExpectedConditions.urlContains("/inventory.html"));
         Assertions.assertTrue(driver.getCurrentUrl().contains("/inventory.html"),
@@ -220,7 +220,7 @@ public class SaucedemoTestSuite {
         cartIcon.click();
         wait.until(ExpectedConditions.urlContains("/cart.html"));
         // Checkout
-        WebElement checkoutBtn = wait.until(ExpectedConditions.elementToBeClickable.id("checkout")));
+        WebElement checkoutBtn = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("checkout")));
         checkoutBtn.click();
         wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
         driver.findElement(By.id("first-name")).sendKeys("John");

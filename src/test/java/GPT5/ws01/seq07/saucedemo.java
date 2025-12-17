@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -15,7 +14,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoHeadlessSuite {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -173,7 +172,6 @@ public class SauceDemoHeadlessSuite {
 
         selectSort("za");
         List<String> namesZA = getItemNames();
-        List<String> sortedZA = new ArrayList<>(namesZA);
         List<String> reversed = new ArrayList<>(sortedAZ);
         Collections.reverse(reversed);
         Assertions.assertEquals(reversed, namesZA, "Z-A sort should be descending by name");

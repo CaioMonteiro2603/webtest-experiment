@@ -11,9 +11,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SwagLabsTestSuite {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
@@ -56,7 +57,6 @@ public class SwagLabsTestSuite {
         login("invalid_user", "invalid_password");
 
         // Assert error message is displayed
-        WebElement errorButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-button")));
         WebElement errorMessage = driver.findElement(By.cssSelector(".error-message-container h3"));
         assertEquals("Epic sadface: Username and password do not match any user in this service",
                 errorMessage.getText(), "Error message should indicate invalid credentials");
@@ -233,22 +233,34 @@ public class SwagLabsTestSuite {
         // Add first item to cart
         List<WebElement> addToCartButtons = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".btn_primary.btn_inventory")));
         assertTrue(addToCartButtons.size() > 0, "At least one item should be available to add to cart");
-        String firstItemName = driver.findElements(By.cssSelector(".inventory_item_name")).get(0).getText();
         addToCartButtons.get(0).click();
 
-        // Verify cart badge shows 1
-        WebElement cartBadge = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".shopping_cart_badge")));
-        assertEquals("1", cartBadge.getText(), "Cart badge should show 1 after adding first item");
+     // Verify cart badge shows 1
+        WebElement cartBadge = wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".shopping_cart_badge"))
+        );
+        Assertions.assertEquals("1", cartBadge.getText(),
+                "Cart badge should show 1 after adding first item");
 
         // Add second item to cart
-        List<WebElement> remainingAddButtons = driver.findElements(By.cssSelector(".btn_primary.btn_inventory"));
-        if (remainingAddButtons.size() > 0) {
+        List<WebElement> remainingAddButtons =
+                driver.findElements(By.cssSelector(".btn_primary.btn_inventory"));
+        if (!remainingAddButtons.isEmpty()) {
             remainingAddButtons.get(0).click();
         }
 
-        // Verify cart badge shows 2
-        cartBadge = wait.until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".shopping_cart_badge"), "2"));
-        assertEquals("2", cartBadge.getText(), "Cart badge should show 2 after adding second item");
+        // Wait until badge text becomes "2"
+        wait.until(
+                ExpectedConditions.textToBePresentInElementLocated(
+                        By.cssSelector(".shopping_cart_badge"),
+                        "2"
+                )
+        );
+
+        // Re-locate the badge to read updated text
+        cartBadge = driver.findElement(By.cssSelector(".shopping_cart_badge"));
+        Assertions.assertEquals("2", cartBadge.getText(),
+                "Cart badge should show 2 after adding second item");
 
         // Go to cart
         WebElement cartLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".shopping_cart_link")));

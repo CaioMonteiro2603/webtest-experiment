@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTestSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

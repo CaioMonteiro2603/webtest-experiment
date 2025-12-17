@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTests {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -190,7 +190,7 @@ public class JSFiddleTests {
 
         WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(sorting));
         // Example interaction: select the first option
-        IList<WebElement> options = sortDropdown.findElements(By.tagName("option"));
+        List<WebElement> options = sortDropdown.findElements(By.tagName("option"));
         if (!options.isEmpty()) {
             options.get(0).click();
             // Verify that page content changes – stubbed by expecting URL change

@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -29,12 +29,6 @@ public class JPetStoreTest {
         if (driver != null) {
             driver.quit();
         }
-    }
-
-    /** Helper: open base URL and ensure we are on the home page */
-    private void openHome() {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
     }
 
     /** Helper: reset app state via the side‑menu */
@@ -135,7 +129,7 @@ public class JPetStoreTest {
             // Select each option
             new Select(sortSelect).selectByVisibleText(option.getText());
             // Wait for list to refresh
-            wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector(".product-name")));// first product element may be refreshed
+            wait.until(ExpectedConditions.stalenessOf(driver.findElement(By.cssSelector(".product-name"))));// first product element may be refreshed
             // Capture first product name
             List<WebElement> products = driver.findElements(By.cssSelector(".product-name"));
             Assertions.assertFalse(products.isEmpty(), "Product list should not be empty after sorting");

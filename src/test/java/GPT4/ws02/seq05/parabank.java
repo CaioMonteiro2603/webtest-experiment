@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
@@ -69,7 +69,6 @@ public class ParabankTest {
         for (WebElement link : links) {
             String href = link.getAttribute("href");
             if (href == null || href.trim().isEmpty()) continue;
-            String originalWindow = driver.getWindowHandle();
             try {
                 link.click();
                 wait.until(ExpectedConditions.urlContains(".htm"));

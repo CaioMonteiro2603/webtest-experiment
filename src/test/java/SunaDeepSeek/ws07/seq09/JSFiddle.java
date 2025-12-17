@@ -1,26 +1,23 @@
-package deepseek.ws07.seq09;
+package SunaDeepSeek.ws07.seq09;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";
-    private static final String TEST_CODE_HTML = "<h1>Hello World</h1>";
-    private static final String TEST_CODE_CSS = "h1 { color: blue; }";
-    private static final String TEST_CODE_JS = "console.log('test');";
 
     @BeforeAll
-    public static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -28,7 +25,7 @@ public class JSFiddleTest {
     }
 
     @AfterAll
-    public static void tearDown() {
+    public static void teardown() {
         if (driver != null) {
             driver.quit();
         }
@@ -38,176 +35,139 @@ public class JSFiddleTest {
     @Order(1)
     public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement editorPanel = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#editor")));
-        assertTrue(editorPanel.isDisplayed(), "Editor panel should be visible");
+        wait.until(ExpectedConditions.titleContains("JSFiddle"));
+        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should be on JSFiddle homepage");
     }
 
     @Test
     @Order(2)
-    public void testCodeEditing() {
+    public void testEditorPageNavigation() {
         driver.get(BASE_URL);
-        
-        // Switch to HTML panel
-        WebElement htmlTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#tabs li:nth-child(1)")));
-        htmlTab.click();
-        
-        WebElement htmlEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#html-editor")));
-        htmlEditor.clear();
-        htmlEditor.sendKeys(TEST_CODE_HTML);
-        
-        // Switch to CSS panel
-        WebElement cssTab = driver.findElement(By.cssSelector("#tabs li:nth-child(2)"));
-        cssTab.click();
-        
-        WebElement cssEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#css-editor")));
-        cssEditor.clear();
-        cssEditor.sendKeys(TEST_CODE_CSS);
-        
-        // Switch to JS panel
-        WebElement jsTab = driver.findElement(By.cssSelector("#tabs li:nth-child(3)"));
-        jsTab.click();
-        
-        WebElement jsEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#js-editor")));
-        jsEditor.clear();
-        jsEditor.sendKeys(TEST_CODE_JS);
-        
-        // Verify content persists
-        htmlTab.click();
-        assertEquals(TEST_CODE_HTML, htmlEditor.getAttribute("value"), 
-            "HTML content should persist");
+        WebElement editorLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/show/']")));
+        editorLink.click();
+        wait.until(ExpectedConditions.urlContains("/show/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/show/"), "Should navigate to editor page");
     }
 
     @Test
     @Order(3)
-    public void testCodeExecution() {
+    public void testDocumentationLink() {
         driver.get(BASE_URL);
-        
-        // Set test code
-        WebElement htmlEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#html-editor")));
-        htmlEditor.clear();
-        htmlEditor.sendKeys(TEST_CODE_HTML);
-        
-        // Run the code
-        WebElement runButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#run")));
-        runButton.click();
-        
-        // Check output
-        WebElement resultFrame = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#result")));
-        driver.switchTo().frame(resultFrame);
-        
-        WebElement output = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("h1")));
-        assertEquals("Hello World", output.getText(), "Output should match the HTML code");
-        
-        driver.switchTo().defaultContent();
+        WebElement docsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/docs/']")));
+        docsLink.click();
+        wait.until(ExpectedConditions.urlContains("/docs/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/docs/"), "Should navigate to docs page");
     }
 
     @Test
     @Order(4)
-    public void testSaveToAnonymousBin() {
+    public void testExternalLinks() {
         driver.get(BASE_URL);
+        String mainWindow = driver.getWindowHandle();
         
-        // Set test code
-        WebElement htmlEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#html-editor")));
-        htmlEditor.clear();
-        htmlEditor.sendKeys(TEST_CODE_HTML);
+        // Test Twitter link
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='twitter.com']")));
+        twitterLink.click();
         
-        // Click save button
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#save")));
-        saveButton.click();
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(mainWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
         
-        // Wait for save to complete
-        WebElement shareLink = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("#shareurl")));
-        assertTrue(shareLink.getAttribute("value").contains("jsfiddle.net"),
-            "Share link should contain jsfiddle.net domain");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"), "Should open Twitter in new tab");
+        driver.close();
+        driver.switchTo().window(mainWindow);
+
+        // Test GitHub link
+        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='github.com']")));
+        githubLink.click();
+        
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(mainWindow)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("github.com"), "Should open GitHub in new tab");
+        driver.close();
+        driver.switchTo().window(mainWindow);
     }
 
     @Test
     @Order(5)
-    public void testMenuNavigation() {
-        driver.get(BASE_URL);
+    public void testLoginFunctionality() {
+        driver.get(BASE_URL + "login/");
         
-        // Click Documentation link
-        WebElement docsLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href='https://doc.jsfiddle.net/']")));
-        docsLink.click();
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.id("login-email")));
+        WebElement passwordField = driver.findElement(By.id("login-password"));
+        WebElement loginButton = driver.findElement(By.id("login-submit"));
+
+        // Negative test case
+        emailField.sendKeys("invalid@example.com");
+        passwordField.sendKeys("wrongpassword");
+        loginButton.click();
         
-        // Verify new tab opened
-        String originalWindow = driver.getWindowHandle();
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
-        
-        assertTrue(driver.getCurrentUrl().contains("doc.jsfiddle.net"), 
-            "Should navigate to documentation site");
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector(".alert.alert-danger")));
+        Assertions.assertTrue(errorMessage.isDisplayed(), "Should show error message for invalid login");
     }
 
     @Test
     @Order(6)
-    public void testPanelResizing() {
+    public void testNavigationMenu() {
         driver.get(BASE_URL);
         
-        // Find and drag the resizer
-        WebElement resizer = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".horizontal-resizer")));
+        // Open menu
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector(".navbar-toggle")));
+        menuButton.click();
         
-        Actions actions = new Actions(driver);
-        actions.clickAndHold(resizer)
-               .moveByOffset(0, 50)
-               .release()
-               .perform();
+        // Verify menu items
+        List<WebElement> menuItems = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector(".nav.navbar-nav li a")));
+        Assertions.assertTrue(menuItems.size() > 0, "Menu should have items");
         
-        WebElement editorWrapper = driver.findElement(By.cssSelector("#editor"));
-        assertTrue(editorWrapper.getSize().height > 300, 
-            "Editor height should increase after resizing");
+        // Close menu
+        menuButton.click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(
+            By.cssSelector(".nav.navbar-nav")));
     }
 
     @Test
     @Order(7)
-    public void testExternalLinks() {
+    public void testFooterLinks() {
         driver.get(BASE_URL);
         
-        // Test GitHub link
-        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='github.com']")));
-        testExternalLink(githubLink, "github.com");
-
-        // Test Twitter link
-        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='twitter.com']")));
-        testExternalLink(twitterLink, "twitter.com");
+        // Scroll to footer
+        ((JavascriptExecutor)driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
+        
+        // Test footer links
+        List<WebElement> footerLinks = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector("footer a")));
+        Assertions.assertTrue(footerLinks.size() > 0, "Footer should have links");
     }
 
-    private void testExternalLink(WebElement link, String expectedDomain) {
-        String originalWindow = driver.getWindowHandle();
-        link.click();
+    @Test
+    @Order(8)
+    public void testSearchFunctionality() {
+        driver.get(BASE_URL);
         
-        for (String windowHandle : driver.getWindowHandles()) {
-            if (!windowHandle.equals(originalWindow)) {
-                driver.switchTo().window(windowHandle);
-                break;
-            }
-        }
+        WebElement searchInput = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("input[type='search']")));
+        searchInput.sendKeys("test");
+        searchInput.sendKeys(Keys.RETURN);
         
-        assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-            "External link should open " + expectedDomain);
-        driver.close();
-        driver.switchTo().window(originalWindow);
+        wait.until(ExpectedConditions.urlContains("search="));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("search=test"), "Should perform search");
     }
 }

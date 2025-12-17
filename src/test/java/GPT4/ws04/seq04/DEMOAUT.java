@@ -1,4 +1,4 @@
-package GTP4.ws04.seq04;
+package GPT4.ws04.seq04;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+public class DEMOAUT {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";

@@ -11,10 +11,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -78,16 +79,6 @@ public class AutomationInTestingSuite {
         el.sendKeys(text);
     }
 
-    private void typeOptional(By by, String text) {
-        List<WebElement> els = driver.findElements(by);
-        if (!els.isEmpty()) {
-            WebElement el = els.get(0);
-            scrollIntoView(el);
-            el.clear();
-            el.sendKeys(text);
-        }
-    }
-
     private ExpectedCondition<Boolean> anyVisible(By... locators) {
         return drv -> {
             for (By by : locators) {
@@ -115,23 +106,6 @@ public class AutomationInTestingSuite {
             }
         }
         Assertions.fail("No new tab was opened for the external link.");
-    }
-
-    private void clickExternalLinkAndAssert(By locator, String expectedDomain) {
-        int before = driver.getWindowHandles().size();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
-        scrollIntoView(link);
-        link.click();
-        // If same-tab navigation, validate and navigate back; else switch to new tab
-        if (driver.getWindowHandles().size() == before) {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                    "Expected navigation to external domain: " + expectedDomain);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
-        } else {
-            switchToNewTabAndVerifyDomain(expectedDomain);
-        }
     }
 
     /* =========================== Tests =========================== */

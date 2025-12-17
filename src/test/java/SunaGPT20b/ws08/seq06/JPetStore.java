@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.ArrayList;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class WebStoreTest {
+public class JPetStore{
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;

@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq10;
+package geminiPro.ws01.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * This suite covers login, product sorting, cart management, the full checkout process, and external link validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoComprehensiveTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

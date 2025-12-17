@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq07;
+package geminiPro.ws03.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankComprehensiveTest {
+public class bugbank {
 
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USER_EMAIL = "caio" + System.currentTimeMillis() + "@gmail.com";
@@ -54,7 +54,6 @@ public class BugBankComprehensiveTest {
     private final By emailInput = By.xpath("//div[label[text()='Email']]/input[@type='email']");
     private final By passwordInput = By.xpath("//div[label[text()='Senha']]/input[@type='password']");
     private final By loginButton = By.xpath("//button[text()='Acessar']");
-    private final By registerButton = By.xpath("//button[text()='Registrar']");
     private final By modalText = By.id("modalText");
     private final By closeModalButton = By.id("btnCloseModal");
     private final By logoutButton = By.id("btnExit");
@@ -78,7 +77,7 @@ public class BugBankComprehensiveTest {
     }
 
     @BeforeAll
-    static void setupAll() {
+    void setupAll() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -199,7 +198,7 @@ public class BugBankComprehensiveTest {
 
     // --- Helper Methods ---
 
-    private static AccountDetails registerUser(String email, String name, String password) {
+    private AccountDetails registerUser(String email, String name, String password) {
         driver.get(BASE_URL);
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Registrar']"))).click();
         

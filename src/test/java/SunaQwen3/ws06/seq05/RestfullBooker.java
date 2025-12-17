@@ -14,14 +14,12 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SiteTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String LOGIN_PAGE_URL = BASE_URL + "login";
-    private static final String INVENTORY_PAGE_URL = BASE_URL + "inventory";
-    private static final String ABOUT_PAGE_URL = "https://saucelabs.com/";
 
     // Test credentials
     private static final String VALID_USERNAME = "admin";

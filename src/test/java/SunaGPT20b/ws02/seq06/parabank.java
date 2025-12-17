@@ -22,7 +22,7 @@ import java.util.Set;
 import java.util.Iterator;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String USERNAME = "caio@gmail.com";

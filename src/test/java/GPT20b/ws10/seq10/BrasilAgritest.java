@@ -24,7 +24,7 @@ import java.util.Set;
 import java.net.URI;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class GestaoTests {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

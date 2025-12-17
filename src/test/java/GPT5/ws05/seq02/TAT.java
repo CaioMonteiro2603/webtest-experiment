@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
@@ -13,7 +12,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessFormTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -41,14 +40,6 @@ public class CacTatHeadlessFormTest {
         wait.until(d -> d.getTitle() != null);
     }
 
-    private WebElement visible(By locator) {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
-    }
-
-    private WebElement clickable(By locator) {
-        return wait.until(ExpectedConditions.elementToBeClickable(locator));
-    }
-
     private WebElement firstDisplayed(By... locators) {
         for (By by : locators) {
             List<WebElement> els = driver.findElements(by);
@@ -68,13 +59,6 @@ public class CacTatHeadlessFormTest {
         el.click();
     }
 
-    private void setValueJS(WebElement el, String value) {
-        ((JavascriptExecutor) driver).executeScript(
-                "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input')); arguments[0].dispatchEvent(new Event('change'));",
-                el, value
-        );
-    }
-
     private void resetOrReload() {
         WebElement resetBtn = firstDisplayed(
                 By.cssSelector("button[type='reset']"),
@@ -86,12 +70,6 @@ public class CacTatHeadlessFormTest {
         } else {
             goHome();
         }
-    }
-
-    private void assertAlertShown() {
-        boolean anyAlert = driver.findElements(By.cssSelector(".success, .error, .alert, .alert-success, .alert-danger")).size() > 0
-                || driver.findElements(By.xpath("//*[contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'sucesso') or contains(translate(.,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'erro')]")).size() > 0;
-        Assertions.assertTrue(anyAlert, "Expected a success or error alert to be visible");
     }
 
     private void clickExternalAndAssert(By linkLocator, String expectedDomainOrPathFragment) {

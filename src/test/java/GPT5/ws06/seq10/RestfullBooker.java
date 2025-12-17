@@ -13,10 +13,11 @@ import java.net.URI;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessSuite {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -422,7 +423,6 @@ public class AutomationInTestingHeadlessSuite {
         Assumptions.assumeTrue(!internalHrefs.isEmpty(), "No internal links found.");
 
         for (String href : internalHrefs) {
-            String before = driver.getCurrentUrl();
             if (href.startsWith("#")) {
                 // SPA navigation
                 WebElement anchor = driver.findElements(By.cssSelector("a[href='" + href + "']")).stream().findFirst().orElse(null);

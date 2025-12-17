@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq07;
+package geminiPro.ws07.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleComprehensiveTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15); // Increased for this complex app
@@ -48,7 +48,7 @@ public class JSFiddleComprehensiveTest {
     static void setupAll() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
-        driver = new Firefox-Driver(options);
+        driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, WAIT_TIMEOUT);
     }
 

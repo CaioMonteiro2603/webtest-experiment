@@ -14,7 +14,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class GestaoTestSuite {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -219,19 +219,44 @@ public class GestaoTestSuite {
     }
 
     private void performLogin(String email, String pass) {
-        WebElement emailField = wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("email"), By.name("email"), By.cssSelector("input[type='email']")));
-        WebElement pwdField = wait.until(ExpectedConditions.elementToBeClickable(
-                By.id("password"), By.name("password"), By.cssSelector("input[type='password']")));
+
+        Boolean emailPresent = wait.until(driver ->
+                !driver.findElements(By.id("email")).isEmpty()
+             || !driver.findElements(By.name("email")).isEmpty()
+             || !driver.findElements(By.cssSelector("input[type='email']")).isEmpty()
+        );
+
+        Boolean passwordPresent = wait.until(driver ->
+                !driver.findElements(By.id("password")).isEmpty()
+             || !driver.findElements(By.name("password")).isEmpty()
+             || !driver.findElements(By.cssSelector("input[type='password']")).isEmpty()
+        );
+
+        Assertions.assertTrue(emailPresent, "Email field not found");
+        Assertions.assertTrue(passwordPresent, "Password field not found");
+
+        WebElement emailField = driver.findElements(By.id("email")).stream().findFirst()
+                .orElseGet(() -> driver.findElements(By.name("email")).stream().findFirst()
+                .orElse(driver.findElements(By.cssSelector("input[type='email']")).get(0)));
+
+        WebElement pwdField = driver.findElements(By.id("password")).stream().findFirst()
+                .orElseGet(() -> driver.findElements(By.name("password")).stream().findFirst()
+                .orElse(driver.findElements(By.cssSelector("input[type='password']")).get(0)));
+
         WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("button[type='submit'], button#login, input[type='submit']")));
+                By.cssSelector("button[type='submit'], button#login, input[type='submit']")
+        ));
 
         emailField.clear();
         emailField.sendKeys(email);
+
         pwdField.clear();
         pwdField.sendKeys(pass);
+
         loginBtn.click();
     }
+
+
 
     private void ensureLoggedIn() {
         if (driver.findElements(By.cssSelector("a[href*='logout']")).isEmpty()) {
@@ -249,7 +274,7 @@ public class GestaoTestSuite {
             wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Login")));
         }
     }
-
+    
     private void navigateToInventory() {
         List<WebElement> itemsLinks = driver.findElements(By.linkText("All Items"));
         if (!itemsLinks.isEmpty()) {
@@ -259,11 +284,13 @@ public class GestaoTestSuite {
             if (!inventoryLinks.isEmpty()) {
                 inventoryLinks.get(0).click();
             } else {
-                Assumptions.fail("No link to inventory page found");
+                Assertions.fail("No link to inventory page found");
             }
         }
+
         wait.until(ExpectedConditions.presenceOfElementLocated(
-                By.cssSelector(".item-card, .product-card, .grid-item")));
+                By.cssSelector(".item-card, .product-card, .grid-item")
+        ));
     }
 
     private void openBurgerMenu() {

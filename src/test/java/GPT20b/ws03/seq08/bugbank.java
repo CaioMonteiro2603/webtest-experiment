@@ -22,7 +22,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugbankTest {
+public class bugbank {
     private static final String BASE_URL = "https://bugbank.netlify.app/";
     private static final String USERNAME = "caio@gmail.com";
     private static final String PASSWORD = "123";

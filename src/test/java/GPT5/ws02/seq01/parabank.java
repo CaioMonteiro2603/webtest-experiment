@@ -9,10 +9,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

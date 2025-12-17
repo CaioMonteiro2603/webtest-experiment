@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq09;
+package geminiPro.ws02.seq09;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -32,13 +31,12 @@ import static org.junit.jupiter.api.Assertions.fail;
  * This suite covers user registration, login, account operations, transactions, and navigation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     // User credentials will be generated during the registration test to ensure idempotency.
     private static String registeredUsername;
     private static String registeredPassword = "password123";
-    private static String customerId;
     private static String initialAccountId;
     private static String newAccountId;
 

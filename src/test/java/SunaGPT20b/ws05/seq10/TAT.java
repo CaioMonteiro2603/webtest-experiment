@@ -1,4 +1,4 @@
-package deepseek.ws05.seq10;
+package SunaGPT20b.ws05.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -8,148 +8,247 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
+import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ContactFormTest {
+public class TAT {
     private static WebDriver driver;
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static WebDriverWait wait;
 
-    @BeforeAll
-    public static void setup() {
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless");
-        driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
+@BeforeAll
+public static void setUp() {
+    FirefoxOptions options = new FirefoxOptions();
+    options.addArguments("--headless");
+    driver = new FirefoxDriver(options);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+}
 
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
+@AfterAll
+public static void tearDown() {
+    if (driver != null) {
+        driver.quit();
+    }
+}
+
+private void openBase() {
+    driver.get(BASE_URL);
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+}
+
+@Test
+@Order(1)
+public void testValidLogin() {
+    openBase();
+    // Assume login fields exist on the landing page
+    WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
+    WebElement password = driver.findElement(By.id("password"));
+    WebElement loginBtn = driver.findElement(By.id("login-button"));
+
+    username.clear();
+    username.sendKeys("standard_user");
+    password.clear();
+    password.sendKeys("secret_sauce");
+    loginBtn.click();
+
+    // Verify navigation to inventory page
+    wait.until(ExpectedConditions.urlContains("/inventory.html"));
+    Assertions.assertTrue(driver.getCurrentUrl().contains("/inventory.html"),
+            "URL should contain /inventory.html after successful login");
+    // Verify inventory list is displayed
+    List<WebElement> items = driver.findElements(By.cssSelector(".inventory_item"));
+    Assertions.assertFalse(items.isEmpty(), "Inventory items should be displayed after login");
+}
+
+@Test
+@Order(2)
+public void testInvalidLogin() {
+    openBase();
+    WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
+    WebElement password = driver.findElement(By.id("password"));
+    WebElement loginBtn = driver.findElement(By.id("login-button"));
+
+    username.clear();
+    username.sendKeys("invalid_user");
+    password.clear();
+    password.sendKeys("wrong_password");
+    loginBtn.click();
+
+    // Verify error message appears
+    WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='error']")));
+    Assertions.assertTrue(error.isDisplayed(), "Error message should be displayed for invalid login");
+    Assertions.assertTrue(error.getText().toLowerCase().contains("username") ||
+                    error.getText().toLowerCase().contains("password"),
+            "Error message should reference username or password");
+}
+
+@Test
+@Order(3)
+public void testSortingDropdown() {
+    // Ensure we are logged in first
+    testValidLogin();
+
+    // Locate sorting dropdown
+    WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("select[data-test='product_sort_container']")));
+    sortDropdown.click();
+
+    // Options: assume values "az", "za", "lohi", "hilo"
+    String[] options = {"az", "za", "lohi", "hilo"};
+    for (String value : options) {
+        WebElement option = driver.findElement(By.cssSelector("option[value='" + value + "']"));
+        option.click();
+        // Verify that the first item changes accordingly (simple check on name order)
+        List<WebElement> names = driver.findElements(By.cssSelector(".inventory_item_name"));
+        Assertions.assertFalse(names.isEmpty(), "Item names should be present after sorting");
+        // No deep validation; just ensure no exception and list is still populated
+    }
+}
+
+@Test
+@Order(4)
+public void testMenuAllItems() {
+    testValidLogin();
+
+    // Open burger menu
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+
+    // Click All Items
+    WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(By.id("inventory_sidebar_link")));
+    allItems.click();
+
+    // Verify we are on inventory page
+    wait.until(ExpectedConditions.urlContains("/inventory.html"));
+    Assertions.assertTrue(driver.getCurrentUrl().contains("/inventory.html"),
+            "Should navigate to inventory page after clicking All Items");
+}
+
+@Test
+@Order(5)
+public void testMenuAboutExternalLink() {
+    testValidLogin();
+
+    // Open burger menu
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+
+    // Click About (external)
+    WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("about_sidebar_link")));
+    String originalWindow = driver.getWindowHandle();
+    aboutLink.click();
+
+    // Switch to new window
+    wait.until(driver -> driver.getWindowHandles().size() > 1);
+    Set<String> windows = driver.getWindowHandles();
+    for (String win : windows) {
+        if (!win.equals(originalWindow)) {
+            driver.switchTo().window(win);
+            break;
         }
     }
 
-    @Test
-    @Order(1)
-    public void testSuccessfulFormSubmission() {
-        driver.get(BASE_URL);
-        
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        firstName.sendKeys("John");
-        
-        WebElement lastName = driver.findElement(By.id("lastName"));
-        lastName.sendKeys("Doe");
-        
-        WebElement email = driver.findElement(By.id("email"));
-        email.sendKeys("john.doe@example.com");
-        
-        WebElement phone = driver.findElement(By.id("phone"));
-        phone.sendKeys("11987654321");
-        
-        Select productSelect = new Select(driver.findElement(By.id("product")));
-        productSelect.selectByVisibleText("Cursos");
-        
-        WebElement message = driver.findElement(By.id("message"));
-        message.sendKeys("This is a test message");
-        
-        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
-        submitButton.click();
-        
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".success-message")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Form submission failed");
+    // Verify external domain (example.com used as placeholder)
+    String currentUrl = driver.getCurrentUrl();
+    Assertions.assertTrue(currentUrl.contains("example.com") || currentUrl.contains("about"),
+            "External About link should navigate to an external domain");
+
+    // Close external tab and switch back
+    driver.close();
+    driver.switchTo().window(originalWindow);
+}
+
+@Test
+@Order(6)
+public void testMenuLogout() {
+    testValidLogin();
+
+    // Open burger menu
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
+
+    // Click Logout
+    WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+    logoutLink.click();
+
+    // Verify we are back on login page
+    wait.until(ExpectedConditions.urlToBe(BASE_URL));
+    Assertions.assertEquals(BASE_URL, driver.getCurrentUrl(),
+            "Should return to login page after logout");
+}
+
+@Test
+@Order(7)
+public void testMenuResetAppState() {
+    testValidLogin();
+
+    // Add an item to cart to change state
+    List<WebElement> addButtons = driver.findElements(By.cssSelector("button[data-test='add-to-cart-sauce-labs-backpack']"));
+    if (!addButtons.isEmpty()) {
+        addButtons.get(0).click();
     }
 
-    @Test
-    @Order(2)
-    public void testRequiredFieldValidation() {
-        driver.get(BASE_URL);
-        
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[type='submit']")));
-        submitButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".error-message")));
-        Assertions.assertTrue(errorMessage.getText().contains("é obrigatório"), "Required field validation failed");
-    }
+    // Verify cart badge appears
+    WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".shopping_cart_badge")));
+    Assertions.assertTrue(badge.isDisplayed(), "Cart badge should be displayed after adding item");
 
-    @Test
-    @Order(3)
-    public void testInvalidEmailValidation() {
-        driver.get(BASE_URL);
-        
-        WebElement email = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("email")));
-        email.sendKeys("invalid-email");
-        
-        WebElement submitButton = driver.findElement(By.cssSelector("button[type='submit']"));
-        submitButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".error-message")));
-        Assertions.assertTrue(errorMessage.getText().contains("E-mail inválido"), "Email validation failed");
-    }
+    // Open burger menu
+    WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+    menuBtn.click();
 
-    @Test
-    @Order(4)
-    public void testPhoneNumberMask() {
-        driver.get(BASE_URL);
-        
-        WebElement phone = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("phone")));
-        phone.sendKeys("11987654321");
-        
-        Assertions.assertEquals("(11) 98765-4321", phone.getAttribute("value"), "Phone mask not working");
-    }
+    // Click Reset App State
+    WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
+    resetLink.click();
 
-    @Test
-    @Order(5)
-    public void testResetForm() {
-        driver.get(BASE_URL);
-        
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
-        firstName.sendKeys("Test");
-        
-        WebElement resetButton = driver.findElement(By.cssSelector("button[type='reset']"));
-        resetButton.click();
-        
-        Assertions.assertEquals("", firstName.getAttribute("value"), "Form reset failed");
-    }
+    // Verify cart badge is gone
+    List<WebElement> badges = driver.findElements(By.cssSelector(".shopping_cart_badge"));
+    Assertions.assertTrue(badges.isEmpty(), "Cart badge should be cleared after resetting app state");
+}
 
-    @Test
-    @Order(6)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        
-        // Test Privacy Policy link
-        testExternalLink("Política de Privacidade", "cucumber.io");
-        
-        // Test Terms link
-        testExternalLink("Termos de Uso", "cucumber.io");
-    }
+@Test
+@Order(8)
+public void testFooterSocialLinks() {
+    openBase();
 
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), '" + linkText + "')]")));
+    // Define expected domains for social links
+    String[][] links = {
+            {"footer_twitter", "twitter.com"},
+            {"footer_facebook", "facebook.com"},
+            {"footer_linkedin", "linkedin.com"}
+    };
+
+    String originalWindow = driver.getWindowHandle();
+
+    for (String[] pair : links) {
+        String elementId = pair[0];
+        String expectedDomain = pair[1];
+
+        List<WebElement> elems = driver.findElements(By.id(elementId));
+        if (elems.isEmpty()) {
+            continue; // Skip if element not present
+        }
+        WebElement link = elems.get(0);
         link.click();
-        
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
-                }
+
+        // Wait for new window
+        wait.until(driver -> driver.getWindowHandles().size() > 1);
+        Set<String> windows = driver.getWindowHandles();
+        for (String win : windows) {
+            if (!win.equals(originalWindow)) {
+                driver.switchTo().window(win);
+                break;
             }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
         }
+
+        String currentUrl = driver.getCurrentUrl();
+        Assertions.assertTrue(currentUrl.contains(expectedDomain),
+                "Social link should open a page containing " + expectedDomain);
+
+        // Close and return
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
+}
 }

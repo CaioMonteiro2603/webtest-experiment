@@ -1,4 +1,4 @@
-package GPT5.ws04.seq06;
+package GPT4.ws04.seq06;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormHtmlTest {
+public class DEMOAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

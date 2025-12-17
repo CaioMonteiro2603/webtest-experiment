@@ -7,11 +7,10 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsFiddleTest {
+public class JSFiddle {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -99,10 +98,7 @@ public class JsFiddleTest {
         // Verify editor content area is editable
         WebElement htmlContent = driver.findElement(By.cssSelector(".CodeMirror textarea"));
         assertTrue(htmlContent.isDisplayed());
-        
-        // Test with basic HTML
-        String testHtml = "<h1>Hello JSFiddle</h1><p>This is a test</p>";
-        
+       
         // Wait for editor to be clickable
         WebElement htmlEditorArea = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#panel_html .CodeMirror")));
         htmlEditorArea.click();
@@ -157,7 +153,6 @@ public class JsFiddleTest {
         // Navigate to first example if available
         if (!examples.isEmpty()) {
             WebElement firstExampleLink = examples.get(0).findElement(By.tagName("a"));
-            String originalUrl = driver.getCurrentUrl();
             firstExampleLink.click();
             
             // Wait for page to load or timeout if loading takes too long
@@ -185,8 +180,6 @@ public class JsFiddleTest {
         // Get footer links
         List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
         assertTrue(footerLinks.size() >= 2);
-        
-        String originalHandle = driver.getWindowHandle();
         
         // Test footer links that might be external (limit to first couple to avoid too many windows)
         int linkCount = Math.min(2, footerLinks.size());

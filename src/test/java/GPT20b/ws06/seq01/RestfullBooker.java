@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationTestingTests {
+public class RestfullBooker{
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -70,30 +70,6 @@ public class AutomationTestingTests {
             loginBtn.click();
 
             wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("inventory-list")));
-        }
-    }
-
-    private void logoutIfLoggedIn() {
-        if (elementExists(By.id("menu"))) {
-            WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("menu")));
-            menuBtn.click();
-            if (elementExists(By.xpath("//a[text()='Logout']"))) {
-                WebElement logoutLink = driver.findElement(By.xpath("//a[text()='Logout']"));
-                logoutLink.click();
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
-            }
-        }
-    }
-
-    private void resetAppState() {
-        if (elementExists(By.id("menu"))) {
-            WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("menu")));
-            menuBtn.click();
-            if (elementExists(By.xpath("//a[text()='Reset App State']"))) {
-                WebElement resetLink = driver.findElement(By.xpath("//a[text()='Reset App State']"));
-                resetLink.click();
-                wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("reset-confirmation")));
-            }
         }
     }
 
@@ -184,7 +160,6 @@ public class AutomationTestingTests {
                     initialOrder,
                     newOrder,
                     "Item order should change after selecting sorting option: " + option.getText());
-            initialOrder = newOrder;
         }
     }
 

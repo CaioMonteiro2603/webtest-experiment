@@ -1,4 +1,4 @@
-package GPT5.ws01.seq03;
+package GPT5.ws01.seq02;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoV1E2ETest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

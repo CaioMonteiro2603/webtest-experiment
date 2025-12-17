@@ -1,4 +1,4 @@
-package geminiPRO.ws04.seq06;
+package geminiPro.ws04.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -20,8 +20,6 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -31,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * and validates submission by inspecting the URL query parameters.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);

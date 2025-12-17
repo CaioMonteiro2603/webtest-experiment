@@ -11,7 +11,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParabankTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

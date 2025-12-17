@@ -11,7 +11,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SwagLabsTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq03;
+package geminiPro.ws05.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -23,7 +23,7 @@ import java.time.Duration;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatE2ETest {
+public class TAT {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";

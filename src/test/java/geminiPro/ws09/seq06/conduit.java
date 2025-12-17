@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq06;
+package geminiPro.ws09.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * creating, editing, commenting on, and deleting articles.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ConduitTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(15);

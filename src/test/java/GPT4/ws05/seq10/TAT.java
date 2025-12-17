@@ -8,11 +8,10 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatFormTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -16,7 +16,7 @@ import java.time.Duration;
  * including successful submissions, error handling for invalid data, and navigation to the privacy policy page.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

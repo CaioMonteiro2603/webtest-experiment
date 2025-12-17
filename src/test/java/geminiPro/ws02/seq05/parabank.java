@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq05;
+package geminiPro.ws02.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.By;
@@ -14,7 +14,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * JUnit 5 test suite for parabank.parasoft.com using Selenium WebDriver with headless Firefox.
@@ -22,7 +21,7 @@ import java.util.stream.Collectors;
  * It creates a new user for each full test run to ensure test independence and state consistency.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -30,7 +29,6 @@ public class ParaBankE2ETest {
     // A unique user is generated during the registration test to ensure a clean state for each test suite run.
     private static String testUsername;
     private static String testPassword;
-    private static String customerId;
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final String FIRST_NAME = "Gemini";

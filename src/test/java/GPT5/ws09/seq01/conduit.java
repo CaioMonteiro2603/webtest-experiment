@@ -9,10 +9,11 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldDemoSuite {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -55,17 +56,6 @@ public class RealWorldDemoSuite {
         }
     }
 
-    private boolean clickIfPresent(By by) {
-        List<WebElement> els = driver.findElements(by);
-        if (!els.isEmpty()) {
-            WebElement el = els.get(0);
-            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block:'center'})", el);
-            wait.until(ExpectedConditions.elementToBeClickable(el)).click();
-            return true;
-        }
-        return false;
-    }
-
     private WebElement firstPresent(By... locators) {
         for (By by : locators) {
             List<WebElement> els = driver.findElements(by);
@@ -96,25 +86,6 @@ public class RealWorldDemoSuite {
             }
         }
         Assertions.fail("No new tab opened for external link.");
-    }
-
-    private void clickExternalAndAssert(String expectedDomain, By... candidates) {
-        int before = driver.getWindowHandles().size();
-        boolean clicked = false;
-        for (By by : candidates) {
-            if (clickIfPresent(by)) { clicked = true; break; }
-        }
-        Assertions.assertTrue(clicked, "Expected external link not found/clickable.");
-
-        if (driver.getWindowHandles().size() > before) {
-            switchToNewTabAndVerify(expectedDomain);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                    "Expected URL to contain external domain: " + expectedDomain);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        }
     }
 
     private List<WebElement> homepageArticlePreviews() {

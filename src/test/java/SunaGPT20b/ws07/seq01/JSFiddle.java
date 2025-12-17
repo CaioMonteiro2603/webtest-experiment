@@ -13,8 +13,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedCondition;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
@@ -25,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
@@ -47,10 +45,11 @@ public class JsFiddleTestSuite {
     }
 
     private static void waitForTitleNotEmpty() {
-        wait.until((ExpectedCondition<Boolean>) d -> {
+        wait.until(d -> {
             String title = d.getTitle();
             return title != null && !title.trim().isEmpty();
-           }
+        });
+    }
 
     private static boolean isExternal(String href) {
         if (href == null) return false;
@@ -79,10 +78,10 @@ public class JsFiddleTestSuite {
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
-        driver.get(BASE_URL);
-        waitForTitleNotEmpty();
-        Assertions.assertTrue(driver.getTitle().length() > 0                "Home page title should be non‑empty");
+    public void testHomePage() {
+    	driver.get(BASE_URL);
+    	waitForTitleNotEmpty(); 
+    	Assertions.assertTrue(driver.getTitle().length() > 0);
     }
 
     @Test

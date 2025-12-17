@@ -1,33 +1,67 @@
-package deepseek.ws04.seq08;
+package SunaGPT20b.ws04.seq08;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class FormPageTest {
+import java.net.URI;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class DemoAUT {
+
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final List<String> internalLinks = new ArrayList<>();
+    private static final List<String> externalLinks = new ArrayList<>();
 
     @BeforeAll
-    public static void setup() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
+        driver.get(BASE_URL);
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
+
+        List<WebElement> anchors = driver.findElements(By.tagName("a"));
+        for (WebElement a : anchors) {
+            String href = a.getAttribute("href");
+            if (href == null || href.isEmpty() || href.startsWith("javascript")) {
+                continue;
+            }
+            if (href.startsWith(BASE_URL) ||
+                href.startsWith("https://katalon-test.s3.amazonaws.com") ||
+                href.startsWith("/")) {
+                if (!href.equals(BASE_URL)) {
+                    internalLinks.add(href);
+                }
+            } else {
+                externalLinks.add(href);
+            }
+        }
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -35,106 +69,110 @@ public class FormPageTest {
 
     @Test
     @Order(1)
-    public void testFormSubmission() {
+    public void testBasePageLoads() {
         driver.get(BASE_URL);
-
-        // Fill out form fields
-        driver.findElement(By.id("first-name")).sendKeys("John");
-        driver.findElement(By.id("last-name")).sendKeys("Doe");
-        driver.findElement(By.id("gender")).sendKeys("Male");
-        driver.findElement(By.id("dob")).sendKeys("01/01/1990");
-        driver.findElement(By.id("address")).sendKeys("123 Main St");
-        driver.findElement(By.id("email")).sendKeys("john.doe@example.com");
-        driver.findElement(By.id("password")).sendKeys("Passw0rd!");
-        driver.findElement(By.id("company")).sendKeys("Acme Inc");
-        
-        // Select role and expectation
-        Select roleSelect = new Select(driver.findElement(By.id("role")));
-        roleSelect.selectByVisibleText("QA");
-        
-        Select expectationSelect = new Select(driver.findElement(By.id("expectation")));
-        expectationSelect.selectByVisibleText("High salary");
-        expectationSelect.selectByVisibleText("Good teamwork");
-        
-        // Submit form
-        driver.findElement(By.id("submit")).click();
-
-        // Verify submission
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("submit-msg")));
-        Assertions.assertTrue(success.getText().contains("Successfully submitted!"),
-                "Form submission should be successful");
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
+        WebElement form = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("form")));
+        Assertions.assertTrue(form.isDisplayed(), "Form should be displayed on the base page");
     }
 
     @Test
     @Order(2)
-    public void testFormValidation() {
+    public void testFormSubmissionValid() {
         driver.get(BASE_URL);
-        
-        // Submit empty form
-        driver.findElement(By.id("submit")).click();
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
 
-        // Verify validation errors
-        WebElement firstNameError = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("#first-name + .invalid-feedback")));
-        Assertions.assertTrue(firstNameError.isDisplayed(),
-                "First name validation error should be displayed");
-        
-        WebElement lastNameError = driver.findElement(By.cssSelector("#last-name + .invalid-feedback"));
-        Assertions.assertTrue(lastNameError.isDisplayed(),
-                "Last name validation error should be displayed");
+        List<WebElement> inputs = driver.findElements(By.cssSelector("input"));
+        for (WebElement input : inputs) {
+            String type = input.getAttribute("type");
+            if ("text".equalsIgnoreCase(type) ||
+                "email".equalsIgnoreCase(type) ||
+                "password".equalsIgnoreCase(type) ||
+                "search".equalsIgnoreCase(type) ||
+                "tel".equalsIgnoreCase(type) ||
+                "url".equalsIgnoreCase(type)) {
+                input.clear();
+                input.sendKeys("test");
+            } else if ("checkbox".equalsIgnoreCase(type) || "radio".equalsIgnoreCase(type)) {
+                if (!input.isSelected()) {
+                    input.click();
+                }
+            }
+        }
+
+        WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button, input[type='submit']")));
+        submit.click();
+
+        WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+        String bodyText = body.getText().toLowerCase();
+        Assertions.assertTrue(bodyText.contains("thank") || bodyText.contains("success"),
+                "Submission should display a success or thank‑you message");
     }
 
     @Test
     @Order(3)
-    public void testFormReset() {
+    public void testFormSubmissionInvalid() {
         driver.get(BASE_URL);
-        
-        // Fill some fields
-        driver.findElement(By.id("first-name")).sendKeys("Test");
-        driver.findElement(By.id("last-name")).sendKeys("User");
-        
-        // Reset form
-        driver.findElement(By.id("reset")).click();
+        wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                .executeScript("return document.readyState").equals("complete"));
 
-        // Verify fields are cleared
-        Assertions.assertTrue(driver.findElement(By.id("first-name")).getText().isEmpty(),
-                "First name should be cleared after reset");
-        Assertions.assertTrue(driver.findElement(By.id("last-name")).getText().isEmpty(),
-                "Last name should be cleared after reset");
+        WebElement submit = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button, input[type='submit']")));
+        submit.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        Assertions.assertEquals(BASE_URL, currentUrl,
+                "Invalid submission should keep the user on the same page");
     }
 
     @Test
     @Order(4)
-    public void testLinkNavigation() {
-        driver.get(BASE_URL);
-        
-        // Test Help link
-        String originalWindow = driver.getWindowHandle();
-        WebElement helpLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Help")));
-        helpLink.click();
-        
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
-                break;
-            }
+    public void testInternalLinksNavigation() {
+        for (String link : internalLinks) {
+            driver.get(link);
+            wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                    .executeScript("return document.readyState").equals("complete"));
+            String currentUrl = driver.getCurrentUrl();
+            Assertions.assertEquals(link, currentUrl,
+                    "Should navigate to internal link: " + link);
+            String title = driver.getTitle();
+            Assertions.assertFalse(title.isEmpty(),
+                    "Page title should not be empty for internal link: " + link);
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("katalon-test"),
-                "Help link should navigate to correct URL");
-        driver.close();
-        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(5)
-    public void testCommentField() {
-        driver.get(BASE_URL);
-        
-        WebElement comment = wait.until(ExpectedConditions.elementToBeClickable(By.id("comment")));
-        comment.sendKeys("This is a test comment with more than 20 characters");
-        
-        Assertions.assertTrue(comment.getAttribute("value").length() > 20,
-                "Should allow long text in comment field");
+    public void testExternalLinks() {
+        String originalWindow = driver.getWindowHandle();
+
+        for (String extLink : externalLinks) {
+            ((JavascriptExecutor) driver).executeScript("window.open(arguments[0]);", extLink);
+            wait.until(d -> d.getWindowHandles().size() > 1);
+
+            Set<String> windows = driver.getWindowHandles();
+            windows.remove(originalWindow);
+            String newWindow = windows.iterator().next();
+
+            driver.switchTo().window(newWindow);
+            wait.until(webDriver -> ((JavascriptExecutor) webDriver)
+                    .executeScript("return document.readyState").equals("complete"));
+
+            String currentUrl = driver.getCurrentUrl();
+            try {
+                URI uri = new URI(extLink);
+                String expectedHost = uri.getHost();
+                Assertions.assertTrue(currentUrl.contains(expectedHost),
+                        "External link should navigate to expected domain: " + extLink);
+            } catch (Exception e) {
+                Assertions.fail("Failed to parse external URL: " + extLink);
+            }
+
+            driver.close();
+            driver.switchTo().window(originalWindow);
+        }
     }
 }

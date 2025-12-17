@@ -1,4 +1,4 @@
-package GTP5.ws04.seq07;
+package GPT5.ws04.seq07;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * File/class name must match. Package as requested.
  */
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -54,30 +54,6 @@ public class KatalonFormTest {
         // assert we are on the expected host/path
         Assertions.assertTrue(driver.getCurrentUrl().contains(baseUri.getHost()),
                 "After navigation, expected current URL to contain base host: " + baseUri.getHost());
-    }
-
-    // Helper: open a URL in a new tab and switch to it; returns the new window handle.
-    private String openUrlInNewTab(String url) {
-        String original = driver.getWindowHandle();
-        ((JavascriptExecutor) driver).executeScript("window.open(arguments[0], '_blank');", url);
-        // wait for additional window
-        wait.until(d -> d.getWindowHandles().size() > 1);
-        Set<String> handles = driver.getWindowHandles();
-        for (String h : handles) {
-            if (!h.equals(original)) {
-                driver.switchTo().window(h);
-                wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
-                return h;
-            }
-        }
-        return original;
-    }
-
-    // Helper: close current tab and switch back to original
-    private void closeTabAndSwitchBack(String originalHandle) {
-        driver.close();
-        driver.switchTo().window(originalHandle);
-        wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
     }
 
     // Helper: determine if an href is external to the base host
@@ -253,7 +229,6 @@ public class KatalonFormTest {
                 if (externalTested > 5) break;
 
                 // Open in new tab to avoid losing the base page
-                String newHandle = openUrlInNewTab(href);
                 try {
                     // Wait for URL to contain the host of href
                     URI hrefUri;

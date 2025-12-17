@@ -10,10 +10,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldTest {
+public class Conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

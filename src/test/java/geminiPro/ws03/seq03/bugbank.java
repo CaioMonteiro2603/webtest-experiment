@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq03;
+package geminiPro.ws03.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankE2ETest {
+public class bugbank {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://bugbank.netlify.app/";
@@ -72,8 +72,6 @@ public class BugBankE2ETest {
     private static final By TRANSFER_VALUE_INPUT = By.xpath("//input[@name='transferValue']");
     private static final By TRANSFER_DESCRIPTION_INPUT = By.xpath("//input[@name='description']");
     private static final By CONFIRM_TRANSFER_BUTTON = By.xpath("//button[text()='Transferir agora']");
-    private static final By BACK_BUTTON = By.id("btnBack");
-
     @BeforeAll
     public static void setup() {
         FirefoxOptions options = new FirefoxOptions();

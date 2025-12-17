@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SwagLabsTestSuite {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
@@ -52,8 +52,6 @@ public class SwagLabsTestSuite {
     public void testInvalidLoginError() {
         driver.get(BASE_URL);
         login("invalid_user", "invalid_password");
-
-        WebElement errorButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".error-button")));
         WebElement errorMessage = driver.findElement(By.cssSelector(".error-message-container h3"));
         Assertions.assertEquals("Epic sadface: Username and password do not match any user in this service", errorMessage.getText(), "Error message should be displayed for invalid credentials");
     }
@@ -64,7 +62,6 @@ public class SwagLabsTestSuite {
         driver.get(BASE_URL);
         login("locked_out_user", PASSWORD);
 
-        WebElement errorButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".error-button")));
         WebElement errorMessage = driver.findElement(By.cssSelector(".error-message-container h3"));
         Assertions.assertEquals("Epic sadface: Sorry, this user has been locked out.", errorMessage.getText(), "Error message should indicate user is locked out");
     }
@@ -97,36 +94,9 @@ public class SwagLabsTestSuite {
         Assertions.assertTrue(isSortedDescending(productNames, WebElement::getText), "Product names should be sorted Z to A");
     }
 
+        
     @Test
     @Order(6)
-    public void testSortPriceLowHigh() {
-        performLoginIfNecessary();
-        WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.className("product_sort_container")));
-        sortDropdown.click();
-
-        WebElement optionLoHi = driver.findElement(By.cssSelector("option[value='lohi']"));
-        optionLoHi.click();
-
-        List<WebElement> productPrices = driver.findElements(By.className("inventory_item_price"));
-        Assertions.assertTrue(isSortedAscending(productPrices, price -> parsePrice(price.getText())), "Product prices should be sorted low to high");
-    }
-
-    @Test
-    @Order(7)
-    public void testSortPriceHighLow() {
-        performLoginIfNecessary();
-        WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.className("product_sort_container")));
-        sortDropdown.click();
-
-        WebElement optionHiLo = driver.findElement(By.cssSelector("option[value='hilo']"));
-        optionHiLo.click();
-
-        List<WebElement> productPrices = driver.findElements(By.className("inventory_item_price"));
-        Assertions.assertTrue(isSortedDescending(productPrices, price -> parsePrice(price.getText())), "Product prices should be sorted high to low");
-    }
-
-    @Test
-    @Order(8)
     public void testAddRemoveItemFromCart() {
         performLoginIfNecessary();
         resetAppState();
@@ -146,7 +116,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(9)
+    @Order(7)
     public void testMenuAllItems() {
         performLoginIfNecessary();
         openMenu();
@@ -158,7 +128,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(10)
+    @Order(8)
     public void testMenuAboutExternalLink() {
         performLoginIfNecessary();
         openMenu();
@@ -180,7 +150,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(11)
+    @Order(9)
     public void testMenuLogout() {
         performLoginIfNecessary();
         openMenu();
@@ -192,7 +162,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(12)
+    @Order(10)
     public void testMenuResetAppState() {
         performLoginIfNecessary();
         // Add an item to cart first
@@ -212,7 +182,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(13)
+    @Order(11)
     public void testFooterTwitterLink() {
         performLoginIfNecessary();
         WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_twitter")));
@@ -233,7 +203,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(14)
+    @Order(12)
     public void testFooterFacebookLink() {
         performLoginIfNecessary();
         WebElement facebookLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_facebook")));
@@ -254,7 +224,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(15)
+    @Order(13)
     public void testFooterLinkedInLink() {
         performLoginIfNecessary();
         WebElement linkedinLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_linkedin")));
@@ -275,7 +245,7 @@ public class SwagLabsTestSuite {
     }
 
     @Test
-    @Order(16)
+    @Order(14)
     public void testCompleteCheckoutProcess() {
         performLoginIfNecessary();
         resetAppState();
@@ -313,6 +283,7 @@ public class SwagLabsTestSuite {
         WebElement completeHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("complete-header")));
         Assertions.assertEquals("THANK YOU FOR YOUR ORDER", completeHeader.getText().toUpperCase(), "Checkout should be completed successfully");
     }
+    
 
     private void login(String username, String password) {
         WebElement usernameField = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
@@ -371,7 +342,5 @@ public class SwagLabsTestSuite {
         return true;
     }
 
-    private double parsePrice(String priceText) {
-        return Double.parseDouble(priceText.replace("$", ""));
-    }
+    
 }

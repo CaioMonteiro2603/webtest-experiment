@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq06;
+package geminiPro.ws01.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * the full checkout process, menu navigation, and external link validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoComprehensiveTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String VALID_USER = "standard_user";

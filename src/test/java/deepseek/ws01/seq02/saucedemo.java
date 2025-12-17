@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo{
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
@@ -95,7 +95,7 @@ public class SauceDemoTest {
             "First item should be '$7.99' after price low-high sort");
 
         // Test sorting by price high-low
-        sortDropdown.selectByValue("hilo"));
+        sortDropdown.selectByValue("hilo");
         items = driver.findElements(By.cssSelector(".inventory_item_price"));
         Assertions.assertTrue(items.get(0).getText().startsWith("$49.99"),
             "First item should be '$49.99' after price high-low sort");

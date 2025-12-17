@@ -3,7 +3,7 @@ package GPT20b.ws06.seq09;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Order;
-import org.jupiter.api.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Assertions;
@@ -16,12 +16,14 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import org.openqa.selenium.support.ui.Select;
+
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationIntestingOnlineTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -48,22 +50,17 @@ public class AutomationIntestingOnlineTest {
 
     private void performLogin(String user, String pass) {
         driver.get(BASE_URL);
-        By userFieldField = By.id("password");
         By loginBtn = By.id("loginButton");
 
-        wait.until(ExpectedConditions.elementToBeClickable(userField)).clear();
+        By userField = null;
+		wait.until(ExpectedConditions.elementToBeClickable(userField)).clear();
         driver.findElement(userField).sendKeys(user);
-        driver.findElement(passField).clear();
+        By passField = null;
+		driver.findElement(passField).clear();
         driver.findElement(passField).sendKeys(pass);
         wait.until(ExpectedConditions.elementToBeClickable(loginBtn)).click();
 
         wait.until(ExpectedConditions.urlContains("dashboard"));
-    }
-
-    private void performLogout() {
-        By logoutBtn = By.id("logoutButton");
-        wait.until(ExpectedConditions.elementToBeClickable(logoutBtn)).click();
-        wait.until(ExpectedConditions.urlContains("login"));
     }
 
     private void resetAppState() {
@@ -72,16 +69,7 @@ public class AutomationIntestingOnlineTest {
         wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.cssSelector(".product-title")));
     }
 
-    private void closeOtherWindows(String originalHandle) {
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(originalHandle)) {
-                driver.switchTo().window(handle);
-                driver.close();
-            }
-        }
-        driver.switchTo().window(originalHandle);
-    }
+ 
 
     /* ---------- Tests ---------- */
 
@@ -124,7 +112,7 @@ public class AutomationIntestingOnlineTest {
         driver.get(BASE_URL);
         By userField = By.id("username");
         By passField = By.id("password");
-        By loginBtn =.id("loginButton");
+        By loginBtn = By.id("loginButton");
 
         wait.until(ExpectedConditions.elementToBeClickable(userField)).clear();
         driver.findElement(userField).sendKeys("invalid");
@@ -141,26 +129,42 @@ public class AutomationIntestingOnlineTest {
     @Test
     @Order(5)
     public void testSortingOptions() {
-        performLogin(USERNAME, PASSWORD By sortDropdown = By.id("sortSelect");
-        By By.cssSelector(".product-title");
 
-        String[] values = {"price_asc", " "name_asc", "name_desc"};
+        // Login
+        performLogin(USERNAME, PASSWORD);
+
+        // Locators
+        By sortDropdown = By.id("sortSelect");
+        By firstProduct = By.cssSelector(".product-title");
+
+        // Sorting values
+        String[] values = {"price_asc", "name_asc", "name_desc"};
         String previousFirst = "";
 
-        for (String val : values) {
-            WebElement dropdown = wait.until(ExpectedConditions.elementToBeClickable(sortDropdown));
-            dropdown.findElement(By.xpath(String.format(".//option[@value='%s']", val))).click();
+        // Create Select once
+        WebElement dropdownElement =
+                wait.until(ExpectedConditions.elementToBeClickable(sortDropdown));
+        Select select = new Select(dropdownElement);
 
-            WebElement first = wait.until(ExpectedConditions.visibilityOfElementLocated(firstProduct));
+        for (String val : values) {
+            select.selectByValue(val);
+
+            WebElement first =
+                    wait.until(ExpectedConditions.visibilityOfElementLocated(firstProduct));
             String currentFirst = first.getText();
 
-            if (!previousFirstEmpty()) {
-                Assertions.assertNotEquals(previousFirst, currentFirst,
-                        "Sorting option " + val + " did not change first product");
+            if (!previousFirst.isEmpty()) {
+                Assertions.assertNotEquals(
+                        previousFirst,
+                        currentFirst,
+                        "Sorting option '" + val + "' did not change first product"
+                );
             }
+
             previousFirst = currentFirst;
         }
     }
+
 
     @Test
     @Order(6)
@@ -193,7 +197,9 @@ public class AutomationIntestingOnlineTest {
         Set<String> handles = driver.getWindowHandles();
         String newHandle = handles.stream()
                 .filter(h -> !h.equals(originalHandle))
-                .findFirst .orElseThrow(() -> new RuntimeException("No new window opened"));
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No new window opened"));
+
 
         driver.switchTo().window(newHandle);
         wait.until(ExpectedConditions.urlContains("about"));
@@ -207,7 +213,9 @@ public class AutomationIntestingOnlineTest {
     @Test
     @Order(8)
     public void testBurgerMenuLogout() {
+
         performLogin(USERNAME, PASSWORD);
+
         By menuBtn = By.id("burgerMenu");
         wait.until(ExpectedConditions.elementToBeClickable(menuBtn)).click();
 
@@ -215,9 +223,13 @@ public class AutomationIntestingOnlineTest {
         wait.until(ExpectedConditions.elementToBeClickable(logoutLink)).click();
 
         wait.until(ExpectedConditions.urlContains("login"));
-        Assertions.assertTrue.getCurrentUrl().contains("login"),
-                "Logout did not redirect to login page");
+
+        Assertions.assertTrue(
+                driver.getCurrentUrl().contains("login"),
+                "Logout did not redirect to login page"
+        );
     }
+
 
     @Test
     @Order(9)
@@ -268,7 +280,7 @@ public class AutomationIntestingOnlineTest {
 
         By cartBadge = By.id("cartBadge");
         WebElement badge = wait.until(ExpectedConditions.visibilityOfElementLocated(cartBadge));
-        Assertions.assertEquals("1", badge.getText(),Cart badge not updated to 1);
+        Assertions.assertEquals("1", badge.getText(),"Cart badge not updated to 1");
 
         By cartIcon = By.id("cartIcon");
         wait.until(ExpectedConditions.elementToBeClickable(cartIcon)).click();
@@ -293,7 +305,7 @@ public class AutomationIntestingOnlineTest {
         wait.until(ExpectedConditions.urlContains("confirmation.html"));
 
         By confirmationMsg = By.cssSelector(".confirmation-message");
-        WebElement msg wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationMsg));
+        WebElement msg =  wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationMsg));
         Assertions.assertTrue(msg.getText().toLowerCase().contains("thank you"),
                 "Checkout confirmation message not displayed");
     }

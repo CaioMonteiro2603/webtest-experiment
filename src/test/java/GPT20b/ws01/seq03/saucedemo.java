@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,7 +25,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTests {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
@@ -61,13 +60,6 @@ public class SauceDemoTests {
         wait.until(ExpectedConditions.elementToBeClickable(By.id("login-button")))
                 .click();
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".inventory_item")));
-    }
-
-    private void logout() {
-        openMenu();
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")))
-                .click();
-        wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("login-button")));
     }
 
     private void resetAppState() {

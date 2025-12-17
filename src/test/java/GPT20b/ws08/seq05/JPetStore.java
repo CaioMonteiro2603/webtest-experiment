@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreWebTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;

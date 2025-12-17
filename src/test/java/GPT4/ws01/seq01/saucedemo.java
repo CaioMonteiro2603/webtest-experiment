@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -49,14 +49,6 @@ public class SauceDemoTest {
         loginBtn.click();
     }
 
-    private void resetAppStateIfAvailable() {
-        WebElement menuBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-        menuBtn.click();
-        WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
-        resetLink.click();
-        WebElement closeBtn = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
-        closeBtn.click();
-    }
 
     private void switchToNewTabAndVerify(String expectedDomain) {
         String originalWindow = driver.getWindowHandle();

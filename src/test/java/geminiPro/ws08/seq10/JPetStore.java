@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq10;
+package geminiPro.ws08.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.List;
  * It uses Selenium WebDriver with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreE2ETest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

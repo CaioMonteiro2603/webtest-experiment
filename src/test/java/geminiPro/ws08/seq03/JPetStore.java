@@ -1,4 +1,4 @@
-package geminiPRO.ws08.seq03;
+package geminiPro.ws08.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -24,7 +24,7 @@ import java.util.Set;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreE2ETest {
+public class JPetStore {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";

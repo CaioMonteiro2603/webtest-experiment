@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankTestSuite {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -47,14 +47,6 @@ public class ParabankTestSuite {
         loginBtn.click();
     }
 
-    private void logoutIfLogged() {
-        List<WebElement> logoutLinks = driver.findElements(By.linkText("Log Out"));
-        if (!logoutLinks.isEmpty()) {
-            logoutLinks.get(0).click();
-            wait.until(ExpectedConditions.urlContains("index.htm"));
-        }
-    }
-
     @Test
     @Order(1)
     public void testValidLogin() {
@@ -67,9 +59,6 @@ public class ParabankTestSuite {
                 By.xpath("//h1[contains(text(),'Accounts Overview')]")));
         Assertions.assertTrue(header.isDisplayed(),
                 "Accounts Overview header should be displayed after successful login.");
-
-        // Clean up
-        logoutIfLoggedIn();
     }
 
     @Test
@@ -134,9 +123,6 @@ public class ParabankTestSuite {
         // Close external window and switch back
         driver.close();
         driver.switchTo().window(originalWindow);
-
-        // Clean up
-        logoutIfLoggedIn();
     }
 
     @Test
@@ -165,7 +151,5 @@ public class ParabankTestSuite {
         Assertions.assertTrue(driver.getCurrentUrl().contains("overview.htm"),
                 "Should return to Overview page after clicking Accounts Overview link.");
 
-        // Clean up
-        logoutIfLoggedIn();
     }
 }

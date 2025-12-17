@@ -10,10 +10,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
-
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleE2ETest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

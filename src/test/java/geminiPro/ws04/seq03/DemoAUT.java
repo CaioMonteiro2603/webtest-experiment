@@ -1,4 +1,4 @@
-package geminiPRO.ws04.seq03;
+package geminiPro.ws04.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +27,7 @@ import java.nio.charset.StandardCharsets;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormE2ETest {
+public class DemoAUT {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";

@@ -18,12 +18,13 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
+import java.util.function.BooleanSupplier;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class FormTests {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -118,7 +119,7 @@ public class FormTests {
         passField.sendKeys("wrong");
         loginBtn.click();
 
-        Assumptions.assumeTrue(wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-message"))), 
+        Assumptions.assumeTrue((BooleanSupplier) wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-message"))), 
                 "Error message not displayed");
         Assertions.assertTrue(true, "Invalid login displayed error");
     }

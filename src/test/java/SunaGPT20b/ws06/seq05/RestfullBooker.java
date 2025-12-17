@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationTestingSuite {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriver driver;

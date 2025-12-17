@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationTestingOnlineTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static WebDriver driver;
@@ -147,7 +147,7 @@ public class AutomationTestingOnlineTest {
 
         wait.until(driver -> driver.getWindowHandles().size() > 1);
         Set<String> windows = driver.getWindowHandles();
-        windows.removeWindow);
+        windows.remove(true);
         String newWindow = windows.iterator().next();
         driver.switchTo().window(newWindow);
         Assertions.assertTrue(driver.getCurrentUrl().contains("saucelabs.com"),

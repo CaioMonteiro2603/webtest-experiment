@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgriTestSuite {
+public class BrasilAgritest {
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
@@ -186,11 +186,7 @@ public class BrasilAgriTestSuite {
             By.xpath("//a[contains(text(),'Sair')]")
         ));
         logoutButton.click();
-        
-        // Verify logged out
-        WebElement loginForm = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector("form")
-        ));
+       
         Assertions.assertTrue(driver.getCurrentUrl().contains("/login"), 
             "Should redirect to login page after logout");
     }

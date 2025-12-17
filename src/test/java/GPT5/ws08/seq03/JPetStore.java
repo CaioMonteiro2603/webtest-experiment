@@ -1,4 +1,4 @@
-package GTP5.ws08.seq03;
+package GPT5.ws08.seq03;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreAspectranHeadlessTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

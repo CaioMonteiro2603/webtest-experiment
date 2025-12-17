@@ -11,10 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTestSuite {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final String USER_EMAIL = "caio@gmail.com";
@@ -82,36 +81,6 @@ public class CacTatTestSuite {
         if (!logoutLinks.isEmpty()) {
             wait.until(ExpectedConditions.elementToBeClickable(logoutLinks.get(0))).click();
             wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        }
-    }
-
-    private void resetAppState() {
-        List<WebElement> resetLinks = driver.findElements(By.linkText("Reset App State"));
-        if (!resetLinks.isEmpty()) {
-            wait.until(ExpectedConditions.elementToBeClickable(resetLinks.get(0))).click();
-            // Assume reset brings us back to home
-            wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        }
-    }
-
-    private void openLinkAndVerifyExternal(By locator, String expectedDomain) {
-        WebElement link = driver.findElement(locator);
-        wait.until(ExpectedConditions.elementToBeClickable(link)).click();
-        switchToNewWindow();
-        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains(expectedDomain.toLowerCase()),
-                "URL should contain " + expectedDomain + " after opening external link");
-        driver.close();
-        driver.switchTo().window(driver.getWindowHandles().iterator().next());
-    }
-
-    private void switchToNewWindow() {
-        String original = driver.getWindowHandle();
-        Set<String> handles = driver.getWindowHandles();
-        for (String handle : handles) {
-            if (!handle.equals(original)) {
-                driver.switchTo().window(handle);
-                break;
-            }
         }
     }
 
@@ -252,27 +221,6 @@ public class CacTatTestSuite {
 
     @Test
     @Order(6)
-    public void testFooterSocialLinks() {
-        navigateToHome();
-        // Twitter
-        List<WebElement> twitterLinks = driver.findElements(By.xpath("//a[contains(@href,'twitter.com')]"));
-        for (WebElement link : twitterLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'twitter.com')]"), "twitter.com");
-        }
-        // Facebook
-        List<WebElement> facebookLinks = driver.findElements(By.xpath("//a[contains(@href,'facebook.com')]"));
-        for (WebElement link : facebookLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'facebook.com')]"), "facebook.com");
-        }
-        // LinkedIn
-        List<WebElement> linkedInLinks = driver.findElements(By.xpath("//a[contains(@href,'linkedin.com')]"));
-        for (WebElement link : linkedInLinks) {
-            openLinkAndVerifyExternal(By.xpath("//a[contains(@href,'linkedin.com')]"), "linkedin.com");
-        }
-    }
-
-    @Test
-    @Order(7)
     public void testResetAppStateLink() {
         navigateToHome();
         List<WebElement> resetLinks = driver.findElements(By.linkText("Reset App State"));

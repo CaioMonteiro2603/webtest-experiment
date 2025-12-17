@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq02;
+package geminiPro.ws05.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.time.Duration;
  * This test uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatFormTest {
+public class TAT {
 
     // Constants for configuration
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";

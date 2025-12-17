@@ -1,4 +1,4 @@
-package GTP5.ws09.seq06;
+package GPT5.ws09.seq06;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessSuite {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -54,15 +54,6 @@ public class RealWorldHeadlessSuite {
         List<WebElement> els = driver.findElements(by);
         return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
     }
-
-    private static Optional<WebElement> waitVisible(By by) {
-        try {
-            return Optional.of(wait.until(ExpectedConditions.visibilityOfElementLocated(by)));
-        } catch (TimeoutException e) {
-            return Optional.empty();
-        }
-    }
-
     private static Optional<WebElement> waitClickable(By by) {
         try {
             return Optional.of(wait.until(ExpectedConditions.elementToBeClickable(by)));
@@ -75,15 +66,6 @@ public class RealWorldHeadlessSuite {
         Optional<WebElement> el = waitClickable(by);
         el.ifPresent(WebElement::click);
         return el.isPresent();
-    }
-
-    private static void clearAndType(By locator, String value) {
-        Optional<WebElement> el = first(locator);
-        el.ifPresent(e -> {
-            wait.until(ExpectedConditions.visibilityOf(e));
-            e.clear();
-            e.sendKeys(value);
-        });
     }
 
     private static boolean elementExists(By by) {
@@ -339,7 +321,6 @@ public class RealWorldHeadlessSuite {
         } else {
             // Use feed tabs
             By globalFeed = By.xpath("//a[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'global feed')]");
-            By yourFeed = By.xpath("//a[contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'your feed')]");
             Assumptions.assumeTrue(elementExists(globalFeed), "No feed tabs found; skipping feed test.");
 
             List<String> baseline = captureArticlePreviews();

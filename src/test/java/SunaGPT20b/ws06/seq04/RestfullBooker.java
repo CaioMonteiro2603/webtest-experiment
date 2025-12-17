@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationTestingWebTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/l";
     private static WebDriver driver;

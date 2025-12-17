@@ -1,4 +1,4 @@
-package geminiPRO.ws03.seq02;
+package geminiPro.ws03.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.regex.Pattern;
  * Note: This application is stateless and requires registration before most actions.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugBankE2ETest {
+public class bugbank {
 
     // Constants for configuration
     private static final String BASE_URL = "https://bugbank.netlify.app/";

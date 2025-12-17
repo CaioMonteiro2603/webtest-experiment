@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq10;
+package geminiPro.ws02.seq10;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -18,7 +17,7 @@ import java.util.UUID;
  * It is designed to run sequentially, with later tests depending on the state created by earlier ones.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

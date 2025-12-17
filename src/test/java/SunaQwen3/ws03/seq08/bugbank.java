@@ -1,27 +1,29 @@
-package deepseek.ws03.seq08;
+package SunaQwen3.ws03.seq08;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
-    private static final String BASE_URL = "https://bugbank.netlify.app/";
-    private static final String USERNAME = "caio@gmail.com";
-    private static final String PASSWORD = "123";
+public class bugbank {
+
     private static WebDriver driver;
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://bugbank.netlify.app/";
+    private static final String LOGIN_EMAIL = "caio@gmail.com";
+    private static final String LOGIN_PASSWORD = "123";
 
     @BeforeAll
-    public static void setup() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -29,7 +31,7 @@ public class BugBankTest {
     }
 
     @AfterAll
-    public static void teardown() {
+    static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -37,121 +39,220 @@ public class BugBankTest {
 
     @Test
     @Order(1)
-    public void testSuccessfulLogin() {
+    void testValidLogin() {
         driver.get(BASE_URL);
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-        email.sendKeys(USERNAME);
-        driver.findElement(By.cssSelector("input[name='password']")).sendKeys(PASSWORD);
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+        assertEquals("BugBank", driver.getTitle());
 
-        wait.until(ExpectedConditions.urlContains("home"));
-        Assertions.assertTrue(driver.findElement(By.cssSelector(".balance")).isDisplayed(),
-                "Balance should be displayed after login");
+        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("email")));
+        emailField.sendKeys(LOGIN_EMAIL);
+
+        WebElement passwordField = driver.findElement(By.name("password"));
+        passwordField.sendKeys(LOGIN_PASSWORD);
+
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(),'Entrar')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+        loginButton.click();
+
+        // Wait for navigation or UI change after login
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        assertTrue(driver.getCurrentUrl().contains("dashboard"), "URL should contain 'dashboard' after login");
+
+        // Assert presence of expected elements on dashboard
+        WebElement logoutButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Sair')]")));
+        assertTrue(logoutButton.isDisplayed(), "Logout button should be visible after login");
     }
 
     @Test
     @Order(2)
-    public void testInvalidLogin() {
+    void testInvalidLoginError() {
         driver.get(BASE_URL);
-        WebElement email = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-        email.sendKeys("invalid@email.com");
-        driver.findElement(By.cssSelector("input[name='password']")).sendKeys("wrongpass");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
 
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error")));
-        Assertions.assertTrue(error.getText().contains("Usuário ou senha inválido"),
-                "Should display error for invalid login");
+        WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("email")));
+        emailField.sendKeys("invalid@example.com");
+
+        WebElement passwordField = driver.findElement(By.name("password"));
+        passwordField.sendKeys("wrong");
+
+        WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(),'Entrar')]"));
+        wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+        loginButton.click();
+
+        // Wait for error message to appear
+        WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".alert-danger")));
+        assertTrue(errorMessage.isDisplayed(), "Error message should be displayed for invalid login");
+        assertTrue(errorMessage.getText().toLowerCase().contains("usuário ou senha inválidos"),
+                "Error message should indicate invalid credentials");
     }
 
     @Test
     @Order(3)
-    public void testAccountNavigation() {
-        loginIfNeeded();
-        
-        // Test Transfer
-        driver.findElement(By.cssSelector("a[href*='transfer']")).click();
-        wait.until(ExpectedConditions.urlContains("transfer"));
-        Assertions.assertTrue(driver.findElement(By.cssSelector(".transfer-form")).isDisplayed(),
-                "Transfer form should be visible");
-        
-        // Test Extrato
-        driver.findElement(By.cssSelector("a[href*='extrato']")).click();
-        wait.until(ExpectedConditions.urlContains("extrato"));
-        Assertions.assertTrue(driver.findElements(By.cssSelector(".transaction")).size() >= 0,
-                "Should display transaction list");
+    void testNavigationMenuAllItems() {
+        // Ensure logged in first
+        loginIfNotOnDashboard();
+
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='open drawer']")));
+        menuButton.click();
+
+        WebElement allItemsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Todos os serviços")));
+        allItemsLink.click();
+
+        // Assert navigation to correct section
+        WebElement servicesHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h2")));
+        assertEquals("Serviços", servicesHeader.getText().trim(), "Should navigate to Services page");
     }
 
     @Test
     @Order(4)
-    public void testTransferOperation() {
-        loginIfNeeded();
-        driver.findElement(By.cssSelector("a[href*='transfer']")).click();
-        
-        WebElement accountNumber = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("input[name='accountNumber']")));
-        accountNumber.sendKeys("12345");
-        
-        driver.findElement(By.cssSelector("input[name='value']")).sendKeys("100");
-        driver.findElement(By.cssSelector("input[name='description']")).sendKeys("Test transfer");
-        driver.findElement(By.cssSelector("button[type='submit']")).click();
+    void testNavigationMenuAboutExternalLink() {
+        // Ensure logged in first
+        loginIfNotOnDashboard();
 
-        WebElement success = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".success")));
-        Assertions.assertTrue(success.getText().contains("Transferência realizada com sucesso"),
-                "Should display success message after transfer");
-    }
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='open drawer']")));
+        menuButton.click();
 
-    @Test
-    @Order(5)
-    public void testFooterLinks() {
-        loginIfNeeded();
+        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Sobre")));
         String originalWindow = driver.getWindowHandle();
-        
-        // Test Facebook link
-        testExternalLink("a[href*='facebook']", "facebook.com", originalWindow);
-        
-        // Test Instagram link
-        testExternalLink("a[href*='instagram']", "instagram.com", originalWindow);
-    }
+        aboutLink.click();
 
-    @Test
-    @Order(6)
-    public void testLogout() {
-        loginIfNeeded();
-        
-        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("button.logout")));
-        logout.click();
-        
-        wait.until(ExpectedConditions.urlContains("login"));
-        Assertions.assertTrue(driver.findElement(By.cssSelector("input[name='email']")).isDisplayed(),
-                "Login form should be visible after logout");
-    }
-
-    private void testExternalLink(String cssSelector, String expectedDomain, String originalWindow) {
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(cssSelector)));
-        link.click();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+        // Wait for new tab to open
+        wait.until(d -> d.getWindowHandles().size() > 1);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!windowHandle.equals(originalWindow)) {
+                driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                "Link should open " + expectedDomain + " domain");
+
+        // Assert URL contains expected domain
+        String aboutUrl = driver.getCurrentUrl();
+        assertTrue(aboutUrl.contains("github") || aboutUrl.contains("bugbank"),
+                "About link should navigate to a GitHub or project-related page: " + aboutUrl);
+
+        // Close the new tab and switch back
         driver.close();
         driver.switchTo().window(originalWindow);
     }
 
-    private void loginIfNeeded() {
-        if (!driver.getCurrentUrl().contains("home")) {
+    @Test
+    @Order(5)
+    void testLogoutFunctionality() {
+        // Ensure logged in first
+        loginIfNotOnDashboard();
+
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='open drawer']")));
+        menuButton.click();
+
+        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Sair')]")));
+        logoutButton.click();
+
+        // Wait for logout confirmation or redirect
+        wait.until(ExpectedConditions.urlToBe(BASE_URL));
+        assertEquals(BASE_URL, driver.getCurrentUrl(), "Should return to login page after logout");
+
+        // Verify login form is visible
+        WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[contains(text(),'Entrar')]")));
+        assertTrue(loginButton.isDisplayed(), "Login button should be visible after logout");
+    }
+
+    @Test
+    @Order(6)
+    void testFooterSocialLinks() {
+        // Ensure logged in first
+        loginIfNotOnDashboard();
+
+        // Find all footer social links
+        List<WebElement> socialLinks = driver.findElements(By.cssSelector("footer a[href*='twitter'], footer a[href*='facebook'], footer a[href*='linkedin']"));
+
+        String originalWindow = driver.getWindowHandle();
+
+        for (WebElement link : socialLinks) {
+            String href = link.getAttribute("href").toLowerCase();
+            String linkText = link.getText().toLowerCase();
+            String expectedDomain;
+            if (href.contains("twitter") || linkText.contains("twitter")) {
+                expectedDomain = "twitter.com";
+            } else if (href.contains("facebook") || linkText.contains("facebook")) {
+                expectedDomain = "facebook.com";
+            } else if (href.contains("linkedin") || linkText.contains("linkedin")) {
+                expectedDomain = "linkedin.com";
+            } else {
+                continue; // Skip unknown social links
+            }
+
+            // Open link in new tab
+            ((JavascriptExecutor) driver).executeScript("window.open('" + href + "','_blank');");
+            wait.until(d -> d.getWindowHandles().size() > 1);
+
+            // Switch to new tab
+            for (String windowHandle : driver.getWindowHandles()) {
+                if (!windowHandle.equals(originalWindow)) {
+                    driver.switchTo().window(windowHandle);
+                    break;
+                }
+            }
+
+            // Assert URL contains expected domain
+            String currentUrl = driver.getCurrentUrl();
+            assertTrue(currentUrl.contains(expectedDomain),
+                    "Social link (" + expectedDomain + ") should open correct domain, but got: " + currentUrl);
+
+            // Close tab and return
+            driver.close();
+            driver.switchTo().window(originalWindow);
+        }
+    }
+
+    @Test
+    @Order(7)
+    void testResetAppState() {
+        // Ensure logged in first
+        loginIfNotOnDashboard();
+
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[aria-label='open drawer']")));
+        menuButton.click();
+
+        WebElement resetButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(text(),'Resetar estado do app')]")));
+        resetButton.click();
+
+        // Confirm reset (if alert appears, accept it)
+        try {
+            Alert alert = wait.until(ExpectedConditions.alertIsPresent());
+            alert.accept();
+        } catch (Exception e) {
+            // No alert present; continue
+        }
+
+        // Assert that app state has been reset (e.g., navigation back to dashboard)
+        wait.until(ExpectedConditions.urlContains("dashboard"));
+        assertTrue(driver.getCurrentUrl().contains("dashboard"), "Should return to dashboard after reset");
+    }
+
+    /**
+     * Helper method to ensure the user is logged in and on the dashboard.
+     * If not, performs login.
+     */
+    private void loginIfNotOnDashboard() {
+        if (!driver.getCurrentUrl().contains("dashboard")) {
             driver.get(BASE_URL);
-            WebElement email = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[name='email']")));
-            email.sendKeys(USERNAME);
-            driver.findElement(By.cssSelector("input[name='password']")).sendKeys(PASSWORD);
-            driver.findElement(By.cssSelector("button[type='submit']")).click();
-            wait.until(ExpectedConditions.urlContains("home"));
+
+            try {
+                WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("email")));
+                emailField.clear();
+                emailField.sendKeys(LOGIN_EMAIL);
+
+                WebElement passwordField = driver.findElement(By.name("password"));
+                passwordField.clear();
+                passwordField.sendKeys(LOGIN_PASSWORD);
+
+                WebElement loginButton = driver.findElement(By.xpath("//button[contains(text(),'Entrar')]"));
+                wait.until(ExpectedConditions.elementToBeClickable(loginButton));
+                loginButton.click();
+
+                // Wait for dashboard
+                wait.until(ExpectedConditions.urlContains("dashboard"));
+            } catch (Exception e) {
+                fail("Failed to login during setup: " + e.getMessage());
+            }
         }
     }
 }

@@ -8,13 +8,13 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Assumptions;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -27,7 +27,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class GestaoTest {
+public class BrasilAgritest {
 
     private static final String BASE_URL = "https://gestao.brasilagritest.com/login";
     private static final String USER_EMAIL = "superadmin@brasilagritest.com.br";
@@ -182,9 +182,9 @@ public class GestaoTest {
         login(USER_EMAIL, USER_PASSWORD);
         // Navigate to Items page
         WebElement itemsLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.linkText("All Items"), By.linkText("All Products"), By.linkText("Products")));
+                By.linkText("All Items")));
         itemsLink.click();
-        wait.until(ExpectedConditions.urlContains("/items") || ExpectedConditions.urlContains("/products"));
+        wait.until(ExpectedConditions.urlContains("/items"));
 
         List<WebElement> sortElements = driver.findElements(
                 By.cssSelector("select[name='sort'], select[id='sortBy'], select.filter"));
@@ -219,16 +219,16 @@ public class GestaoTest {
 
         // All Items
         WebElement allItemsLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.linkText("All Items"), By.linkText("All Products"), By.linkText("Products")));
+                By.linkText("All Items")));
         allItemsLink.click();
-        wait.until(ExpectedConditions.urlContains("/items") || ExpectedConditions.urlContains("/products"));
+        wait.until(ExpectedConditions.urlContains("/items"));
         assertTrue(driver.getCurrentUrl().contains("items") || driver.getCurrentUrl().contains("products"),
                 "Did not navigate to All Items page");
 
         driver.navigate().back();
 
         // About (external)
-        WebElement aboutLink = driver.findElements(By.linkText("About")).stream()
+        Optional<WebElement> aboutLink = driver.findElements(By.linkText("About")).stream()
                 .filter(el -> el.isDisplayed()).findFirst();
         if (aboutLink.isPresent()) {
             String parentHandle = driver.getWindowHandle();

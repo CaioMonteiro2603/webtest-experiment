@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq08;
+package geminiPro.ws05.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatFormTest {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final Duration TIMEOUT = Duration.ofSeconds(10);

@@ -12,7 +12,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AutomationTestingOnlineTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -191,9 +191,6 @@ public class AutomationTestingOnlineTest {
         // Navigate to contact form
         WebElement contactLink = driver.findElement(By.linkText("Contact"));
         contactLink.click();
-        
-        // Wait for form to load
-        WebElement contactForm = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("contact-form")));
         
         // Fill in form fields
         WebElement nameInput = driver.findElement(By.id("name"));

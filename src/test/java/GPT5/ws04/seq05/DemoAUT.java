@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class KatalonFormHeadlessSuite {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -45,10 +45,6 @@ public class KatalonFormHeadlessSuite {
         wait.until(d -> d.findElements(By.tagName("form")).size() > 0);
     }
 
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
-    }
-
     private boolean present(By by) {
         return driver.findElements(by).size() > 0;
     }
@@ -75,7 +71,8 @@ public class KatalonFormHeadlessSuite {
         String originalWindow = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
         String originalHost = hostOf(driver.getCurrentUrl());
-        waitClickable(link).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link)); 
+        el.click();
         Set<String> after = driver.getWindowHandles();
 
         if (after.size() > before.size()) {
@@ -149,14 +146,16 @@ public class KatalonFormHeadlessSuite {
         // Select gender if present (radio group)
         List<WebElement> genders = driver.findElements(By.cssSelector("input[type='radio'][name*='gender' i]"));
         if (!genders.isEmpty()) {
-            waitClickable(genders.get(0)).click();
+            WebElement el = wait.until(ExpectedConditions.elementToBeClickable(genders.get(0)));
+            el.click();
             Assertions.assertTrue(genders.get(0).isSelected(), "Chosen gender radio should be selected");
         }
 
         // Choose at least one expectation checkbox if present
         List<WebElement> expectations = driver.findElements(By.cssSelector("input[type='checkbox'][name*='expectation' i]"));
         if (!expectations.isEmpty()) {
-            waitClickable(expectations.get(0)).click();
+        	WebElement el = wait.until(ExpectedConditions.elementToBeClickable(genders.get(0)));
+            el.click();
             Assertions.assertTrue(expectations.get(0).isSelected(), "Expectation checkbox should be selected");
         }
 
@@ -172,7 +171,8 @@ public class KatalonFormHeadlessSuite {
         }
 
         String beforeUrl = driver.getCurrentUrl();
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         // Handle either HTML5 validation stopping submission, or a successful submission (alert or acknowledgment)
         boolean acknowledged = false;
@@ -204,7 +204,8 @@ public class KatalonFormHeadlessSuite {
         clearAndType(lastName, "B");
         clearAndType(email, "not-an-email");
 
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         String msg = getValidationMessage(email);
         Assumptions.assumeTrue(msg != null, "No native validation message; skipping assertion");
@@ -243,14 +244,16 @@ public class KatalonFormHeadlessSuite {
 
         if (!radios.isEmpty()) {
             WebElement r0 = radios.get(0);
-            waitClickable(r0).click();
+            WebElement el = wait.until(ExpectedConditions.elementToBeClickable((r0))); 
+            el.click();
             Assertions.assertTrue(r0.isSelected(), "Radio should be selected after click");
             // If same name group has more than one, select another to ensure exclusivity
             String name = r0.getAttribute("name");
             List<WebElement> sameGroup = driver.findElements(By.cssSelector("input[type='radio'][name='" + name + "']"));
             if (sameGroup.size() > 1) {
                 WebElement r1 = sameGroup.get(1);
-                waitClickable(r1).click();
+                WebElement ele = wait.until(ExpectedConditions.elementToBeClickable((r1))); 
+                ele.click();
                 Assertions.assertTrue(r1.isSelected(), "Second radio in group should be selected");
                 Assertions.assertFalse(r0.isSelected(), "First radio should be unselected due to exclusivity");
             }
@@ -258,9 +261,11 @@ public class KatalonFormHeadlessSuite {
 
         if (!checks.isEmpty()) {
             WebElement c0 = checks.get(0);
-            waitClickable(c0).click();
+            WebElement ele = wait.until(ExpectedConditions.elementToBeClickable((c0))); 
+            ele.click();
             Assertions.assertTrue(c0.isSelected(), "Checkbox should be selected after click");
-            waitClickable(c0).click();
+            WebElement el = wait.until(ExpectedConditions.elementToBeClickable((c0))); 
+            el.click();
             Assertions.assertFalse(c0.isSelected(), "Checkbox should toggle off on second click");
         }
     }
@@ -302,7 +307,8 @@ public class KatalonFormHeadlessSuite {
 
             String before = driver.getCurrentUrl();
             try {
-                waitClickable(a).click();
+            	WebElement ele = wait.until(ExpectedConditions.elementToBeClickable((a))); 
+                ele.click();
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()),
                         "Internal link should remain on same host");
@@ -365,7 +371,8 @@ public class KatalonFormHeadlessSuite {
         if (lastName != null) lastName.clear();
         if (email != null) { email.clear(); email.sendKeys(""); }
 
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         // Check if any of these fields report a validation message
         List<String> msgs = new ArrayList<>();

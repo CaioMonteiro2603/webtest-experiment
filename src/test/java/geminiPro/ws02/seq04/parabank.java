@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq04;
+package geminiPro.ws02.seq04;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -17,232 +17,255 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
- * Comprehensive JUnit 5 test suite for the SauceDemo e-commerce website using Selenium WebDriver with Firefox in headless mode.
- * NOTE: The prompt provided a BASE_URL for ParaBank but described test cases (sorting, burger menu, etc.) specific to SauceDemo.
- * This suite tests SauceDemo to match the functional requirements.
+ * JUnit 5 test suite for the Parabank site using Selenium WebDriver in Headless Firefox mode.
+ * Covers login, key features (one level below base), and external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoHeadlessTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String BASE_URL = "https://www.saucedemo.com/";
-    private static final String VALID_USER = "standard_user";
-    private static final String LOCKED_USER = "locked_out_user";
-    private static final String PASSWORD = "secret_sauce";
+    private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
+    private static final String LOGIN_USER = "caio@gmail.com";
+    private static final String LOGIN_PASS = "123";
+    private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);
+    private static final String ACCOUNTS_OVERVIEW_HEADER_TEXT = "Accounts Overview";
 
-    // --- Locators ---
-    private static final By USERNAME_INPUT = By.id("user-name");
-    private static final By PASSWORD_INPUT = By.id("password");
-    private static final By LOGIN_BUTTON = By.id("login-button");
-    private static final By ERROR_MESSAGE_CONTAINER = By.cssSelector("h3[data-test='error']");
-    private static final By INVENTORY_CONTAINER = By.id("inventory_container");
-    private static final By BURGER_MENU_BUTTON = By.id("react-burger-menu-btn");
-    private static final By LOGOUT_LINK = By.id("logout_sidebar_link");
-    private static final By SHOPPING_CART_BADGE = By.className("shopping_cart_badge");
-    private static final By SORT_DROPDOWN = By.className("product_sort_container");
-    private static final By INVENTORY_ITEM_NAME = By.className("inventory_item_name");
-
+    /**
+     * Initializes the WebDriver (Firefox headless) and WebDriverWait once before all tests.
+     */
     @BeforeAll
-    static void setUp() {
+    public static void setup() {
         FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless"); // Per requirement, use arguments only for headless mode.
+        // Use addArguments for headless mode as required
+        options.addArguments("--headless");
         driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new WebDriverWait(driver, WAIT_TIMEOUT);
+        driver.manage().window().maximize(); // Maximizing helps with consistent element locations
     }
 
+    /**
+     * Closes the WebDriver after all tests have completed.
+     */
     @AfterAll
-    static void tearDown() {
+    public static void teardown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
-    private void performLogin(String username, String password) {
+    /**
+     * Navigates to the base URL and waits for the login form to be visible.
+     */
+    private void navigateToHome() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(USERNAME_INPUT)).sendKeys(username);
-        driver.findElement(PASSWORD_INPUT).sendKeys(password);
-        driver.findElement(LOGIN_BUTTON).click();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
     }
 
-    private void handleExternalLink(By locator, String expectedDomain) {
-        String originalWindowHandle = driver.getWindowHandle();
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+    /**
+     * Logs in with the predefined credentials. Assumes on the login page.
+     */
+    private void login() {
+        navigateToHome();
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))).sendKeys(LOGIN_USER);
+        driver.findElement(By.name("password")).sendKeys(LOGIN_PASS);
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Log In']"))).click();
+
+        // Wait for successful login by checking for the Accounts Overview header
+        wait.until(ExpectedConditions.textToBe(By.tagName("h1"), ACCOUNTS_OVERVIEW_HEADER_TEXT));
+    }
+
+    /**
+     * Helper to perform the DB reset via the Admin Page.
+     * Assumes logged in.
+     */
+    private void resetAppState() {
+        // 1. Navigate to Admin Page
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Admin Page"))).click();
+        wait.until(ExpectedConditions.urlContains("admin.htm"));
+
+        // 2. Click the Clean button (Database Cleanup)
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("button[value='CLEAN']"))).click();
+
+        // 3. Assert success message and navigate back to home (login page)
+        wait.until(ExpectedConditions.textToBe(By.id("bodyText"), "Database Cleaned"));
+        navigateToHome();
+    }
+
+    /**
+     * Handles external link testing: switches window, asserts URL, closes window, switches back.
+     * @param linkElement The WebElement to click (the external link).
+     * @param expectedDomain The expected domain name (e.g., "parasoft.com").
+     * @param originalHandle The handle of the initial window.
+     */
+    private void assertLinkExternal(WebElement linkElement, String expectedDomain, String originalHandle) {
+        linkElement.click();
 
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         Set<String> allWindowHandles = driver.getWindowHandles();
-        allWindowHandles.remove(originalWindowHandle);
-        String newWindowHandle = allWindowHandles.iterator().next();
+        String newWindowHandle = allWindowHandles.stream()
+                .filter(handle -> !handle.equals(originalHandle))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("New window handle not found."));
 
         driver.switchTo().window(newWindowHandle);
-        String currentUrl = driver.getCurrentUrl();
-        Assertions.assertTrue(currentUrl.contains(expectedDomain), "URL of new window should contain '" + expectedDomain + "'. Actual: " + currentUrl);
-
-        driver.close();
-        driver.switchTo().window(originalWindowHandle);
-        Assertions.assertEquals(1, driver.getWindowHandles().size(), "Should have returned to the original window.");
+        try {
+            // Wait for the new page to load and assert the URL contains the expected domain
+            wait.until(ExpectedConditions.urlContains(expectedDomain));
+            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
+                    "External link URL does not contain expected domain: " + expectedDomain);
+        } finally {
+            // Close the new window/tab and switch back to the original one
+            driver.close();
+            driver.switchTo().window(originalHandle);
+            wait.until(ExpectedConditions.urlContains(BASE_URL.substring(0, BASE_URL.lastIndexOf('/')))); // Wait for the original window to be active
+        }
     }
 
-    private void resetAppState() {
-        wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
-        WebElement resetLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
-        resetLink.click();
-        // Close the menu by clicking the 'X' button
-        WebElement closeMenuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
-        closeMenuButton.click();
-        // Wait for menu to be hidden
-        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("bm-menu-wrap")));
-    }
-
-
+    /**
+     * Order 1: Test valid login credentials and assert successful navigation to Accounts Overview.
+     */
     @Test
     @Order(1)
-    void testInvalidLogins() {
-        // Test with locked out user
-        performLogin(LOCKED_USER, PASSWORD);
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE_CONTAINER));
-        Assertions.assertTrue(error.getText().contains("Sorry, this user has been locked out."), "Error message for locked user is incorrect.");
+    public void testValidLoginAndLogout() {
+        navigateToHome();
+        resetAppState(); // Ensure a clean state before the main flow
+        
+        // --- Login ---
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))).sendKeys(LOGIN_USER);
+        driver.findElement(By.name("password")).sendKeys(LOGIN_PASS);
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Log In']"))).click();
 
-        // Test with invalid password
-        performLogin(VALID_USER, "wrong_password");
-        error = wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE_CONTAINER));
-        Assertions.assertTrue(error.getText().contains("Username and password do not match"), "Error message for invalid password is not as expected.");
+        // Assert successful login
+        WebElement accountsHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        Assertions.assertEquals(ACCOUNTS_OVERVIEW_HEADER_TEXT, accountsHeader.getText(), "Expected Accounts Overview page after login.");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("overview.htm"), "URL should contain overview.htm after successful login.");
+        
+        // --- Logout ---
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
+        
+        // Assert successful logout (back to login page)
+        wait.until(ExpectedConditions.urlContains("index.htm"));
+        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Log In']")));
+        Assertions.assertTrue(loginButton.isDisplayed(), "Login button should be visible after logout.");
     }
 
+    /**
+     * Order 2: Test invalid login credentials and assert the error message.
+     */
     @Test
     @Order(2)
-    void testSuccessfulLoginAndLogout() {
-        performLogin(VALID_USER, PASSWORD);
-        wait.until(ExpectedConditions.urlContains("/inventory.html"));
-        Assertions.assertTrue(driver.findElement(INVENTORY_CONTAINER).isDisplayed(), "Inventory container should be visible after login.");
+    public void testInvalidLogin() {
+        navigateToHome();
 
-        wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
-        wait.until(ExpectedConditions.elementToBeClickable(LOGOUT_LINK)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.name("username"))).sendKeys("bad_user");
+        driver.findElement(By.name("password")).sendKeys("bad_pass");
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Log In']"))).click();
 
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
-        Assertions.assertTrue(driver.findElement(LOGIN_BUTTON).isDisplayed(), "Login button should be visible after logout.");
+        // Assert error message
+        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("p.error")));
+        Assertions.assertEquals("The username and password could not be verified.", error.getText(), "Expected invalid login error message.");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("index.htm"), "URL should remain index.htm after failed login.");
     }
 
+    /**
+     * Order 3: Test Open New Account functionality.
+     */
     @Test
     @Order(3)
-    void testProductSortOrder() {
-        performLogin(VALID_USER, PASSWORD);
+    public void testOpenNewAccount() {
+        login(); // Start clean, log in
 
-        // Default sort: Name (A to Z)
-        List<WebElement> items = driver.findElements(INVENTORY_ITEM_NAME);
-        Assertions.assertEquals("Sauce Labs Backpack", items.get(0).getText(), "Default sort order first item is incorrect.");
+        // Navigate to 'Open New Account'
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Open New Account"))).click();
+        wait.until(ExpectedConditions.urlContains("openaccount.htm"));
 
-        // Sort by Name (Z to A)
-        new Select(driver.findElement(SORT_DROPDOWN)).selectByValue("za");
-        items = wait.until(ExpectedConditions.numberOfElementsToBe(INVENTORY_ITEM_NAME, 6));
-        Assertions.assertEquals("Test.allTheThings() T-Shirt (Red)", items.get(0).getText(), "Sort by Z-A first item is incorrect.");
+        // Select 'CHECKING' and the first existing account
+        WebElement accountTypeDropdown = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("type")));
+        Select accountType = new Select(accountTypeDropdown);
+        accountType.selectByVisibleText("CHECKING");
 
-        // Sort by Price (low to high)
-        new Select(driver.findElement(SORT_DROPDOWN)).selectByValue("lohi");
-        items = wait.until(ExpectedConditions.numberOfElementsToBe(INVENTORY_ITEM_NAME, 6));
-        Assertions.assertEquals("Sauce Labs Onesie", items.get(0).getText(), "Sort by Price Low-High first item is incorrect.");
+        // Click Open New Account button
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Open New Account']"))).click();
 
-        // Sort by Price (high to low)
-        new Select(driver.findElement(SORT_DROPDOWN)).selectByValue("hilo");
-        items = wait.until(ExpectedConditions.numberOfElementsToBe(INVENTORY_ITEM_NAME, 6));
-        Assertions.assertEquals("Sauce Labs Fleece Jacket", items.get(0).getText(), "Sort by Price High-Low first item is incorrect.");
+        // Assert success
+        WebElement confirmationHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        Assertions.assertEquals("Account Opened!", confirmationHeader.getText(), "Expected 'Account Opened!' confirmation.");
+        
+        // Logout to clean up session for next test
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
+        wait.until(ExpectedConditions.urlContains("index.htm"));
     }
 
+    /**
+     * Order 4: Test Transfer Funds functionality.
+     */
     @Test
     @Order(4)
-    void testFullCheckoutFlow() {
-        performLogin(VALID_USER, PASSWORD);
-        resetAppState(); // Ensure clean state before starting
+    public void testTransferFunds() {
+        login(); // Start clean, log in
 
-        // Add item to cart and verify badge
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("add-to-cart-sauce-labs-backpack"))).click();
-        WebElement cartBadge = wait.until(ExpectedConditions.visibilityOfElementLocated(SHOPPING_CART_BADGE));
-        Assertions.assertEquals("1", cartBadge.getText(), "Cart badge should show 1 after adding an item.");
+        // Navigate to 'Transfer Funds'
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Transfer Funds"))).click();
+        wait.until(ExpectedConditions.urlContains("transfer.htm"));
 
-        // Go to cart and verify item
-        cartBadge.click();
-        wait.until(ExpectedConditions.urlContains("/cart.html"));
-        List<WebElement> cartItems = driver.findElements(By.className("inventory_item_name"));
-        Assertions.assertEquals(1, cartItems.size(), "There should be one item in the cart.");
-        Assertions.assertEquals("Sauce Labs Backpack", cartItems.get(0).getText(), "The correct item should be in the cart.");
+        // Enter amount and select accounts (assuming at least two exist)
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("amount"))).sendKeys("10.00");
+        
+        // Select accounts - relying on default options or first two if multiple exist
+        // Note: The specific account IDs are dynamic, relying on the default selection or first available.
+        
+        // Click Transfer button
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("input[value='Transfer']"))).click();
 
-        // Proceed to checkout
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("checkout"))).click();
-        wait.until(ExpectedConditions.urlContains("/checkout-step-one.html"));
-
-        // Fill user information
-        driver.findElement(By.id("first-name")).sendKeys("Caio");
-        driver.findElement(By.id("last-name")).sendKeys("Gemini");
-        driver.findElement(By.id("postal-code")).sendKeys("12345");
-        driver.findElement(By.id("continue")).click();
-
-        // Finalize purchase
-        wait.until(ExpectedConditions.urlContains("/checkout-step-two.html"));
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("finish"))).click();
-
-        // Verify completion
-        wait.until(ExpectedConditions.urlContains("/checkout-complete.html"));
-        WebElement completeHeader = driver.findElement(By.className("complete-header"));
-        Assertions.assertEquals("Thank you for your order!", completeHeader.getText(), "Checkout completion message is incorrect.");
-
-        // Go back and check if cart is empty
-        driver.findElement(By.id("back-to-products")).click();
-        wait.until(ExpectedConditions.urlContains("/inventory.html"));
-        List<WebElement> badges = driver.findElements(SHOPPING_CART_BADGE);
-        Assertions.assertTrue(badges.isEmpty(), "Cart badge should be gone after completing an order.");
-    }
-
-    @Test
-    @Order(5)
-    void testBurgerMenuLinks() {
-        performLogin(VALID_USER, PASSWORD);
+        // Assert success
+        WebElement confirmationHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("h1")));
+        Assertions.assertEquals("Transfer Complete!", confirmationHeader.getText(), "Expected 'Transfer Complete!' confirmation.");
         
-        // Test "About" link
-        wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
-        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(By.id("about_sidebar_link")));
+        // Assert transaction details are displayed (e.g., amount transferred)
+        WebElement amountCell = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("amount")));
+        Assertions.assertTrue(amountCell.getText().contains("$10.00"), "Transaction summary should show transferred amount.");
         
-        String originalWindow = driver.getWindowHandle();
-        aboutLink.click();
-        
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        Set<String> allWindows = driver.getWindowHandles();
-        allWindows.remove(originalWindow);
-        String newWindow = allWindows.iterator().next();
-        driver.switchTo().window(newWindow);
-        
-        wait.until(ExpectedConditions.urlContains("saucelabs.com"));
-        Assertions.assertTrue(driver.getCurrentUrl().startsWith("https://saucelabs.com/"), "About link should navigate to saucelabs.com.");
-        
-        driver.close();
-        driver.switchTo().window(originalWindow);
-        
-        // Test "Reset App State" by adding an item first
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("add-to-cart-sauce-labs-bike-light"))).click();
-        Assertions.assertEquals("1", driver.findElement(SHOPPING_CART_BADGE).getText(), "Cart should have 1 item before reset.");
-        
-        resetAppState();
-        
-        Assertions.assertTrue(driver.findElements(SHOPPING_CART_BADGE).isEmpty(), "Cart should be empty after resetting app state.");
+        // Logout to clean up session for next test
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
+        wait.until(ExpectedConditions.urlContains("index.htm"));
     }
     
+    /**
+     * Order 5: Test the external links present on the home and logged-in pages.
+     */
     @Test
-    @Order(6)
-    void testFooterExternalLinks() {
-        performLogin(VALID_USER, PASSWORD);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(INVENTORY_CONTAINER));
-
-        // Test Twitter link
-        handleExternalLink(By.linkText("Twitter"), "twitter.com");
-
-        // Test Facebook link
-        handleExternalLink(By.linkText("Facebook"), "facebook.com/saucelabs");
-
-        // Test LinkedIn link
-        handleExternalLink(By.linkText("LinkedIn"), "linkedin.com/company/sauce-labs");
+    @Order(5)
+    public void testExternalLinks() {
+        navigateToHome();
+        String originalHandle = driver.getWindowHandle();
+        
+        // 1. Test 'About Us' link (visible on login page)
+        WebElement aboutUsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About Us")));
+        assertLinkExternal(aboutUsLink, "parasoft.com", originalHandle);
+        
+        // 2. Test 'Parasoft' footer link (visible on login page)
+        WebElement footerLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Parasoft")));
+        assertLinkExternal(footerLink, "parasoft.com", originalHandle);
+        
+        // The instructions ask for links on the base page AND one level below.
+        // Let's log in to check links there too, assuming they might differ.
+        login();
+        originalHandle = driver.getWindowHandle();
+        
+        // 3. Test 'About Us' link again (visible on logged-in page)
+        WebElement loggedInAboutUsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("About Us")));
+        assertLinkExternal(loggedInAboutUsLink, "parasoft.com", originalHandle);
+        
+        // 4. Test 'Parasoft' footer link again (visible on logged-in page)
+        WebElement loggedInFooterLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Parasoft")));
+        assertLinkExternal(loggedInFooterLink, "parasoft.com", originalHandle);
+        
+        // Logout to ensure next test starts from a clean slate (login page)
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
+        wait.until(ExpectedConditions.urlContains("index.htm"));
     }
 }

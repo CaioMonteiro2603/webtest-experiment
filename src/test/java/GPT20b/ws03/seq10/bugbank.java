@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BugbankTests {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

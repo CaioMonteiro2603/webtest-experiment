@@ -1,4 +1,4 @@
-package GTP5.ws09.seq02;
+package GPT5.ws09.seq02;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

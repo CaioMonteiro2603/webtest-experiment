@@ -22,7 +22,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsfiddleWebTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
@@ -78,7 +78,7 @@ public class JsfiddleWebTest {
         assertFalse(newButton.isEmpty(), "New fiddle button not found on home page");
         WebElement newBtn = newButton.get(0);
         wait.until(ExpectedConditions.elementToBeClickable(newBtn)).click();
-        wait.until(ExpectedConditions.urlPattern("https://jsfiddle.net/i/.+")); // new fiddle URLs start with /i/
+        wait.until(ExpectedConditions.urlMatches("https://jsfiddle.net/i/.+")); // new fiddle URLs start with /i/
         assertTrue(driver.getCurrentUrl().contains("/i/"),
                 "URL after clicking New should contain '/i/'");
         driver.navigate().back();

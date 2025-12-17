@@ -1,4 +1,4 @@
-package deepseek.ws04.seq10;
+package SunaGPT20b.ws04.seq10;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -10,138 +10,140 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.time.Duration;
+import java.util.List;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class FormTest {
+public class DemoAUT {
     private static WebDriver driver;
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
     private static WebDriverWait wait;
 
-    @BeforeAll
-    public static void setup() {
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless");
-        driver = new FirefoxDriver(options);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-    }
+@BeforeAll
+public static void setUpAll() {
+    FirefoxOptions options = new FirefoxOptions();
+    options.addArguments("--headless");
+    driver = new FirefoxDriver(options);
+    wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+}
 
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            driver.quit();
-        }
+@AfterAll
+public static void tearDownAll() {
+    if (driver != null) {
+        driver.quit();
     }
+}
 
-    @Test
-    @Order(1)
-    public void testFormSubmission() {
-        driver.get(BASE_URL);
-        
-        // Fill form
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
-        firstName.sendKeys("John");
-        
-        WebElement lastName = driver.findElement(By.id("last-name"));
-        lastName.sendKeys("Doe");
-        
-        WebElement gender = driver.findElement(By.id("gender"));
-        Select genderSelect = new Select(gender);
-        genderSelect.selectByVisibleText("Male");
-        
-        WebElement dob = driver.findElement(By.id("dob"));
-        dob.sendKeys("01/01/1990");
-        
-        WebElement address = driver.findElement(By.id("address"));
-        address.sendKeys("123 Main St");
-        
-        WebElement email = driver.findElement(By.id("email"));
-        email.sendKeys("john.doe@example.com");
-        
-        WebElement password = driver.findElement(By.id("password"));
-        password.sendKeys("secure123");
-        
-        WebElement company = driver.findElement(By.id("company"));
-        company.sendKeys("ACME Inc");
-        
-        WebElement role = driver.findElement(By.id("role"));
-        Select roleSelect = new Select(role);
-        roleSelect.selectByVisibleText("QA");
-        
-        WebElement jobExpectation = driver.findElement(By.id("expectation"));
-        Select expectationSelect = new Select(jobExpectation);
-        expectationSelect.selectByVisibleText("Good teamwork");
-        expectationSelect.selectByVisibleText("High salary");
-        
-        WebElement submitButton = driver.findElement(By.id("submit"));
-        submitButton.click();
-        
-        // Verify submission
-        WebElement successMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Successfully submitted!')]")));
-        Assertions.assertTrue(successMessage.isDisplayed(), "Form submission failed");
-    }
+private void openBasePage() {
+    driver.get(BASE_URL);
+    // Wait for the form to be present
+    wait.until(ExpectedConditions.presenceOfElementLocated(By.id("infoForm")));
+}
 
-    @Test
-    @Order(2)
-    public void testRequiredFieldValidation() {
-        driver.get(BASE_URL);
-        
-        WebElement submitButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("submit")));
-        submitButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(), 'Please fill out this field')]")));
-        Assertions.assertTrue(errorMessage.isDisplayed(), "Required field validation failed");
-    }
+private void fillForm(String firstName, String lastName, String email,
+                      String password, String gender, String country, boolean agreeTerms) {
+    // Text fields
+    WebElement firstNameEl = wait.until(ExpectedConditions.elementToBeClickable(By.id("first-name")));
+    firstNameEl.clear();
+    firstNameEl.sendKeys(firstName);
 
-    @Test
-    @Order(3)
-    public void testFormReset() {
-        driver.get(BASE_URL);
-        
-        // Fill some fields
-        WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
-        firstName.sendKeys("Test");
-        
-        WebElement resetButton = driver.findElement(By.id("reset"));
-        resetButton.click();
-        
-        Assertions.assertEquals("", firstName.getAttribute("value"), "Form reset failed");
-    }
+    WebElement lastNameEl = driver.findElement(By.id("last-name"));
+    lastNameEl.clear();
+    lastNameEl.sendKeys(lastName);
 
-    @Test
-    @Order(4)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        
-        // Test Help link
-        testExternalLink("Help", "katalon.com");
-        
-        // Test Privacy Policy link
-        testExternalLink("Privacy Policy", "katalon.com");
-    }
+    WebElement emailEl = driver.findElement(By.id("email"));
+    emailEl.clear();
+    emailEl.sendKeys(email);
 
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), '" + linkText + "')]")));
-        link.click();
-        
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
+    WebElement passwordEl = driver.findElement(By.id("password"));
+    passwordEl.clear();
+    passwordEl.sendKeys(password);
+
+    // Gender radio
+    if (gender != null) {
+        List<WebElement> genderOptions = driver.findElements(By.name("gender"));
+        for (WebElement opt : genderOptions) {
+            if (opt.getAttribute("value").equalsIgnoreCase(gender)) {
+                if (!opt.isSelected()) {
+                    opt.click();
                 }
+                break;
             }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
         }
     }
+
+    // Country dropdown
+    if (country != null) {
+        Select countrySelect = new Select(driver.findElement(By.id("country")));
+        countrySelect.selectByVisibleText(country);
+    }
+
+    // Terms checkbox
+    WebElement termsChk = driver.findElement(By.id("terms"));
+    if (agreeTerms != termsChk.isSelected()) {
+        termsChk.click();
+    }
+}
+
+private void submitForm() {
+    WebElement submitBtn = wait.until(ExpectedConditions.elementToBeClickable(
+            By.xpath("//button[normalize-space()='Submit' or @type='submit']")));
+    submitBtn.click();
+}
+
+@Test
+@Order(1)
+public void testPageLoads() {
+    openBasePage();
+    Assertions.assertEquals(BASE_URL, driver.getCurrentUrl(),
+            "The browser should be on the base URL after navigation.");
+    Assertions.assertTrue(driver.findElement(By.id("infoForm")).isDisplayed(),
+            "The form should be visible on the page.");
+}
+
+@Test
+@Order(2)
+public void testEmptyFormValidation() {
+    openBasePage();
+    submitForm();
+
+    // Expect at least one validation message to appear
+    List<WebElement> errors = driver.findElements(By.cssSelector(".error, .validation-message, .invalid"));
+    Assertions.assertFalse(errors.isEmpty(),
+            "Validation messages should be displayed when submitting an empty form.");
+}
+
+@Test
+@Order(3)
+public void testSuccessfulSubmission() {
+    openBasePage();
+    fillForm("Alice", "Smith", "alice.smith@example.com",
+            "SecurePass123", "female", "United States", true);
+    submitForm();
+
+    // Wait for a success indicator (generic text containing 'success' or 'thank')
+    By successLocator = By.xpath("//*[contains(translate(text(),'SUCCESS','success'),'success') " +
+            "or contains(translate(text(),'THANK','thank'),'thank')]");
+    WebElement successMsg = wait.until(ExpectedConditions.visibilityOfElementLocated(successLocator));
+    Assertions.assertTrue(successMsg.isDisplayed(),
+            "A success message should be displayed after a valid form submission.");
+}
+
+@Test
+@Order(4)
+public void testInvalidEmailValidation() {
+    openBasePage();
+    fillForm("Bob", "Jones", "invalid-email",
+            "AnotherPass123", "male", "Canada", true);
+    submitForm();
+
+    // Look for an email‑specific validation message
+    List<WebElement> emailErrors = driver.findElements(By.xpath(
+            "//*[contains(translate(text(),'email','EMAIL'),'email') " +
+            "and (contains(translate(text(),'invalid','INVALID'),'invalid') " +
+            "or contains(translate(text(),'required','REQUIRED'),'required')]"));
+    Assertions.assertFalse(emailErrors.isEmpty(),
+            "An email validation error should be shown for an invalid email address.");
+}
 }

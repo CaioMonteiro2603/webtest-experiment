@@ -1,4 +1,4 @@
-package geminiPRO.ws04.seq02;
+package geminiPro.ws04.seq02;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -18,7 +18,7 @@ import java.time.Duration;
  * This test uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class KatalonFormTest {
+public class DemoAUT {
 
     // Constants for configuration and locators
     private static final String BASE_URL = "https://katalon-test.s3.amazonaws.com/aut/html/form.html";
@@ -32,7 +32,6 @@ public class KatalonFormTest {
     private final By firstNameInput = By.id("first-name");
     private final By lastNameInput = By.id("last-name");
     private final By genderMaleRadio = By.xpath("//input[@name='gender' and @value='male']");
-    private final By genderFemaleRadio = By.xpath("//input[@name='gender' and @value='female']");
     private final By dobInput = By.id("dob");
     private final By addressInput = By.id("address");
     private final By emailInput = By.id("email");

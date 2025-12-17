@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessSuite {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -70,7 +70,8 @@ public class CacTatHeadlessSuite {
     private void openExternalAndAssertDomain(WebElement link, String expectedDomainFragment) {
         String original = driver.getWindowHandle();
         Set<String> before = driver.getWindowHandles();
-        waitClickable(link).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link));
+        el.click(); 
         wait.until(d -> d.getWindowHandles().size() != before.size() || !Objects.equals(((JavascriptExecutor) d).executeScript("return document.readyState"), "loading"));
         Set<String> after = new HashSet<>(driver.getWindowHandles());
         after.removeAll(before);
@@ -224,7 +225,10 @@ public class CacTatHeadlessSuite {
         }).findFirst();
         if (phoneCheck.isPresent() && exists(By.id("phone"))) {
             WebElement cb = phoneCheck.get();
-            if (!cb.isSelected()) waitClickable(cb).click();
+            if (!cb.isSelected()) {
+                WebElement el = wait.until(ExpectedConditions.elementToBeClickable(cb));
+                el.click();
+            }
             clearAndType(By.id("phone"), "11987654321");
             Assertions.assertEquals("11987654321", waitVisible(By.id("phone")).getAttribute("value"), "Phone should accept digits");
         }

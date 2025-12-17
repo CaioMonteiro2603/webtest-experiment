@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatHeadlessSuite {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -40,10 +40,6 @@ public class CacTatHeadlessSuite {
         wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
         Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should land on base URL");
         wait.until(d -> d.findElements(By.tagName("form")).size() > 0);
-    }
-
-    private WebElement waitClickable(By by) {
-        return wait.until(ExpectedConditions.elementToBeClickable(by));
     }
 
     private boolean present(By by) {
@@ -75,7 +71,8 @@ public class CacTatHeadlessSuite {
         String href = link.getAttribute("href");
         if (href == null || href.isBlank()) return;
 
-        waitClickable(link).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(link));
+        el.click();
         Set<String> after = driver.getWindowHandles();
 
         if (after.size() > before.size()) {
@@ -163,18 +160,21 @@ public class CacTatHeadlessSuite {
         // Optional radios (e.g., service type)
         List<WebElement> radios = driver.findElements(By.cssSelector("input[type='radio']"));
         if (!radios.isEmpty()) {
-            waitClickable(radios.get(0)).click();
+        	 WebElement el = wait.until(ExpectedConditions.elementToBeClickable(radios.get(0)));
+             el.click();
             Assertions.assertTrue(radios.get(0).isSelected(), "Chosen radio should be selected");
         }
 
         // Optional checkboxes (e.g., contact by phone)
         List<WebElement> checks = driver.findElements(By.cssSelector("input[type='checkbox']"));
         if (!checks.isEmpty()) {
-            waitClickable(checks.get(0)).click();
+        	WebElement el = wait.until(ExpectedConditions.elementToBeClickable(checks.get(0)));
+            el.click();
             Assertions.assertTrue(checks.get(0).isSelected(), "Checkbox should be selected");
         }
 
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         // Expect success message on the page (commonly .success)
         boolean success = waitForVisible(By.cssSelector(".success, .alert-success, [data-test='success']"));
@@ -207,7 +207,8 @@ public class CacTatHeadlessSuite {
         clearAndType(email, "not-an-email");
         clearAndType(textarea, "Any message");
 
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         // HTML5 native browser validation or page-level error
         String msg = getValidationMessage(email);
@@ -249,7 +250,8 @@ public class CacTatHeadlessSuite {
 
         if (!radios.isEmpty()) {
             WebElement r0 = radios.get(0);
-            waitClickable(r0).click();
+            WebElement el = wait.until(ExpectedConditions.elementToBeClickable(r0));
+            el.click();
             Assertions.assertTrue(r0.isSelected(), "Radio should be selected after click");
 
             String name = r0.getAttribute("name");
@@ -257,7 +259,8 @@ public class CacTatHeadlessSuite {
                 List<WebElement> sameGroup = driver.findElements(By.cssSelector("input[type='radio'][name='" + name + "']"));
                 if (sameGroup.size() > 1) {
                     WebElement r1 = sameGroup.get(1);
-                    waitClickable(r1).click();
+                    WebElement ele = wait.until(ExpectedConditions.elementToBeClickable(r1));
+                    ele.click();
                     Assertions.assertTrue(r1.isSelected(), "Second radio should be selected");
                     Assertions.assertFalse(r0.isSelected(), "First radio should be unselected due to exclusivity");
                 }
@@ -266,9 +269,11 @@ public class CacTatHeadlessSuite {
 
         if (!checks.isEmpty()) {
             WebElement c0 = checks.get(0);
-            waitClickable(c0).click();
+            WebElement el = wait.until(ExpectedConditions.elementToBeClickable(c0));
+            el.click();
             Assertions.assertTrue(c0.isSelected(), "Checkbox should be selected");
-            waitClickable(c0).click();
+            WebElement elw = wait.until(ExpectedConditions.elementToBeClickable(c0));
+            elw.click();
             Assertions.assertFalse(c0.isSelected(), "Checkbox should toggle off");
         }
     }
@@ -321,7 +326,8 @@ public class CacTatHeadlessSuite {
 
             String before = driver.getCurrentUrl();
             try {
-                waitClickable(a).click();
+            	WebElement el = wait.until(ExpectedConditions.elementToBeClickable(a));
+                el.click();
                 wait.until(d -> !d.getCurrentUrl().equals(before));
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on same host");
                 Assertions.assertTrue(driver.findElements(By.tagName("body")).size() > 0, "Internal page should render");
@@ -377,7 +383,8 @@ public class CacTatHeadlessSuite {
         if (email != null) { email.clear(); email.sendKeys(""); }
         if (textarea != null) textarea.clear();
 
-        waitClickable(submit).click();
+        WebElement el = wait.until(ExpectedConditions.elementToBeClickable(submit));
+        el.click();
 
         // Check for native validation messages or page-level errors
         List<String> msgs = new ArrayList<>();

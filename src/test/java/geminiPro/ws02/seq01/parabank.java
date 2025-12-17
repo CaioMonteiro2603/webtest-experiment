@@ -17,7 +17,7 @@ import java.time.Duration;
  * It creates a unique user for each test run to ensure idempotency.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankComprehensiveTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -59,7 +59,6 @@ public class ParaBankComprehensiveTest {
 
     // Accounts Overview
     private static final By ACCOUNTS_OVERVIEW_TITLE = By.xpath("//h1[text()='Accounts Overview']");
-    private static final By ACCOUNT_TABLE_FIRST_ROW_LINK = By.cssSelector("#accountTable tbody tr:first-child td:first-child a");
 
     // Left Menu
     private static final By OPEN_NEW_ACCOUNT_LINK = By.linkText("Open New Account");

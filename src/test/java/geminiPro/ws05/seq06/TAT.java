@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq06;
+package geminiPro.ws05.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * dynamic success/error messages, and navigation to the privacy policy page.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CacTatTest {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);

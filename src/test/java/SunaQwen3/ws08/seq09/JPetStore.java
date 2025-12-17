@@ -1,4 +1,4 @@
-package deepseek.ws08.seq09;
+package SunaQwen3.ws08.seq09;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -6,13 +6,13 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -21,7 +21,7 @@ public class JPetStoreTest {
     private static final String PASSWORD = "j2ee";
 
     @BeforeAll
-    public static void setUp() {
+    static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -29,7 +29,7 @@ public class JPetStoreTest {
     }
 
     @AfterAll
-    public static void tearDown() {
+    static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
@@ -37,142 +37,179 @@ public class JPetStoreTest {
 
     @Test
     @Order(1)
-    public void testHomePageLoads() {
+    void testValidLogin() {
         driver.get(BASE_URL);
-        WebElement welcomeMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(),'Welcome to JPetStore')]")));
-        assertTrue(welcomeMessage.isDisplayed(), "Welcome message should be displayed");
+        assertEquals("JPetStore Demo", driver.getTitle(), "Page title should be 'JPetStore Demo'");
+
+        WebElement signInLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Enter the Store")));
+        signInLink.click();
+
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.name("signon"));
+
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("/actions/Catalog.action"), "Should be redirected to catalog after login");
+        assertTrue(driver.getPageSource().contains("Fish"), "Catalog should contain 'Fish' category");
     }
 
     @Test
     @Order(2)
-    public void testNavigationToCategory() {
-        driver.get(BASE_URL);
-        
-        WebElement fishLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, 'FISH')]")));
-        fishLink.click();
-        
-        WebElement categoryHeader = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(),'Fish')]")));
-        assertTrue(categoryHeader.isDisplayed(), "Fish category page should load");
+    void testInvalidLogin() {
+        driver.get(BASE_URL + "actions/Account.action?signonForm=");
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.name("username")));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.name("signon"));
+
+        usernameField.sendKeys("invalid");
+        passwordField.sendKeys("invalid");
+        loginButton.click();
+
+        String alertText = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("font[color='red']"))).getText();
+        assertTrue(alertText.contains("Invalid username or password"), "Error message should appear for invalid login");
     }
 
     @Test
     @Order(3)
-    public void testProductSelection() {
-        driver.get(BASE_URL + "catalog/categories/FISH");
-        
-        WebElement productLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, 'FI-SW-01')]")));
-        productLink.click();
-        
-        WebElement productHeader = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(),'Angelfish')]")));
-        assertTrue(productHeader.isDisplayed(), "Product page should load");
+    void testBrowseCategoriesAndProducts() {
+        driver.get(BASE_URL + "actions/Catalog.action");
+        wait.until(ExpectedConditions.titleIs("JPetStore Demo"));
+
+        List<WebElement> categoryLinks = driver.findElements(By.cssSelector("a[href*='viewCategory']"));
+        assertFalse(categoryLinks.isEmpty(), "At least one category should be present");
+
+        for (WebElement link : categoryLinks) {
+            String categoryName = link.getText();
+            assertNotNull(categoryName, "Category name should not be null");
+            link.click();
+
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='viewProduct']")));
+            assertTrue(driver.getPageSource().contains(categoryName), "Page should contain category name");
+
+            driver.navigate().back();
+            wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='viewCategory']")));
+        }
     }
 
     @Test
     @Order(4)
-    public void testAddToCart() {
-        driver.get(BASE_URL + "catalog/products/FI-SW-01");
-        
-        WebElement addToCartButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, 'addItemToCart')]")));
-        addToCartButton.click();
-        
-        WebElement cartHeader = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//h2[contains(text(),'Shopping Cart')]")));
-        assertTrue(cartHeader.isDisplayed(), "Cart page should load after adding item");
-        
-        WebElement cartItem = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//td[contains(text(),'Angelfish')]")));
-        assertTrue(cartItem.isDisplayed(), "Added item should appear in cart");
+    void testProductDetailAndAddToCart() {
+        driver.get(BASE_URL + "actions/Catalog.action?viewCategory=&categoryId=FISH");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='productId=FI-SW-01']"))).click();
+
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("a[href*='addItemToCart']")));
+        assertTrue(driver.getPageSource().contains("Angelfish"), "Product detail should show Angelfish");
+
+        WebElement addToCartLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[href*='addItemToCart']")));
+        addToCartLink.click();
+
+        wait.until(ExpectedConditions.urlContains("viewItem"));
+        WebElement updateCartButton = wait.until(ExpectedConditions.elementToBeClickable(By.name("updateCartQuantities")));
+        assertTrue(updateCartButton.isDisplayed(), "Should be on cart page with update button");
+
+        WebElement quantityInput = driver.findElement(By.name("EST-1"));
+        assertEquals("1", quantityInput.getAttribute("value"), "Default quantity should be 1");
     }
 
     @Test
     @Order(5)
-    public void testUserLogin() {
-        driver.get(BASE_URL + "account/signonForm");
-        
-        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.name("username")));
-        usernameField.sendKeys(USERNAME);
-        
-        WebElement passwordField = driver.findElement(By.name("password"));
-        passwordField.sendKeys(PASSWORD);
-        
-        WebElement loginButton = driver.findElement(By.name("signon"));
-        loginButton.click();
-        
-        WebElement welcomeMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(text(),'Welcome')]")));
-        assertTrue(welcomeMessage.getText().contains(USERNAME), 
-            "Welcome message should show logged in user");
+    void testCartUpdateAndCheckout() {
+        driver.get(BASE_URL + "actions/Cart.action?addItemToCart=&workingItemId=EST-1");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.name("updateCartQuantities")));
+
+        WebElement quantityInput = driver.findElement(By.name("EST-1"));
+        quantityInput.clear();
+        quantityInput.sendKeys("2");
+
+        WebElement updateButton = driver.findElement(By.name("updateCartQuantities"));
+        updateButton.click();
+
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("td[colspan='3']"), "2"));
+
+        WebElement proceedToCheckout = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Proceed to Checkout")));
+        proceedToCheckout.click();
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains("newOrderForm"), "Should be on checkout page");
     }
 
     @Test
     @Order(6)
-    public void testInvalidLogin() {
-        driver.get(BASE_URL + "account/signonForm");
-        
-        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.name("username")));
-        usernameField.sendKeys("invalid");
-        
-        WebElement passwordField = driver.findElement(By.name("password"));
-        passwordField.sendKeys("wrong");
-        
-        WebElement loginButton = driver.findElement(By.name("signon"));
-        loginButton.click();
-        
-        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.cssSelector(".error")));
-        assertTrue(errorMessage.isDisplayed(), "Error message should appear for invalid login");
+    void testMenuNavigationAndResetAppState() {
+        driver.get(BASE_URL + "actions/Catalog.action");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.className("Menu")));
+
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img[src='/images/menu.gif']")));
+        menuButton.click();
+
+        WebElement allItemsLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("All Items")));
+        allItemsLink.click();
+        assertTrue(driver.getCurrentUrl().contains("/actions/Catalog.action"), "Should navigate to catalog");
+
+        menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("img[src='/images/menu.gif']")));
+        menuButton.click();
+
+        WebElement resetAppStateLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Reset App State")));
+        resetAppStateLink.click();
+        assertTrue(driver.getCurrentUrl().contains("/actions/Catalog.action"), "App state should reset and remain in catalog");
     }
 
     @Test
     @Order(7)
-    public void testSearchFunctionality() {
+    void testExternalFooterLinks() {
         driver.get(BASE_URL);
-        
-        WebElement searchField = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.name("keyword")));
-        searchField.sendKeys("fish");
-        
-        WebElement searchButton = driver.findElement(By.name("searchProducts"));
-        searchButton.click();
-        
-        List<WebElement> results = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
-            By.xpath("//td[contains(text(),'Fish')]")));
-        assertTrue(results.size() > 0, "Search should return results");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("footer")));
+
+        List<WebElement> footerLinks = driver.findElements(By.cssSelector("footer a"));
+        assertFalse(footerLinks.isEmpty(), "Footer should contain links");
+
+        for (WebElement link : footerLinks) {
+            String href = link.getAttribute("href");
+            String linkText = link.getText();
+
+            if (href.contains("twitter.com")) {
+                assertExternalLinkInNewTab(href, "twitter.com", linkText);
+            } else if (href.contains("facebook.com")) {
+                assertExternalLinkInNewTab(href, "facebook.com", linkText);
+            } else if (href.contains("linkedin.com")) {
+                assertExternalLinkInNewTab(href, "linkedin.com", linkText);
+            }
+        }
     }
 
-    @Test
-    @Order(8)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
-        
-        // Test Aspectran link
-        WebElement aspectranLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href,'aspectran.com')]")));
-        testExternalLink(aspectranLink, "aspectran.com");
-    }
-
-    private void testExternalLink(WebElement link, String expectedDomain) {
+    private void assertExternalLinkInNewTab(String href, String expectedDomain, String linkText) {
         String originalWindow = driver.getWindowHandle();
-        link.click();
-        
+        ((JavascriptExecutor) driver).executeScript("window.open('" + href + "', '_blank');");
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+
         for (String windowHandle : driver.getWindowHandles()) {
             if (!windowHandle.equals(originalWindow)) {
                 driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        
-        assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-            "External link should open " + expectedDomain);
+
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue(currentUrl.contains(expectedDomain), "External link for " + linkText + " should contain " + expectedDomain);
+
         driver.close();
         driver.switchTo().window(originalWindow);
+    }
+
+    @Test
+    @Order(8)
+    void testLogout() {
+        driver.get(BASE_URL + "actions/Catalog.action");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.linkText("Sign Out")));
+
+        WebElement signOutLink = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Sign Out")));
+        signOutLink.click();
+
+        wait.until(ExpectedConditions.urlToBe(BASE_URL + "actions/Catalog.action"));
+        assertTrue(driver.getPageSource().contains("You have logged out."), "Logout confirmation message should appear");
     }
 }

@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class WebTestSuite {
+public class TAT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -70,7 +70,6 @@ public class WebTestSuite {
 
             if (href.contains(baseDomain)) {
                 // Internal link – navigate and verify URL contains the path
-                String originalWindow = driver.getWindowHandle();
                 driver.navigate().to(href);
                 wait.until(ExpectedConditions.urlContains(href));
                 Assertions.assertTrue(driver.getCurrentUrl().contains(href),

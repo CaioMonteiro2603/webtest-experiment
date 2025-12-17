@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class RealWorldTests {
+public class conduit {
     private static WebDriver driver;
 private static WebDriverWait wait;
 private static final String BASE_URL = "https://demo.realworld.io/";
@@ -228,4 +228,5 @@ public void testExternalAboutLink() {
         driver.navigate().back();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.tagName("body")));
     }
+}
 }

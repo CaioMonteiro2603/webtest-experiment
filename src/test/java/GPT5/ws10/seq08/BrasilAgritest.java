@@ -15,7 +15,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BrasilAgriBetaE2ETest {
+public class BrasilAgritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -12,7 +12,7 @@ import java.time.Duration;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

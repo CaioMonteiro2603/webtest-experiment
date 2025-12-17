@@ -5,7 +5,6 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -15,7 +14,7 @@ import java.util.List;
 import static org.openqa.selenium.support.ui.ExpectedConditions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -196,7 +195,6 @@ public class JPetStoreTest {
         searchInput.sendKeys("Goldfish");
         searchInput.submit();
 
-        WebElement searchResults = wait.until(visibilityOfElementLocated(By.className("product")));
         List<WebElement> results = driver.findElements(By.className("product"));
         Assertions.assertTrue(results.size() > 0, "Search should return at least one result for 'Goldfish'");
     }

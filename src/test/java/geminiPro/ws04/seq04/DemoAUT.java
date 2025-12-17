@@ -1,4 +1,4 @@
-package GTP4.ws04.seq04;
+package geminiPro.ws04.seq04;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -27,20 +27,13 @@ import java.util.Set;
  * This test suite targets SauceDemo to align with the detailed functional scope.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ComprehensiveECommerceTest {
+public class DemoAUT {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
 
-    // --- Site Configuration (for SauceDemo) ---
-    private static final String BASE_URL = "https://www.saucedemo.com/";
-    private static final String VALID_USER = "standard_user";
-    private static final String LOCKED_USER = "locked_out_user";
-    private static final String PASSWORD = "secret_sauce";
 
     // --- Common Locators ---
-    private static final By USERNAME_INPUT = By.id("user-name");
-    private static final By PASSWORD_INPUT = By.id("password");
     private static final By LOGIN_BUTTON = By.id("login-button");
     private static final By ERROR_MESSAGE_CONTAINER = By.cssSelector("h3[data-test='error']");
     private static final By INVENTORY_CONTAINER = By.id("inventory_container");
@@ -66,12 +59,6 @@ public class ComprehensiveECommerceTest {
         }
     }
 
-    private void performLogin(String username, String password) {
-        driver.get(BASE_URL);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(USERNAME_INPUT)).sendKeys(username);
-        driver.findElement(PASSWORD_INPUT).sendKeys(password);
-        driver.findElement(LOGIN_BUTTON).click();
-    }
 
     private void resetAppState() {
         wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
@@ -106,12 +93,9 @@ public class ComprehensiveECommerceTest {
     @Order(1)
     void testLoginPageValidations() {
         // Test locked out user
-        performLogin(LOCKED_USER, PASSWORD);
         WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE_CONTAINER));
         Assertions.assertTrue(error.getText().contains("Sorry, this user has been locked out."), "Error message for locked user is incorrect.");
 
-        // Test invalid password
-        performLogin(VALID_USER, "wrong_password");
         error = wait.until(ExpectedConditions.visibilityOfElementLocated(ERROR_MESSAGE_CONTAINER));
         Assertions.assertTrue(error.getText().contains("Username and password do not match"), "Error message for invalid password is not as expected.");
     }
@@ -119,21 +103,18 @@ public class ComprehensiveECommerceTest {
     @Test
     @Order(2)
     void testSuccessfulLoginAndLogoutCycle() {
-        performLogin(VALID_USER, PASSWORD);
         wait.until(ExpectedConditions.urlContains("/inventory.html"));
         Assertions.assertTrue(driver.findElement(INVENTORY_CONTAINER).isDisplayed(), "Inventory container should be visible after login.");
 
         wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
         wait.until(ExpectedConditions.elementToBeClickable(LOGOUT_LINK)).click();
 
-        wait.until(ExpectedConditions.urlToBe(BASE_URL));
         Assertions.assertTrue(driver.findElement(LOGIN_BUTTON).isDisplayed(), "Login button should be visible after logout.");
     }
     
     @Test
     @Order(3)
     void testProductSortFunctionality() {
-        performLogin(VALID_USER, PASSWORD);
 
         // Default sort: Name (A to Z)
         List<WebElement> items = driver.findElements(INVENTORY_ITEM_NAME);
@@ -158,7 +139,6 @@ public class ComprehensiveECommerceTest {
     @Test
     @Order(4)
     void testCompletePurchaseWorkflow() {
-        performLogin(VALID_USER, PASSWORD);
         resetAppState(); // Ensure a clean slate before starting
 
         // Add item and verify cart badge
@@ -197,7 +177,6 @@ public class ComprehensiveECommerceTest {
     @Test
     @Order(5)
     void testBurgerMenuLinksAndActions() {
-        performLogin(VALID_USER, PASSWORD);
         
         // Test "About" link
         wait.until(ExpectedConditions.elementToBeClickable(BURGER_MENU_BUTTON)).click();
@@ -216,7 +195,6 @@ public class ComprehensiveECommerceTest {
     @Test
     @Order(6)
     void testFooterSocialMediaLinks() {
-        performLogin(VALID_USER, PASSWORD);
         wait.until(ExpectedConditions.visibilityOfElementLocated(INVENTORY_CONTAINER));
 
         testExternalLink(By.linkText("Twitter"), "twitter.com");

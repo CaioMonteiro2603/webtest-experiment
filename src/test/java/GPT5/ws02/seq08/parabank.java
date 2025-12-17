@@ -12,10 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParaBankE2ETest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -67,7 +68,7 @@ public class ParaBankE2ETest {
     private void login(String user, String pass) {
         driver.get(BASE_URL);
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginPanel")));
-        WebElement u = wait.until(ExpectedConditions.elementToBeClickable(usernameField().getLocator()));
+        WebElement u = wait.until(ExpectedConditions.elementToBeClickable((WebElement) usernameField().getLocation()));
         u.clear();
         u.sendKeys(user);
         WebElement p = passwordField();

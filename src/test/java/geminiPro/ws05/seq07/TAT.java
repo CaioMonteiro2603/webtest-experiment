@@ -1,4 +1,4 @@
-package geminiPRO.ws05.seq07;
+package geminiPro.ws05.seq07;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,11 +16,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -32,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * It uses Selenium WebDriver with Firefox running in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BookingPlatformComprehensiveTest {
+public class TAT {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String ADMIN_URL = BASE_URL + "#/admin";
@@ -90,8 +88,6 @@ public class BookingPlatformComprehensiveTest {
 
         // Select dates: today and tomorrow
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".rbc-calendar")));
-        String today = String.valueOf(LocalDate.now().getDayOfMonth());
-        String tomorrow = String.valueOf(LocalDate.now().plusDays(1).getDayOfMonth());
         
         // This clicks the first available day and the day after. A more robust solution for complex calendars might be needed.
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[contains(@class, 'rbc-day-bg') and not(contains(@class, 'rbc-off-range-bg'))][1]"))).click();

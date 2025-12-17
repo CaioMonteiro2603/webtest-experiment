@@ -17,12 +17,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -98,19 +97,6 @@ public class SauceDemoTest {
             }
         }
         driver.switchTo().window(originalHandle);
-    }
-
-    private List<Double> getAllPrices() {
-        List<WebElement> priceElements = driver.findElements(By.cssSelector(".inventory_item_price"));
-        List<Double> prices = new ArrayList<>();
-        for (WebElement el : priceElements) {
-            String text = el.getText().replace("$", "").trim();
-            try {
-                prices.add(Double.parseDouble(text));
-            } catch (NumberFormatException {
-            }
-        }
-        return prices;
     }
 
     /* ---------- Test Cases ---------- */

@@ -9,7 +9,6 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.List;
 
 /**
  * A comprehensive JUnit 5 test suite for the JSFiddle online IDE.
@@ -17,7 +16,7 @@ import java.util.List;
  * like running code snippets, interacting with the UI (menus, settings), and verifying external links.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -28,8 +27,6 @@ public class JSFiddleTest {
     private static final By RUN_BUTTON = By.id("run");
     private static final By RESULT_IFRAME = By.name("result");
     private static final By HTML_EDITOR_CONTAINER = By.cssSelector(".window.html .CodeMirror");
-    private static final By BURGER_MENU_BUTTON = By.id("show-mobile-menu");
-    private static final By NEW_FIDDLE_LINK = By.linkText("New fiddle");
     private static final By SETTINGS_BUTTON = By.cssSelector("a[title='Settings']");
     private static final By SETTINGS_MODAL = By.id("options");
     private static final By THEME_DROPDOWN = By.id("option-theme");
@@ -47,7 +44,7 @@ public class JSFiddleTest {
     static void setup() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
-        driver = new Firefox-Driver(options);
+        driver = new FirefoxDriver(options);
         // JSFiddle can be slow to load, a slightly longer wait is beneficial
         wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     }

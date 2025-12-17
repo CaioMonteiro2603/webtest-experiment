@@ -1,4 +1,4 @@
-package geminiPRO.ws06.seq08;
+package geminiPro.ws06.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -9,12 +9,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class AutomationInTestingTest {
+public class RestfullBooker {
 
     private static final String BASE_URL = "https://automationintesting.online/";
     private static final String ADMIN_URL = BASE_URL + "#/admin";

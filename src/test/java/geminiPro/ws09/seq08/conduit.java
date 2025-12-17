@@ -1,4 +1,4 @@
-package geminiPRO.ws09.seq08;
+package geminiPro.ws09.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ConduitAppTest {
+public class conduit {
 
     private static final String BASE_URL = "https://demo.realworld.io/";
     private static final Duration TIMEOUT = Duration.ofSeconds(15); // Increased for SPA reactivity

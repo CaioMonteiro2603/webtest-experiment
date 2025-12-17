@@ -1,7 +1,6 @@
 package Qwen3.ws01.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -10,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class SwagLabsTest {
+public class saucedemo {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -32,8 +31,6 @@ public class SwagLabsTest {
             driver.quit();
         }
     }
-
-    @TestMethodOrder(OrderAnnotation.class)
     @Test
     @Order(1)
     void testValidLogin_SuccessfulRedirectToInventory() {

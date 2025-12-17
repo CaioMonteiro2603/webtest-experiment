@@ -8,7 +8,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Assumptions;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,7 +26,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTests {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;
@@ -122,7 +121,6 @@ public class JPetStoreTests {
         // Navigate to a category link (first category)
         WebElement categoryLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("table#categoryTable a[href*='category']")));
-        String categoryUrl = categoryLink.getAttribute("href");
         categoryLink.click();
 
         // Wait for items to load

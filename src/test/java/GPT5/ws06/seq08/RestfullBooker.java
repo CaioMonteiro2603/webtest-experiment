@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingE2ETest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

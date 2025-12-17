@@ -1,7 +1,12 @@
-package deepseek.ws07.seq08;
+package SunaGPT20b.ws07.seq08;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,16 +14,19 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import java.time.Duration;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+import java.time.Duration;
+import java.util.Set;
+
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class JSFiddle {
+
     private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriver driver;
-    private static WebDriverWait wait;
+    private static WebDriverWait wait; 
 
     @BeforeAll
-    public static void setup() {
+    public static void setUp() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
@@ -26,128 +34,122 @@ public class JSFiddleTest {
     }
 
     @AfterAll
-    public static void teardown() {
+    public static void tearDown() {
         if (driver != null) {
             driver.quit();
         }
     }
 
+    /** Verify that the home page loads and the title contains "JSFiddle". */
     @Test
     @Order(1)
-    public void testHomePageLoading() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement editor = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector("#editor")));
-        Assertions.assertTrue(editor.isDisplayed(), "Editor should be visible on home page");
+        WebElement body = wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+        Assertions.assertTrue(body.isDisplayed(), "Home page body should be displayed");
+        Assertions.assertTrue(driver.getTitle().toLowerCase().contains("jsfiddle"),
+                "Page title should contain 'JSFiddle'");
     }
 
+    /** Click the "Explore" navigation link and verify navigation to the explore page. */
     @Test
     @Order(2)
-    public void testLoginButton() {
+    public void testExplorePageNavigation() {
         driver.get(BASE_URL);
-        WebElement loginBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".login-btn")));
-        loginBtn.click();
-        
-        WebElement loginForm = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".auth-modal")));
-        Assertions.assertTrue(loginForm.isDisplayed(), "Login form should appear");
+        // The Explore link is usually identified by its visible text.
+        WebElement exploreLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[normalize-space()='Explore']")));
+        exploreLink.click();
+
+        wait.until(ExpectedConditions.urlContains("/explore"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/explore"),
+                "URL should contain '/explore' after clicking Explore link");
+        Assertions.assertTrue(driver.getTitle().toLowerCase().contains("explore"),
+                "Page title should indicate Explore page");
     }
 
+    /** Open the first example from the Explore page (one level below) and verify it loads. */
     @Test
     @Order(3)
-    public void testCodeExecution() {
+    public void testFirstExampleLoads() {
         driver.get(BASE_URL);
-        
-        // Clear default code
-        WebElement htmlPane = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#html .CodeMirror")));
-        htmlPane.click();
-        driver.findElement(By.cssSelector("#html .CodeMirror textarea")).sendKeys("<h1>Test</h1>");
-        
-        // Click Run button
-        WebElement runBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("#run")));
-        runBtn.click();
-        
-        // Check result in output frame
-        driver.switchTo().frame("result");
-        WebElement output = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.tagName("h1")));
-        Assertions.assertEquals("Test", output.getText(), "Output should match entered HTML");
-        driver.switchTo().defaultContent();
+        // Navigate to Explore page first.
+        WebElement exploreLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath("//a[normalize-space()='Explore']")));
+        exploreLink.click();
+
+        // Wait for example cards to be present and click the first one.
+        WebElement firstExample = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("section a[href*='/fiddle/']")));
+        firstExample.click();
+
+        wait.until(ExpectedConditions.urlContains("/fiddle/"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("/fiddle/"),
+                "URL should contain '/fiddle/' after opening an example");
+        // Verify that the editor area is present.
+        WebElement editor = wait.until(ExpectedConditions.presenceOfElementLocated(
+                By.cssSelector("#editor")));
+        Assertions.assertTrue(editor.isDisplayed(), "Editor should be displayed on example page");
     }
 
+    /** Verify that the Twitter footer link opens an external page and contains the expected domain. */
     @Test
     @Order(4)
-    public void testPanelResizing() {
+    public void testFooterTwitterLink() {
         driver.get(BASE_URL);
-        WebElement resizeHandle = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".vertical-resize-handle")));
-        
-        // Drag action would be complex to simulate, so we just verify element exists
-        Assertions.assertTrue(resizeHandle.isDisplayed(), "Resize handle should be visible");
-    }
-
-    @Test
-    @Order(5)
-    public void testExternalLinks() {
-        driver.get(BASE_URL);
+        // Footer Twitter link typically contains "twitter.com" in href.
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("footer a[href*='twitter.com']")));
         String originalWindow = driver.getWindowHandle();
-        
-        // Test Documentation link
-        WebElement docLink = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='docs']")));
-        docLink.click();
-        
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
-                break;
-            }
-        }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("docs.jsfiddle.net"),
-            "Should open documentation in new tab");
+
+        twitterLink.click();
+
+        // Wait for a new window/tab if it opens.
+        wait.until(driver -> driver.getWindowHandles().size() > 1);
+        Set<String> windows = driver.getWindowHandles();
+        windows.remove(originalWindow);
+        String newWindow = windows.iterator().next();
+
+        driver.switchTo().window(newWindow);
+        wait.until(ExpectedConditions.urlContains("twitter.com"));
+        Assertions.assertTrue(driver.getCurrentUrl().toLowerCase().contains("twitter.com"),
+                "External link should navigate to a Twitter domain");
+
         driver.close();
         driver.switchTo().window(originalWindow);
     }
 
+    /** Verify that the GitHub footer link opens an external page and contains the expected domain. */
     @Test
-    @Order(6)
-    public void testNavigationTabs() {
+    @Order(5)
+    public void testFooterGitHubLink() {
         driver.get(BASE_URL);
-        
-        // Test About tab
-        WebElement aboutTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='about']")));
-        aboutTab.click();
-        
-        WebElement aboutContent = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".about-content")));
-        Assertions.assertTrue(aboutContent.isDisplayed(), "About page content should be visible");
-        
-        // Test Blog tab
-        WebElement blogTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("a[href*='blog']")));
-        blogTab.click();
-        
-        WebElement blogContent = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".blog-content")));
-        Assertions.assertTrue(blogContent.isDisplayed(), "Blog page content should be visible");
-    }
 
-    @Test
-    @Order(7)
-    public void testEmbedOption() {
-        driver.get(BASE_URL);
-        
-        WebElement embedBtn = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector(".embed-btn")));
-        embedBtn.click();
-        
-        WebElement embedModal = wait.until(ExpectedConditions.visibilityOfElementLocated(
-            By.cssSelector(".embed-modal")));
-        Assertions.assertTrue(embedModal.isDisplayed(), "Embed modal should appear");
+        WebElement githubLink = wait.until(
+                ExpectedConditions.elementToBeClickable(
+                        By.cssSelector("footer a[href*='github.com']"))
+        );
+
+        String originalWindow = driver.getWindowHandle();
+        Set<String> before = driver.getWindowHandles();
+
+        githubLink.click();
+
+        wait.until(d -> d.getWindowHandles().size() > before.size());
+
+        Set<String> after = driver.getWindowHandles();
+        after.removeAll(before);
+        String newWindow = after.iterator().next();
+
+        driver.switchTo().window(newWindow);
+        wait.until(ExpectedConditions.urlContains("github.com"));
+
+        Assertions.assertTrue(
+                driver.getCurrentUrl().toLowerCase().contains("github.com"),
+                "External link should navigate to a GitHub domain"
+        );
+
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 }

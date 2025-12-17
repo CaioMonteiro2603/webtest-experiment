@@ -5,13 +5,12 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -78,7 +77,7 @@ public class JPetStoreTest {
 
         wait.until(ExpectedConditions.urlContains("itemId=EST-1"));
         WebElement addToCartBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(By.name("addToCart"));
+            ExpectedConditions.elementToBeClickable(By.name("addToCart")));
         addToCartBtn.click();
 
         WebElement cartMessage = wait.until(
@@ -92,7 +91,7 @@ public class JPetStoreTest {
     public void testCartOperations() {
         driver.get(BASE_URL + "cart/viewCart");
         WebElement removeBtn = wait.until(
-            ExpectedConditions.elementToBeClickable(By.name("remove"));
+            ExpectedConditions.elementToBeClickable(By.name("remove")));
         removeBtn.click();
 
         WebElement emptyCartMsg = wait.until(

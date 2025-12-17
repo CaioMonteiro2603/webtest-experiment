@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class RealWorldHeadlessTest {
+public class conduit {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

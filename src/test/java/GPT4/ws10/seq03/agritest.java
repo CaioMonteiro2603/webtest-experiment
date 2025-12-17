@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class BrasilAgritestLoginTest {
+public class agritest {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -12,10 +12,11 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.net.URI;
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JsFiddleHeadlessSuite {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -309,7 +310,6 @@ public class JsFiddleHeadlessSuite {
         for (String href : internal) {
             String target = href;
             if (href.startsWith("/")) target = BASE_URL + href.substring(1);
-            String before = driver.getCurrentUrl();
             driver.navigate().to(target);
             wait.until(ExpectedConditions.presenceOfElementLocated(BODY));
             String after = driver.getCurrentUrl();

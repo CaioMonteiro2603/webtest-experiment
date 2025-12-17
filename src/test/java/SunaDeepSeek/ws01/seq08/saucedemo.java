@@ -1,25 +1,22 @@
-package deepseek.ws01.seq08;
+package SunaDeepSeek.ws01.seq08;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class SaucedemoTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class saucedemo {
+
+    private static WebDriver driver;
+    private static WebDriverWait wait;
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String USERNAME = "standard_user";
     private static final String PASSWORD = "secret_sauce";
-    private static WebDriver driver;
-    private static WebDriverWait wait;
 
     @BeforeAll
     public static void setup() {
@@ -38,158 +35,180 @@ public class SaucedemoTest {
 
     @Test
     @Order(1)
-    public void testSuccessfulLogin() {
+    public void testLoginPage() {
         driver.get(BASE_URL);
-        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
-        username.sendKeys(USERNAME);
-        driver.findElement(By.id("password")).sendKeys(PASSWORD);
-        driver.findElement(By.id("login-button")).click();
+        Assertions.assertTrue(driver.getCurrentUrl().contains("index.html"));
+
+        WebElement usernameField = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("user-name")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login-button"));
+
+        usernameField.sendKeys("invalid_user");
+        passwordField.sendKeys("wrong_password");
+        loginButton.click();
+
+        WebElement errorElement = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("[data-test='error']")));
+        Assertions.assertTrue(errorElement.getText().contains("Username and password do not match"));
+
+        usernameField.clear();
+        passwordField.clear();
+        usernameField.sendKeys(USERNAME);
+        passwordField.sendKeys(PASSWORD);
+        loginButton.click();
 
         wait.until(ExpectedConditions.urlContains("inventory.html"));
-        Assertions.assertTrue(driver.findElements(By.className("inventory_item")).size() > 0,
-                "Inventory items should be displayed after login");
     }
 
     @Test
     @Order(2)
-    public void testInvalidLogin() {
-        driver.get(BASE_URL);
-        WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
-        username.sendKeys("invalid_user");
-        driver.findElement(By.id("password")).sendKeys(PASSWORD);
-        driver.findElement(By.id("login-button")).click();
+    public void testInventoryPage() {
+        driver.get(BASE_URL + "inventory.html");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
 
-        WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("[data-test='error']")));
-        Assertions.assertTrue(error.getText().contains("Epic sadface"), "Should display error for invalid login");
+        List<WebElement> items = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.cssSelector(".inventory_item")));
+        Assertions.assertEquals(6, items.size());
     }
 
     @Test
     @Order(3)
-    public void testInventorySorting() {
-        loginIfNeeded();
+    public void testSortingDropdown() {
+        driver.get(BASE_URL + "inventory.html");
         
-        Select sortDropdown = new Select(driver.findElement(By.cssSelector(".product_sort_container")));
+        WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".product_sort_container")));
+        sortDropdown.click();
         
-        // Test name A-Z
-        sortDropdown.selectByValue("az");
-        List<WebElement> itemsAz = driver.findElements(By.cssSelector(".inventory_item_name"));
-        Assertions.assertTrue(itemsAz.get(0).getText().startsWith("Sauce Labs Backpack"),
-                "First item should be 'Sauce Labs Backpack' when sorted A-Z");
+        // Test Name (A to Z)
+        sortDropdown.sendKeys("Name (A to Z)");
+        WebElement firstItemAZ = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".inventory_item_name")));
+        Assertions.assertTrue(firstItemAZ.getText().startsWith("Sauce Labs Backpack"));
 
-        // Test name Z-A
-        sortDropdown.selectByValue("za");
-        List<WebElement> itemsZa = driver.findElements(By.cssSelector(".inventory_item_name"));
-        Assertions.assertTrue(itemsZa.get(0).getText().startsWith("Test.allTheThings()"),
-                "First item should be 'Test.allTheThings()' when sorted Z-A");
+        // Test Name (Z to A)
+        sortDropdown.sendKeys("Name (Z to A)");
+        WebElement firstItemZA = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".inventory_item_name")));
+        Assertions.assertTrue(firstItemZA.getText().startsWith("Test.allTheThings() T-Shirt"));
 
-        // Test price low-high
-        sortDropdown.selectByValue("lohi");
-        List<WebElement> pricesLoHi = driver.findElements(By.cssSelector(".inventory_item_price"));
-        Assertions.assertTrue(pricesLoHi.get(0).getText().startsWith("$7.99"),
-                "First item price should be $7.99 when sorted low-high");
+        // Test Price (low to high)
+        sortDropdown.sendKeys("Price (low to high)");
+        WebElement firstItemLow = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".inventory_item_price")));
+        Assertions.assertTrue(firstItemLow.getText().contains("7.99"));
 
-        // Test price high-low
-        sortDropdown.selectByValue("hilo");
-        List<WebElement> pricesHiLo = driver.findElements(By.cssSelector(".inventory_item_price"));
-        Assertions.assertTrue(pricesHiLo.get(0).getText().startsWith("$49.99"),
-                "First item price should be $49.99 when sorted high-low");
+        // Test Price (high to low)
+        sortDropdown.sendKeys("Price (high to low)");
+        WebElement firstItemHigh = wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".inventory_item_price")));
+        Assertions.assertTrue(firstItemHigh.getText().contains("49.99"));
     }
 
     @Test
     @Order(4)
-    public void testMenuNavigation() {
-        loginIfNeeded();
+    public void testMenuOptions() {
+        driver.get(BASE_URL + "inventory.html");
         
+        // Open menu
         WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
         menuButton.click();
         
         // Test All Items
         WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(By.id("inventory_sidebar_link")));
         allItems.click();
-        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory.html"),
-                "All Items should navigate to inventory page");
+        Assertions.assertTrue(driver.getCurrentUrl().contains("inventory.html"));
         
-        // Open menu again
+        // Reopen menu
+        menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
         menuButton.click();
         
         // Test About (external)
         WebElement about = wait.until(ExpectedConditions.elementToBeClickable(By.id("about_sidebar_link")));
         about.click();
+        
         String originalWindow = driver.getWindowHandle();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains("saucelabs.com"),
-                "About link should open saucelabs domain");
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("saucelabs.com"));
         driver.close();
         driver.switchTo().window(originalWindow);
         
-        // Test reset app state and logout
-        testResetAppState();
-        testLogout();
-    }
-
-    private void testResetAppState() {
-        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+        // Reopen menu
+        menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
         menuButton.click();
+        
+        // Test Reset App State
         WebElement reset = wait.until(ExpectedConditions.elementToBeClickable(By.id("reset_sidebar_link")));
         reset.click();
-        wait.until(ExpectedConditions.invisibilityOf(reset));
-        driver.findElement(By.id("react-burger-cross-btn")).click();
-    }
-
-    private void testLogout() {
-        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
-        menuButton.click();
-        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
-        logout.click();
-        wait.until(ExpectedConditions.urlContains("index.html"));
+        
+        // Close menu
+        WebElement closeMenu = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-cross-btn")));
+        closeMenu.click();
     }
 
     @Test
     @Order(5)
-    public void testFooterSocialLinks() {
-        loginIfNeeded();
+    public void testSocialLinks() {
+        driver.get(BASE_URL + "inventory.html");
+        
+        // Test Twitter link
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_twitter a")));
+        twitterLink.click();
+        
         String originalWindow = driver.getWindowHandle();
-        
-        // Test Twitter
-        testExternalLink("social_twitter", "twitter.com", originalWindow);
-        
-        // Test Facebook
-        testExternalLink("social_facebook", "facebook.com", originalWindow);
-        
-        // Test LinkedIn
-        testExternalLink("social_linkedin", "linkedin.com", originalWindow);
-    }
-
-    private void testExternalLink(String linkId, String expectedDomain, String originalWindow) {
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.id(linkId)));
-        link.click();
-        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        for (String window : driver.getWindowHandles()) {
-            if (!window.equals(originalWindow)) {
-                driver.switchTo().window(window);
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
                 break;
             }
         }
-        Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                "Link should open " + expectedDomain + " domain");
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"));
+        driver.close();
+        driver.switchTo().window(originalWindow);
+        
+        // Test Facebook link
+        WebElement facebookLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_facebook a")));
+        facebookLink.click();
+        
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("facebook.com"));
+        driver.close();
+        driver.switchTo().window(originalWindow);
+        
+        // Test LinkedIn link
+        WebElement linkedinLink = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".social_linkedin a")));
+        linkedinLink.click();
+        
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.contentEquals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("linkedin.com"));
         driver.close();
         driver.switchTo().window(originalWindow);
     }
 
-    private void loginIfNeeded() {
-        if (!driver.getCurrentUrl().contains("inventory.html")) {
-            driver.get(BASE_URL);
-            WebElement username = wait.until(ExpectedConditions.elementToBeClickable(By.id("user-name")));
-            username.sendKeys(USERNAME);
-            driver.findElement(By.id("password")).sendKeys(PASSWORD);
-            driver.findElement(By.id("login-button")).click();
-            wait.until(ExpectedConditions.urlContains("inventory.html"));
-        }
+    @Test
+    @Order(6)
+    public void testLogout() {
+        driver.get(BASE_URL + "inventory.html");
+        
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("react-burger-menu-btn")));
+        menuButton.click();
+        
+        WebElement logout = wait.until(ExpectedConditions.elementToBeClickable(By.id("logout_sidebar_link")));
+        logout.click();
+        
+        wait.until(ExpectedConditions.urlContains("index.html"));
+        Assertions.assertTrue(driver.getCurrentUrl().contains("index.html"));
     }
 }

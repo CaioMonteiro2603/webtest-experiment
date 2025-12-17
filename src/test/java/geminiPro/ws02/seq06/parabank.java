@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq06;
+package geminiPro.ws02.seq06;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,13 +18,10 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -34,7 +31,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * transaction searching, and external link validation.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankComprehensiveTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);
@@ -233,7 +230,6 @@ public class ParaBankComprehensiveTest {
         }
         
         // Wait for ajax to load account list before clicking
-        By fromAccountIdSelect = By.id("fromAccountId");
         wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
             By.xpath("//select[@id='fromAccountId']/option"), 0));
 

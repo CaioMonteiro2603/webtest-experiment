@@ -2,7 +2,6 @@ package GPT20b.ws02.seq07;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.AfterAll;
@@ -22,7 +21,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParabankWebTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -35,10 +34,13 @@ public class ParabankWebTest {
     static void setUpAll() {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
+
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(10));
     }
+
 
     @AfterAll
     static void tearDownAll() {
@@ -78,10 +80,6 @@ public class ParabankWebTest {
         wait.until(ExpectedConditions.urlContains("index.htm"));
         Assertions.assertTrue(driver.getCurrentUrl().contains("index.htm"),
                 "Should return to login page after logout");
-    }
-
-    private List<WebElement> getNavigationLinks() {
-        return driver.findElements(By.cssSelector("ul.menuTop > li > a"));
     }
 
     private void clickAndReturn(String linkText) {
@@ -239,16 +237,11 @@ public class ParabankWebTest {
         // Click again to sort descending
         balanceHeader.click();
 
-        List<Double> afterSortDesc = accountTable.findElements(By.xpath(".//tbody/tr/td[3]"))
-                .stream()
-                .mapDouble(el.getText().replace("$", "").replace(",", "")))
-                .collect(Collectors.toList());
-
         List<Double> expectedDesc = expectedAsc.stream()
                 .sorted((a, b) -> Double.compare(b, a))
                 .collect(Collectors.toList());
 
-        Assertions.assertEquals(expectedDesc, afterSortDesc,
+        Assertions.assertEquals(expectedDesc,
                 "Sorting by Balance descending should match expected order");
     }
 

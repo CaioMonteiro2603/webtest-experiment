@@ -16,7 +16,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleHeadlessTest {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

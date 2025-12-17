@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class AutomationInTestingHeadlessTest {
+public class RestfullBooker {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -1,21 +1,19 @@
-package deepseek.ws07.seq10;
+package SunaDeepSeek.ws07.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
+import java.util.List;
 
-@TestMethodOrder(OrderAnnotation.class)
-public class JSFiddleTest {
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+public class JSFiddle {
     private static WebDriver driver;
-    private static final String BASE_URL = "https://jsfiddle.net/";
     private static WebDriverWait wait;
+    private static final String BASE_URL = "https://jsfiddle.net/";
 
     @BeforeAll
     public static void setup() {
@@ -34,115 +32,140 @@ public class JSFiddleTest {
 
     @Test
     @Order(1)
-    public void testPageLoad() {
+    public void testHomePageLoads() {
         driver.get(BASE_URL);
-        WebElement editor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.className("CodeMirror")));
-        Assertions.assertTrue(editor.isDisplayed(), "Editor not loaded");
+        wait.until(ExpectedConditions.titleContains("JSFiddle"));
+        Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL), "Should be on JSFiddle homepage");
+        
+        WebElement logo = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("a.navbar-brand img")));
+        Assertions.assertTrue(logo.isDisplayed(), "JSFiddle logo should be visible");
     }
 
     @Test
     @Order(2)
-    public void testRunButton() {
+    public void testEditorPageNavigation() {
         driver.get(BASE_URL);
-        WebElement runButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.id("run")));
-        runButton.click();
+        WebElement editorLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/show/']")));
+        editorLink.click();
         
-        WebElement resultFrame = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.id("result")));
-        Assertions.assertTrue(resultFrame.isDisplayed(), "Result frame not displayed after run");
+        wait.until(ExpectedConditions.urlContains("/show/"));
+        WebElement runButton = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("button#run")));
+        Assertions.assertTrue(runButton.isDisplayed(), "Run button should be visible on editor page");
     }
 
     @Test
     @Order(3)
-    public void testLoginForm() {
+    public void testDocumentationLink() {
         driver.get(BASE_URL);
-        WebElement loginButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'Login')]")));
-        loginButton.click();
+        WebElement docsLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/docs/']")));
+        docsLink.click();
         
-        WebElement loginForm = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.id("login-form")));
-        Assertions.assertTrue(loginForm.isDisplayed(), "Login form not displayed");
+        wait.until(ExpectedConditions.urlContains("/docs/"));
+        WebElement docsTitle = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("h1")));
+        Assertions.assertTrue(docsTitle.getText().contains("Documentation"), 
+            "Documentation page should have correct title");
     }
 
     @Test
     @Order(4)
     public void testExternalLinks() {
         driver.get(BASE_URL);
+        String originalWindow = driver.getWindowHandle();
         
         // Test Twitter link
-        testExternalLink("Twitter", "twitter.com");
+        WebElement twitterLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='twitter.com']")));
+        twitterLink.click();
+        
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.equals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("twitter.com"), 
+            "Should be on Twitter domain");
+        driver.close();
+        driver.switchTo().window(originalWindow);
         
         // Test GitHub link
-        testExternalLink("GitHub", "github.com");
+        WebElement githubLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='github.com']")));
+        githubLink.click();
+        
+        wait.until(ExpectedConditions.numberOfWindowsToBe(2));
+        for (String windowHandle : driver.getWindowHandles()) {
+            if (!originalWindow.equals(windowHandle)) {
+                driver.switchTo().window(windowHandle);
+                break;
+            }
+        }
+        
+        Assertions.assertTrue(driver.getCurrentUrl().contains("github.com"), 
+            "Should be on GitHub domain");
+        driver.close();
+        driver.switchTo().window(originalWindow);
     }
 
     @Test
     @Order(5)
-    public void testEditorTabs() {
-        driver.get(BASE_URL);
+    public void testLoginFunctionality() {
+        driver.get(BASE_URL + "login/");
         
-        // Test HTML tab
-        WebElement htmlTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'HTML')]")));
-        htmlTab.click();
-        WebElement htmlEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'CodeMirror') and contains(@class, 'html')]")));
-        Assertions.assertTrue(htmlEditor.isDisplayed(), "HTML editor not displayed");
+        WebElement emailField = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.id("login-email")));
+        WebElement passwordField = driver.findElement(By.id("login-password"));
+        WebElement loginButton = driver.findElement(By.id("login-submit"));
         
-        // Test CSS tab
-        WebElement cssTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'CSS')]")));
-        cssTab.click();
-        WebElement cssEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'CodeMirror') and contains(@class, 'css')]")));
-        Assertions.assertTrue(cssEditor.isDisplayed(), "CSS editor not displayed");
+        emailField.sendKeys("test@example.com");
+        passwordField.sendKeys("wrongpassword");
+        loginButton.click();
         
-        // Test JS tab
-        WebElement jsTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'JS')]")));
-        jsTab.click();
-        WebElement jsEditor = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.xpath("//div[contains(@class, 'CodeMirror') and contains(@class, 'javascript')]")));
-        Assertions.assertTrue(jsEditor.isDisplayed(), "JS editor not displayed");
+        WebElement errorMessage = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector(".alert.alert-danger")));
+        Assertions.assertTrue(errorMessage.isDisplayed(), 
+            "Error message should be displayed for invalid login");
     }
 
     @Test
     @Order(6)
-    public void testConsoleTab() {
+    public void testNavigationMenu() {
         driver.get(BASE_URL);
         
-        WebElement consoleTab = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(text(), 'Console')]")));
-        consoleTab.click();
+        WebElement menuButton = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector(".navbar-toggler")));
+        menuButton.click();
         
-        WebElement consolePanel = wait.until(ExpectedConditions.presenceOfElementLocated(
-            By.id("console")));
-        Assertions.assertTrue(consolePanel.isDisplayed(), "Console panel not displayed");
+        WebElement aboutLink = wait.until(ExpectedConditions.elementToBeClickable(
+            By.cssSelector("a[href*='/about/']")));
+        aboutLink.click();
+        
+        wait.until(ExpectedConditions.urlContains("/about/"));
+        WebElement aboutTitle = wait.until(ExpectedConditions.presenceOfElementLocated(
+            By.cssSelector("h1")));
+        Assertions.assertTrue(aboutTitle.getText().contains("About"), 
+            "About page should have correct title");
     }
 
-    private void testExternalLink(String linkText, String expectedDomain) {
-        String mainWindow = driver.getWindowHandle();
-        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(
-            By.xpath("//a[contains(@href, '" + expectedDomain + "')]")));
-        link.click();
+    @Test
+    @Order(7)
+    public void testFooterLinks() {
+        driver.get(BASE_URL);
+        ((JavascriptExecutor)driver).executeScript("window.scrollTo(0, document.body.scrollHeight)");
         
-        // Switch to new window if opened
-        if (driver.getWindowHandles().size() > 1) {
-            for (String windowHandle : driver.getWindowHandles()) {
-                if (!windowHandle.equals(mainWindow)) {
-                    driver.switchTo().window(windowHandle);
-                    break;
-                }
-            }
-            
-            wait.until(d -> d.getCurrentUrl().contains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
-                linkText + " link failed - wrong domain");
-            driver.close();
-            driver.switchTo().window(mainWindow);
+        List<WebElement> footerLinks = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(
+            By.cssSelector("footer a")));
+        Assertions.assertTrue(footerLinks.size() > 0, "Footer should contain links");
+        
+        for (WebElement link : footerLinks) {
+            Assertions.assertTrue(link.isDisplayed(), "Footer link should be visible");
         }
     }
 }

@@ -9,10 +9,11 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.*;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreAspectranSuite {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -92,26 +93,6 @@ public class JPetStoreAspectranSuite {
         }
         Assertions.fail("No new tab opened for external link.");
     }
-
-    private void clickExternalAndAssert(String expectedDomain, By... candidates) {
-        int before = driver.getWindowHandles().size();
-        boolean clicked = false;
-        for (By by : candidates) {
-            if (clickIfPresent(by)) { clicked = true; break; }
-        }
-        Assertions.assertTrue(clicked, "Expected external link was not found/clickable.");
-
-        if (driver.getWindowHandles().size() > before) {
-            switchToNewTabAndVerify(expectedDomain);
-        } else {
-            wait.until(ExpectedConditions.urlContains(expectedDomain));
-            Assertions.assertTrue(driver.getCurrentUrl().contains(expectedDomain),
-                    "Expected URL to contain external domain: " + expectedDomain);
-            driver.navigate().back();
-            wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        }
-    }
-
     private boolean onCartPage() {
         return driver.getCurrentUrl().toLowerCase().contains("cart")
                 || driver.findElements(By.xpath("//*[contains(.,'Shopping Cart') or contains(.,'Cart')]")).size() > 0;

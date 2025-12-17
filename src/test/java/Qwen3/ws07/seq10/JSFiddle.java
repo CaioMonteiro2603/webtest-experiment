@@ -1,7 +1,6 @@
 package Qwen3.ws07.seq10;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -10,7 +9,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsFiddleTest {
+public class JSFiddle {
     private static WebDriver driver;
     private static WebDriverWait wait;
 
@@ -30,8 +29,7 @@ public class JsFiddleTest {
             driver.quit();
         }
     }
-
-    @TestMethodOrder(OrderAnnotation.class)
+   
     @Test
     @Order(1)
     void testPageTitleAndHeader_DisplayedCorrectly() {
@@ -223,11 +221,7 @@ public class JsFiddleTest {
     @Order(11)
     void testJavaScriptEditorArea_IsEditable() {
         driver.get(BASE_URL);
-
-        // Switch to the iframe that contains the editor
-        WebElement editorFrame = wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.cssSelector("#result-iframe")));
-        driver.switchTo().defaultContent(); // Need to target the code editor iframe, not result
-
+        
         // Switch to editor iframe (JS)
         driver.switchTo().frame(wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("iframe[src^='/code/']"))));
 

@@ -1,7 +1,6 @@
 package SunaQwen3.ws07.seq04;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -11,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class JsFiddleTestSuite {
+public class JSFiddle {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

@@ -6,12 +6,14 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.*;
 import org.openqa.selenium.support.ui.*;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static final String BASE_URL = "https://jpetstore.aspectran.com/";
     private static WebDriver driver;
@@ -36,16 +38,6 @@ public class JPetStoreTest {
     private void goToHome() {
         driver.get(BASE_URL);
         wait.until(ExpectedConditions.titleContains("JPetStore"));
-    }
-
-    /** Helper to switch to a newly opened window and return its handle */
-    private String switchToNewWindow(Set<String> oldHandles) {
-        wait.until(driver -> driver.getWindowHandles().size() > oldHandles.size());
-        Set<String> newHandles = driver.getWindowHandles();
-        newHandles.removeAll(oldHandles);
-        String newHandle = newHandles.iterator().next();
-        driver.switchTo().window(newHandle);
-        return newHandle;
     }
 
     @Test
@@ -80,7 +72,7 @@ public class JPetStoreTest {
 
     @Test
     @Order(3)
-    public testProductDetailPage() {
+    public void testProductDetailPage() {
         goToHome();
         // Open first category
         WebElement firstCategory = wait.until(ExpectedConditions.elementToBeClickable(
@@ -91,7 +83,6 @@ public class JPetStoreTest {
         // Click first product link
         WebElement firstProduct = wait.until(ExpectedConditions.elementToBeClickable(
                 By.cssSelector("a[href*='viewProduct']")));
-        String productId = firstProduct.getAttribute("href");
         firstProduct.click();
         wait.until(ExpectedConditions.urlContains("viewProduct"));
 
@@ -147,7 +138,7 @@ public class JPetStoreTest {
 
     @Test
     @Order(5)
-    public void testFooterExternalLinks() {
+    public void testFooterExternalLinks() throws MalformedURLException {
         goToHome();
         // Locate footer external links (target="_blank")
         List<WebElement> externalLinks = driver.findElements(By.cssSelector("footer a[target='_blank']"));
@@ -160,7 +151,6 @@ public class JPetStoreTest {
             link.click();
 
             // Switch to new window/tab
-            String newHandle = switchToNewWindow(oldHandles);
             String currentUrl = driver.getCurrentUrl();
             Assertions.assertTrue(currentUrl.contains(new URL(href).getHost()),
                     "External link should navigate to expected domain: " + href);

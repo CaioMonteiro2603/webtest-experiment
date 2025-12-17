@@ -11,10 +11,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankE2ETest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -50,14 +49,6 @@ public class BugBankE2ETest {
 
     private boolean exists(By by) {
         return !driver.findElements(by).isEmpty();
-    }
-
-    private WebElement first(By... locators) {
-        for (By by : locators) {
-            List<WebElement> els = driver.findElements(by);
-            if (!els.isEmpty()) return els.get(0);
-        }
-        throw new NoSuchElementException("Unable to find element by any of: " + Arrays.toString(locators));
     }
 
     private Optional<WebElement> firstOptional(By... locators) {
@@ -250,7 +241,6 @@ public class BugBankE2ETest {
                 By.xpath("//button[contains(@aria-label,'menu') or contains(.,'Menu')]")
         );
         if (burger.isPresent()) {
-            waitClickable(burger.getLocator()).click();
             // Verify menu opened by looking for close/cross or sidebar
             boolean menuOpen = exists(By.cssSelector("[data-test='menu-open']")) ||
                                exists(By.id("react-burger-cross-btn")) ||
@@ -314,60 +304,5 @@ public class BugBankE2ETest {
                 "Login email field should be visible after logout/reset");
         Assertions.assertTrue(driver.getCurrentUrl().startsWith(BASE_URL) || driver.getCurrentUrl().contains("netlify"),
                 "Should be on base URL after returning to login");
-    }
-
-    // --------------- Optional utilities for Optional<WebElement> wait/click ---------------
-
-    // Allows waiting on locator used by a previously found Optional<WebElement>
-    private static class LocatedOptionalWebElement {
-        private final WebElement element;
-        private final By locator;
-        LocatedOptionalWebElement(WebElement element, By locator) { this.element = element; this.locator = locator; }
-        public WebElement getElement() { return element; }
-        public By getLocator() { return locator; }
-    }
-
-    // Overload firstOptional to also capture locator for waitClickable(...) usage above
-    private Optional<WebElement> firstOptional(By locator) {
-        List<WebElement> els = driver.findElements(locator);
-        return els.isEmpty() ? Optional.empty() : Optional.of(els.get(0));
-    }
-
-    // Extension method to get locator back from element we chose via firstOptional(...) lists
-    private LocatedOptionalWebElement getLocatorWrapped(Optional<WebElement> opt, By locator) {
-        return opt.map(el -> new LocatedOptionalWebElement(el, locator)).orElse(null);
-    }
-
-    // Convenience to retrieve locator of an Optional<WebElement> chosen from a set
-    private LocatedOptionalWebElement resolveOptionalWithLocator(By... locators) {
-        for (By by : locators) {
-            Optional<WebElement> opt = firstOptional(by);
-            if (opt.isPresent()) return new LocatedOptionalWebElement(opt.get(), by);
-        }
-        return null;
-    }
-
-    // Add a tiny helper to get back the By used to locate an Optional burger above
-    private static class OptionalWithLocator extends AbstractMap.SimpleEntry<WebElement, By> {
-        OptionalWithLocator(WebElement key, By value) { super(key, value); }
-    }
-
-    // Expose a helper for burger waitClickable(...) call
-    private OptionalWithLocator burgerWithLocator() {
-        By[] locs = new By[]{
-                By.cssSelector("[data-test='menu']"),
-                By.id("react-burger-menu-btn"),
-                By.xpath("//button[contains(@aria-label,'menu') or contains(.,'Menu')]")
-        };
-        for (By b : locs) {
-            List<WebElement> els = driver.findElements(b);
-            if (!els.isEmpty()) return new OptionalWithLocator(els.get(0), b);
-        }
-        return null;
-    }
-
-    // Convenience method used in test #5
-    private WebElement waitClickable(OptionalWithLocator owl) {
-        return wait.until(ExpectedConditions.elementToBeClickable(owl.getValue()));
     }
 }

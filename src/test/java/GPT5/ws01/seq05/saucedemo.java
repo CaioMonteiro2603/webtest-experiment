@@ -1,4 +1,4 @@
-package GPT5.ws01.seq04;
+package GPT5.ws01.seq05;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class SauceDemoV1HeadlessTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -305,7 +305,6 @@ public class SauceDemoV1HeadlessTest {
     @Order(9)
     public void testFooterSocialExternalLinks() {
         standardLogin();
-        WebElement footer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("page_wrapper")));
         List<String> domains = Arrays.asList("twitter.com", "facebook.com", "linkedin.com");
         for (String domain : domains) {
             List<WebElement> links = driver.findElements(By.cssSelector("footer .social a[href*='" + domain + "']"));

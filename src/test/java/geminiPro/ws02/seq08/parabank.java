@@ -1,4 +1,4 @@
-package geminiPRO.ws02.seq08;
+package geminiPro.ws02.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -17,7 +17,7 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ParaBankComprehensiveTest {
+public class parabank {
 
     private static final String BASE_URL = "https://parabank.parasoft.com/parabank/index.htm";
     private static final Duration TIMEOUT = Duration.ofSeconds(10);

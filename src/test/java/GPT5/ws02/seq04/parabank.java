@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class ParabankE2EHeadlessTest {
+public class parabank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -46,13 +46,6 @@ public class ParabankE2EHeadlessTest {
 
     private boolean isLoggedIn() {
         return driver.findElements(By.linkText("Log Out")).size() > 0;
-    }
-
-    private void logoutIfLoggedIn() {
-        if (isLoggedIn()) {
-            wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Log Out"))).click();
-            wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("loginPanel")));
-        }
     }
 
     private void login(String user, String pass) {

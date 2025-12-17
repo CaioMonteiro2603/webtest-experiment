@@ -1,4 +1,4 @@
-package geminiPRO.ws07.seq08;
+package geminiPro.ws07.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -13,7 +13,7 @@ import java.time.Duration;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JsFiddleTest {
+public class JSFiddle {
 
     private static final String BASE_URL = "https://jsfiddle.net/";
     // JSFiddle can be slow to load all its frames and editors, so a longer timeout is safer.

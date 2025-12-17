@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class JPetStoreTest {
+public class JPetStore {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -205,7 +205,6 @@ public class JPetStoreTest {
 
         for (WebElement link : socialLinks) {
             String href = link.getAttribute("href");
-            String target = link.getAttribute("target");
 
             if (href != null && (href.contains("twitter.com") || href.contains("facebook.com") || href.contains("linkedin.com"))) {
                 link.click();

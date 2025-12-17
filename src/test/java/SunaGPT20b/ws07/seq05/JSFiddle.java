@@ -1,4 +1,4 @@
-package SunaDeepSeek.ws07.seq04;
+package SunaGPT20b.ws07.seq05;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -10,7 +10,7 @@ import java.time.Duration;
 import java.util.List;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class JSFiddleWebTest {
+public class JSFiddle{
     private static WebDriver driver;
     private static WebDriverWait wait;
     private static final String BASE_URL = "https://jsfiddle.net/";

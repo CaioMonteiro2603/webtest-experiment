@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class BugBankTest {
+public class bugbank {
 
     private static WebDriver driver;
     private static WebDriverWait wait;
@@ -51,13 +51,6 @@ public class BugBankTest {
         List<WebElement> logoutBtns = driver.findElements(By.id("btnExit"));
         if (!logoutBtns.isEmpty()) {
             logoutBtns.get(0).click();
-        }
-    }
-
-    private void resetAppStateIfAvailable() {
-        List<WebElement> resetBtns = driver.findElements(By.id("resetAppState"));
-        if (!resetBtns.isEmpty()) {
-            resetBtns.get(0).click();
         }
     }
 

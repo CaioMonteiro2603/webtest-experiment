@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoV1HeadlessTest {
+public class saucedemo {
 
     private static WebDriver driver;
     private static WebDriverWait wait;

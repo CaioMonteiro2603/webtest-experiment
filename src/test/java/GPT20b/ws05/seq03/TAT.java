@@ -25,7 +25,7 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 @TestMethodOrder(OrderAnnotation.class)
-public class CacTatTests {
+public class TAT {
 
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static WebDriver driver;
@@ -87,7 +87,7 @@ public class CacTatTests {
         submitBtn.click();
 
         // Expect a redirect or visible element indicating successful login
-        wait.until(ExpectedConditions.urlContains("dashboard") || ExpectedConditions.urlContains("account"));
+        wait.until(ExpectedConditions.urlContains("dashboard"));
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("dashboard") || currentUrl.contains("account") || currentUrl.contains("home"),
                 "Login did not redirect to a page containing expected path. URL: " + currentUrl);
@@ -178,7 +178,8 @@ public class CacTatTests {
         if (!allItems.isEmpty()) {
             WebElement allLink = allItems.get(0);
             allLink.click();
-            wait.until(ExpectedConditions.urlContains("products") || ExpectedConditions.urlContains("inventory"));
+            wait.until(ExpectedConditions.urlContains("products"));
+            wait.until(ExpectedConditions.urlContains("inventory"));
             assertTrue(driver.getCurrentUrl().contains("products") || driver.getCurrentUrl().contains("inventory"),
                     "Did not navigate to All Items page");
             driver.navigate().back();

@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq08;
+package geminiPro.ws01.seq08;
 
 import org.junit.jupiter.api.*;
 import org.openqa.selenium.*;
@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoComprehensiveTest {
+public class saucedemo {
 
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
     private static final String VALID_USER = "standard_user";

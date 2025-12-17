@@ -1,4 +1,4 @@
-package geminiPRO.ws01.seq03;
+package geminiPro.ws01.seq03;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * with Firefox in headless mode.
  */
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SauceDemoE2ETest {
+public class saucedemo {
 
     // --- Test Configuration ---
     private static final String BASE_URL = "https://www.saucedemo.com/v1/index.html";
@@ -55,7 +55,6 @@ public class SauceDemoE2ETest {
     private static final By INVENTORY_ITEM_NAME = By.cssSelector(".inventory_item_name");
     private static final By INVENTORY_ITEM_PRICE = By.cssSelector(".inventory_item_price");
     private static final By ADD_TO_CART_BACKPACK_BUTTON = By.id("add-to-cart-sauce-labs-backpack");
-    private static final By REMOVE_FROM_CART_BACKPACK_BUTTON = By.id("remove-sauce-labs-backpack");
     private static final By CHECKOUT_BUTTON = By.id("checkout");
     private static final By FIRST_NAME_INPUT = By.id("first-name");
     private static final By LAST_NAME_INPUT = By.id("last-name");
