@@ -47,9 +47,22 @@ def generate_csv_report(xml_dir, output_csv):
     print(f"CSV report generated at: {output_csv}")
 
 
-# Example usage:
 if __name__ == "__main__":
-    xml_directory = "./target/surefire-reports/deepseek"  # Replace with your directory path
-    output_csv_path = "surefire_summary_deepseek.csv"
-    generate_csv_report(xml_directory, output_csv_path)
-
+    models = [
+        "deepseek",
+        "geminiPro",
+        "GPT20b",
+        "GPT4",
+        "GPT5",
+        "Qwen3",
+        "SunaDeepSeek",
+        "SunaGPT20b",
+        "SunaQwen3"
+    ]
+    
+    for model in models:
+        xml_directory = f"./target/surefire-reports/{model}"
+        output_csv_path = f"surefire_summary_{model}.csv"
+        print(f"Processing model: {model}")
+        generate_csv_report(xml_directory, output_csv_path)
+        print(f"Completed: {output_csv_path}")

@@ -126,7 +126,7 @@ public class BrasilAgritest {
         for (By by : candidates) {
             if (clickIfPresent(by)) {
                 // after click, wait a bit for a sidebar/nav to appear
-                wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
+                wait.until(d -> driver.findElement(By.tagName("body")) != null);
                 break;
             }
         }

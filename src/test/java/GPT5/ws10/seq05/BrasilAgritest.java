@@ -76,7 +76,6 @@ public class BrasilAgritest {
         return null;
     }
 
-    // ✅ IMPLEMENTAÇÃO SOLICITADA
     private WebElement waitClickable(WebElement element) {
         return wait.until(ExpectedConditions.elementToBeClickable(element));
     }
@@ -102,7 +101,11 @@ public class BrasilAgritest {
                 By.xpath("//button[contains(.,'Entrar') or contains(.,'Login') or contains(.,'Acessar')]")
         );
 
-        Assumptions.assumeTrue(email != null && password != null && submit != null);
+        // Check elements exist before proceeding
+        Assumptions.assumeTrue(email != null, "Email field not found");
+        Assumptions.assumeTrue(password != null, "Password field not found");
+        Assumptions.assumeTrue(submit != null, "Submit button not found");
+        
         email.clear();
         email.sendKeys(user);
         password.clear();
