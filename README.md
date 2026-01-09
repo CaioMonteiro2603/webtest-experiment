@@ -2,118 +2,45 @@
 
 ## Folder Naming
 
+`<LLM_MODEL>` can be one of the following names: `deepseek`, `geminiPro`, `GPT20b`, `GPT4`, `GPT5`, `Qwen3`, `SunaDeepSeek`, `SunaGPT20b`, `SunaQwen3`.
+
+
 ```bash
 reports/
-├── GPT5 Thinking/GPT4/GeminiPro 2.5/OpenRouter/Suna 
+├── <LLM_MODEL> 
 │   ├── ws01
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
-│   │   └── seq05
+│   │   ├── seq05
 │   │   ├── seq06
 │   │   ├── seq07
 │   │   ├── seq08
-│   │   └── seq09
+│   │   ├── seq09
 │   │   └── seq10
 │   ├── ws02
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
-│   │   └── seq05
+│   │   ├── seq05
 │   │   ├── seq06
 │   │   ├── seq07
 │   │   ├── seq08
-│   │   └── seq09
+│   │   ├── seq09
 │   │   └── seq10
-│   ├── ws03
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws04
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws05
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws06
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws07
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws08
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
-│   ├── ws09
-│   │   ├── seq01
-│   │   ├── seq02
-│   │   ├── seq03
-│   │   ├── seq04
-│   │   └── seq05
-│   │   ├── seq06
-│   │   ├── seq07
-│   │   ├── seq08
-│   │   └── seq09
-│   │   └── seq10
+│   ...
 │   ├── ws10
 │   │   ├── seq01
 │   │   ├── seq02
 │   │   ├── seq03
 │   │   ├── seq04
-│   │   └── seq05
+│   │   ├── seq05
 │   │   ├── seq06
 │   │   ├── seq07
 │   │   ├── seq08
-│   │   └── seq09
+│   │   ├── seq09
 │   │   └── seq10
 ```
 
@@ -123,7 +50,7 @@ reports/
 - [`ws03`](https://bugbank.netlify.app/)
 - [`ws04`](https://katalon-test.s3.amazonaws.com/aut/html/form.html)
 - [`ws05`](https://cac-tat.s3.eu-central-1.amazonaws.com/index.html)
-- [`ws06`](https://jsfiddle.net/)
+- [`ws06`](https://automationintesting.online/)
 - [`ws07`](https://jsfiddle.net/)
 - [`ws08`](https://jpetstore.aspectran.com/)
 - [`ws09`](https://demo.realworld.io/)
@@ -136,7 +63,7 @@ reports/
 The DeepSeek V3 (`deepseek/deepseek-chat-v3-0324`), the gpt-oss-20b (`OpenAI: gpt-oss-20b`) and the 
 Qwen3 235B A22B model (`Qwen: Qwen3 235B A22B Instruct 2507`) all the models are paid models and were tested through [OpenRouter API](https://openrouter.ai/). 
 
-Each sequence is generated on a different day for each model.
+Each sequence is generated on a different day for each model to minimize bias.
 
 ---
 ## 🤖 How the Tests Were Generated
@@ -150,13 +77,15 @@ Each sequence is generated on a different day for each model.
 
 ## How to run the scripts for data collection
 
+
+### Run each test sequence individually, collecting surefire reports
 ```bash
 cd webtest-experiment
-python 
+./generate-reports.sh 
 ```
 
+### Syntetize data for each model individually.
 ```bash
-```
-
-```bash
+cd webtest-experiment
+python errors-failures-report.py
 ```

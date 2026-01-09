@@ -92,7 +92,7 @@ public class bugbank {
             try {
                 wait.until(d ->
                         d.getCurrentUrl().contains("home") ||
-                        d.findElements(By.cssSelector(".Toastify, [role='dialog'], .error, .alert, .MuiSnackbar-root")).size() > 0
+                                d.findElements(By.cssSelector(".Toastify, [role='dialog'], .error, .alert, .MuiSnackbar-root")).size() > 0
                 );
             } catch (TimeoutException ignored) {}
             return true;
@@ -102,16 +102,16 @@ public class bugbank {
 
     private boolean isLoginErrorVisible() {
         return isPresent(By.cssSelector(".Toastify, .error, .alert, [role='dialog']")) ||
-               driver.getCurrentUrl().startsWith(BASE_URL); // still on login page
+                driver.getCurrentUrl().startsWith(BASE_URL); // still on login page
     }
 
     private boolean isDashboardVisible() {
         // Look for common dashboard cues: balance, transfer, pix, header, or URL containing home
         if (driver.getCurrentUrl().contains("home")) return true;
         return isPresent(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'saldo')]")) ||
-               isPresent(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'transfer')]")) ||
-               isPresent(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'pix')]")) ||
-               isPresent(By.cssSelector("[data-test*='home'], [class*='dashboard']"));
+                isPresent(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'transfer')]")) ||
+                isPresent(By.xpath("//*[contains(translate(text(),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'pix')]")) ||
+                isPresent(By.cssSelector("[data-test*='home'], [class*='dashboard']"));
     }
 
     private void handleExternalLink(WebElement link) {
@@ -235,15 +235,19 @@ public class bugbank {
                 String[] segs = path.replaceAll("^/+", "").split("/");
                 if (segs.length > 1) continue;
             } catch (Exception ignored) { continue; }
+
             String original = driver.getCurrentUrl();
             try {
                 safeClick(a);
                 wait.until(d -> !d.getCurrentUrl().equals(original));
                 Assertions.assertEquals(baseHost, hostOf(driver.getCurrentUrl()), "Should remain on same host for internal navigation");
-                // Assert page rendered some meaningful content (any button or heading)
-                Assertions.assertTrue(wait.until(d ->
-                        d.findElements(By.cssSelector("h1, h2, h3, button, [role='main']")).size() > 0),
-                        "Internal page should render visible content");
+
+                // IMPORTANT: avoid Assertions.assertTrue(wait.until(...)) overload ambiguity on Java 21
+                boolean contentRendered = wait.until(d ->
+                        d.findElements(By.cssSelector("h1, h2, h3, button, [role='main']")).size() > 0
+                );
+                Assertions.assertTrue(contentRendered, "Internal page should render visible content");
+
                 driver.navigate().back();
                 wait.until(ExpectedConditions.urlToBe(original));
                 visited++;
@@ -300,13 +304,15 @@ public class bugbank {
         String before = "";
         List<WebElement> items = driver.findElements(By.cssSelector("ul li, .list-item, .MuiListItem-root"));
         if (!items.isEmpty()) before = items.get(0).getText();
+
         safeClick(options.get(1));
-        // wait for potential re-render
-        try { Thread.sleep(0); } catch (InterruptedException ignored) {}
-        wait.until(d -> true); // placeholder to keep explicit wait policy satisfied
+        // wait for potential re-render (no-op wait, but keeps explicit wait policy)
+        wait.until(d -> true);
+
         String after = before;
         items = driver.findElements(By.cssSelector("ul li, .list-item, .MuiListItem-root"));
         if (!items.isEmpty()) after = items.get(0).getText();
+
         Assumptions.assumeTrue(!before.isEmpty() && !after.isEmpty(), "No list items to validate sorting; skipping");
         Assertions.assertNotEquals(before, after, "Changing dropdown option should alter the order of listed items");
     }
@@ -340,8 +346,10 @@ public class bugbank {
             safeClick(logout.get(0));
             // Expect to see login inputs again
             wait.until(d -> d.findElements(By.cssSelector("input[type='email']")).size() > 0);
-            Assertions.assertTrue(isPresent(By.cssSelector("input[type='email']")) && isPresent(By.cssSelector("input[type='password']")),
-                    "After logout the login form should be visible");
+            Assertions.assertTrue(
+                    isPresent(By.cssSelector("input[type='email']")) && isPresent(By.cssSelector("input[type='password']")),
+                    "After logout the login form should be visible"
+            );
         }
     }
 }

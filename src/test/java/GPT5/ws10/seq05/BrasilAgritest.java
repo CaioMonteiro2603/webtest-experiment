@@ -48,7 +48,8 @@ public class BrasilAgritest {
                             .executeScript("return document.readyState")
                             .equals("complete")
             );
-        } catch (Exception ignored) {}
+        } catch (Exception ignored) {
+        }
     }
 
     private void dismissCookieOrWelcome() {
@@ -63,7 +64,8 @@ public class BrasilAgritest {
                 try {
                     wait.until(ExpectedConditions.elementToBeClickable(els.get(0))).click();
                     break;
-                } catch (Exception ignored) {}
+                } catch (Exception ignored) {
+                }
             }
         }
     }
@@ -101,11 +103,10 @@ public class BrasilAgritest {
                 By.xpath("//button[contains(.,'Entrar') or contains(.,'Login') or contains(.,'Acessar')]")
         );
 
-        // Check elements exist before proceeding
-        Assumptions.assumeTrue(email != null, "Email field not found");
-        Assumptions.assumeTrue(password != null, "Password field not found");
-        Assumptions.assumeTrue(submit != null, "Submit button not found");
-        
+        Assertions.assertNotNull(email, "Email field not found");
+        Assertions.assertNotNull(password, "Password field not found");
+        Assertions.assertNotNull(submit, "Submit button not found");
+
         email.clear();
         email.sendKeys(user);
         password.clear();
@@ -129,6 +130,10 @@ public class BrasilAgritest {
     @Order(2)
     public void login_WithValidCredentials_NavigatesToApp() {
         login(LOGIN, PASSWORD);
-        Assertions.assertTrue(wait.until(d -> isLoggedInHeuristic()));
+
+        // Force primitive boolean to avoid JUnit's assertTrue(BooleanSupplier) overload issues with type inference
+        boolean loggedIn = wait.until(d -> isLoggedInHeuristic());
+
+        Assertions.assertTrue(loggedIn, "Login did not succeed (heuristic check failed)");
     }
 }
