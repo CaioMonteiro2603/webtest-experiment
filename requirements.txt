@@ -1,0 +1,17 @@
+# Core dependencies for XML parsing and data processing
+pandas>=2.0.0
+
+# HTTP requests for OpenRouter API
+requests>=2.31.0
+
+# Note: The following are part of Python's standard library and don't need to be installed:
+# - xml.etree.ElementTree
+# - os
+# - sys
+# - argparse
+# - re
+# - pathlib
+# - json
+# - time
+# - datetime
+# - collections
