@@ -54,26 +54,28 @@ public class DemoAUT {
     public void testFormSubmissionNavigatesToSubmitPage() {
         driver.get(BASE_URL);
 
-        // Wait for the page to fully load before interacting
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for the page to fully load before interacting - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("firstName")));
 
         // Fill the form
         WebElement firstName = driver.findElement(By.id("firstName"));
         firstName.clear();
         firstName.sendKeys("John");
-        
+
         WebElement lastName = driver.findElement(By.id("lastName"));
         lastName.clear();
         lastName.sendKeys("Doe");
-        
+
         WebElement email = driver.findElement(By.id("email"));
         email.clear();
         email.sendKeys("john.doe@example.com");
-        
+
         Select genderSelect = new Select(driver.findElement(By.id("gender")));
         genderSelect.selectByVisibleText("Male");
-        
+
         WebElement message = driver.findElement(By.id("message"));
         message.clear();
         message.sendKeys("Testing form submission.");

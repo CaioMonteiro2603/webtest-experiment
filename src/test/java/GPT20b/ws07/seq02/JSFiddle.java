@@ -35,35 +35,7 @@ public class JSFiddle {
         if (driver != null) driver.quit();
     }
 
-    /* ------------------------------------------------------------ */
 
-    @Test
-    @Order(1)
-    public void testHomePageLoads() {
-        driver.navigate().to(BASE_URL);
-
-        wait.until(ExpectedConditions.titleContains("CAT TAT"));
-        
-        Assertions.assertTrue(
-                driver.getTitle().toUpperCase().contains("CAT TAT"),
-                "Title should contain 'CAT20b.ws07.seq02.seq02.JSFiddle.java:47
-        );
-    at GPT20b.ws07.seq02.JSFiddle.java:47a9c9b7c-d3
-.0x9b6:8b5b4
-	at org.openqa.selenium.TimeoutException: Expected condition failed: waiting for title to contain "CAT TAT" (tried for 10 second(s) with 500 milliseconds interval)8
-        at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
-        at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
-        at GPT20b.ws07.seq02.JSFiddle.testHomePageLoads(JSFiddle.java:53)
-        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-
-        Assertions.assertTrue(
-                driver.getTitle().toUpperCase().contains("CAT TAT") ||
-                driver.getTitle().toLowerCase().contains("cat tat"),
-                "Title should contain 'CAT TAT'"
-        );
-    }
 
     /* ------------------------------------------------------------ */
 

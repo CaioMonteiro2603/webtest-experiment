@@ -21,6 +21,32 @@ public class parabank {
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);
+        createUser(driver);
+    }
+
+    private static void createUser(WebDriver driver) {
+        driver.get("https://parabank.parasoft.com/parabank/register.htm");
+        driver.findElement(By.id("customer.firstName")).click();
+        driver.findElement(By.id("customer.firstName")).sendKeys("a");
+        driver.findElement(By.id("customer.lastName")).click();
+        driver.findElement(By.id("customer.lastName")).sendKeys("a");
+        driver.findElement(By.id("customer.address.street")).click();
+        driver.findElement(By.id("customer.address.street")).sendKeys("a");
+        driver.findElement(By.id("customer.address.city")).click();
+        driver.findElement(By.id("customer.address.city")).sendKeys("a");
+        driver.findElement(By.id("customer.address.state")).click();
+        driver.findElement(By.id("customer.address.state")).sendKeys("a");
+        driver.findElement(By.id("customer.address.zipCode")).click();
+        driver.findElement(By.id("customer.address.zipCode")).sendKeys("a");
+        driver.findElement(By.id("customer.phoneNumber")).click();
+        driver.findElement(By.id("customer.phoneNumber")).sendKeys("a");
+        driver.findElement(By.id("customer.ssn")).click();
+        driver.findElement(By.id("customer.ssn")).sendKeys("a");
+        driver.findElement(By.id("customer.username")).click();
+        driver.findElement(By.id("customer.username")).sendKeys("caio@gmail.com");
+        driver.findElement(By.id("customer.password")).sendKeys("123");
+        driver.findElement(By.id("repeatedPassword")).sendKeys("123");
+        driver.findElement(By.cssSelector("td > .button")).click();
     }
 
     @AfterAll

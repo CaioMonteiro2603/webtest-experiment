@@ -167,8 +167,11 @@ public class BrasilAgritest {
             By.xpath("//a[contains(.,'Usuários') or contains(.,'Users') or @href*='user' or @href*='usuario']")));
         usersLink.click();
         
-        // Wait for users page
-        wait.until(ExpectedConditions.urlContains("users") .or(ExpectedConditions.urlContains("usuario")));
+        // Wait for users page - FIXED
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("users"),
+            ExpectedConditions.urlContains("usuario")
+        ));
         
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("users") || currentUrl.contains("usuario"), "Should navigate to users page");
@@ -210,8 +213,11 @@ public class BrasilAgritest {
             By.xpath("//a[contains(.,'Relatórios') or contains(.,'Reports') or @href*='report' or @href*='relatorio']")));
         reportsLink.click();
         
-        // Wait for reports page
-        wait.until(ExpectedConditions.urlContains("reports") .or(ExpectedConditions.urlContains("relatorio")));
+        // Wait for reports page - FIXED
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("reports"),
+            ExpectedConditions.urlContains("relatorio")
+        ));
         
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("reports") || currentUrl.contains("relatorio"), "Should navigate to reports page");
@@ -253,8 +259,11 @@ public class BrasilAgritest {
             By.cssSelector("[data-testid='profile-link'], .profile-link, a[href*='profile'], a:contains('Perfil'), a:contains('Profile')")));
         profileLink.click();
         
-        // Wait for profile page
-        wait.until(ExpectedConditions.urlContains("profile") .or(ExpectedConditions.urlContains("perfil")));
+        // Wait for profile page - FIXED
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("profile"),
+            ExpectedConditions.urlContains("perfil")
+        ));
         
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("profile") || currentUrl.contains("perfil"), "Should navigate to profile page");
@@ -269,39 +278,47 @@ public class BrasilAgritest {
     @Order(7)
     public void testLogoutFunctionality() {
         driver.get("https://gestao.brasilagritest.com/login");
-        
+
         // Wait for page load and then find email field
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        
+
         try {
             Thread.sleep(2000); // Give extra time for page to fully load
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
-        
+
         // Login first
         WebElement usernameField = driver.findElement(By.cssSelector("input[type='email'], input[name='email'], #email"));
         WebElement passwordField = driver.findElement(By.cssSelector("input[type='password'], input[name='password'], #password"));
         WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit'], .btn-primary, button:contains('Entrar')"));
-        
+
         usernameField.sendKeys("superadmin@brasilagritest.com.br");
         passwordField.sendKeys("10203040");
         loginButton.click();
-        
+
         // Wait for dashboard to load
         wait.until(ExpectedConditions.urlContains("dashboard"));
-        
-        // Logout
-        WebElement logoutButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.linkText("Sair") .or(By.linkText("Logout")) .or(By.cssSelector("[href*='logout'], .logout-btn"))));
+
+        // Logout - FIXED: Use helper method or try-catch approach
+        WebElement logoutButton = null;
+        try {
+            logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Sair")));
+        } catch (TimeoutException e1) {
+            try {
+                logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.linkText("Logout")));
+            } catch (TimeoutException e2) {
+                logoutButton = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("[href*='logout'], .logout-btn")));
+            }
+        }
         logoutButton.click();
-        
+
         // Wait for login page to appear
         wait.until(ExpectedConditions.urlContains("login"));
-        
+
         String currentUrl = driver.getCurrentUrl();
         assertTrue(currentUrl.contains("login"), "Should redirect to login page after logout");
-        
+
         // Verify login form is present
         WebElement loginForm = wait.until(ExpectedConditions.presenceOfElementLocated(
             By.cssSelector(".login-form, form, [class*='login']")));

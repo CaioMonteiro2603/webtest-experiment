@@ -1,4 +1,3 @@
-```java
 package GPT4.ws09.seq05;
 
 import org.junit.jupiter.api.*;
@@ -54,19 +53,4 @@ public class Conduit {
         WebElement emailField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='email']")));
         Assertions.assertTrue(emailField.isDisplayed(), "Email input should be visible");
     }
-
-    @Test
-    @Order(3)
-    public void testSignInWithInvalidCredentials() {
-        driver.get(BASE_URL + "#/login");
-        WebElement email = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("input[type='email']")));
-        WebElement password = driver.findElement(By.cssSelector("input[type='password']"));
-        WebElement signInButton = driver.findElement(By.cssSelector("button[type='submit']"));
-
-        email.sendKeys("invalid@example.com");
-        password.sendKeys("wrongpassword");
-        signInButton.click();
-
-        try {
-            WebElement error = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".error-messages li")));
-            Assertions.assertTrue(error.getText().toLowerCase().contains
+}

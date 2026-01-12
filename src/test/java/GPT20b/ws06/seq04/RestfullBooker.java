@@ -83,10 +83,10 @@ public class RestfullBooker {
         // Wait for page to load
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
         // Verify form and input fields exist
-        findElement("form#login-form, form", "form[action*='login']", ".login-form", "#login-form");
-        findElement("input#username, input[name='username'], input#email", "input[type='text']", "input[name='username']", "input#username");
-        findElement("input#password, input[name='password']", "input[type='password']", "input#password");
-        findElement("button#login, button[type='submit'], button.login", "button[type='submit']", "input[type='submit']", "button#submit");
+        findElement("form#login-form", "form", "form[action*='login']", ".login-form", "#login-form");
+        findElement("input#username", "input[name='username']", "input#email", "input[type='text']");
+        findElement("input#password", "input[name='password']", "input[type='password']");
+        findElement("button#login", "button[type='submit']", "button.login", "input[type='submit']", "button#submit");
     }
 
     @Test
@@ -94,11 +94,12 @@ public class RestfullBooker {
     public void testInvalidLoginShowsError() {
         driver.navigate().to(BASE_URL);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        findElement("input#username, input[name='username'], input#email", "input[type='text']", "input[name='username']", "input#username").sendKeys("invalid_user");
-        findElement("input#password, input[type='password']", "input#password").sendKeys("wrong_pass");
-        findElement("button#login, button[type='submit'], button.login", "button[type='submit']", "input[type='submit']", "button#submit").click();
+        findElement("input#username", "input[name='username']", "input#email", "input[type='text']").sendKeys("invalid_user");
+        findElement("input#password", "input[type='password']").sendKeys("wrong_pass");
+        findElement("button#login", "button[type='submit']", "button.login", "input[type='submit']", "button#submit").click();
 
-        List<WebElement> errors = driver.findElements(By.cssSelector(".error, .alert-danger, .wrong-credentials, .alert", ".error-message"));
+        // FIXED: Use separate findElements for each selector
+        List<WebElement> errors = driver.findElements(By.cssSelector(".error, .alert-danger, .wrong-credentials, .alert, .error-message"));
         assertFalse(errors.isEmpty(), "Login error message should be displayed for invalid credentials");
     }
 
@@ -107,9 +108,9 @@ public class RestfullBooker {
     public void testValidLoginAndLogout() {
         driver.navigate().to(BASE_URL);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        findElement("input#username, input[name='username'], input#email", "input[type='text']", "input[name='username']", "input#username").sendKeys("standard_user");
-        findElement("input#password, input[type='password']", "input#password").sendKeys("secret_sauce");
-        findElement("button#login, button[type='submit'], button.login", "button[type='submit']", "input[type='submit']", "button#submit").click();
+        findElement("input#username", "input[name='username']", "input#email", "input[type='text']").sendKeys("standard_user");
+        findElement("input#password", "input[type='password']").sendKeys("secret_sauce");
+        findElement("button#login", "button[type='submit']", "button.login", "input[type='submit']", "button#submit").click();
 
         // Verify we are on the inventory page
         wait.until(ExpectedConditions.or(
@@ -121,7 +122,7 @@ public class RestfullBooker {
         assertFalse(items.isEmpty(), "Inventory items should be visible after successful login");
 
         // Logout
-        findElement("a#logout, button#logout, button.logout", "a[href*='logout']", "button.logout").click();
+        findElement("a#logout", "button#logout", "button.logout", "a[href*='logout']").click();
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.urlContains("/login"),
                 ExpectedConditions.urlContains("/index.html"),
@@ -136,12 +137,13 @@ public class RestfullBooker {
     public void testSortingDropdown() {
         driver.navigate().to(BASE_URL);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        findElement("input#username, input[name='username'], input#email", "input[type='text']", "input[name='username']", "input#username").sendKeys("standard_user");
-        findElement("input#password, input[type='password']", "input#password").sendKeys("secret_sauce");
-        findElement("button#login, button[type='submit'], button.login", "button[type='submit']", "input[type='submit']", "button#submit").click();
+        findElement("input#username", "input[name='username']", "input#email", "input[type='text']").sendKeys("standard_user");
+        findElement("input#password", "input[type='password']").sendKeys("secret_sauce");
+        findElement("button#login", "button[type='submit']", "button.login", "input[type='submit']", "button#submit").click();
 
+        // FIXED: Use findElement helper instead
         WebElement sortDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("select#sort-options, select[name='sort']", "select", ".sort-dropdown")));
+                findElement("select#sort-options", "select[name='sort']", "select", ".sort-dropdown")));
         List<WebElement> options = sortDropdown.findElements(By.tagName("option"));
         assertTrue(options.size() > 1, "Sorting dropdown should have at least two options");
 
@@ -156,45 +158,47 @@ public class RestfullBooker {
     public void testBurgerMenuOptions() {
         driver.navigate().to(BASE_URL);
         wait.until(ExpectedConditions.presenceOfElementLocated(By.tagName("body")));
-        findElement("input#username, input[name='username'], input#email", "input[type='text']", "input[name='username']", "input#username").sendKeys("standard_user");
-        findElement("input#password, input[type='password']", "input#password").sendKeys("secret_sauce");
-        findElement("button#login, button[type='submit'], button.login", "button[type='submit']", "input[type='submit']", "button#submit").click();
+        findElement("input#username", "input[name='username']", "input#email", "input[type='text']").sendKeys("standard_user");
+        findElement("input#password", "input[type='password']").sendKeys("secret_sauce");
+        findElement("button#login", "button[type='submit']", "button.login", "input[type='submit']", "button#submit").click();
 
-        // Open burger menu
+        // Open burger menu - FIXED
         WebElement burger = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("nav .burger-menu, button#menu, .menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
+                findElement("nav .burger-menu", "button#menu", ".menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
         burger.click();
 
-        // All Items
+        // All Items - FIXED
         WebElement allItems = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("a[href*='all-items'], a#menu-home, nav a[href*='inventory']", "a[href*='inventory']", ".menu-item a", "nav a")));
+                findElement("a[href*='all-items']", "a#menu-home", "nav a[href*='inventory']", "a[href*='inventory']", ".menu-item a", "nav a")));
         allItems.click();
-        wait.until(ExpectedConditions.urlContains("/inventory.html") || ExpectedConditions.urlContains("/room"));
+        
+        // FIXED: Wait properly with lambda
+        wait.until(d -> d.getCurrentUrl().contains("/inventory.html") || d.getCurrentUrl().contains("/room"));
         assertFalse(driver.findElements(By.cssSelector(".product-card, .inventory_item, .room-card, .room-listing")).isEmpty(),
                 "All Items should display the inventory list");
 
-        // Reopen menu for About
+        // Reopen menu for About - FIXED
         burger = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("nav .burger-menu, button#menu, .menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
+                findElement("nav .burger-menu", "button#menu", ".menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
         burger.click();
         openAndVerifyExternalLink("about", "about");
 
-        // Reopen menu for Reset App State (if exists)
+        // Reopen menu for Reset App State (if exists) - FIXED
         burger = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("nav .burger-menu, button#menu, .menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
+                findElement("nav .burger-menu", "button#menu", ".menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
         burger.click();
         List<WebElement> resetLinks = driver.findElements(By.cssSelector("a[href*='reset']"));
         if (!resetLinks.isEmpty()) {
             resetLinks.get(0).click();
-            wait.until(ExpectedConditions.urlContains("/inventory.html") || ExpectedConditions.urlContains("/room"));
+            wait.until(d -> d.getCurrentUrl().contains("/inventory.html") || d.getCurrentUrl().contains("/room"));
         }
 
-        // Reopen menu for Logout
+        // Reopen menu for Logout - FIXED
         burger = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("nav .burger-menu, button#menu, .menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
+                findElement("nav .burger-menu", "button#menu", ".menu-toggle", "button.menu", ".menu-button", "button[aria-label*='menu']")));
         burger.click();
         WebElement logoutLink = wait.until(ExpectedConditions.elementToBeClickable(
-                By.cssSelector("a#logout, a[href*='logout'], button#logout", "a[href*='logout']", ".logout-link", "button.logout")));
+                findElement("a#logout", "a[href*='logout']", "button#logout", ".logout-link", "button.logout")));
         logoutLink.click();
         wait.until(ExpectedConditions.or(
                 ExpectedConditions.urlContains("/login"),

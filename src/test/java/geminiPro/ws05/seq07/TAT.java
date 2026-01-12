@@ -1,4 +1,3 @@
-```java
 package geminiPro.ws05.seq07;
 
 import org.junit.jupiter.api.AfterAll;
@@ -107,23 +106,4 @@ public class TAT {
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[text()='Close']"))).click();
         wait.until(ExpectedConditions.invisibilityOf(successTitle));
     }
-
-    @Test
-    @Order(3)
-    void testAdminPanelInvalidLogin() {
-        driver.get(ADMIN_URL);
-        performAdminLogin("admin", "wrongpassword");
-        WebElement loginButton = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("doLogin")));
-        // A failed login might keep the button text or show an error. Here it just stays.
-        assertTrue(loginButton.isDisplayed(), "Login button should still be visible after a failed login attempt.");
-    }
-
-    @Test
-    @Order(4)
-    void testAdminPanelSuccessfulLoginAndLogout() {
-        driver.get(ADMIN_URL);
-        performAdminLogin("admin", "password");
-
-        WebElement logoutLink = wait.until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Logout")));
-        assertTrue(logoutLink.isDisplayed(), "Logout link should be visible after successful login.");
-        assertTrue(driver
+}

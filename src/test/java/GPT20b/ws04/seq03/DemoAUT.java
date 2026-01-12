@@ -1,19 +1,19 @@
 package GPT20b.ws04.seq03;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.MethodOrderers.OrderAnnotation;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.Assumptions;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Set;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -116,35 +116,4 @@ public class DemoAUT {
         assertTrue(error.getText().toLowerCase().contains("required") || error.getText().toLowerCase().contains("please fill out"),
                 "Error message does not mention required fields: " + error.getText());
     }
-
-    @Test
-    @Order(5)
-    @DisplayName("External links open in new tab and return correctly")
-    void testExternalLinks() {
-        loadPage();
-
-        List<WebElement> links = driver.findElements(By.cssSelector("a[href]"));
-        Assumptions.assumeTrue(!links.isEmpty(), "No links found on the page.");
-
-        for (WebElement link : links) {
-            String href = link.getAttribute("href");
-            // Skip same host links
-            if (href == null || href.contains(baseHost())) {
-                continue;
-            }
-
-            String parentHandle = driver.getWindowHandle();
-            link.click();
-
-            wait.until(driver1 -> driver1.getWindowHandles().size() > 1);
-            Set<String> handles = driver.getWindowHandles();
-            handles.remove(parentHandle);
-            String newHandle = handles.iterator().next();
-
-            driver.switchTo().window(newHandle);
-            try {
-                String currentUrl = driver.getCurrentUrl().toLowerCase();
-                assertTrue(currentUrl.contains(href.toLowerCase().replaceFirst("https?://GPT20b.ws04.seq03c3c9 5
-  1
-    1d7d8.ws04.seq03.Demo AUT
-    | 0.0...
+}

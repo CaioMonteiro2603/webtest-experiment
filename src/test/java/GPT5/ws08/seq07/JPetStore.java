@@ -1,4 +1,3 @@
-```java
 package GPT5.ws08.seq07;
 
 import org.junit.jupiter.api.*;
@@ -365,27 +364,4 @@ public class JPetStore {
         }
         Assertions.assertTrue(checked > 0, "Should validate at least one external link");
     }
-
-    @Test
-    @Order(9)
-    void topMenuNavigation_Home_MyAccount_Cart_Smoke() {
-        goHome();
-        // Home
-        Optional<WebElement> homeLink = findTopNavLink("home");
-        if (homeLink.isPresent()) {
-            waitClickable(homeLink.get()).click();
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase(Locale.ROOT).contains("jpetstore"), "Home navigation should keep us in app");
-        } else {
-            Assertions.assertTrue(true, "No explicit Home link; base already open");
-        }
-
-        // Cart
-        Optional<WebElement> cartLink = findTopNavLink("cart");
-        if (cartLink.isPresent()) {
-            waitClickable(cartLink.get()).click();
-            Assertions.assertTrue(driver.getCurrentUrl().toLowerCase(Locale.ROOT).contains("cart"), "Cart navigation should open cart page");
-            // Back home
-            driver.get(BASE_URL);
-        }
-
-        // My
+}

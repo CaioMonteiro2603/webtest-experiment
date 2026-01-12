@@ -1,4 +1,3 @@
-```java
 package SunaQwen3.ws07.seq01;
 
 import org.junit.jupiter.api.*;
@@ -419,10 +418,4 @@ public class JSFiddle{
         wait.until(webDriver -> webDriver.getCurrentUrl().contains("/docs/changelog/"));
         assertTrue(driver.getCurrentUrl().contains("/docs/changelog/"), "Should navigate to Changelog");
     }
-
-    @Test
-    @Order(28)
-    public void testNavigationToFAQ() {
-        driver.get(BASE_URL);
-        By faqLink = By.xpath("//a[contains(@href,'faq') or contains(text(),'FAQ')]");
-        WebElement faq = wait.until(ExpectedConditions.elementToBe
+}

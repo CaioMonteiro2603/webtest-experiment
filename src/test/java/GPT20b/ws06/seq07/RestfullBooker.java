@@ -2,7 +2,6 @@ package GPT20b.ws06.seq07;
 
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.AfterAll;

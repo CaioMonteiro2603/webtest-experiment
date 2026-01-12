@@ -112,7 +112,7 @@ public class DemoAUT {
         WebElement experienceCheckbox = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//input[@type='checkbox' and @value='1']")));
         if (EXPERIENCE && !experienceCheckbox.isSelected()) {
             experienceCheckbox.click();
-        } else if (!EXPERIENCE && experienceCheckbox.isSelected()) {
+        } else if (!EXPERIENCE) {
             experienceCheckbox.click();
         }
 

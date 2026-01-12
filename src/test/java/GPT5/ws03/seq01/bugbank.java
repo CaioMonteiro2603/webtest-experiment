@@ -248,10 +248,14 @@ public class bugbank {
         String text = modal.getText().toLowerCase();
         Assertions.assertTrue(text.contains("erro") || text.contains("error") || text.contains("inválid"),
                 "An error modal/message should appear for invalid login. Found: " + text);
-        // close modal
-        List<WebElement> close = modal.findElements(By.cssSelector("button, .close, [data-test='modal-close']"));
-        if (!close.isEmpty()) waitClickable(close.get(0).getTagName().equals("button") ? By.tagName("button") : By.cssSelector("[data-test='modal-close']")).click();
-        else driver.findElement(By.cssSelector("body")).click(); // fallback
+        
+        // FIXED: Close modal - simplified logic
+        List<WebElement> closeButtons = modal.findElements(By.cssSelector("button, .close, [data-test='modal-close']"));
+        if (!closeButtons.isEmpty()) {
+            wait.until(ExpectedConditions.elementToBeClickable(closeButtons.get(0))).click();
+        } else {
+            driver.findElement(By.cssSelector("body")).click(); // fallback
+        }
         closeAnyModalIfOpen();
     }
 
@@ -275,7 +279,7 @@ public class bugbank {
             }
         }
         
-        waitClickable(registerBtn).click();
+        wait.until(ExpectedConditions.elementToBeClickable(registerBtn)).click();
         WebElement modal = waitVisible(By.cssSelector(".modal-content"));
         Assertions.assertTrue(modal.isDisplayed(), "Registration modal should be visible.");
         closeAnyModalIfOpen();

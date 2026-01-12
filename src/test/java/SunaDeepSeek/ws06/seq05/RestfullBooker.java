@@ -44,10 +44,10 @@ public class RestfullBooker {
         // Verify main page elements
         WebElement header = wait.until(ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("h1")));
-        Assertions.assertTrue(header.getText().contains("Hotel")));
+        Assertions.assertTrue(header.getText().contains("Hotel"));
         
         // Verify navigation links
-        verifyNavLink("Rooms", "/#/"));
+        verifyNavLink("Rooms", "/#/");
         verifyNavLink("Admin", "/#/admin");
         verifyNavLink("Branding", "/#/branding");
     }

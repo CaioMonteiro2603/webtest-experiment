@@ -129,7 +129,7 @@ public class DemoAUT {
         WebElement firstName = wait.until(ExpectedConditions.presenceOfElementLocated(By.id("first-name")));
         firstName.sendKeys("Test");
         
-        WebElement resetButton = driver.findElement(By.id("reset")));
+        WebElement resetButton = driver.findElement(By.id("reset"));
         resetButton.click();
 
         assertEquals("", firstName.getAttribute("value"), "Reset should clear form fields");

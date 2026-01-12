@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TAT {
 
     private static WebDriver driver;
-    private WebDriverWait wait;
+    private static WebDriverWait wait;
     private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final String USER_EMAIL = "caio@gmail.com";
     private static final String USER_PASSWORD = "123";

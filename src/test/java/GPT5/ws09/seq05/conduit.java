@@ -40,7 +40,6 @@ public class conduit {
         waitDocumentReady();
         // The app typically redirects to a hash route (#/)
         wait.until(d -> driver.getCurrentUrl().startsWith(BASE_URL));
-        dismissOverlaysIfAny();
     }
 
     private void waitDocumentReady() {
@@ -48,8 +47,4 @@ public class conduit {
             wait.until(d -> ((JavascriptExecutor) d).executeScript("return document.readyState").equals("complete"));
         } catch (Exception ignored) {}
     }
-
-    private void dismissOverlaysIfAny() {
-        // Best-effort cookie banners / modals
-        List<By> candidates = Arrays.asList(
-                By.cssSelector("button[id*='accept'],button[class*='accept'],button[aria-label*='''); 
+}

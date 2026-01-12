@@ -97,7 +97,7 @@ public class RestfullBooker {
 
     @Test
     @Order(4)
-    public void testRoomBookingForm() {
+    public void testRoomBookingForm() throws InterruptedException {
         driver.get(BASE_URL);
         wait.until(ExpectedConditions.urlContains("automationintesting.online"));
         

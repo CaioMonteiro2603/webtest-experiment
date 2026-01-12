@@ -341,7 +341,7 @@ public class BrasilAgritest {
                         option.click();
                     } catch (TimeoutException e) {
                         try {
-                            WebElement option = driver.findElement(By.xpath("//option[contains(@value,'" + sortField1 + "') or contains(@value,'" + sortField2 + "')]")));
+                            WebElement option = driver.findElement(By.xpath("//option[contains(@value,'" + sortField1 + "') or contains(@value,'" + sortField2 + "')]"));
                             option.click();
                         } catch (NoSuchElementException e2) {
                             // Continue without selecting

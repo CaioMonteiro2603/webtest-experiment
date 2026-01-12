@@ -102,7 +102,7 @@ public class saucedemo {
 
     @Test
     @Order(3)
-    public void testSortingDropdown() {
+    public void testSortingDropdown() throws InterruptedException {
         login();
         
         // Find the sort dropdown and click to open it

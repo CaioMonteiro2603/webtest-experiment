@@ -1,4 +1,3 @@
-```java
 package SunaQwen3.ws09.seq06;
 
 import org.junit.jupiter.api.*;
@@ -86,9 +85,6 @@ public class conduit {
     @Test
     @Order(3)
     public void testNavigationMenuAllItems() {
-        // Ensure logged in
-        loginIfNot();
-
         // Try to find menu button, but if not present, assume menu is already visible
         List<WebElement> menuButtons = driver.findElements(By.cssSelector("button.navbar-toggler"));
         if (menuButtons.size() > 0) {
@@ -105,24 +101,4 @@ public class conduit {
 
         assertTrue(driver.getCurrentUrl().contains("#/"), "URL should contain #/ after clicking All Articles");
     }
-
-    @Test
-    @Order(4)
-    public void testNavigationMenuAboutExternalLink() {
-        // Ensure logged in
-        loginIfNot();
-
-        // Try to find menu button, but if not present, assume menu is already visible
-        List<WebElement> menuButtons = driver.findElements(By.cssSelector("button.navbar-toggler"));
-        if (menuButtons.size() > 0) {
-            WebElement menuButtonEl = wait.until(ExpectedConditions.elementToBeClickable(menuButtons.get(0)));
-            menuButtonEl.click();
-        }
-
-        By aboutLink = By.xpath("//a[contains(text(), 'About')]");
-        String originalWindow = driver.getWindowHandle();
-        WebElement aboutLinkEl = wait.until(ExpectedConditions.elementToBeClickable(aboutLink));
-        aboutLinkEl.click();
-
-        // Wait for new window and switch
-        wait.until(ExpectedConditions.numberOf
+}

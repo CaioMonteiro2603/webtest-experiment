@@ -71,7 +71,7 @@ public class bugbank {
 
     private void resetAppState() {
         openMenu();
-        WebElement resetLink = driver.findElement(By.id("reset_sidebar_link));
+        WebElement resetLink = driver.findElement(By.id("reset_sidebar_link"));
         resetLink.click();
         // Ensure the cart badge disappears as a sign of reset
         wait.until(ExpectedConditions.invisibilityOfElementLocated(By.className("shopping_cart_badge")));

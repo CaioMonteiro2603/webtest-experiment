@@ -1,4 +1,3 @@
-```java
 package SunaQwen3.ws05.seq05;
 
 import org.junit.jupiter.api.*;
@@ -17,7 +16,7 @@ import java.util.Set;
 public class TAT {
     private static WebDriver driver;
     private static WebDriverWait wait;
-    private static final String BASE_URL = "https://www.saucedemo.com/";
+    private static final String BASE_URL = "https://cac-tat.s3.eu-central-1.amazonaws.com/index.html";
     private static final String USERNAME = "standard_user";
     private static final String PASSWORD = "secret_sauce";
 
@@ -210,4 +209,61 @@ public class TAT {
         firstAddButton.click();
 
         // Wait for button text to change to "Remove"
-        wait.until(ExpectedConditions.text
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".btn_inventory"), "Remove"));
+
+        // Check cart badge
+        WebElement cartBadge = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".shopping_cart_badge")));
+        assertEquals("1", cartBadge.getText(), "Cart badge should show 1 item");
+
+        // Remove item from cart
+        WebElement removeButton = driver.findElement(By.cssSelector(".btn_inventory"));
+        removeButton.click();
+
+        // Wait for button text to change back to "Add to cart"
+        wait.until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector(".btn_inventory"), "Add to cart"));
+
+        // Cart badge should disappear
+        List<WebElement> badgeElements = driver.findElements(By.cssSelector(".shopping_cart_badge"));
+        assertEquals(0, badgeElements.size(), "Cart badge should disappear when cart is empty");
+    }
+
+    private void login(String username, String password) {
+        WebElement usernameField = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("user-name")));
+        WebElement passwordField = driver.findElement(By.id("password"));
+        WebElement loginButton = driver.findElement(By.id("login-button"));
+
+        usernameField.clear();
+        usernameField.sendKeys(username);
+        passwordField.clear();
+        passwordField.sendKeys(password);
+        loginButton.click();
+    }
+
+    private void testExternalLink(By locator, String expectedDomain) {
+        String originalWindow = driver.getWindowHandle();
+
+        // Find and click the link
+        WebElement link = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        link.click();
+
+        // Switch to new tab
+        String newWindow = wait.until(d -> {
+            Set<String> handles = d.getWindowHandles();
+            handles.remove(originalWindow);
+            return handles.size() > 0 ? handles.iterator().next() : null;
+        });
+        driver.switchTo().window(newWindow);
+
+        // Assert URL contains expected domain
+        assertTrue(driver.getCurrentUrl().contains(expectedDomain), 
+                   "External link should navigate to expected domain: " + expectedDomain);
+
+        // Close new tab and switch back
+        driver.close();
+        driver.switchTo().window(originalWindow);
+    }
+
+    private double parsePrice(String priceText) {
+        return Double.parseDouble(priceText.replace("$", ""));
+    }
+}

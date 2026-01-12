@@ -1,5 +1,10 @@
 package SunaGPT20b.ws02.seq03;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -15,12 +20,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-
-@TestMethodOrder(MethodOrderer.OrderTest4cb7455a09-b8f7f4cb7455d)
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class parabank {
 
     private static WebDriver driver;
@@ -37,7 +37,34 @@ public class parabank {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+        createUser(driver);
     }
+
+    private static void createUser(WebDriver driver) {
+        driver.get("https://parabank.parasoft.com/parabank/register.htm");
+        driver.findElement(By.id("customer.firstName")).click();
+        driver.findElement(By.id("customer.firstName")).sendKeys("a");
+        driver.findElement(By.id("customer.lastName")).click();
+        driver.findElement(By.id("customer.lastName")).sendKeys("a");
+        driver.findElement(By.id("customer.address.street")).click();
+        driver.findElement(By.id("customer.address.street")).sendKeys("a");
+        driver.findElement(By.id("customer.address.city")).click();
+        driver.findElement(By.id("customer.address.city")).sendKeys("a");
+        driver.findElement(By.id("customer.address.state")).click();
+        driver.findElement(By.id("customer.address.state")).sendKeys("a");
+        driver.findElement(By.id("customer.address.zipCode")).click();
+        driver.findElement(By.id("customer.address.zipCode")).sendKeys("a");
+        driver.findElement(By.id("customer.phoneNumber")).click();
+        driver.findElement(By.id("customer.phoneNumber")).sendKeys("a");
+        driver.findElement(By.id("customer.ssn")).click();
+        driver.findElement(By.id("customer.ssn")).sendKeys("a");
+        driver.findElement(By.id("customer.username")).click();
+        driver.findElement(By.id("customer.username")).sendKeys("caio@gmail.com");
+        driver.findElement(By.id("customer.password")).sendKeys("123");
+        driver.findElement(By.id("repeatedPassword")).sendKeys("123");
+        driver.findElement(By.cssSelector("td > .button")).click();
+    }
+
 
     @AfterAll
     public static void tearDownAll() {
@@ -173,7 +200,10 @@ public class parabank {
                 ExpectedConditions.elementToBeClickable(By.linkText("Log Out")));
         logoutLink.click();
 
-        wait.until(ExpectedConditions.urlContains("index.htm") || ExpectedConditions.urlContains("login.htm"));
+        wait.until(ExpectedConditions.or(
+        	    ExpectedConditions.urlContains("index.htm"),
+        	    ExpectedConditions.urlContains("login.htm")
+        	));
         Assertions.assertTrue(driver.getCurrentUrl().contains("index.htm") || driver.getCurrentUrl().contains("login.htm"),
                 "URL should contain 'index.htm' or 'login.htm' after logout");
 

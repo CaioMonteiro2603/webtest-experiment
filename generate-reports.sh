@@ -5,7 +5,7 @@
 # ./generate-report.sh
 #############################
 
-mvn clean test-compile
+#mvn clean test-compile
 
 for model in $(echo "deepseek geminiPro GPT20b GPT4 GPT5 Qwen3 SunaDeepSeek SunaGPT20b SunaQwen3")
 do

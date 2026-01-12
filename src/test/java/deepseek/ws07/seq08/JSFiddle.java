@@ -125,7 +125,7 @@ public class JSFiddle {
 
     @Test
     @Order(6)
-    public void testNavigationTabs() {
+    public void testNavigationTabs() throws InterruptedException {
         driver.get(BASE_URL);
         
         // Look for navigation links in header or nav element

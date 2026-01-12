@@ -1,4 +1,3 @@
-```java
 package GPT4.ws06.seq02;
 
 import org.junit.jupiter.api.*;
@@ -22,19 +21,11 @@ public class RESTFULL {
 
     @BeforeAll
     public static void setUp() {
-        FirefoxOptions options: '5.39.0', revision: '126f156aee')
-        FirefoxDriver...
-Driver info: org.openqa.selenium.
-
-**Analysis and Fixes:**
-
-Looking at the failing tests, I can see several issues that need to be addressed:
-        at org.openqa.selenium.support.ui.WebDriverWait.timeoutException(WebDriverWait.java:84)
-        at org.openqa.selenium.support.ui.FluentWait.until(FluentWait.java:228)
-        at GPT4.ws06.seq02.RESTFULL.testHomePageLoads(RESTFULL.java:41)
-        at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-        at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+        FirefoxOptions options = new FirefoxOptions();
+        options.addArguments("--headless");
+        driver = new FirefoxDriver(options);
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+    }
 
     @Test
     @Order(1)

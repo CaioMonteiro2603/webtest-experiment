@@ -104,27 +104,4 @@ public class DemoAUT {
             Assertions.assertFalse(successElements.isEmpty(), "Expected success message after form submission");
         }
     }
-
-    @Test
-    @Order(3)
-    public void testExternalLinksOneLevelDeep() {
-        driver.get(BASE_URL);
-        String originalWindow = driver.getWindowHandle();
-
-        List<WebElement> links = driver.findElements(By.tagName("a"));
-        boolean foundExternal = false;
-        for (WebElement link : links) {
-            String href = link.getAttribute("href");
-            if (href != null && href.startsWith("http") && !href.contains("katalon-test.s3.amazonaws.com")) {
-                foundExternal = true;
-                link.click();
-                Set<String> handles = driver.getWindowHandles();
-                if (handles.size() > 1) {
-                    for (String h : handles) {
-                        if (!h.equals(originalWindow)) {
-                           
-            at SunaGPT20b5
-at java.base/java/util/   3) . . . 4, "true'0x
-                | (5
-            at Suna4c
-...
+}

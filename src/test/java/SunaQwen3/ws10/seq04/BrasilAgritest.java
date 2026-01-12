@@ -5,6 +5,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
@@ -199,7 +200,7 @@ public class BrasilAgritest {
         logoutLink.click();
 
         // Assert redirected to login page
-        wait.until(d -> d.getCurrentUrl().contains("/login") || d.findElement(By.cssSelector("input[name='email'], input[type='email']")).isDisplayed());
-        assertTrue(d.getCurrentUrl().contains("/login") || d.findElement(By.cssSelector("input[name='email'], input[type='email']")).isDisplayed());
+        wait.until(driver -> driver.getCurrentUrl().contains("/login") || driver.findElement(By.cssSelector("input[name='email'], input[type='email']")).isDisplayed());
+		assertTrue(driver.getCurrentUrl().contains("/login") || driver.findElement(By.cssSelector("input[name='email'], input[type='email']")).isDisplayed());
     }
 }

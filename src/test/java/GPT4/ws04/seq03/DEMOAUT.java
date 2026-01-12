@@ -76,14 +76,4 @@ public class DEMOAUT {
         List<WebElement> invalidEls = driver.findElements(By.cssSelector("input:invalid"));
         Assertions.assertFalse(invalidEls.isEmpty(), "Expected validation errors");
     }
-
-    @Test
-    @Order(4)
-    public void testExternalLinkNavigation() {
-        WebElement privacyLink = wait.until(ExpectedConditions.elementToBeClickable(By.partialLinkText("Privacy Policy")));
-        String msg
-at GPT4.ws04.seq03.DEMOAUT.assertFalse-1.0-SNAPSHOT:
-..."
-
-AlrightArrowForward   <failureType: <2c5aee7:0xception
--&nul
+}

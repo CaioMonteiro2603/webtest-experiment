@@ -326,21 +326,24 @@ public class BrasilAgritest {
     @Order(10)
     public void testLoginFormValidation() {
         driver.get("https://gestao.brasilagritest.com/login");
-        
+
         // Test empty form submission
         WebElement loginButton = driver.findElement(By.cssSelector("button[type='submit']"));
         loginButton.click();
-        
+
         // Check for validation errors - allow for different error message formats
+        // FIXED: Use findElements (plural) to get a List
         List<WebElement> errorMessages = driver.findElements(By.cssSelector(".error-message, .validation-error, .alert-danger"));
-        assertTrue(errorMessages.size() > 0 || !driver.findElement(By.cssSelector("input[type='email']:invalid, input[type='password']:invalid")).isEmpty(), 
-                   "Should show validation errors with empty form");
+        List<WebElement> invalidInputs = driver.findElements(By.cssSelector("input[type='email']:invalid, input[type='password']:invalid"));
         
+        assertTrue(errorMessages.size() > 0 || !invalidInputs.isEmpty(),
+                   "Should show validation errors with empty form");
+
         // Fill email only
         WebElement emailInput = driver.findElement(By.id("email"));
         emailInput.sendKeys("test@example.com");
         loginButton.click();
-        
+
         // Check for validation error about password
         List<WebElement> passwordError = driver.findElements(By.cssSelector(".password-error, .error-message, input[type='password']:invalid"));
         if (passwordError.isEmpty()) {

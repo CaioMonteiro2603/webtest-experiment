@@ -86,15 +86,20 @@ public class BrasilAgritest {
     @Order(4)
     public void testEnterpriseNavigation() {
         loginIfNeeded();
-        
+
         WebElement enterpriseMenu = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//span[contains(text(),'Empresas')]")));
         enterpriseMenu.click();
         WebElement enterpriseItem = wait.until(ExpectedConditions.elementToBeClickable(
             By.xpath("//a[contains(@href,'/enterprises') or contains(@href,'/emp')]")));
         enterpriseItem.click();
+
+        // FIXED: Use ExpectedConditions.or() instead of ||
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("/enterprises"),
+            ExpectedConditions.urlContains("/emp")
+        ));
         
-        wait.until(ExpectedConditions.urlContains("/enterprises") || ExpectedConditions.urlContains("/emp"));
         WebElement pageTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("h1")));
         Assertions.assertTrue(pageTitle.getText().contains("Empresas"));
@@ -104,15 +109,20 @@ public class BrasilAgritest {
     @Order(5)
     public void testUserProfile() {
         loginIfNeeded();
-        
+
         WebElement profileButton = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector(".user-dropdown, .dropdown-toggle, [data-testid='user-menu'], .flex.items-center")));
         profileButton.click();
         WebElement profileLink = wait.until(ExpectedConditions.elementToBeClickable(
             By.cssSelector("a[href*='profile'], a[href*='perfil'], [data-testid='profile-link']")));
         profileLink.click();
+
+        // FIXED: Use ExpectedConditions.or() instead of ||
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("/profile"),
+            ExpectedConditions.urlContains("/perfil")
+        ));
         
-        wait.until(ExpectedConditions.urlContains("/profile") || ExpectedConditions.urlContains("/perfil"));
         WebElement profileTitle = wait.until(ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("h1")));
         Assertions.assertTrue(profileTitle.getText().contains("Perfil"));

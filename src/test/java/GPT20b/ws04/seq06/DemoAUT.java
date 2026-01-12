@@ -123,8 +123,8 @@ public class DemoAUT {
 
         // Wait for success message or page change
         try {
-            // Try multiple possible success indicators
-            WebElement success = wait.until(ExpectedConditions.or(
+            // FIXED: Don't assign to WebElement, just wait for the condition
+            wait.until(ExpectedConditions.or(
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Success') or contains(@class,'success') or contains(@id,'success')]")),
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[contains(text(),'Submitted')]")),
                 ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(@class,'alert-success')]")),

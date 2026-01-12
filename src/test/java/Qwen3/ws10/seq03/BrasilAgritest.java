@@ -327,7 +327,7 @@ import static org.junit.jupiter.api.Assertions.*;
         
         if (privacyLink != null) {
             privacyLink.click();
-            currentWindowHandle = driver.getWindowHandle();
+            String currentWindowHandle = driver.getWindowHandle();
             for (String windowHandle : driver.getWindowHandles()) {
                 if (!windowHandle.equals(currentWindowHandle)) {
                     driver.switchTo().window(windowHandle);

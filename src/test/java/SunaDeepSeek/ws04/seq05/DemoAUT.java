@@ -1,4 +1,3 @@
-```java
 package SunaDeepSeek.ws04.seq05;
 
 import org.junit.jupiter.api.*;
@@ -23,19 +22,4 @@ public class DemoAUT {
         driver = new FirefoxDriver(options);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
-
-    @AfterAll
-    public static void teardown() {
-        if (driver != null) {
-            at Suna8aee7aee1f4-3c2ce, os.arch'9e9c3
-	at org.openqa.selenium.TimeoutException: java.lang.Class.forName(Class.java:467)
-	at org.openqa.remote.service.DriverCommandExecutor.execute(DriverCommandExecutor.java:174)
-	at org.openqa.selenium.remote.RemoteWebDriver.execute(RemoteWebDriver.java:561)
-	at org.openqa.selenium.remote.ElementLocation$ElementFinder$2.findElement(ElementLocation.java:166)
-	at org.openqa.selenium.remote.ElementLocation.findElement(ElementLocation.java:60)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:384)
-	at org.openqa.selenium.remote.RemoteWebDriver.findElement(RemoteWebDriver.java:378)
-	at SunaDeepSeek.ws04.seq05.DemoAUT.testFormReset(DemoAUT.java:147)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at java.base/java.
+}

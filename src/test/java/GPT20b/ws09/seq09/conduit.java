@@ -201,7 +201,7 @@ public class conduit {
 
     @Test
     @Order(9)
-    public void testFooterSocialLinks() {
+    public void testFooterSocialLinks() throws InterruptedException {
         performLogin(USERNAME, PASSWORD);
         List<WebElement> externalLinks = driver.findElements(By.cssSelector("footer a"));
         Assertions.assertFalse(externalLinks.isEmpty(),

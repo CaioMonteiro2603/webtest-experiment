@@ -1,4 +1,3 @@
-```java
 package GPT5.ws10.seq07;
 
 import org.junit.jupiter.api.*;
@@ -374,45 +373,4 @@ public class BrasilAgritest {
             Assertions.assertTrue(driver.getCurrentUrl().startsWith(ORIGIN), "No sorting control found; still on app");
         }
     }
-
-    @Test
-    @Order(6)
-    public void logoutViaMenuIfAvailable() {
-        login();
-        openDrawerIfPresent();
-        List<By> logoutCandidates = Arrays.asList(
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//a[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'logout')]"),
-                By.xpath("//span[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sair')]"),
-                By.xpath("//button[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'),'sair')]")
-        );
-        boolean clicked = false;
-        for (By by : logoutCandidates) {
-            if (isElementPresent(by)) {
-                clickable(by).click();
-                clicked = true;
-                break;
-            }
-        }
-        if (clicked) {
-            wait.until(ExpectedConditions.urlContains("/login"));
-            Assertions.assertTrue(driver.getCurrentUrl().contains("/login"), "After logout we should be back on /login");
-        } else {
-            // If no logout entry, try visiting a profile menu first if present
-            List<WebElement> candidates = driver.findElements(By.cssSelector("button[aria-label*='account'], button:has(svg), .MuiAvatar-root"));
-            if (!candidates.isEmpty()) {
-                try {
-                    candidates.get(0).click();
-                    for (By by : logoutCandidates) {
-                        if (isElementPresent(by)) {
-                            clickable(by).click();
-                            wait.until(ExpectedConditions.urlContains("/login"));
-                            break;
-                        }
-                    }
-                } catch (Exception ignored) {}
-            }
-            // Ensure we end at login one way or another
-            if (!driver.getCurrentUrl().contains("/login")) {
-                logoutIfLogged
+}

@@ -70,19 +70,19 @@ public class DemoAUT {
     @Order(3)
     public void testRadioButtons() {
         driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
-        
-        // Select first radio button
-        WebElement radio1 = driver.findElement(By.name("sex") and driver.findElement(By.id("radio2")));
+
+        // Select first radio button (id="radio2" with name="sex")
+        WebElement radio1 = driver.findElement(By.id("radio2"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", radio1);
         radio1.click();
         assertTrue(radio1.isSelected());
-        
-        // Select second radio button
-        WebElement radio2 = driver.findElement(By.name("sex") and driver.findElement(By.id("radio1")));
+
+        // Select second radio button (id="radio1" with name="sex")
+        WebElement radio2 = driver.findElement(By.id("radio1"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", radio2);
         radio2.click();
         assertTrue(radio2.isSelected());
-        
+
         // Ensure first is deselected
         assertFalse(radio1.isSelected());
     }
@@ -92,14 +92,14 @@ public class DemoAUT {
     public void testCheckBoxes() {
         driver.get("https://katalon-test.s3.amazonaws.com/aut/html/form.html");
         
-        // Check first checkbox
-        WebElement checkbox1 = driver.findElement(By.name("hobby") and driver.findElement(By.id("check1")));
+        // Check first checkbox - FIXED
+        WebElement checkbox1 = driver.findElement(By.id("check1"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox1);
         checkbox1.click();
         assertTrue(checkbox1.isSelected());
         
-        // Check second checkbox
-        WebElement checkbox2 = driver.findElement(By.name("hobby") and driver.findElement(By.id("check2")));
+        // Check second checkbox - FIXED
+        WebElement checkbox2 = driver.findElement(By.id("check2"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox2);
         checkbox2.click();
         assertTrue(checkbox2.isSelected());
@@ -169,11 +169,13 @@ public class DemoAUT {
         WebElement passwordField = driver.findElement(By.name("pass"));
         passwordField.sendKeys("password123");
         
-        WebElement radio2 = driver.findElement(By.name("sex") and driver.findElement(By.id("radio1")));
+        // FIXED: Use By.id directly
+        WebElement radio2 = driver.findElement(By.id("radio1"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", radio2);
         radio2.click();
         
-        WebElement checkbox2 = driver.findElement(By.name("hobby") and driver.findElement(By.id("check2")));
+        // FIXED: Use By.id directly
+        WebElement checkbox2 = driver.findElement(By.id("check2"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox2);
         checkbox2.click();
         
@@ -203,11 +205,13 @@ public class DemoAUT {
         WebElement textField = wait.until(ExpectedConditions.elementToBeClickable(By.id("fname")));
         textField.sendKeys("Test Data");
         
-        WebElement checkbox = driver.findElement(By.name("hobby") and driver.findElement(By.id("check1")));
+        // FIXED: Use By.id directly
+        WebElement checkbox = driver.findElement(By.id("check1"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", checkbox);
         checkbox.click();
         
-        WebElement radio = driver.findElement(By.name("sex") and driver.findElement(By.id("radio2")));
+        // FIXED: Use By.id directly
+        WebElement radio = driver.findElement(By.id("radio2"));
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", radio);
         radio.click();
         

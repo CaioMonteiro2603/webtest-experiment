@@ -138,8 +138,12 @@ public class JSFiddle {
     @Order(6)
     public void testSaveButton() {
         driver.get(BASE_URL);
-        WebElement saveButton = wait.until(ExpectedConditions.elementToBeClickable(
-            By.cssSelector("button[title*='Save'], button[title*='Fork'], .save"))) {
+        
+        WebElement saveButton = null;
+        
+        try {
+            saveButton = wait.until(ExpectedConditions.elementToBeClickable(
+                By.cssSelector("button[title*='Save'], button[title*='Fork'], .save")));
             saveButton.click();
         } catch (TimeoutException e) {
             // Try alternative selectors
@@ -147,7 +151,7 @@ public class JSFiddle {
                 By.cssSelector(".headerLayersWrapper a:nth-child(2)")));
             altSaveButton.click();
         }
-        
+
         try {
             WebElement loginPrompt = wait.until(ExpectedConditions.visibilityOfElementLocated(
                 By.cssSelector(".login-dialog, .modal, [class*='login']")));

@@ -156,10 +156,10 @@ public class TAT {
                 Select select = new Select(productSelect);
                 List<WebElement> options = select.getOptions();
                 for (WebElement opt : options) {
-                    if (!opt.getAttribute("disabled") && !opt.getAttribute("value").isEmpty()) {
-                        select.selectByVisibleText(opt.getText());
-                        break;
-                    }
+                	if (opt.getAttribute("disabled") == null && !opt.getAttribute("value").isEmpty()) {
+                	    select.selectByVisibleText(opt.getText());
+                	    break;
+                	}
                 }
                 Assertions.assertNotNull(select.getFirstSelectedOption(), "A product should be selected.");
             } catch (UnsupportedOperationException e) {
@@ -255,9 +255,9 @@ public class TAT {
         List<WebElement> radios = driver.findElements(By.cssSelector("input[type='radio']"))
                 .stream().filter(WebElement::isDisplayed).collect(Collectors.toList());
         Map<String, List<WebElement>> grouped = radios.stream()
-                .collect(Collectors.groupingBy(r -> r.getAttribute("index.html:0<|tool_call_argument_begin|>"));
+        	    .collect(Collectors.groupingBy(r -> r.getAttribute("name")));
         for (Map.Entry<String, List<WebElement>> entry : grouped.entrySet()) {
-            List<WebElement"> group = entry.getValue();
+            List<WebElement> group = entry.getValue();
             if (group.size() < 2) continue;
             WebElement first = group.get(0);
             ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", first);
@@ -273,7 +273,7 @@ public class TAT {
         }
 
         // Checkboxes
-        List<WebElement"> checks = driver.findElements(By.cssSelector("input[type='checkbox']"))
+        List<WebElement> checks = driver.findElements(By.cssSelector("input[type='checkbox']"))
                 .stream().filter(WebElement::isDisplayed).collect(Collectors.toList());
         Assumptions.assumeTrue(!checks.isEmpty(), "No visible checkboxes found; skipping test.");
         WebElement c = checks.get(0);
@@ -348,7 +348,7 @@ public class TAT {
     public void externalLinksOpenDifferentDomain() {
         openBase();
         String baseHost = hostOf(driver.getCurrentUrl());
-        List<WebElement"> externals = driver.findElements(By.cssSelector("a[href]"))
+        List<WebElement> externals = driver.findElements(By.cssSelector("a[href]"))
                 .stream().filter(a -> {
                     String href = a.getAttribute("href");
                     if (href == null || href.isEmpty()) return false;

@@ -142,7 +142,13 @@ public class JSFIDDLE {
         if (!loginLinks.isEmpty()) {
             WebElement loginLink = wait.until(ExpectedConditions.elementToBeClickable(loginLinks.get(0)));
             loginLink.click();
-            wait.until(ExpectedConditions.urlContains("/login") || ExpectedConditions.urlContains("/signin"));
+            
+            // FIXED: Use ExpectedConditions.or() instead of ||
+            wait.until(ExpectedConditions.or(
+                ExpectedConditions.urlContains("/login"),
+                ExpectedConditions.urlContains("/signin")
+            ));
+            
             Assertions.assertTrue(driver.getCurrentUrl().contains("/login") || driver.getCurrentUrl().contains("/signin"), "Login page did not load");
         } else {
             Assertions.assertTrue(true, "Login link not found, skipping test");

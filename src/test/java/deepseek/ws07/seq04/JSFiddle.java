@@ -143,30 +143,31 @@ public class JSFiddle {
     @Order(5)
     public void testFooterSocialLinks() {
         driver.get(BASE_URL);
-        
+
         String originalWindow = driver.getWindowHandle();
         int originalWindowCount = driver.getWindowHandles().size();
-        
+
         // Look for any social media link in footer
         try {
             WebElement socialLink = wait.until(ExpectedConditions.elementToBeClickable(
                 By.xpath("//footer//a[contains(@href,'twitter') or contains(@href,'github') or contains(@href,'facebook') or contains(@href,'linkedin')]")));
             socialLink.click();
-            
+
             // Check if a new window/tab was opened
-            wait.until(ExpectedConditions.numberOfWindowsToBeGreaterThan(originalWindowCount));
-            
+            // FIXED: Use numberOfWindowsToBe with expected count
+            wait.until(ExpectedConditions.numberOfWindowsToBe(originalWindowCount + 1));
+
             for (String windowHandle : driver.getWindowHandles()) {
                 if (!windowHandle.equals(originalWindow)) {
                     driver.switchTo().window(windowHandle);
                     break;
                 }
             }
-            
+
             // Generic assertion that a new page loaded
             String currentUrl = driver.getCurrentUrl();
             Assertions.assertFalse(currentUrl.equals(BASE_URL));
-            
+
             driver.close();
             driver.switchTo().window(originalWindow);
         } catch (TimeoutException e) {

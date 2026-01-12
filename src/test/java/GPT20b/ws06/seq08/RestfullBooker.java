@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -301,12 +302,13 @@ public class RestfullBooker {
             if (href == null || href.isEmpty()) {
                 continue;
             }
-            
+
             // Check if click would open new window
             String target = link.getAttribute("target");
             if ("_blank".equals(target)) {
-                driver.executeScript("arguments[0].click();", link);
-                
+                // FIXED: Cast driver to JavascriptExecutor
+                ((JavascriptExecutor) driver).executeScript("arguments[0].click();", link);
+
                 wait.until(ExpectedConditions.numberOfWindowsToBe(2));
                 for (String handle : driver.getWindowHandles()) {
                     if (!handle.equals(originalWindow)) {

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -228,7 +229,7 @@ public class saucedemo {
 
     @Test
     @Order(5)
-    public void testFooterSocialLinks() {
+    public void testFooterSocialLinks() throws InterruptedException {
         login();
         
         // Test Twitter link
@@ -241,7 +242,7 @@ public class saucedemo {
         testExternalLink("social_linkedin", "linkedin.com");
     }
 
-    private void testExternalLink(String linkId, String expectedDomain) {
+    private void testExternalLink(String linkId, String expectedDomain) throws InterruptedException {
         String originalWindow = driver.getWindowHandle();
         
         WebElement link = wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[id*='" + linkId + "']")));

@@ -148,7 +148,7 @@ public class RestfullBooker {
         login();
         Assertions.assertTrue(
                 driver.findElements(By.id("logout")).size() > 0 ||
-                        driver.findElements(By.linkText("Logout")).size() > 0x
+                        driver.findElements(By.linkText("Logout")).size() > 0,
                 "Logout button not present after login");
         logout();
     }

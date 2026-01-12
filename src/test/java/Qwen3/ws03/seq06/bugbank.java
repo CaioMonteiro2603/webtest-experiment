@@ -157,7 +157,7 @@ public class bugbank {
 
     @Test
     @Order(5)
-    public void testMenuNavigation() {
+    public void testMenuNavigation2() {
         // Click on menu button
         WebElement menuButton = driver.findElement(By.cssSelector(".menu-button"));
         menuButton.click();

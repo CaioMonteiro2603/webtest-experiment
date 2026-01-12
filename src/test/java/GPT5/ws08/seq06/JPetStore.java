@@ -1,4 +1,3 @@
-```java
 package GPT5.ws08.seq06;
 
 import org.junit.jupiter.api.*;
@@ -354,21 +353,4 @@ public class JPetStore {
         openBase();
     }
 
-    @Test
-    @Order(7)
-    @DisplayName("Menu actions if available: Home/All Items, About (external), Logout/Reset")
-    void menuActionsIfAvailable() {
-        openBase();
-        // Try a generic menu/burger if present
-        By[] burgers = new By[] {
-                By.cssSelector("button[aria-label*='menu' i], .navbar-toggler, .hamburger, .bm-burger-button"),
-                By.xpath("//button[contains(translate(@aria-label,'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'menu') or contains(translate(normalize-space(.),'ABCDEFGHIJKLMNOPQRSTUVWXYZ','abcdefghijklmnopqrstuvwxyz'),'menu')]")
-        };
-        Optional<WebElement> burger = Optional.empty();
-        for (By by : burgers) {
-            burger = first(by);
-            if (burger.isPresent()) {
-                try {
-                    wait.until(ExpectedConditions.elementToBeClickable(burger.get())).click();
-                } catch (TimeoutException e) {
-                    burger =
+}

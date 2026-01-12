@@ -1,0 +1,865 @@
+generation_id,created_at,cost_total,cost_web_search,cost_cache,cost_file_processing,byok_usage_inference,tokens_prompt,tokens_completion,tokens_reasoning,model_permaslug,provider_name,variant,cancelled,streamed,user,finish_reason_raw,finish_reason_normalized,generation_time_ms,time_to_first_token_ms,app_name,api_key_name
+gen-1768075724-XIQRYEOg9GJAO7xaobgD,2026-01-10 20:08:44.210,0.023262,,,0,0,7790,1788,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,21541,3826,Selenium Test Fixer,aurimrv.org
+gen-1768075646-VS52MfXg4wmPy2Iqjch5,2026-01-10 20:07:26.688,0.00858,,,0,0,8542,2582,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,75953,1066,Selenium Test Fixer,aurimrv.org
+gen-1768075625-Es1sSxZGqC3UCiKo3TZG,2026-01-10 20:07:05.633,0.012182,,,0,0,8987,2716,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,19164,1380,Selenium Test Fixer,aurimrv.org
+gen-1768075539-A5YJBXZBEdNwsYy9Mz0m,2026-01-10 20:05:39.056,0.006694,,,0,0,4928,1495,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,84834,2929,Selenium Test Fixer,aurimrv.org
+gen-1768075440-UC5uBgdqwRjqyebvr76X,2026-01-10 20:04:00.667,0.005795,,,0,0,6818,1534,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,96804,1834,Selenium Test Fixer,aurimrv.org
+gen-1768075303-w2bJZsc1BCESQ49nk8Hz,2026-01-10 20:01:43.437,0.010667,,,0,0,7879,2376,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,135512,3980,Selenium Test Fixer,aurimrv.org
+gen-1768075178-RgrIvjVvmwxNcaVpqj3l,2026-01-10 19:59:38.210,0.008272,,,0,0,4809,2155,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,123621,3482,Selenium Test Fixer,aurimrv.org
+gen-1768074952-qA72uhA9Q0cgjoHk6jlA,2026-01-10 19:55:52.866,0.010921,,,0,0,6469,2816,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,223671,4131,Selenium Test Fixer,aurimrv.org
+gen-1768074945-5OTdOhf962tFPXlt0DdO,2026-01-10 19:55:45.448,0.010833,,,0,0,3738,2365,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,5431,584,Selenium Test Fixer,aurimrv.org
+gen-1768074884-Mwh4y01Evc2hnFUKRqV9,2026-01-10 19:54:44.478,0.007272,,,0,0,7951,2046,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,59385,1115,Selenium Test Fixer,aurimrv.org
+gen-1768074801-soNlmNNqpWtzi6BKjmE9,2026-01-10 19:53:21.612,0.007478,,,0,0,12227,1294,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,81296,2867,Selenium Test Fixer,aurimrv.org
+gen-1768074657-2vCmVNE85Ue7x6JBEX4e,2026-01-10 19:50:56.906,0.01047,,,0,0,6559,2614,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,143052,3753,Selenium Test Fixer,aurimrv.org
+gen-1768074509-H8Xby0EpXbqEQteJ9mPM,2026-01-10 19:48:29.786,0.01007,,,0,0,13830,2269,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,145426,4424,Selenium Test Fixer,aurimrv.org
+gen-1768074364-2bgFjpxPlxl8PjgCkpnQ,2026-01-10 19:46:04.573,0.014386,,,0,0,12531,2747,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,143529,5081,Selenium Test Fixer,aurimrv.org
+gen-1768074272-YBmGxB1qFPoOs3zfmHDA,2026-01-10 19:44:32.056,0.012916,,,0,0,8373,3157,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,90916,1409,Selenium Test Fixer,aurimrv.org
+gen-1768074216-z3nmOVcyc0S8yXUNLlcx,2026-01-10 19:43:35.966,0.006366,,,0,0,6592,1865,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,54417,911,Selenium Test Fixer,aurimrv.org
+gen-1768074147-fZPnMr8dCscTxgFKzJSy,2026-01-10 19:42:27.123,0.006164,,,0,0,4962,1275,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,67106,3267,Selenium Test Fixer,aurimrv.org
+gen-1768074023-rT7fsoq7gKm4bHpl4Kmi,2026-01-10 19:40:23.115,0.005988,,,0,0,4645,2065,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,122363,1514,Selenium Test Fixer,aurimrv.org
+gen-1768073986-vXwKvFcRkD3cXWM47skK,2026-01-10 19:39:46.205,0.016563,,,0,0,9774,2263,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,35116,1336,Selenium Test Fixer,aurimrv.org
+gen-1768073931-s91FBUSoOtEIahsreFhr,2026-01-10 19:38:51.327,0.007822,,,0,0,6547,2602,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,53187,921,Selenium Test Fixer,aurimrv.org
+gen-1768073901-hNudueMJ2klVyNAuDjfP,2026-01-10 19:38:21.251,0.008256,,,0,0,2724,1844,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,28421,832,Selenium Test Fixer,aurimrv.org
+gen-1768073757-umeJDQCLZXJaaqYC7rV6,2026-01-10 19:35:57.732,0.012067,,,0,0,9858,2461,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,141928,4451,Selenium Test Fixer,aurimrv.org
+gen-1768073549-fgstHweKtebNtFwgCiZz,2026-01-10 19:32:29.667,0.009578,,,0,0,7716,3246,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,206486,2110,Selenium Test Fixer,aurimrv.org
+gen-1768073483-B3qe8ZFlxTEkRpcmrGRR,2026-01-10 19:31:23.326,0.010921,,,0,0,7935,2087,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,64558,1406,Selenium Test Fixer,aurimrv.org
+gen-1768073421-JCSDQbGH9H6xnVRjvU0R,2026-01-10 19:30:20.987,0.003525,,,0,0,1971,937,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,60760,2114,Selenium Test Fixer,aurimrv.org
+gen-1768073255-1ip1rjjxnSs3SKKNXsAu,2026-01-10 19:27:35.270,0.013068,,,0,0,12105,4113,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,164127,1611,Selenium Test Fixer,aurimrv.org
+gen-1768073191-7biPF7bwEe96xsDV4UHm,2026-01-10 19:26:31.672,0.005533,,,0,0,4418,1153,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,61945,3048,Selenium Test Fixer,aurimrv.org
+gen-1768072993-NHUZdKNf5SXni28sN4zr,2026-01-10 19:23:12.918,0.014749,,,0,0,10153,3463,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,197090,4443,Selenium Test Fixer,aurimrv.org
+gen-1768072825-TiyTh5EsOtCLh7tmhDdE,2026-01-10 19:20:25.383,0.007112,,,0,0,4376,2681,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,165841,1630,Selenium Test Fixer,aurimrv.org
+gen-1768072695-3c1pPgQUWswnQ1yGNPIr,2026-01-10 19:18:15.298,0.00622,,,0,0,5476,2015,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,128505,1902,Selenium Test Fixer,aurimrv.org
+gen-1768072579-Qzud4HwXHHT9vqETUhVy,2026-01-10 19:16:19.316,0.01482,,,0,0,11171,5176,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,114141,1278,Selenium Test Fixer,aurimrv.org
+gen-1768072507-JTf9dQC58qwUCxT6Nvji,2026-01-10 19:15:07.378,0.010262,,,0,0,7516,2301,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,70297,1406,Selenium Test Fixer,aurimrv.org
+gen-1768072387-qI3awbTWTULsiCVTMch0,2026-01-10 19:13:07.597,0.005688,,,0,0,5010,1842,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118080,1962,Selenium Test Fixer,aurimrv.org
+gen-1768072143-WLLGQotsW3H3tbBc9wBb,2026-01-10 19:09:03.784,0.013799,,,0,0,5574,4182,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,242021,3588,Selenium Test Fixer,aurimrv.org
+gen-1768072050-Jw21yKqCaGjC6vN2lsQ9,2026-01-10 19:07:29.958,0.004344,,,0,0,3402,1492,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,92211,1107,Selenium Test Fixer,aurimrv.org
+gen-1768072017-b3OIcE4zL1GYMm3Z0Kt6,2026-01-10 19:06:57.846,0.030505,,,0,0,11069,2222,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,30313,4386,Selenium Test Fixer,aurimrv.org
+gen-1768071940-vXUdpACrdPNHwINOh9GY,2026-01-10 19:05:40.641,0.014759,,,0,0,12438,2482,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,75556,1540,Selenium Test Fixer,aurimrv.org
+gen-1768071934-9mAzZCD5pAXQmHmoXRWm,2026-01-10 19:05:34.349,0.011577,,,0,0,7005,1524,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,4051,1233,Selenium Test Fixer,aurimrv.org
+gen-1768071922-xM0BB7xtjNitAtfjO9Jg,2026-01-10 19:05:22.751,0.00699,,,0,0,4621,1687,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9941,450,Selenium Test Fixer,aurimrv.org
+gen-1768071899-NkpdxJWGWKNJUJVUhtZe,2026-01-10 19:04:59.551,0.005544,,,0,0,5875,1597,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,21503,1107,Selenium Test Fixer,aurimrv.org
+gen-1768071739-WTfYy5uU3NGpyWdIzMLX,2026-01-10 19:02:19.421,0.010626,,,0,0,6419,2710,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,158452,3888,Selenium Test Fixer,aurimrv.org
+gen-1768071692-d386ANIb4WfiKizt9Ocs,2026-01-10 19:01:32.231,0.006659,,,0,0,4774,1518,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,45612,1478,Selenium Test Fixer,aurimrv.org
+gen-1768071590-D3e6jfCaA5OcPirU4xYa,2026-01-10 18:59:49.938,0.007168,,,0,0,11240,1336,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,100572,2755,Selenium Test Fixer,aurimrv.org
+gen-1768071389-oge8bZdvk6T9ewiIKnc6,2026-01-10 18:56:29.260,0.010306,,,0,0,10771,2999,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,198999,1973,Selenium Test Fixer,aurimrv.org
+gen-1768071207-WPl5Z7F2OIr1emVxw4bV,2026-01-10 18:53:27.811,0.011872,,,0,0,9338,2508,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,179752,4655,Selenium Test Fixer,aurimrv.org
+gen-1768071200-d5Hu3dzcNqdqA3C6DwFh,2026-01-10 18:53:20.748,0.013613,,,0,0,9263,1450,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,5231,1750,Selenium Test Fixer,aurimrv.org
+gen-1768071182-dj7k02cddewWDGzxiSsV,2026-01-10 18:53:02.705,0.010597,,,0,0,8125,2289,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,16357,1398,Selenium Test Fixer,aurimrv.org
+gen-1768071045-7UHtzy6h8t02FsQY01zh,2026-01-10 18:50:45.415,0.008238,,,0,0,7398,1520,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,135799,5270,Selenium Test Fixer,aurimrv.org
+gen-1768071038-dWE2u0SJGlzElRiAVULc,2026-01-10 18:50:38.561,0.011629,,,0,0,6409,1740,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,4834,1088,Selenium Test Fixer,aurimrv.org
+gen-1768071015-jlFCVIU2fRbcC6DucInn,2026-01-10 18:50:15.504,0.007712,,,0,0,3539,1391,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,21437,854,Selenium Test Fixer,aurimrv.org
+gen-1768070867-hQCSpFt73wxM4VUov5f9,2026-01-10 18:47:47.669,0.007611,,,0,0,8443,2117,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,146253,2069,Selenium Test Fixer,aurimrv.org
+gen-1768070690-Uk06Xs2Ju7U4x7IBfvVj,2026-01-10 18:44:50.239,0.011437,,,0,0,8066,2639,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,174973,4379,Selenium Test Fixer,aurimrv.org
+gen-1768070687-TgIZzcyBEToURoljtiGR,2026-01-10 18:44:47.042,0.003827,,,0,0,6386,20,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,,,1665,1278,Selenium Test Fixer,aurimrv.org
+gen-1768070673-Msh01M75zEuZWFddyx7n,2026-01-10 18:44:33.171,0.008017,,,0,0,4812,2052,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12024,1055,Selenium Test Fixer,aurimrv.org
+gen-1768070592-YPHaEzMRMHyn2vLa7Wj9,2026-01-10 18:43:12.293,0.004209,,,0,0,4149,1275,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,79318,2027,Selenium Test Fixer,aurimrv.org
+gen-1768070398-8c7YBVXbAyB9MeCVyZYY,2026-01-10 18:39:58.746,0.009709,,,0,0,5483,2568,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,191828,4302,Selenium Test Fixer,aurimrv.org
+gen-1768070036-WNx4YT45fr9TDjtFOPaO,2026-01-10 18:33:56.522,0.017414,,,0,0,10608,4420,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,360336,7954,Selenium Test Fixer,aurimrv.org
+gen-1768069912-H250t1rNPFuF4ncCRUuh,2026-01-10 18:31:52.255,0.00519,,,0,0,3151,1965,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,122676,2171,Selenium Test Fixer,aurimrv.org
+gen-1768069812-lHfiIGn9LhILqJ7rs8bU,2026-01-10 18:30:12.033,0.004642,,,0,0,3797,1562,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,98529,1586,Selenium Test Fixer,aurimrv.org
+gen-1768069746-Ch6fiJExHUWaIjuLsVUb,2026-01-10 18:29:06.135,0.003332,,,0,0,3700,926,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,63910,1349,Selenium Test Fixer,aurimrv.org
+gen-1768069656-uKUzrp4UZW3gkLTFO5VD,2026-01-10 18:27:35.926,0.003816,,,0,0,2977,1313,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,88640,1817,Selenium Test Fixer,aurimrv.org
+gen-1768069623-n1VnqXbYiRpXlZ4LlqVH,2026-01-10 18:27:03.656,0.011639,,,0,0,6668,1657,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,30650,1268,Selenium Test Fixer,aurimrv.org
+gen-1768069530-qvv3qfrVlhajAsSx45VX,2026-01-10 18:25:29.901,0.006828,,,0,0,5101,1507,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,92020,3483,Selenium Test Fixer,aurimrv.org
+gen-1768069381-lWwjEoo942nbJ8xoKPbY,2026-01-10 18:23:01.642,0.007335,,,0,0,6833,2301,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,146518,1946,Selenium Test Fixer,aurimrv.org
+gen-1768069262-JNN9YF2eMKBM0PlNJRtz,2026-01-10 18:21:02.616,0.006216,,,0,0,6001,1908,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,117572,1867,Selenium Test Fixer,aurimrv.org
+gen-1768069250-XbZBmWMBQ69sV6uUmp5c,2026-01-10 18:20:49.935,0.009916,,,0,0,9727,1632,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10797,936,Selenium Test Fixer,aurimrv.org
+gen-1768069241-8m0n515p8lLCHz5KI5eW,2026-01-10 18:20:41.202,0.006255,,,0,0,5384,1210,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,6941,1026,Selenium Test Fixer,aurimrv.org
+gen-1768069165-l7SELsgvUqrbaci9RkQq,2026-01-10 18:19:25.735,0.005182,,,0,0,4546,982,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,64049,4299,Selenium Test Fixer,aurimrv.org
+gen-1768069138-Ls5VlDmBAGrhr1if6wJ2,2026-01-10 18:18:58.748,0.008022,,,0,0,3471,1517,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,25067,759,Selenium Test Fixer,aurimrv.org
+gen-1768068909-kz766GNw33gHViz2rFhb,2026-01-10 18:15:08.912,0.014826,,,0,0,10890,3317,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,228271,4807,Selenium Test Fixer,aurimrv.org
+gen-1768068858-v7XET15uLJIiL18XIWaU,2026-01-10 18:14:17.926,0.008685,,,0,0,7203,2902,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,49252,712,Selenium Test Fixer,aurimrv.org
+gen-1768068804-XmpfN7Zj8c8fdn7Qg3Qh,2026-01-10 18:13:24.817,0.012122,,,0,0,10238,2034,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,51408,1000,Selenium Test Fixer,aurimrv.org
+gen-1768068608-fkFkf1jolIdefZseacM3,2026-01-10 18:10:08.258,0.009983,,,0,0,9679,3056,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,194509,2150,Selenium Test Fixer,aurimrv.org
+gen-1768068593-JB5STr6YmQJXCk1MQ6r6,2026-01-10 18:09:53.211,0.004151,,,0,0,6289,818,0,moonshotai/kimi-k2-0905,DeepInfra,standard,true,true,,,,14700,1243,Selenium Test Fixer,aurimrv.org
+gen-1768068523-OdrmQb9lVCECzfZkTTgI,2026-01-10 18:08:43.093,0.010644,,,0,0,7566,2442,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,68458,1348,Selenium Test Fixer,aurimrv.org
+gen-1768068367-xmz7zQUCz9BoMCRYR8DT,2026-01-10 18:06:07.729,0.007982,,,0,0,9336,2124,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,153821,1973,Selenium Test Fixer,aurimrv.org
+gen-1768068211-21oPxZOojAUfTVcmKJ7J,2026-01-10 18:03:31.193,0.015282,,,0,0,14588,2612,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,154943,5846,Selenium Test Fixer,aurimrv.org
+gen-1768068003-q6CAyfyt1t1WB72ix3DR,2026-01-10 18:00:03.278,0.010352,,,0,0,7620,2312,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,206257,5171,Selenium Test Fixer,aurimrv.org
+gen-1768067950-8oHnik33dV1OWaqSxJk7,2026-01-10 17:59:10.788,0.009268,,,0,0,10312,2572,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,50843,1257,Selenium Test Fixer,aurimrv.org
+gen-1768067848-5NBE9brA6DQlAOR4Bdxz,2026-01-10 17:57:28.341,0.004083,,,0,0,2238,1594,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,100842,1415,Selenium Test Fixer,aurimrv.org
+gen-1768067837-8aPLCUl8Rh1o8Wk9qXMd,2026-01-10 17:57:16.994,0.006782,,,0,0,3454,1884,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9650,821,Selenium Test Fixer,aurimrv.org
+gen-1768067681-fiIygcFtcGrJ7HHbkX0s,2026-01-10 17:54:41.429,0.008406,,,0,0,7198,1635,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,153575,5982,Selenium Test Fixer,aurimrv.org
+gen-1768067665-eocZ9JUCNa4MN2QhxeSN,2026-01-10 17:54:25.568,0.011104,,,0,0,9903,2065,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14265,516,Selenium Test Fixer,aurimrv.org
+gen-1768067656-JK1Fq8hOIcOkS0IrDBim,2026-01-10 17:54:15.937,0.006007,,,0,0,3717,1511,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,7848,682,Selenium Test Fixer,aurimrv.org
+gen-1768067347-rdXBQ971dEx1OHz9W00J,2026-01-10 17:49:07.590,0.01694,,,0,0,13492,3538,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,306589,5455,Selenium Test Fixer,aurimrv.org
+gen-1768067304-EEFq9thDFHEr5uRyu0W0,2026-01-10 17:48:24.044,0.009601,,,0,0,5399,2146,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,41826,994,Selenium Test Fixer,aurimrv.org
+gen-1768067279-iTQ5RS8AbIhUAAqTBe6z,2026-01-10 17:47:59.550,0.012077,,,0,0,5017,3627,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,22812,1029,Selenium Test Fixer,aurimrv.org
+gen-1768066888-WtcBvCGP0R7mvmunO1u8,2026-01-10 17:41:28.240,0.010088,,,0,0,7222,3600,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,389733,1726,Selenium Test Fixer,aurimrv.org
+gen-1768066760-X0dPQvywC9R0PfCtf2bt,2026-01-10 17:39:20.840,0.00768,,,0,0,5722,1699,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,125649,3968,Selenium Test Fixer,aurimrv.org
+gen-1768066640-nmGewADK8lpJ1PJdes8a,2026-01-10 17:37:20.303,0.005164,,,0,0,7037,1175,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118940,2044,Selenium Test Fixer,aurimrv.org
+gen-1768066409-jiA8af1zSRcdaWtWEqpF,2026-01-10 17:33:29.240,0.013013,,,0,0,8822,3088,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,229370,4295,Selenium Test Fixer,aurimrv.org
+gen-1768066351-NgTFRjCFnttBxSY4Q66R,2026-01-10 17:32:31.451,0.00721,,,0,0,7156,2174,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,56290,1203,Selenium Test Fixer,aurimrv.org
+gen-1768066338-H7lCDbUpkCbqU7lkX2de,2026-01-10 17:32:18.946,0.007725,,,0,0,6568,1514,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10918,973,Selenium Test Fixer,aurimrv.org
+gen-1768066308-XtNaWWJyjN7E0xzlaOQd,2026-01-10 17:31:48.338,0.007837,,,0,0,6458,1347,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,29120,775,Selenium Test Fixer,aurimrv.org
+gen-1768066281-fqvdOZM9KKfanB3nOJsr,2026-01-10 17:31:20.991,0.006618,,,0,0,5132,1201,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,25748,696,Selenium Test Fixer,aurimrv.org
+gen-1768066176-hhnP6C7nKZihdP7zl1sJ,2026-01-10 17:29:35.953,0.009979,,,0,0,9054,1819,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,103354,4160,Selenium Test Fixer,aurimrv.org
+gen-1768066100-BJ56GKA31fAS3kb4mHEk,2026-01-10 17:28:20.560,0.008127,,,0,0,8020,1326,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,73710,4400,Selenium Test Fixer,aurimrv.org
+gen-1768065934-ncaVFfOAz1zfjDHIfWSR,2026-01-10 17:25:34.085,0.00807,,,0,0,7650,2505,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,164034,2208,Selenium Test Fixer,aurimrv.org
+gen-1768065877-s1zTPGZZErBbJX0znITG,2026-01-10 17:24:37.660,0.007504,,,0,0,3712,3010,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,54888,2331,Selenium Test Fixer,aurimrv.org
+gen-1768065862-Y05JNEgdllh9s6jexKZc,2026-01-10 17:24:22.400,0.010668,,,0,0,8118,2319,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13563,459,Selenium Test Fixer,aurimrv.org
+gen-1768065803-c4P1MFOsqW3D4q1Axhl7,2026-01-10 17:23:23.609,0.008369,,,0,0,7849,2615,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,57179,1102,Selenium Test Fixer,aurimrv.org
+gen-1768065706-fWzPKypW396GPeKwyoi7,2026-01-10 17:21:46.858,0.004772,,,0,0,4225,1541,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,95192,1561,Selenium Test Fixer,aurimrv.org
+gen-1768065691-QRSJfEQ4LFxYWaQ7WF3F,2026-01-10 17:21:31.100,0.012944,,,0,0,3367,1134,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,14042,2380,Selenium Test Fixer,aurimrv.org
+gen-1768065656-gspKPMB3ZIMmjcaWkWCu,2026-01-10 17:20:56.352,0.007155,,,0,0,7374,2103,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,33181,1207,Selenium Test Fixer,aurimrv.org
+gen-1768065606-wYmfad6lA7BrpiZsI5Sn,2026-01-10 17:20:06.285,0.007685,,,0,0,8008,2241,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,48449,492,Selenium Test Fixer,aurimrv.org
+gen-1768065525-ztsCjq6AIjqcIu5MEuFf,2026-01-10 17:18:45.427,0.007964,,,0,0,7487,1389,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,79208,4234,Selenium Test Fixer,aurimrv.org
+gen-1768065494-q5Hc7nth9PPzw2VPoUB3,2026-01-10 17:18:14.116,0.004693,,,0,0,3463,1654,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,29856,668,Selenium Test Fixer,aurimrv.org
+gen-1768065481-rSfWZfSVZ3XiUVBfapyd,2026-01-10 17:18:01.145,0.008629,,,0,0,6779,1825,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11319,848,Selenium Test Fixer,aurimrv.org
+gen-1768065472-3E5erg0vbL3yFCmPTYz4,2026-01-10 17:17:51.898,0.005399,,,0,0,3261,1377,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,7303,867,Selenium Test Fixer,aurimrv.org
+gen-1768065383-Px5JGi8beJSzFx2ZsQxD,2026-01-10 17:16:23.163,0.009317,,,0,0,9342,1485,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,87198,5385,Selenium Test Fixer,aurimrv.org
+gen-1768065243-TsvOF7HlWm8Jj6zQkxk5,2026-01-10 17:14:03.778,0.009267,,,0,0,5475,2393,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,137794,3505,Selenium Test Fixer,aurimrv.org
+gen-1768065187-2uF4LL1D0pfqRcdNceRq,2026-01-10 17:13:06.998,0.009073,,,0,0,8623,1560,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,55134,1476,Selenium Test Fixer,aurimrv.org
+gen-1768065079-naqU9jTYAJtVSRVuEIUd,2026-01-10 17:11:19.525,0.009049,,,0,0,6629,2029,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,105770,3665,Selenium Test Fixer,aurimrv.org
+gen-1768064953-08a6aj7dRUoWnDT9XWyG,2026-01-10 17:09:12.968,0.009058,,,0,0,5760,2241,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,124744,3831,Selenium Test Fixer,aurimrv.org
+gen-1768064756-fSVJEOXdWP4umr8t8cdw,2026-01-10 17:05:56.471,0.006005,,,0,0,3525,1556,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,98448,4501,Selenium Test Fixer,aurimrv.org
+gen-1768064581-MtObDZykHmInGXz04YJ6,2026-01-10 17:03:01.554,0.007521,,,0,0,5998,2561,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,173309,1403,Selenium Test Fixer,aurimrv.org
+gen-1768064523-Sd8uw6GQFDadreKXesHH,2026-01-10 17:02:02.980,0.012112,,,0,0,8458,2382,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,56984,832,Selenium Test Fixer,aurimrv.org
+gen-1768064352-YG3IicDTM1QYPVmXhVtB,2026-01-10 16:59:12.037,0.00967,,,0,0,10720,2691,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,169442,1789,Selenium Test Fixer,aurimrv.org
+gen-1768064278-TtrJZD90UKaqL6HdkP4J,2026-01-10 16:57:58.450,0.009575,,,0,0,5932,2032,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,71890,1173,Selenium Test Fixer,aurimrv.org
+gen-1768064121-BLz96TbfTYF0dBzrXAEP,2026-01-10 16:55:21.161,0.007499,,,0,0,6114,2527,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,155702,1800,Selenium Test Fixer,aurimrv.org
+gen-1768064008-XazxHoLxI7xRCB8zFTvX,2026-01-10 16:53:28.346,0.005038,,,0,0,4136,1692,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,111290,1143,Selenium Test Fixer,aurimrv.org
+gen-1768063965-vPGbIXXc6qOvLdi2dTyq,2026-01-10 16:52:45.614,0.008528,,,0,0,6133,1642,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,41032,1118,Selenium Test Fixer,aurimrv.org
+gen-1768063790-jgHTvrmKMgoIQxkAmko7,2026-01-10 16:49:49.916,0.010176,,,0,0,7985,2154,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,173965,4125,Selenium Test Fixer,aurimrv.org
+gen-1768063697-FClQdoK9Qm2XtZwbfANj,2026-01-10 16:48:17.669,0.015756,,,0,0,14436,2838,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,90647,2403,Selenium Test Fixer,aurimrv.org
+gen-1768063570-cAMNuexnDYOnuZLVn82R,2026-01-10 16:46:10.966,0.01417,,,0,0,7526,3862,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,125005,1860,Selenium Test Fixer,aurimrv.org
+gen-1768063511-x8YJ9hmJ9crdOFOGJi9s,2026-01-10 16:45:11.357,0.007872,,,0,0,6708,1539,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,58001,1270,Selenium Test Fixer,aurimrv.org
+gen-1768063414-kRXlhL0hJmPwH2MrQvqN,2026-01-10 16:43:34.758,0.00845,,,0,0,6385,2948,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,95048,977,Selenium Test Fixer,aurimrv.org
+gen-1768063370-GC8iI6WdMZkOt69EIZcp,2026-01-10 16:42:50.786,0.006531,,,0,0,6229,2020,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,42383,840,Selenium Test Fixer,aurimrv.org
+gen-1768063109-uYnmAneVfD03xvC2DaiO,2026-01-10 16:38:29.505,0.016737,,,0,0,21393,4090,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,259682,3490,Selenium Test Fixer,aurimrv.org
+gen-1768062981-QsY92tDKLXWrvNwG2d0r,2026-01-10 16:36:21.778,0.010769,,,0,0,9286,2079,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,126111,7478,Selenium Test Fixer,aurimrv.org
+gen-1768062866-VphTlfdXgrOpavb6xWF0,2026-01-10 16:34:25.903,0.012142,,,0,0,11821,2020,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,114162,5696,Selenium Test Fixer,aurimrv.org
+gen-1768062512-H22pJ4113IjBPwXEzNFQ,2026-01-10 16:28:32.677,0.01644,,,0,0,8825,4458,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,351415,4821,Selenium Test Fixer,aurimrv.org
+gen-1768062377-uPG2Fbis4rvXOSSbvBlY,2026-01-10 16:26:17.752,0.006459,,,0,0,5653,2099,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,133330,1526,Selenium Test Fixer,aurimrv.org
+gen-1768062312-8bpjwSwg5NQkUDsOa8c3,2026-01-10 16:25:12.151,0.009478,,,0,0,6223,1942,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,63929,679,Selenium Test Fixer,aurimrv.org
+gen-1768062306-T21jYPo7YjRwBSTo4x7E,2026-01-10 16:25:06.613,0.003862,,,0,0,4754,404,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,3807,1100,Selenium Test Fixer,aurimrv.org
+gen-1768062192-5qcIBOC4HgCGr15Fiivx,2026-01-10 16:23:12.741,0.006718,,,0,0,4118,1699,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,112226,4400,Selenium Test Fixer,aurimrv.org
+gen-1768062125-KNL3xzD8sFheaXGRwbgN,2026-01-10 16:22:05.386,0.012588,,,0,0,6097,3007,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,65577,732,Selenium Test Fixer,aurimrv.org
+gen-1768062048-UNNbHxG7VscdInZNtnLc,2026-01-10 16:20:48.563,0.008274,,,0,0,7220,2693,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,75048,711,Selenium Test Fixer,aurimrv.org
+gen-1768061963-cZ1cijDanaPOuPvYVQvf,2026-01-10 16:19:23.001,0.006952,,,0,0,6507,2175,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,83958,714,Selenium Test Fixer,aurimrv.org
+gen-1768061915-HZPztniWLUG49WDPgxtJ,2026-01-10 16:18:35.494,0.00518,,,0,0,3560,1878,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,45806,1558,Selenium Test Fixer,aurimrv.org
+gen-1768061792-E0ZAyqaREz8wFxkAMEMi,2026-01-10 16:16:32.779,0.007172,,,0,0,4741,1731,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,121251,5502,Selenium Test Fixer,aurimrv.org
+gen-1768061783-6WyEDbJuQHimveZMKvix,2026-01-10 16:16:23.648,0.015926,,,0,0,7223,2901,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,7279,727,Selenium Test Fixer,aurimrv.org
+gen-1768061737-p9xnPS7paU0amZ9zxwl9,2026-01-10 16:15:37.083,0.01017,,,0,0,6545,2110,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,44912,757,Selenium Test Fixer,aurimrv.org
+gen-1768061510-KsvGX3uWbUTyaqUaQWxB,2026-01-10 16:11:50.867,0.010358,,,0,0,7273,2398,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,224430,4395,Selenium Test Fixer,aurimrv.org
+gen-1768061363-OZzGvvyf7KWxQxDgOC6b,2026-01-10 16:09:23.813,0.009322,,,0,0,9497,2762,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,107436,1256,Selenium Test Fixer,aurimrv.org
+gen-1768061361-VG4j14KBgj3nK9IIWsFb,2026-01-10 16:09:21.461,0.005085,,,0,0,7021,349,0,moonshotai/kimi-k2-0905,Fireworks,standard,true,true,,,,2100,881,Selenium Test Fixer,aurimrv.org
+gen-1768061096-HbL5Ot9CzhnybcaHbEEE,2026-01-10 16:04:56.849,0.009941,,,0,0,5927,2554,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,262893,9645,Selenium Test Fixer,aurimrv.org
+gen-1768061057-Q3KSgVOf42bxPHX2AuQ4,2026-01-10 16:04:17.928,0.004671,,,0,0,3632,997,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,37386,1885,Selenium Test Fixer,aurimrv.org
+gen-1768061033-uwn48PQ3V8LfdWqQiE41,2026-01-10 16:03:53.727,0.005147,,,0,0,1883,1350,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,22595,778,Selenium Test Fixer,aurimrv.org
+gen-1768060962-tfbpPP83WxV8EZyLayos,2026-01-10 16:02:42.097,0.004834,,,0,0,6462,1125,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,70041,2013,Selenium Test Fixer,aurimrv.org
+gen-1768060869-0fyDpacut0tiDy3RxuzN,2026-01-10 16:01:09.251,0.005436,,,0,0,6276,1463,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,91210,1467,Selenium Test Fixer,aurimrv.org
+gen-1768060851-cSdTUWmYc69zFysOTOEc,2026-01-10 16:00:51.805,0.009226,,,0,0,6274,984,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,15773,918,Selenium Test Fixer,aurimrv.org
+gen-1768060824-D41vsvnNxlTSGRgmyCDx,2026-01-10 16:00:24.462,0.006018,,,0,0,4865,1053,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,25755,625,Selenium Test Fixer,aurimrv.org
+gen-1768060806-dXPMghL9hIr5ySk4F5fj,2026-01-10 16:00:06.043,0.006148,,,0,0,2815,1111,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,16772,804,Selenium Test Fixer,aurimrv.org
+gen-1768060736-6dkHThN8dVLmGgm2LSh7,2026-01-10 15:58:56.298,0.008444,,,0,0,7865,2649,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,68110,1416,Selenium Test Fixer,aurimrv.org
+gen-1768060649-0DbgMmNDxEMFmd9gAgAY,2026-01-10 15:57:29.599,0.004895,,,0,0,5648,1318,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,85221,2314,Selenium Test Fixer,aurimrv.org
+gen-1768060640-qSgN47d8C0oGfoNhSoSx,2026-01-10 15:57:20.039,0.005245,,,0,0,3147,1343,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,7879,995,Selenium Test Fixer,aurimrv.org
+gen-1768060569-aWxTH6FQr83oUlWdwimV,2026-01-10 15:56:09.878,0.010554,,,0,0,10560,3165,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,68522,1550,Selenium Test Fixer,aurimrv.org
+gen-1768060426-ucrMT5LWiDVE9MRHjKr7,2026-01-10 15:53:46.738,0.007045,,,0,0,5393,1524,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,141431,3779,Selenium Test Fixer,aurimrv.org
+gen-1768060371-uC3F5Di1zWLD7H1R0TXY,2026-01-10 15:52:51.847,0.008465,,,0,0,6054,3022,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,53279,778,Selenium Test Fixer,aurimrv.org
+gen-1768060318-CtLbOKZ1YDQiRvhKDS41,2026-01-10 15:51:58.667,0.004733,,,0,0,1910,1435,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,51672,725,Selenium Test Fixer,aurimrv.org
+gen-1768060264-G6CH0hcoWxpyUIORrIts,2026-01-10 15:51:04.123,0.009629,,,0,0,7386,1763,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,52933,763,Selenium Test Fixer,aurimrv.org
+gen-1768060252-GlBIYTH4jKPARB8WHOjp,2026-01-10 15:50:52.580,0.006072,,,0,0,4188,1424,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9008,1042,Selenium Test Fixer,aurimrv.org
+gen-1768060120-B9jpdVUZ42iiLv2r3POZ,2026-01-10 15:48:40.730,0.009948,,,0,0,4737,4027,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,130104,832,Selenium Test Fixer,aurimrv.org
+gen-1768060038-YGjgA9ofCG5aK4xkVrLT,2026-01-10 15:47:18.533,0.01071,,,0,0,8418,2264,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,80505,1861,Selenium Test Fixer,aurimrv.org
+gen-1768059968-2aQcRoF6pZU2ky1E8x19,2026-01-10 15:46:08.378,0.008492,,,0,0,6490,2948,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,68483,460,Selenium Test Fixer,aurimrv.org
+gen-1768059884-FZgB9BQpwkVlGHqeh3uK,2026-01-10 15:44:44.838,0.004172,,,0,0,3606,1365,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,81993,1552,Selenium Test Fixer,aurimrv.org
+gen-1768059661-pYFn0dQqvs0eHhwU8bG0,2026-01-10 15:41:01.550,0.012781,,,0,0,10623,2563,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,221587,7669,Selenium Test Fixer,aurimrv.org
+gen-1768059651-PUiIuhRDWchaxbsyLelM,2026-01-10 15:40:51.358,0.006836,,,0,0,5594,1392,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8411,1137,Selenium Test Fixer,aurimrv.org
+gen-1768059580-XmJ2gWSOiwxLYDZUfsdq,2026-01-10 15:39:40.607,0.007426,,,0,0,5287,2656,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,69261,947,Selenium Test Fixer,aurimrv.org
+gen-1768059569-i6mL5iXGnmXd5RSoFeur,2026-01-10 15:39:28.994,0.007083,,,0,0,5368,1545,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9894,1389,Selenium Test Fixer,aurimrv.org
+gen-1768059528-mHHZsIt5ukgciQGoGk4I,2026-01-10 15:38:48.540,0.018834,,,0,0,11157,2559,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,38810,860,Selenium Test Fixer,aurimrv.org
+gen-1768059444-ocfSgnOkDYtUcTLPthcs,2026-01-10 15:37:24.271,0.013555,,,0,0,6348,3281,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,82541,734,Selenium Test Fixer,aurimrv.org
+gen-1768059383-J7LoTgmNDhxIZ162UYOY,2026-01-10 15:36:23.390,0.006891,,,0,0,4202,1748,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,59303,970,Selenium Test Fixer,aurimrv.org
+gen-1768059280-wFSlLsw4j5icKtD9yl7d,2026-01-10 15:34:40.700,0.007706,,,0,0,6294,1572,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,101234,7298,Selenium Test Fixer,aurimrv.org
+gen-1768059223-x64Ak3TwrBsFWPtDjjGA,2026-01-10 15:33:43.239,0.009065,,,0,0,6524,3228,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,55842,695,Selenium Test Fixer,aurimrv.org
+gen-1768059108-U2VeXK3lfLN03luOxUqu,2026-01-10 15:31:48.871,0.012407,,,0,0,8388,2950,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,112772,1431,Selenium Test Fixer,aurimrv.org
+gen-1768058997-ZNdnyE0yketmO2SgR4iG,2026-01-10 15:29:57.338,0.010945,,,0,0,6001,2938,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,109974,1453,Selenium Test Fixer,aurimrv.org
+gen-1768058983-oKKR25Joe7D7XAE5Qepo,2026-01-10 15:29:43.716,0.01035,,,0,0,10089,1719,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11576,1117,Selenium Test Fixer,aurimrv.org
+gen-1768058916-CjBm0Ppa0cfpflyGFRpY,2026-01-10 15:28:36.469,0.009124,,,0,0,9945,2573,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,65655,1069,Selenium Test Fixer,aurimrv.org
+gen-1768058816-RA9JvOe41cl9qTK0gvVd,2026-01-10 15:26:56.694,0.010504,,,0,0,9357,3381,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,98029,1321,Selenium Test Fixer,aurimrv.org
+gen-1768058749-CLFoPMfRyhgR4d40A4EG,2026-01-10 15:25:49.536,0.010207,,,0,0,8813,1968,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,65603,1468,Selenium Test Fixer,aurimrv.org
+gen-1768058638-sYdlrNKLFA4flhFJaVe7,2026-01-10 15:23:58.712,0.006835,,,0,0,8408,1736,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,109358,1952,Selenium Test Fixer,aurimrv.org
+gen-1768058575-KpYbIdIon3cucXZE5llo,2026-01-10 15:22:55.707,0.007653,,,0,0,5619,1713,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,61438,1327,Selenium Test Fixer,aurimrv.org
+gen-1768058559-C2JmvbWI2z21pz2au7rQ,2026-01-10 15:22:38.892,0.011471,,,0,0,11173,1907,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14962,1132,Selenium Test Fixer,aurimrv.org
+gen-1768058470-k7J1f0ClvOMI9VzSvYRX,2026-01-10 15:21:10.015,0.005153,,,0,0,6258,1325,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,86484,1745,Selenium Test Fixer,aurimrv.org
+gen-1768058379-YFaNOOqlesDSTX3cWnI3,2026-01-10 15:19:39.032,0.00538,,,0,0,6806,1329,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,89431,1801,Selenium Test Fixer,aurimrv.org
+gen-1768058293-j1QqjJ7cWashKb9nwjPm,2026-01-10 15:18:13.523,0.005112,,,0,0,6417,1273,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,83695,1735,Selenium Test Fixer,aurimrv.org
+gen-1768058199-UkDc6ugvk17rtWCcprIQ,2026-01-10 15:16:39.548,0.008808,,,0,0,6936,3017,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,92208,1064,Selenium Test Fixer,aurimrv.org
+gen-1768058024-WQSfvXsIBgjQRGPq2Bja,2026-01-10 15:13:44.286,0.011591,,,0,0,15588,2678,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,173768,2456,Selenium Test Fixer,aurimrv.org
+gen-1768058010-gnlHI4kpddArUChye0wv,2026-01-10 15:13:30.410,0.020188,,,0,0,8806,3794,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,11672,974,Selenium Test Fixer,aurimrv.org
+gen-1768057957-h334eQjWVSLS5EsK3t81,2026-01-10 15:12:37.641,0.008131,,,0,0,3515,2026,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,51146,686,Selenium Test Fixer,aurimrv.org
+gen-1768057896-YjST37InTn4G246ZehmP,2026-01-10 15:11:36.730,0.009841,,,0,0,6424,2024,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,59436,1004,Selenium Test Fixer,aurimrv.org
+gen-1768057830-DeXJEyhZdnfoOe728NEW,2026-01-10 15:10:30.623,0.005526,,,0,0,3947,1974,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,64452,3521,Selenium Test Fixer,aurimrv.org
+gen-1768057738-iVoA9J8CpF9IRQRt7dEq,2026-01-10 15:08:57.955,0.003472,,,0,0,2187,1299,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,91090,2981,Selenium Test Fixer,aurimrv.org
+gen-1768057662-Og7VdnY8E11IECmwd8tW,2026-01-10 15:07:41.909,0.00394,,,0,0,4540,1062,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,74522,2180,Selenium Test Fixer,aurimrv.org
+gen-1768057524-gxuFlEUyaapgFNNPG7mQ,2026-01-10 15:05:23.980,0.006544,,,0,0,6222,2028,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,136351,6104,Selenium Test Fixer,aurimrv.org
+gen-1768057386-dtJAfToeD9CZsJUdWH5l,2026-01-10 15:03:06.247,0.00874,,,0,0,6434,1952,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,135923,3941,Selenium Test Fixer,aurimrv.org
+gen-1768057302-thzOm3TKb08kyizpehT6,2026-01-10 15:01:42.525,0.007243,,,0,0,5259,2570,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,82079,843,Selenium Test Fixer,aurimrv.org
+gen-1768057144-T49mRmeg9Qwc2nqQ6aha,2026-01-10 14:59:04.703,0.008336,,,0,0,9785,2211,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,156267,3974,Selenium Test Fixer,aurimrv.org
+gen-1768057130-SRkh0ONUNNnvWC1ig1q6,2026-01-10 14:58:50.379,0.008804,,,0,0,6016,2078,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12626,1138,Selenium Test Fixer,aurimrv.org
+gen-1768057013-xpWmi84BrqVtcoqZIl6k,2026-01-10 14:56:52.999,0.012346,,,0,0,5782,5017,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,114680,1067,Selenium Test Fixer,aurimrv.org
+gen-1768056806-WeKWQdf2nJNoV5pAtRii,2026-01-10 14:53:26.381,0.014548,,,0,0,11081,3160,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,205064,6603,Selenium Test Fixer,aurimrv.org
+gen-1768056646-svppjSaZOkTji3Jyn28f,2026-01-10 14:50:46.401,0.008615,,,0,0,6889,1793,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,158354,4264,Selenium Test Fixer,aurimrv.org
+gen-1768056635-qwr9iCTtrP7e9Bs1d4lW,2026-01-10 14:50:35.090,0.007964,,,0,0,6082,1726,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9465,421,Selenium Test Fixer,aurimrv.org
+gen-1768056358-96pyvEK2K4q3uLRZ0ySh,2026-01-10 14:45:58.191,0.012835,,,0,0,11608,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,275294,2050,Selenium Test Fixer,aurimrv.org
+gen-1768056146-ppKV5ZcRgdXvTcGH1Zca,2026-01-10 14:42:26.315,0.008624,,,0,0,4885,3335,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,210281,1991,Selenium Test Fixer,aurimrv.org
+gen-1768056131-Hh7y3c4XDty1cGYGnwyX,2026-01-10 14:42:11.136,0.009521,,,0,0,7669,1968,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13344,1203,Selenium Test Fixer,aurimrv.org
+gen-1768056070-y6lNQ861E4Z9pf4khEIW,2026-01-10 14:41:10.714,0.006886,,,0,0,6402,2163,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,58811,706,Selenium Test Fixer,aurimrv.org
+gen-1768055992-Yo9wwrWeIngPXl86qfSf,2026-01-10 14:39:52.165,0.004176,,,0,0,4126,1263,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,76701,2035,Selenium Test Fixer,aurimrv.org
+gen-1768055898-BoLgcVNSyIXCPAMZzRxe,2026-01-10 14:38:18.090,0.008471,,,0,0,6624,2911,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,92459,944,Selenium Test Fixer,aurimrv.org
+gen-1768055805-dart5m7JLuJDmGhWnCT9,2026-01-10 14:36:45.474,0.015427,,,0,0,8928,3398,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,91144,869,Selenium Test Fixer,aurimrv.org
+gen-1768055788-tG66F7y59KfYMO1V4mZe,2026-01-10 14:36:28.434,0.017977,,,0,0,8495,1026,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,14816,4212,Selenium Test Fixer,aurimrv.org
+gen-1768055779-sC12mbOnTnUiRjCdgZYJ,2026-01-10 14:36:19.479,0.006679,,,0,0,5603,1327,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,7268,418,Selenium Test Fixer,aurimrv.org
+gen-1768055689-rCUM97IBkVxCm2LcHsUy,2026-01-10 14:34:49.777,0.004867,,,0,0,2941,1241,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,88214,3411,Selenium Test Fixer,aurimrv.org
+gen-1768055681-WVsRTcEYr5WUzHFscKU7,2026-01-10 14:34:41.068,0.006269,,,0,0,5529,1181,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,6905,1120,Selenium Test Fixer,aurimrv.org
+gen-1768055634-uuzBvHoE4l4g8ugOrWLe,2026-01-10 14:33:54.291,0.009584,,,0,0,6033,2015,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,45159,961,Selenium Test Fixer,aurimrv.org
+gen-1768055445-VAqK6nZA4JQlfTO2HZFZ,2026-01-10 14:30:45.054,0.010675,,,0,0,9117,2082,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,187674,6895,Selenium Test Fixer,aurimrv.org
+gen-1768055351-PCSIkyOA4lrqfozt2ReK,2026-01-10 14:29:11.349,0.004784,,,0,0,4387,1515,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,92245,864,Selenium Test Fixer,aurimrv.org
+gen-1768055344-1EO5PZRDJL2oWKBytGOw,2026-01-10 14:29:04.437,0.010348,,,0,0,7147,1067,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3792,1831,Selenium Test Fixer,aurimrv.org
+gen-1768055287-x40PKLsZ7PKXbdkUJ6LH,2026-01-10 14:28:07.706,0.006772,,,0,0,8237,1739,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,55094,1412,Selenium Test Fixer,aurimrv.org
+gen-1768055185-vAERgpd1TgF4uf62TvaO,2026-01-10 14:26:25.446,0.004203,,,0,0,2189,1664,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,100598,1781,Selenium Test Fixer,aurimrv.org
+gen-1768055053-LyLLW7U1qK0qYfU0TNJz,2026-01-10 14:24:13.749,0.012279,,,0,0,12489,3642,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,130084,1341,Selenium Test Fixer,aurimrv.org
+gen-1768054941-UrP19PRvspwqQVkSoXNP,2026-01-10 14:22:21.193,0.008477,,,0,0,7758,1529,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,110846,4183,Selenium Test Fixer,aurimrv.org
+gen-1768054844-Pc4uVevseoygMVp7eo56,2026-01-10 14:20:44.103,0.013416,,,0,0,4708,3558,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,94425,819,Selenium Test Fixer,aurimrv.org
+gen-1768054577-psPhZEx3DuaQ8VYkxQJ7,2026-01-10 14:16:17.188,0.010332,,,0,0,5352,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,265454,1905,Selenium Test Fixer,aurimrv.org
+gen-1768054572-qSrSIEsei5ZMGLtypU1h,2026-01-10 14:16:12.092,0.010326,,,0,0,6576,1250,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3101,685,Selenium Test Fixer,aurimrv.org
+gen-1768054408-S6AvDRkovo7dyLrAMBaa,2026-01-10 14:13:28.008,0.004873,,,0,0,1876,1499,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,162366,2903,Selenium Test Fixer,aurimrv.org
+gen-1768054258-WWXOygCip4Qokj6mYmK9,2026-01-10 14:10:57.914,0.00795,,,0,0,8586,2258,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,148540,2249,Selenium Test Fixer,aurimrv.org
+gen-1768054167-oiKwr50lCw0kd2chnGvf,2026-01-10 14:09:27.379,0.0072,,,0,0,6243,1382,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,88770,6854,Selenium Test Fixer,aurimrv.org
+gen-1768054149-tWTY59oC6E2DlQLT6aHq,2026-01-10 14:09:09.293,0.004822,,,0,0,5216,1368,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,16514,1059,Selenium Test Fixer,aurimrv.org
+gen-1768054055-bPKUIcJRsJIZne9gMKgO,2026-01-10 14:07:35.286,0.010683,,,0,0,10053,3331,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,92340,934,Selenium Test Fixer,aurimrv.org
+gen-1768054002-WPceDTeyE9QixeZEBGls,2026-01-10 14:06:42.309,0.008884,,,0,0,7740,1696,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,51173,1675,Selenium Test Fixer,aurimrv.org
+gen-1768053801-kHybN65fLzzlUVLmUYqZ,2026-01-10 14:03:21.312,0.008472,,,0,0,3813,2474,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,199475,5279,Selenium Test Fixer,aurimrv.org
+gen-1768053777-HvkW8G5k7yods0g9uIAg,2026-01-10 14:02:57.878,0.022796,,,0,0,8491,1629,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,21650,4013,Selenium Test Fixer,aurimrv.org
+gen-1768053763-BQAjwSd3JkcL5hkNgrzL,2026-01-10 14:02:43.794,0.00789,,,0,0,4050,2184,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12351,1145,Selenium Test Fixer,aurimrv.org
+gen-1768053732-r7wAjNdfh05y8woJFcva,2026-01-10 14:02:12.298,0.01422,,,0,0,8523,1899,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,29895,1159,Selenium Test Fixer,aurimrv.org
+gen-1768053680-6uC5NyGAtj1mf6yzwPui,2026-01-10 14:01:20.024,0.01664,,,0,0,7514,3042,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,50710,1020,Selenium Test Fixer,aurimrv.org
+gen-1768053630-Z9IpAVkEqbn7M8xBGI9H,2026-01-10 14:00:29.979,0.005822,,,0,0,3246,1550,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,48463,2404,Selenium Test Fixer,aurimrv.org
+gen-1768053507-Gng1tX8ph7n3EAEZndgI,2026-01-10 13:58:27.319,0.013723,,,0,0,6131,4018,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,121094,1205,Selenium Test Fixer,aurimrv.org
+gen-1768053495-xMEH82DZRbH9RQAmtbWA,2026-01-10 13:58:15.632,0.007408,,,0,0,5943,1537,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10140,1187,Selenium Test Fixer,aurimrv.org
+gen-1768053480-SyNMTGYejjh6oqPWug05,2026-01-10 13:58:00.481,0.009406,,,0,0,7132,2051,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13373,1104,Selenium Test Fixer,aurimrv.org
+gen-1768053419-A6rRpQ3gg5PYqk7JGf5L,2026-01-10 13:56:59.952,0.00749,,,0,0,5200,1748,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,58963,1094,Selenium Test Fixer,aurimrv.org
+gen-1768053347-PVytVikcJ4MBONzRAIBO,2026-01-10 13:55:47.168,0.011912,,,0,0,10916,2145,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,71119,1764,Selenium Test Fixer,aurimrv.org
+gen-1768053232-TiATWBgS34gi2V6btYZj,2026-01-10 13:53:52.087,0.007197,,,0,0,9358,1727,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,113492,3109,Selenium Test Fixer,aurimrv.org
+gen-1768053166-wfTWJ0Ghz6WTrsXlWaDk,2026-01-10 13:52:46.230,0.007256,,,0,0,5551,2518,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,64147,1288,Selenium Test Fixer,aurimrv.org
+gen-1768053078-dDracC3xjInv36Ju881i,2026-01-10 13:51:18.558,0.011004,,,0,0,7821,2137,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,86178,1302,Selenium Test Fixer,aurimrv.org
+gen-1768053056-Ve2pNoYmEL8kgpfLT3Ta,2026-01-10 13:50:56.085,0.005689,,,0,0,4114,1091,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,20833,1120,Selenium Test Fixer,aurimrv.org
+gen-1768052955-RgLYp7U6CPRHMM9z9JYR,2026-01-10 13:49:15.001,0.013964,,,0,0,4426,3797,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,94199,1125,Selenium Test Fixer,aurimrv.org
+gen-1768052946-PhfMImHVWCc99jvG5IlH,2026-01-10 13:49:06.248,0.013705,,,0,0,6085,2540,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,6823,1865,Selenium Test Fixer,aurimrv.org
+gen-1768052888-v2ls6U9NaugO2cIZs2O6,2026-01-10 13:48:08.384,0.007284,,,0,0,6282,1406,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,56270,5276,Selenium Test Fixer,aurimrv.org
+gen-1768052865-yloUVho61aCBeyxI7jwV,2026-01-10 13:47:44.955,0.010852,,,0,0,6712,1380,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,21721,1030,Selenium Test Fixer,aurimrv.org
+gen-1768052807-DjuMw8o5IAM4IKm9ywIe,2026-01-10 13:46:47.607,0.01009,,,0,0,7981,1800,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,55767,1765,Selenium Test Fixer,aurimrv.org
+gen-1768052766-zNFIwkbboyZ5FzJ0UraO,2026-01-10 13:46:06.535,0.007468,,,0,0,8382,2058,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,39492,989,Selenium Test Fixer,aurimrv.org
+gen-1768052646-9E875nJhY9hVkxJWT7eJ,2026-01-10 13:44:06.255,0.005319,,,0,0,4228,1814,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118761,1990,Selenium Test Fixer,aurimrv.org
+gen-1768052594-ygbA84WFMc56o1SJtqoU,2026-01-10 13:43:14.006,0.004438,,,0,0,3275,1564,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,50685,953,Selenium Test Fixer,aurimrv.org
+gen-1768052583-jgjd9oh6QZrag27olJhJ,2026-01-10 13:43:02.930,0.004606,,,0,0,3971,1509,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,9451,436,Selenium Test Fixer,aurimrv.org
+gen-1768052495-68g8RSoJ1fG1ucTujvVt,2026-01-10 13:41:34.978,0.010836,,,0,0,6900,4038,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,86287,1145,Selenium Test Fixer,aurimrv.org
+gen-1768052379-fJVfk27U90wQdLmNDla4,2026-01-10 13:39:39.012,0.015889,,,0,0,15888,4767,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,113847,1888,Selenium Test Fixer,aurimrv.org
+gen-1768052271-NOQTUQYhtpRU8spQaykv,2026-01-10 13:37:51.339,0.008942,,,0,0,6987,1900,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,105846,3923,Selenium Test Fixer,aurimrv.org
+gen-1768052265-xEJNk9M6h9eMItd7NMZ1,2026-01-10 13:37:45.088,0.003738,,,0,0,2872,806,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,4620,1017,Selenium Test Fixer,aurimrv.org
+gen-1768052190-92NGvaz3xvPl8O4nbuMQ,2026-01-10 13:36:30.363,0.0049,,,0,0,6406,1169,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,72966,1639,Selenium Test Fixer,aurimrv.org
+gen-1768052107-mLITQnm67kS8dzWAcgEM,2026-01-10 13:35:06.910,0.006817,,,0,0,5233,1471,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,81731,3661,Selenium Test Fixer,aurimrv.org
+gen-1768052028-QXHAtqobgW0MmIVJST9S,2026-01-10 13:33:47.888,0.008859,,,0,0,7464,2937,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,77361,731,Selenium Test Fixer,aurimrv.org
+gen-1768051875-5vgp8SjFfFdsMZn5stJR,2026-01-10 13:31:15.873,0.012681,,,0,0,9956,2683,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,150421,5731,Selenium Test Fixer,aurimrv.org
+gen-1768051853-mwwFiJZjGOWxcevgVQnq,2026-01-10 13:30:53.027,0.004104,,,0,0,3765,1299,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,21189,737,Selenium Test Fixer,aurimrv.org
+gen-1768051732-9shKhkEYTYfz24nsKt5v,2026-01-10 13:28:52.136,0.004894,,,0,0,3317,1784,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,119233,1785,Selenium Test Fixer,aurimrv.org
+gen-1768051623-fxHs6rlOLayZGYeIIir9,2026-01-10 13:27:03.788,0.009808,,,0,0,9235,1707,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,106771,9905,Selenium Test Fixer,aurimrv.org
+gen-1768051617-5u46g3wr6MyzcOPqAsgm,2026-01-10 13:26:56.964,0.003239,,,0,0,2333,736,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,5095,1100,Selenium Test Fixer,aurimrv.org
+gen-1768051529-YINJKpyUDTQg8uTzskNp,2026-01-10 13:25:29.225,0.003712,,,0,0,2442,1368,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,86171,1244,Selenium Test Fixer,aurimrv.org
+gen-1768051505-7PhfVwJdvO0SsP8tim1h,2026-01-10 13:25:05.644,0.00792,,,0,0,3543,1459,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,21869,435,Selenium Test Fixer,aurimrv.org
+gen-1768051283-r5iJwfR6m8iZ6r95rJTq,2026-01-10 13:21:23.022,0.010753,,,0,0,5176,3059,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,221044,5693,Selenium Test Fixer,aurimrv.org
+gen-1768051228-ITIGtnRSiUXIqOSHws7r,2026-01-10 13:20:28.302,0.011055,,,0,0,8010,2117,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,53137,1393,Selenium Test Fixer,aurimrv.org
+gen-1768051130-q1OqDbBbfqbRKMOd1psm,2026-01-10 13:18:50.690,0.008095,,,0,0,6253,2797,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,96010,1175,Selenium Test Fixer,aurimrv.org
+gen-1768051034-MbdjgK8bMBZZ3VXud7s9,2026-01-10 13:17:14.839,0.0055,,,0,0,6436,1463,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,94263,1711,Selenium Test Fixer,aurimrv.org
+gen-1768050840-DIpINs4ZC8eo0TX3qSLH,2026-01-10 13:14:00.465,0.012483,,,0,0,7610,3167,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,191897,4276,Selenium Test Fixer,aurimrv.org
+gen-1768050734-jXYjDjq84wcikeMzpEP3,2026-01-10 13:12:13.892,0.009114,,,0,0,7070,3143,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,104859,794,Selenium Test Fixer,aurimrv.org
+gen-1768050571-D6jNLV014HRnQguKqhMg,2026-01-10 13:09:31.388,0.009455,,,0,0,3442,2956,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,160644,7380,Selenium Test Fixer,aurimrv.org
+gen-1768050418-bxWNgpni9qMSjCopDdIX,2026-01-10 13:06:58.487,0.007114,,,0,0,5775,2402,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,150847,1785,Selenium Test Fixer,aurimrv.org
+gen-1768050402-7nWcevhYg4uhbINUO8Ib,2026-01-10 13:06:42.108,0.009972,,,0,0,6120,2520,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14613,550,Selenium Test Fixer,aurimrv.org
+gen-1768050310-KHqOxLvYPA77q7WyhX6l,2026-01-10 13:05:10.651,0.008952,,,0,0,6601,3156,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,89814,691,Selenium Test Fixer,aurimrv.org
+gen-1768050255-WfXw22SAyihTBKmsZrxZ,2026-01-10 13:04:15.461,0.005823,,,0,0,5013,1909,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,53400,444,Selenium Test Fixer,aurimrv.org
+gen-1768050233-5fnETAtlr5PguFe50lUH,2026-01-10 13:03:53.549,0.018913,,,0,0,6714,1399,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,20156,4952,Selenium Test Fixer,aurimrv.org
+gen-1768050157-nTdgNvKcwyHZzTjHTdNL,2026-01-10 13:02:37.779,0.006825,,,0,0,4479,2517,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,74262,1096,Selenium Test Fixer,aurimrv.org
+gen-1768050146-AypY1aPVfQpknIJanDvc,2026-01-10 13:02:26.084,0.015357,,,0,0,7386,2657,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,8942,2711,Selenium Test Fixer,aurimrv.org
+gen-1768050095-Se8gYh9Jwu2KfnTYGUan,2026-01-10 13:01:35.838,0.006506,,,0,0,4200,2413,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,48692,1780,Selenium Test Fixer,aurimrv.org
+gen-1768049982-f1r3gkUsSoaBemes8hVm,2026-01-10 12:59:42.616,0.011235,,,0,0,4021,3529,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,111657,1124,Selenium Test Fixer,aurimrv.org
+gen-1768049860-pXqiTrTjanFZrVhovOEl,2026-01-10 12:57:40.761,0.007644,,,0,0,3787,2149,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,120289,4180,Selenium Test Fixer,aurimrv.org
+gen-1768049856-DNrUuXC2ecGv4DoPULMj,2026-01-10 12:57:36.306,0.005622,,,0,0,2490,1044,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,2285,649,Selenium Test Fixer,aurimrv.org
+gen-1768049845-fhlvgV62sjK6NyQ3sKuv,2026-01-10 12:57:25.884,0.005913,,,0,0,2543,1755,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8772,1124,Selenium Test Fixer,aurimrv.org
+gen-1768049830-sNYhQoksPDeGhTGEJ8Ht,2026-01-10 12:57:09.890,0.013771,,,0,0,2953,1297,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,13707,3491,Selenium Test Fixer,aurimrv.org
+gen-1768049731-7P86IEWY0P7ELr0Nk1tH,2026-01-10 12:55:31.075,0.007985,,,0,0,6521,1629,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,97260,6707,Selenium Test Fixer,aurimrv.org
+gen-1768049702-3COBuI7trqp8QME0IDPT,2026-01-10 12:55:02.679,0.010704,,,0,0,5631,1691,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,26835,1247,Selenium Test Fixer,aurimrv.org
+gen-1768049692-FZ0cSQhDRB0GeCJpht5w,2026-01-10 12:54:52.483,0.008467,,,0,0,8166,1427,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8622,711,Selenium Test Fixer,aurimrv.org
+gen-1768049680-kU5pDTvRNYpsH9NMbwsS,2026-01-10 12:54:40.542,0.009252,,,0,0,9204,1492,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10306,875,Selenium Test Fixer,aurimrv.org
+gen-1768049552-KmhiB7Hz2BO8yGcvZh5Z,2026-01-10 12:52:32.725,0.007198,,,0,0,7771,2045,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,126352,1648,Selenium Test Fixer,aurimrv.org
+gen-1768049542-J8tTChO0xonnhf44Mlff,2026-01-10 12:52:22.264,0.006322,,,0,0,4996,1330,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8840,1082,Selenium Test Fixer,aurimrv.org
+gen-1768049411-8Ta6g7Fsp7BrsaUViIdU,2026-01-10 12:50:11.347,0.010287,,,0,0,7620,2286,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,129130,4927,Selenium Test Fixer,aurimrv.org
+gen-1768049303-jgv4HT5tr0IzJslZxAAo,2026-01-10 12:48:23.866,0.01026,,,0,0,8751,3380,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,105913,1214,Selenium Test Fixer,aurimrv.org
+gen-1768049294-tqJrBUDHeu5QxWmZciGk,2026-01-10 12:48:14.582,0.016896,,,0,0,10428,2156,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,7408,1263,Selenium Test Fixer,aurimrv.org
+gen-1768049237-spJioDO2Lc45Lmp7iag0,2026-01-10 12:47:17.294,0.007121,,,0,0,3932,1905,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,55610,1414,Selenium Test Fixer,aurimrv.org
+gen-1768049149-fTAFxSkveO8IxvTzXtNf,2026-01-10 12:45:49.362,0.005305,,,0,0,6189,1415,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,86318,2455,Selenium Test Fixer,aurimrv.org
+gen-1768049029-C66YX22Kdo0aP7Vb4YWK,2026-01-10 12:43:49.213,0.008498,,,0,0,5939,1974,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,118591,5279,Selenium Test Fixer,aurimrv.org
+gen-1768048937-lNHu2tpZTT36arzblk5I,2026-01-10 12:42:17.053,0.00625,,,0,0,8290,1467,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,90347,2372,Selenium Test Fixer,aurimrv.org
+gen-1768048887-gFk520YKr9cHBHXjpNOT,2026-01-10 12:41:27.607,0.00648,,,0,0,3170,2606,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,47838,675,Selenium Test Fixer,aurimrv.org
+gen-1768048789-KTKkFtsxDdRzw8zeZqYB,2026-01-10 12:39:49.162,0.014244,,,0,0,11641,2904,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,96823,2071,Selenium Test Fixer,aurimrv.org
+gen-1768048767-DqreLyJ6VPGgEHhYKvPN,2026-01-10 12:39:27.689,0.005002,,,0,0,3233,1035,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,19843,926,Selenium Test Fixer,aurimrv.org
+gen-1768048621-rTlbmY7kQeVRv2PbLcPz,2026-01-10 12:37:01.700,0.009186,,,0,0,6232,2179,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,144082,6158,Selenium Test Fixer,aurimrv.org
+gen-1768048468-oiv1ECppg4HLvJWkDAb4,2026-01-10 12:34:28.817,0.008975,,,0,0,10059,2476,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,150902,2648,Selenium Test Fixer,aurimrv.org
+gen-1768048365-7dg940AW3ppSy5lMJ3u2,2026-01-10 12:32:45.232,0.006732,,,0,0,8791,1608,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,101953,2699,Selenium Test Fixer,aurimrv.org
+gen-1768048107-8qgdxYJWiQ7GuvEcXw9j,2026-01-10 12:28:27.100,0.010693,,,0,0,6254,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,256520,2169,Selenium Test Fixer,aurimrv.org
+gen-1768048045-obExbPFDZx5Cl2p9PUu2,2026-01-10 12:27:25.880,0.011512,,,0,0,8511,2171,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,59678,964,Selenium Test Fixer,aurimrv.org
+gen-1768048001-cCKBWxL8CFIXs9RZmNNc,2026-01-10 12:26:41.584,0.008089,,,0,0,3469,2021,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,42737,767,Selenium Test Fixer,aurimrv.org
+gen-1768047990-JHNygVN6312qDALiwrqQ,2026-01-10 12:26:30.479,0.006507,,,0,0,4421,1542,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9527,1006,Selenium Test Fixer,aurimrv.org
+gen-1768047985-SImU70MJ2TrXccGsLWnx,2026-01-10 12:26:25.052,0.010581,,,0,0,7125,1152,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,2967,696,Selenium Test Fixer,aurimrv.org
+gen-1768047955-VzE8g0zSirCEd5QGuLP4,2026-01-10 12:25:55.125,0.02437,,,0,0,6451,2119,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,28088,3777,Selenium Test Fixer,aurimrv.org
+gen-1768047868-siqCLcIdZ6nmEr68cYYZ,2026-01-10 12:24:28.450,0.015511,,,0,0,14113,2403,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,85083,1599,Selenium Test Fixer,aurimrv.org
+gen-1768047735-xJ37JrqoUHnKJQfeSiY0,2026-01-10 12:22:15.509,0.008655,,,0,0,5580,2123,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,131178,3807,Selenium Test Fixer,aurimrv.org
+gen-1768047622-jkuoGezGRWy4T1cH4AHg,2026-01-10 12:20:22.536,0.005979,,,0,0,6314,1727,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,111288,1820,Selenium Test Fixer,aurimrv.org
+gen-1768047504-zsxUKsnq6KWCaKK20LlV,2026-01-10 12:18:24.573,0.010509,,,0,0,3440,2836,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,116022,566,Selenium Test Fixer,aurimrv.org
+gen-1768047389-D8tYErQLSINzfItASoWu,2026-01-10 12:16:29.083,0.009119,,,0,0,6866,2000,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,113813,3874,Selenium Test Fixer,aurimrv.org
+gen-1768047264-iBeOj0C18Mbw4GZn5Kdd,2026-01-10 12:14:24.272,0.01704,,,0,0,12518,3812,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,123270,2195,Selenium Test Fixer,aurimrv.org
+gen-1768047259-BDANpbSSWjCFLq4PqdwL,2026-01-10 12:14:19.628,0.006082,,,0,0,3589,831,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,2529,1118,Selenium Test Fixer,aurimrv.org
+gen-1768047237-HwjRvW3n6jbPTYaMy9Tj,2026-01-10 12:13:57.715,0.0095,,,0,0,5717,1261,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,20333,917,Selenium Test Fixer,aurimrv.org
+gen-1768047172-D6L0eKtR2Y10VZGI7Fce,2026-01-10 12:12:52.658,0.005108,,,0,0,4376,993,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,63398,3185,Selenium Test Fixer,aurimrv.org
+gen-1768046996-k3d5vpZ9UPTcCESV56wY,2026-01-10 12:09:55.932,0.009784,,,0,0,11135,2665,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,174066,2231,Selenium Test Fixer,aurimrv.org
+gen-1768046871-oNdyFNIJ3633GniDKsKC,2026-01-10 12:07:50.939,0.01143,,,0,0,10421,2071,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,123090,8675,Selenium Test Fixer,aurimrv.org
+gen-1768046717-fR3QRut7E42I0i13yCCH,2026-01-10 12:05:17.046,0.008299,,,0,0,8683,2413,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,152177,2438,Selenium Test Fixer,aurimrv.org
+gen-1768046670-pJT566mhxSFpgNUqaR1r,2026-01-10 12:04:30.597,0.006228,,,0,0,7636,1587,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,44783,740,Selenium Test Fixer,aurimrv.org
+gen-1768046650-T8Z9gajiFqNEeEJoZVTx,2026-01-10 12:04:10.124,0.022209,,,0,0,8742,4489,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,18423,1263,Selenium Test Fixer,aurimrv.org
+gen-1768046605-SWw6rqiu3w1McVTQ8Aah,2026-01-10 12:03:25.389,0.0062,,,0,0,6676,1765,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,43231,782,Selenium Test Fixer,aurimrv.org
+gen-1768046584-5yBQFiV9ReTl2EMpCCXV,2026-01-10 12:03:04.905,0.006507,,,0,0,6733,1907,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,18770,465,Selenium Test Fixer,aurimrv.org
+gen-1768046538-0vqmmeaQ3LlHaQoUSYzN,2026-01-10 12:02:18.790,0.0085,,,0,0,10180,2214,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,44407,1137,Selenium Test Fixer,aurimrv.org
+gen-1768046329-agdRHLrjWGteWsOzIwwn,2026-01-10 11:58:49.261,0.012782,,,0,0,5941,3687,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,207724,3775,Selenium Test Fixer,aurimrv.org
+gen-1768046283-Oqts0nOY5aVImOLdfqAs,2026-01-10 11:58:03.211,0.007871,,,0,0,6788,2578,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,44570,1196,Selenium Test Fixer,aurimrv.org
+gen-1768046232-xSOwp7DUSkNw6dr51KZA,2026-01-10 11:57:12.673,0.009131,,,0,0,8590,1591,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,48937,1454,Selenium Test Fixer,aurimrv.org
+gen-1768046177-X0xSW59cFKOSvcqNLW6F,2026-01-10 11:56:17.356,0.007256,,,0,0,5882,1491,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,53863,1099,Selenium Test Fixer,aurimrv.org
+gen-1768046155-mzhpLKECWSmtNwiZBhkU,2026-01-10 11:55:55.090,0.013649,,,0,0,11554,2687,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,20486,1283,Selenium Test Fixer,aurimrv.org
+gen-1768046074-ayVfmj3IHop4I39IdhoH,2026-01-10 11:54:34.447,0.006325,,,0,0,4622,1421,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,78911,3263,Selenium Test Fixer,aurimrv.org
+gen-1768045940-nq5m08EM9fKmncXVkwC4,2026-01-10 11:52:20.811,0.010176,,,0,0,6782,2443,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,131933,4353,Selenium Test Fixer,aurimrv.org
+gen-1768045926-LqFXFyzBM5xvxFVjbTuU,2026-01-10 11:52:06.841,0.008616,,,0,0,5727,2072,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12366,842,Selenium Test Fixer,aurimrv.org
+gen-1768045904-zSRmmupAVHSDAWYTogbG,2026-01-10 11:51:44.250,0.004737,,,0,0,5148,1339,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,21049,709,Selenium Test Fixer,aurimrv.org
+gen-1768045855-odJwy2qlAd8Oy3Mn5iCi,2026-01-10 11:50:55.026,0.009114,,,0,0,9316,1410,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,47644,1576,Selenium Test Fixer,aurimrv.org
+gen-1768045733-izOOnXbKNMvMgaH64iq6,2026-01-10 11:48:53.008,0.010535,,,0,0,8564,2159,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,120258,5821,Selenium Test Fixer,aurimrv.org
+gen-1768045686-kDQy9YiP3iyjr39LFL0h,2026-01-10 11:48:05.962,0.007568,,,0,0,3726,3039,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,45423,694,Selenium Test Fixer,aurimrv.org
+gen-1768045642-0avKUwA71TTy1kmGt7Qz,2026-01-10 11:47:22.301,0.009344,,,0,0,7806,1585,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,42029,1218,Selenium Test Fixer,aurimrv.org
+gen-1768045507-jNsh7cV27BBRuL4acrYx,2026-01-10 11:45:07.851,0.007073,,,0,0,7114,2114,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,133002,1275,Selenium Test Fixer,aurimrv.org
+gen-1768045487-1apQLnlw9RavB0auXQr0,2026-01-10 11:44:47.379,0.010745,,,0,0,6318,2782,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,18661,1093,Selenium Test Fixer,aurimrv.org
+gen-1768045407-h4X10r4UtuhifgUy6uNn,2026-01-10 11:43:27.303,0.006199,,,0,0,5257,1218,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,78509,5516,Selenium Test Fixer,aurimrv.org
+gen-1768045372-yaVJ0u1IEP6sq8bl2lUv,2026-01-10 11:42:52.020,0.005791,,,0,0,3603,2175,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,33751,940,Selenium Test Fixer,aurimrv.org
+gen-1768045322-s477eCzGG9cWcJjp5raU,2026-01-10 11:42:02.001,0.008546,,,0,0,8061,1484,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,48456,1472,Selenium Test Fixer,aurimrv.org
+gen-1768045277-2z6jIOK1Y8nlRsLpZdyi,2026-01-10 11:41:17.049,0.009464,,,0,0,8897,2953,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,43332,919,Selenium Test Fixer,aurimrv.org
+gen-1768045193-EGHseNfTCSUmUTeqLZSp,2026-01-10 11:39:53.039,0.005786,,,0,0,8506,1192,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,82461,2569,Selenium Test Fixer,aurimrv.org
+gen-1768045107-mr55IGVeZUSGieFXDtdw,2026-01-10 11:38:27.375,0.004627,,,0,0,5048,1304,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,84105,1707,Selenium Test Fixer,aurimrv.org
+gen-1768045100-rTAO63dLI6Mdc6wFNmiN,2026-01-10 11:38:20.234,0.007012,,,0,0,8412,786,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,5351,1009,Selenium Test Fixer,aurimrv.org
+gen-1768045009-b1auD7FFeGbuhseyK3gK,2026-01-10 11:36:49.722,0.00493,,,0,0,6010,1263,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,89046,3967,Selenium Test Fixer,aurimrv.org
+gen-1768044988-aL5mR3PcFzfQMGE8OhWY,2026-01-10 11:36:28.578,0.018698,,,0,0,6493,1404,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,19317,3701,Selenium Test Fixer,aurimrv.org
+gen-1768044898-JPyBAGJOanEo9i75DS2B,2026-01-10 11:34:58.064,0.009285,,,0,0,4742,2576,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,88898,1011,Selenium Test Fixer,aurimrv.org
+gen-1768044806-sPQX5Y4tSyeHyoKqTd8u,2026-01-10 11:33:26.339,0.007131,,,0,0,6244,1354,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,90122,6000,Selenium Test Fixer,aurimrv.org
+gen-1768044629-e0qY40ZKeRY6GdECUHCn,2026-01-10 11:30:29.052,0.007641,,,0,0,5154,2790,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,175770,1480,Selenium Test Fixer,aurimrv.org
+gen-1768044598-f25L9TAWPbSsnnVgBlfl,2026-01-10 11:29:58.047,0.010246,,,0,0,4642,1868,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,29349,1144,Selenium Test Fixer,aurimrv.org
+gen-1768044487-Fft4q7NBHRpd0FHO5psq,2026-01-10 11:28:07.736,0.014352,,,0,0,8471,3708,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,108634,1875,Selenium Test Fixer,aurimrv.org
+gen-1768044330-Z7Vx3QJdSVFBvH7FasFm,2026-01-10 11:25:30.474,0.007763,,,0,0,6919,2498,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,155601,1972,Selenium Test Fixer,aurimrv.org
+gen-1768044198-iN9VhCVaHYtyzZYPueMp,2026-01-10 11:23:18.426,0.009284,,,0,0,7890,1820,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,116430,4157,Selenium Test Fixer,aurimrv.org
+gen-1768044185-8mREbobgFBsLjLFRkM0O,2026-01-10 11:23:05.659,0.009312,,,0,0,8020,1800,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11134,453,Selenium Test Fixer,aurimrv.org
+gen-1768043997-J33nakiulNd7vygd3PQ3,2026-01-10 11:19:57.406,0.0124,,,0,0,15906,3019,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,186601,2697,Selenium Test Fixer,aurimrv.org
+gen-1768043834-PjD3P9tcbnUalsUSVJt7,2026-01-10 11:17:14.522,0.008632,,,0,0,5613,2106,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,161093,4559,Selenium Test Fixer,aurimrv.org
+gen-1768043765-8qMjijJ1DjZTeOBruXcT,2026-01-10 11:16:05.961,0.015085,,,0,0,12038,2670,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,67039,1257,Selenium Test Fixer,aurimrv.org
+gen-1768043732-DNJLkTuStlmwM1zVb9lK,2026-01-10 11:15:32.295,0.008428,,,0,0,6151,1605,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,31986,677,Selenium Test Fixer,aurimrv.org
+gen-1768043697-ZfHHnQY2Nt2egvlUEges,2026-01-10 11:14:57.507,0.006892,,,0,0,4552,2536,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,33266,936,Selenium Test Fixer,aurimrv.org
+gen-1768043669-rr2NWuuvgjnVMTx8AF2Q,2026-01-10 11:14:29.788,0.006188,,,0,0,5660,1962,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,26023,883,Selenium Test Fixer,aurimrv.org
+gen-1768043464-e9Co9J3Gl1l0QChA4TdF,2026-01-10 11:11:04.855,0.010316,,,0,0,8107,2181,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,203162,4564,Selenium Test Fixer,aurimrv.org
+gen-1768043370-sPzOzcQDcKtHC3VgeUle,2026-01-10 11:09:30.268,0.00751,,,0,0,11366,1482,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,93066,2383,Selenium Test Fixer,aurimrv.org
+gen-1768043335-DjWuokIVSXzcbpzKsEaD,2026-01-10 11:08:55.958,0.009499,,,0,0,7486,1700,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,32716,823,Selenium Test Fixer,aurimrv.org
+gen-1768043298-FbIU1eSTYJjZQTFlang6,2026-01-10 11:08:18.257,0.010538,,,0,0,7782,1989,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,36049,771,Selenium Test Fixer,aurimrv.org
+gen-1768043247-JoYfc48znZH4jVRuGNqr,2026-01-10 11:07:27.158,0.00864,,,0,0,8456,2629,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,48685,958,Selenium Test Fixer,aurimrv.org
+gen-1768043232-fRt8W60NsjRfyamD6it6,2026-01-10 11:07:12.356,0.00953,,,0,0,5946,2385,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13130,643,Selenium Test Fixer,aurimrv.org
+gen-1768043006-r0ol1MWbTaDTIvbm8SKt,2026-01-10 11:03:26.275,0.013227,,,0,0,15469,3520,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,224508,2158,Selenium Test Fixer,aurimrv.org
+gen-1768042954-bjlL8tkhvi5OBlNc8MML,2026-01-10 11:02:34.331,0.008517,,,0,0,7221,1674,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,50238,1525,Selenium Test Fixer,aurimrv.org
+gen-1768042920-XmMnlPIR1DzRQpBb3V9s,2026-01-10 11:02:00.389,0.007396,,,0,0,2487,1983,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,32223,561,Selenium Test Fixer,aurimrv.org
+gen-1768042875-IqCKb8KMaem1PS6B8HkH,2026-01-10 11:01:15.136,0.011881,,,0,0,11533,1698,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,43686,1020,Selenium Test Fixer,aurimrv.org
+gen-1768042852-URdDvmZG7F1AWqrd3bGI,2026-01-10 11:00:52.642,0.007829,,,0,0,7265,1185,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,20830,785,Selenium Test Fixer,aurimrv.org
+gen-1768042824-AUmYhnXlddGAVdm9pZXg,2026-01-10 11:00:24.543,0.007192,,,0,0,9072,1782,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,26487,1227,Selenium Test Fixer,aurimrv.org
+gen-1768042743-BNBr9qVci7bmAHFu6g7W,2026-01-10 10:59:03.748,0.012184,,,0,0,8599,2810,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,79220,1464,Selenium Test Fixer,aurimrv.org
+gen-1768042639-f1frU5jAxVRaArE5NDhX,2026-01-10 10:57:19.466,0.008669,,,0,0,7691,1622,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,102697,6144,Selenium Test Fixer,aurimrv.org
+gen-1768042535-4upM2ZMJruCLXQiDhRa9,2026-01-10 10:55:35.568,0.008406,,,0,0,7673,1521,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,101553,5808,Selenium Test Fixer,aurimrv.org
+gen-1768042387-lwjk4HENbQ19CL96L2RU,2026-01-10 10:53:07.501,0.007001,,,0,0,5704,2360,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,146514,2335,Selenium Test Fixer,aurimrv.org
+gen-1768042362-gU4qa9eZeXpRoZVeCUXp,2026-01-10 10:52:42.617,0.006772,,,0,0,5479,1184,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,23193,674,Selenium Test Fixer,aurimrv.org
+gen-1768042246-jQp2TazJ4yIW9KJRnzU2,2026-01-10 10:50:46.110,0.006334,,,0,0,6282,1911,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,114847,1898,Selenium Test Fixer,aurimrv.org
+gen-1768042075-xi8x6eHW69pz8gAAgOfx,2026-01-10 10:47:55.485,0.006258,,,0,0,4780,1356,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,168947,4432,Selenium Test Fixer,aurimrv.org
+gen-1768041992-RnLF6BWCXkF7bI9cr7UU,2026-01-10 10:46:32.039,0.005264,,,0,0,6367,1359,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,81782,2118,Selenium Test Fixer,aurimrv.org
+gen-1768041862-IRI5uIDrAd6hgNklxjcM,2026-01-10 10:44:22.312,0.009764,,,0,0,8316,1910,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,128055,6624,Selenium Test Fixer,aurimrv.org
+gen-1768041789-A4YCaf6H0xE0nvvcOH0c,2026-01-10 10:43:09.268,0.007881,,,0,0,6549,2631,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,71352,749,Selenium Test Fixer,aurimrv.org
+gen-1768041693-3NjVupavJiwH90benAhZ,2026-01-10 10:41:33.336,0.005298,,,0,0,5750,1499,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,94386,2301,Selenium Test Fixer,aurimrv.org
+gen-1768041663-T7x3Qa3p7P8g3FUDL46Y,2026-01-10 10:41:03.735,0.009036,,,0,0,9007,1245,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,27978,853,Selenium Test Fixer,aurimrv.org
+gen-1768041536-YgkLRoIYGUGSqDSAsNFZ,2026-01-10 10:38:55.938,0.013097,,,0,0,6137,3766,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,126222,1165,Selenium Test Fixer,aurimrv.org
+gen-1768041373-8u3hhv02OduzKL4LF4F0,2026-01-10 10:36:13.465,0.008937,,,0,0,9603,2548,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,160825,2378,Selenium Test Fixer,aurimrv.org
+gen-1768041148-fIlJd61XSoQFfLxQtYt2,2026-01-10 10:32:28.453,0.008242,,,0,0,5054,2084,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,219720,4852,Selenium Test Fixer,aurimrv.org
+gen-1768041112-UDwhwASBxMTsLGd0CE82,2026-01-10 10:31:52.512,0.033181,,,0,0,6801,3170,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,34078,3826,Selenium Test Fixer,aurimrv.org
+gen-1768040863-uqjT001YFd2mLv8HVg0T,2026-01-10 10:27:43.503,0.018112,,,0,0,13159,4087,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,247380,6619,Selenium Test Fixer,aurimrv.org
+gen-1768040842-RsTl8zAy9wQ0cllJ2lq4,2026-01-10 10:27:22.811,0.00604,,,0,0,6432,1734,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,19084,959,Selenium Test Fixer,aurimrv.org
+gen-1768040794-0sYunXV9NXyfrIOIAKP4,2026-01-10 10:26:33.947,0.010363,,,0,0,6421,2199,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,47288,729,Selenium Test Fixer,aurimrv.org
+gen-1768040620-GnXjAQCrwvxXGPjSfLmw,2026-01-10 10:23:40.156,0.008282,,,0,0,6141,2913,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,172037,1649,Selenium Test Fixer,aurimrv.org
+gen-1768040587-ZmYran8Iwpbhr89Se5Bf,2026-01-10 10:23:07.219,0.011778,,,0,0,13551,3179,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,31279,1062,Selenium Test Fixer,aurimrv.org
+gen-1768040430-HhZES0Ifi7qPBE8yxfni,2026-01-10 10:20:30.736,0.00749,,,0,0,5418,1696,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,154851,5299,Selenium Test Fixer,aurimrv.org
+gen-1768040284-GwlZE5jRCAPzzGRVSEvC,2026-01-10 10:18:04.703,0.007675,,,0,0,7568,2324,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,144322,1779,Selenium Test Fixer,aurimrv.org
+gen-1768040123-BEkPv7H8T7lWbbf7RC9R,2026-01-10 10:15:23.251,0.012414,,,0,0,9832,2606,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,159728,4189,Selenium Test Fixer,aurimrv.org
+gen-1768040085-Rs5cIceqgTkcPMfmXjxZ,2026-01-10 10:14:45.026,0.009222,,,0,0,7586,3094,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,36643,462,Selenium Test Fixer,aurimrv.org
+gen-1768040079-ujaeAqWCio5U3zaiT8mE,2026-01-10 10:14:39.090,0.009828,,,0,0,4530,1766,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3812,574,Selenium Test Fixer,aurimrv.org
+gen-1768039986-CIz2IRKmyDdDSAkZubin,2026-01-10 10:13:06.550,0.005413,,,0,0,6479,1411,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,90953,2500,Selenium Test Fixer,aurimrv.org
+gen-1768039734-LkpTjrktJOYXy0yWGcUx,2026-01-10 10:08:54.614,0.009457,,,0,0,3684,2899,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,250015,3320,Selenium Test Fixer,aurimrv.org
+gen-1768039720-eSUN2KWlkm5BjPt484As,2026-01-10 10:08:40.815,0.008408,,,0,0,6381,1832,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12202,442,Selenium Test Fixer,aurimrv.org
+gen-1768039717-KW6tre9yWyDqprZ8gG2U,2026-01-10 10:08:37.011,0.009213,,,0,0,8316,299,0,moonshotai/kimi-k2-0905,Together,standard,true,true,,,,3360,761,Selenium Test Fixer,aurimrv.org
+gen-1768039698-EL7OxQmQgiY8jKkiOml2,2026-01-10 10:08:18.740,0.011167,,,0,0,7742,2609,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,16618,454,Selenium Test Fixer,aurimrv.org
+gen-1768039636-a8LqqOW0spvA7GiOIpGC,2026-01-10 10:07:16.208,0.007495,,,0,0,8517,954,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,60827,4257,Selenium Test Fixer,aurimrv.org
+gen-1768039552-BYAknjDGKyucwmMGSqvh,2026-01-10 10:05:52.754,0.010956,,,0,0,8919,2242,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,81881,1490,Selenium Test Fixer,aurimrv.org
+gen-1768039537-G9SCUh1c91aXbhZvcDwC,2026-01-10 10:05:37.078,0.008267,,,0,0,4591,2205,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14095,821,Selenium Test Fixer,aurimrv.org
+gen-1768039489-FePMlhjnvsHtKFXiuPBy,2026-01-10 10:04:49.666,0.0073,,,0,0,5547,2541,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,45578,1053,Selenium Test Fixer,aurimrv.org
+gen-1768039458-WGXLQMYwEe8srQhfURln,2026-01-10 10:04:18.451,0.015899,,,0,0,11628,3569,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,29557,772,Selenium Test Fixer,aurimrv.org
+gen-1768039273-BBh68tpxkA13WpqAJISu,2026-01-10 10:01:12.919,0.010852,,,0,0,12462,2934,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,183021,2339,Selenium Test Fixer,aurimrv.org
+gen-1768039113-vn1P7gsVsZDWUPREMVli,2026-01-10 09:58:33.165,0.00856,,,0,0,6476,1870,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,157996,4124,Selenium Test Fixer,aurimrv.org
+gen-1768039096-OnOFmuPp18YmLn9e7Sp6,2026-01-10 09:58:15.967,0.011831,,,0,0,10369,2244,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,15439,715,Selenium Test Fixer,aurimrv.org
+gen-1768039077-Wt1Ih679kbO8H6xE79Tz,2026-01-10 09:57:57.393,0.005711,,,0,0,4450,1032,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,16866,642,Selenium Test Fixer,aurimrv.org
+gen-1768038993-pZU7OfGzSkG9JfDh3ira,2026-01-10 09:56:33.331,0.004912,,,0,0,5666,1323,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,82437,2805,Selenium Test Fixer,aurimrv.org
+gen-1768038814-TezMTZPSgrUZ4K1tUpEf,2026-01-10 09:53:34.840,0.008724,,,0,0,6308,1976,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,176956,4881,Selenium Test Fixer,aurimrv.org
+gen-1768038785-rb8Afq2K1w7Kr73379sx,2026-01-10 09:53:05.755,0.009244,,,0,0,7171,3188,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,27462,897,Selenium Test Fixer,aurimrv.org
+gen-1768038600-lu3QuuTdS0WxngAqi7O9,2026-01-10 09:50:00.358,0.01264,,,0,0,8838,2935,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,183520,6251,Selenium Test Fixer,aurimrv.org
+gen-1768038493-ZOII6ThHYtRXo9aCQnlp,2026-01-10 09:48:13.081,0.009049,,,0,0,7799,1748,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,105651,5802,Selenium Test Fixer,aurimrv.org
+gen-1768038469-MZvJLvI8lW9tlsTCi1da,2026-01-10 09:47:49.246,0.013671,,,0,0,10052,3056,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,22011,550,Selenium Test Fixer,aurimrv.org
+gen-1768038334-TFHi5pNj7XKtfipcxUeq,2026-01-10 09:45:34.800,0.010212,,,0,0,7712,2234,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,132815,6202,Selenium Test Fixer,aurimrv.org
+gen-1768038232-YCK1Lk04J4MM50eAuftd,2026-01-10 09:43:52.506,0.004861,,,0,0,3958,1639,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,100448,3376,Selenium Test Fixer,aurimrv.org
+gen-1768038156-EJ26k5cFQ8vf9oV6wJHm,2026-01-10 09:42:36.348,0.012597,,,0,0,13245,1860,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,74577,2038,Selenium Test Fixer,aurimrv.org
+gen-1768038143-L0zF9ppcrdAz28RUAP1h,2026-01-10 09:42:23.652,0.0092,,,0,0,8672,1599,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10589,567,Selenium Test Fixer,aurimrv.org
+gen-1768038127-ri1Ds7Qg26QL73Ed1VeB,2026-01-10 09:42:07.455,0.013934,,,0,0,4611,1079,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,14334,4905,Selenium Test Fixer,aurimrv.org
+gen-1768037910-wSxdTtvUgo46N3HvzL07,2026-01-10 09:38:30.553,0.010602,,,0,0,8611,3579,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,215348,2072,Selenium Test Fixer,aurimrv.org
+gen-1768037892-NLdM23KWYWB3Z7C6e3tK,2026-01-10 09:38:12.728,0.007113,,,0,0,10574,1442,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,,,16103,712,Selenium Test Fixer,aurimrv.org
+gen-1768037824-I0Cai3icsJfnuuXgVUIE,2026-01-10 09:37:04.431,0.007323,,,0,0,5389,2584,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,66577,1177,Selenium Test Fixer,aurimrv.org
+gen-1768037707-9BMP2yQSOIiI7nTsFOJw,2026-01-10 09:35:07.841,0.006491,,,0,0,6368,1972,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,114947,1898,Selenium Test Fixer,aurimrv.org
+gen-1768037506-GPR2BSlEFf1fPdswi5RE,2026-01-10 09:31:46.418,0.019369,,,0,0,18766,3244,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,199843,6213,Selenium Test Fixer,aurimrv.org
+gen-1768037498-MwfkvAFpjvSwDSCY4vm9,2026-01-10 09:31:38.317,0.014209,,,0,0,8095,2038,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,5423,761,Selenium Test Fixer,aurimrv.org
+gen-1768037309-VfVP9tv3BNjUVxmzKyYG,2026-01-10 09:28:29.747,0.010531,,,0,0,11124,3041,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,187089,2254,Selenium Test Fixer,aurimrv.org
+gen-1768037300-QnxzWDmek5Z5HFqTQybX,2026-01-10 09:28:20.512,0.016665,,,0,0,9993,2224,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,7298,918,Selenium Test Fixer,aurimrv.org
+gen-1768037021-qn23aI8mOU66EHHjYh1R,2026-01-10 09:23:41.705,0.009673,,,0,0,4369,2821,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,277049,3846,Selenium Test Fixer,aurimrv.org
+gen-1768036920-VF2JXGyvqdDXmivo4jmZ,2026-01-10 09:22:00.242,0.007902,,,0,0,6434,1617,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,99958,4735,Selenium Test Fixer,aurimrv.org
+gen-1768036885-5BtqHNLwnt7wOjS1u6Wm,2026-01-10 09:21:25.505,0.013367,,,0,0,7202,2055,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,33073,1159,Selenium Test Fixer,aurimrv.org
+gen-1768036845-LGs25LDlpnMpodnXkmql,2026-01-10 09:20:45.257,0.008012,,,0,0,4150,3176,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,38655,937,Selenium Test Fixer,aurimrv.org
+gen-1768036742-5P0oTB21KK5CP4Whq25C,2026-01-10 09:19:02.552,0.006821,,,0,0,9478,1515,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,100994,2030,Selenium Test Fixer,aurimrv.org
+gen-1768036601-Q278BXMcPXOOt3x1QXRc,2026-01-10 09:16:41.047,0.005041,,,0,0,4185,1012,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,139791,4497,Selenium Test Fixer,aurimrv.org
+gen-1768036517-k9dYXjfAdo5VEoEQkz5Y,2026-01-10 09:15:17.722,0.004984,,,0,0,6580,1176,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,81802,1978,Selenium Test Fixer,aurimrv.org
+gen-1768036492-QSWS9tHilChDITZDIyAr,2026-01-10 09:14:52.426,0.009821,,,0,0,5051,1590,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,23754,881,Selenium Test Fixer,aurimrv.org
+gen-1768036487-yM1xbzMc6mEowRXPPwiZ,2026-01-10 09:14:47.693,0.002408,,,0,0,5320,140,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,,,3114,684,Selenium Test Fixer,aurimrv.org
+gen-1768036483-oYSY3EG8XFEEQN2scRRu,2026-01-10 09:14:43.277,0.006595,,,0,0,3643,984,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,2352,673,Selenium Test Fixer,aurimrv.org
+gen-1768036391-6i3NBhAPaikEurA2qSEZ,2026-01-10 09:13:11.098,0.005585,,,0,0,5234,978,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,90352,3771,Selenium Test Fixer,aurimrv.org
+gen-1768036151-pBwjUiJsang5HEYUjxX7,2026-01-10 09:09:11.245,0.00953,,,0,0,4570,3851,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,238271,1384,Selenium Test Fixer,aurimrv.org
+gen-1768036017-jbnjCN01oAXOLF6tftow,2026-01-10 09:06:57.770,0.009831,,,0,0,8073,1995,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,131853,5473,Selenium Test Fixer,aurimrv.org
+gen-1768035771-DaYb6W7s3W413rl9JLeI,2026-01-10 09:02:50.907,0.009486,,,0,0,4520,3839,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,245173,1947,Selenium Test Fixer,aurimrv.org
+gen-1768035630-IwOwS4bFlE4JaLLesnSg,2026-01-10 09:00:30.699,0.007202,,,0,0,7537,2094,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,137824,2050,Selenium Test Fixer,aurimrv.org
+gen-1768035549-1oURyo53GBJmgLfG9cQn,2026-01-10 08:59:09.433,0.012644,,,0,0,11208,2368,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,79633,1959,Selenium Test Fixer,aurimrv.org
+gen-1768035462-dhkyqujnEPMhQYJfILqc,2026-01-10 08:57:42.146,0.005093,,,0,0,6449,1257,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,74516,2048,Selenium Test Fixer,aurimrv.org
+gen-1768035331-a2CW4Dxh1SRhOLEPEJpC,2026-01-10 08:55:30.997,0.006648,,,0,0,6156,2093,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,129488,2993,Selenium Test Fixer,aurimrv.org
+gen-1768035242-KbX3dANLm6M6OQbdlMCr,2026-01-10 08:54:01.969,0.008839,,,0,0,8212,1565,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,,,87150,4336,Selenium Test Fixer,aurimrv.org
+gen-1768035170-GnJREWR0JbHdpFPmbA6J,2026-01-10 08:52:50.281,0.00313,,,0,0,2210,1123,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,70229,1319,Selenium Test Fixer,aurimrv.org
+gen-1768035137-wEuHz6vTWU8iTkHqqI8J,2026-01-10 08:52:17.615,0.008762,,,0,0,8626,2656,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,31075,791,Selenium Test Fixer,aurimrv.org
+gen-1768035120-YMgV3c95eATwu6jVSmv5,2026-01-10 08:52:00.739,0.010356,,,0,0,6748,2523,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,15158,836,Selenium Test Fixer,aurimrv.org
+gen-1768035002-tzn26TO7SdNUFfQqbspg,2026-01-10 08:50:01.957,0.006902,,,0,0,7532,1945,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,117028,2379,Selenium Test Fixer,aurimrv.org
+gen-1768034962-5KowSZ0exsBIdFH7uiha,2026-01-10 08:49:22.312,0.009426,,,0,0,8820,2949,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,38009,946,Selenium Test Fixer,aurimrv.org
+gen-1768034889-mFC7OkTfIxu8vmJ4WjgJ,2026-01-10 08:48:09.711,0.004389,,,0,0,2370,1187,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,70809,2339,Selenium Test Fixer,aurimrv.org
+gen-1768034785-etwCqXYG27xK2gLKLkkP,2026-01-10 08:46:25.272,0.009304,,,0,0,8404,1705,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,102886,4365,Selenium Test Fixer,aurimrv.org
+gen-1768034738-YYAObQf8KQNxYomWx9f1,2026-01-10 08:45:38.291,0.00532,,,0,0,3826,1210,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,45302,1003,Selenium Test Fixer,aurimrv.org
+gen-1768034658-U4tRiq6QsA7yfIqtSAqV,2026-01-10 08:44:18.493,0.015854,,,0,0,9079,3511,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,78173,864,Selenium Test Fixer,aurimrv.org
+gen-1768034527-yaP797sNkv1RKR3SIRv8,2026-01-10 08:42:07.590,0.008783,,,0,0,5773,2128,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,129110,3773,Selenium Test Fixer,aurimrv.org
+gen-1768034421-qmFhca3pnn2tuXunQZ1L,2026-01-10 08:40:20.958,0.0068,,,0,0,8566,1687,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,105058,2674,Selenium Test Fixer,aurimrv.org
+gen-1768034379-N3mB4epI61f3Wlc56er5,2026-01-10 08:39:39.768,0.009736,,,0,0,7543,1768,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,39471,811,Selenium Test Fixer,aurimrv.org
+gen-1768034289-BrPCSgCtlhYE4Vfflfh3,2026-01-10 08:38:09.406,0.003711,,,0,0,1813,1493,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,88703,1347,Selenium Test Fixer,aurimrv.org
+gen-1768034150-hKrbsNrHBoErWuCJ7VP5,2026-01-10 08:35:50.124,0.009846,,,0,0,7902,2042,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,137644,4453,Selenium Test Fixer,aurimrv.org
+gen-1768034095-0Q2YYsa1vAxC1otpdOIG,2026-01-10 08:34:54.992,0.01214,,,0,0,8019,2478,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,53532,1368,Selenium Test Fixer,aurimrv.org
+gen-1768033949-oBBNeI49GmZ3IhfEHldb,2026-01-10 08:32:29.569,0.007708,,,0,0,7695,2315,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,143900,2582,Selenium Test Fixer,aurimrv.org
+gen-1768033879-NYRr9DH520AqzL22p7Jl,2026-01-10 08:31:18.990,0.014648,,,0,0,12996,4725,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,68897,1031,Selenium Test Fixer,aurimrv.org
+gen-1768033867-p08l4nWZzJ9mw7iajECX,2026-01-10 08:31:07.404,0.003772,,,0,0,5730,740,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,,,9826,689,Selenium Test Fixer,aurimrv.org
+gen-1768033747-GxA3Doo25n1mS2J24Gwh,2026-01-10 08:29:07.748,0.006704,,,0,0,7511,1850,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118105,1592,Selenium Test Fixer,aurimrv.org
+gen-1768033586-16EYB3atLOhTcN5GQ00d,2026-01-10 08:26:26.128,0.006513,,,0,0,4744,2308,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,159775,2049,Selenium Test Fixer,aurimrv.org
+gen-1768033348-TDas10s8bNQTt7vHslrn,2026-01-10 08:22:28.461,0.019833,,,0,0,15985,4097,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,235836,5471,Selenium Test Fixer,aurimrv.org
+gen-1768033328-s7nAAkwFFq3r3ki2Mqxv,2026-01-10 08:22:08.241,0.012198,,,0,0,8252,2899,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,18620,865,Selenium Test Fixer,aurimrv.org
+gen-1768033265-us0OXkZ5EqSLXSgKWex3,2026-01-10 08:21:05.265,0.014669,,,0,0,12614,2417,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,61364,1868,Selenium Test Fixer,aurimrv.org
+gen-1768033259-5Cq6nhRvwUJdTN6EzsJv,2026-01-10 08:20:59.502,0.01136,,,0,0,7124,1412,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3549,712,Selenium Test Fixer,aurimrv.org
+gen-1768033216-LWCBAgN6gk74VktHoXlU,2026-01-10 08:20:16.392,0.009453,,,0,0,9289,2869,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,41380,732,Selenium Test Fixer,aurimrv.org
+gen-1768033085-x5eKKng3bRfD4CWkrzZl,2026-01-10 08:18:05.819,0.00696,,,0,0,6950,2090,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,128686,2080,Selenium Test Fixer,aurimrv.org
+gen-1768032915-pJJsbaqCBiKHNVFfhg1X,2026-01-10 08:15:15.111,0.009027,,,0,0,8614,2791,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,169040,1570,Selenium Test Fixer,aurimrv.org
+gen-1768032882-xjPyY4JDMWQMzKR6ePs5,2026-01-10 08:14:42.567,0.01255,,,0,0,6586,1988,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,30896,872,Selenium Test Fixer,aurimrv.org
+gen-1768032808-ADeMStGh3izzsdb0u4mx,2026-01-10 08:13:28.521,0.007982,,,0,0,6338,1672,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,72444,1187,Selenium Test Fixer,aurimrv.org
+gen-1768032696-xdhlNTiwnqaFhABnmPF5,2026-01-10 08:11:35.990,0.006055,,,0,0,6093,1809,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,110865,1684,Selenium Test Fixer,aurimrv.org
+gen-1768032601-WgUkjGAgZSt0b6LXSsst,2026-01-10 08:10:01.685,0.006902,,,0,0,6275,1255,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,92602,4775,Selenium Test Fixer,aurimrv.org
+gen-1768032529-CfIoPNOenXFrMBfQkCqe,2026-01-10 08:08:49.515,0.00433,,,0,0,5396,1086,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,70568,2692,Selenium Test Fixer,aurimrv.org
+gen-1768032440-J2KtJHInKCnXQulYFZoy,2026-01-10 08:07:20.545,0.017158,,,0,0,11599,3450,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,87348,1151,Selenium Test Fixer,aurimrv.org
+gen-1768032304-hsGLwXXmsLIwuCtb2u1G,2026-01-10 08:05:04.333,0.009274,,,0,0,7062,2015,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,134320,4757,Selenium Test Fixer,aurimrv.org
+gen-1768032073-9hXyAnrDaBRjWXFDGYCy,2026-01-10 08:01:13.686,0.009843,,,0,0,7549,3412,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,229178,2194,Selenium Test Fixer,aurimrv.org
+gen-1768032067-gmh6WUoXOfEVr6WUiF1m,2026-01-10 08:01:07.870,0.011789,,,0,0,7103,1562,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3507,753,Selenium Test Fixer,aurimrv.org
+gen-1768032023-GOk7yUo8dHItkJKBnmN6,2026-01-10 08:00:23.146,0.009843,,,0,0,8747,1566,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,43065,831,Selenium Test Fixer,aurimrv.org
+gen-1768031965-mbOM2TQ4M0wZpf59VeEQ,2026-01-10 07:59:25.348,0.009918,,,0,0,8546,3250,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,56032,753,Selenium Test Fixer,aurimrv.org
+gen-1768031934-IxvmgGX4QWkkrsIAyQ4l,2026-01-10 07:58:54.004,0.00804,,,0,0,8532,2314,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,29491,977,Selenium Test Fixer,aurimrv.org
+gen-1768031901-l0fPciB7XnMtUneM5gOj,2026-01-10 07:58:21.564,0.011283,,,0,0,5661,1874,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,29549,1027,Selenium Test Fixer,aurimrv.org
+gen-1768031853-fsU76jYgSjHztnIlUQ5s,2026-01-10 07:57:33.649,0.010719,,,0,0,6488,2305,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,46382,708,Selenium Test Fixer,aurimrv.org
+gen-1768031843-zeVqyxWkhl2ZwLDiX6Cl,2026-01-10 07:57:23.724,0.007321,,,0,0,6652,1332,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8180,1041,Selenium Test Fixer,aurimrv.org
+gen-1768031813-KFpqPtlZXnHtbD9pe3qp,2026-01-10 07:56:53.807,0.007715,,,0,0,4437,1705,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,28098,620,Selenium Test Fixer,aurimrv.org
+gen-1768031709-5BmqPd8Ql47iYnE8zNrR,2026-01-10 07:55:09.383,0.01262,,,0,0,7490,4812,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,102795,481,Selenium Test Fixer,aurimrv.org
+gen-1768031604-n3IgcxcJX7q0OXuf7O2y,2026-01-10 07:53:24.271,0.005875,,,0,0,6048,1728,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,103595,1973,Selenium Test Fixer,aurimrv.org
+gen-1768031586-8Vp3AvnNvHQsdzhK7H8x,2026-01-10 07:53:06.103,0.010847,,,0,0,7688,2494,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,16340,1056,Selenium Test Fixer,aurimrv.org
+gen-1768031437-Qn2HrFg4mZtMepSGxhjf,2026-01-10 07:50:37.107,0.012715,,,0,0,10943,2460,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,147271,6416,Selenium Test Fixer,aurimrv.org
+gen-1768031399-5CxPKvvsYSO9THUG0QZ2,2026-01-10 07:49:59.689,0.00746,,,0,0,5030,2724,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,35760,477,Selenium Test Fixer,aurimrv.org
+gen-1768031318-AT7FPGI16NEjjNy3bALH,2026-01-10 07:48:38.679,0.008382,,,0,0,5366,2065,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,79160,1127,Selenium Test Fixer,aurimrv.org
+gen-1768031091-cUNNGi09NYLPTH4wYC5G,2026-01-10 07:44:51.296,0.013084,,,0,0,7012,3551,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,225677,4584,Selenium Test Fixer,aurimrv.org
+gen-1768030838-VE3X4bFJbluVH3uxHFxr,2026-01-10 07:40:38.042,0.013526,,,0,0,6540,3841,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,250857,3880,Selenium Test Fixer,aurimrv.org
+gen-1768030818-yqJl9sd5WXIuv1oCtmez,2026-01-10 07:40:18.622,0.012557,,,0,0,11017,2379,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,17666,1051,Selenium Test Fixer,aurimrv.org
+gen-1768030644-WrWRHX5zJMknL7br0wWo,2026-01-10 07:37:24.211,0.014396,,,0,0,11848,2915,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,172655,4660,Selenium Test Fixer,aurimrv.org
+gen-1768030508-sGDwfTKwc6Iz9CWP6qdR,2026-01-10 07:35:08.518,0.00753,,,0,0,7876,2190,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,133818,3386,Selenium Test Fixer,aurimrv.org
+gen-1768030324-8gLLFjhYlHgkHTkDYDNr,2026-01-10 07:32:04.204,0.009385,,,0,0,4309,2720,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,182758,4796,Selenium Test Fixer,aurimrv.org
+gen-1768030296-4oF9dkOj7Qb4O5G1EC2B,2026-01-10 07:31:36.440,0.005312,,,0,0,4540,1748,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,26173,485,Selenium Test Fixer,aurimrv.org
+gen-1768030291-MSS60iM7dqQUBBKMt4hg,2026-01-10 07:31:31.404,0.003467,,,0,0,4141,393,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,3482,1099,Selenium Test Fixer,aurimrv.org
+gen-1768030253-Pe0kicHVXXxKuPNhnd19,2026-01-10 07:30:52.900,0.009093,,,0,0,6848,1690,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,36573,875,Selenium Test Fixer,aurimrv.org
+gen-1768030034-vULRyMd1cWTOW49gVYvN,2026-01-10 07:27:14.594,0.00958,,,0,0,7090,3372,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,216829,1862,Selenium Test Fixer,aurimrv.org
+gen-1768030007-2LuLd9OjmEmZpM34MQyD,2026-01-10 07:26:47.681,0.022219,,,0,0,6027,1911,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,25145,3664,Selenium Test Fixer,aurimrv.org
+gen-1768029853-c9SnBK4VTYtPwevG4Ns3,2026-01-10 07:24:13.127,0.009807,,,0,0,7334,2163,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,152835,5166,Selenium Test Fixer,aurimrv.org
+gen-1768029648-Ff3Im1wX2uEqyEuUa7ka,2026-01-10 07:20:48.663,0.013732,,,0,0,10363,3006,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,202798,5129,Selenium Test Fixer,aurimrv.org
+gen-1768029398-vEsgUghckZ7seIdZTKd1,2026-01-10 07:16:38.298,0.012774,,,0,0,11925,4002,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,248819,2595,Selenium Test Fixer,aurimrv.org
+gen-1768029336-uWiZR3alSaW1Ym4FCpm8,2026-01-10 07:15:36.713,0.003178,,,0,0,3090,971,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,59789,1760,Selenium Test Fixer,aurimrv.org
+gen-1768029325-nIqyekdEoor6uly99b9h,2026-01-10 07:15:25.254,0.004754,,,0,0,2849,635,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,9722,812,Selenium Test Fixer,aurimrv.org
+gen-1768029131-FjqfIVpedEaenwn8PE9w,2026-01-10 07:12:11.405,0.009679,,,0,0,8403,3159,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,191948,2029,Selenium Test Fixer,aurimrv.org
+gen-1768029040-tEndqFtnnIs2QMU2zsmK,2026-01-10 07:10:40.845,0.011025,,,0,0,6338,4245,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,88857,769,Selenium Test Fixer,aurimrv.org
+gen-1768028962-c6qv3SySl0dT1taS4rW8,2026-01-10 07:09:22.851,0.00403,,,0,0,3860,1243,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,76394,1702,Selenium Test Fixer,aurimrv.org
+gen-1768028891-VUHjCvcq13pVpEUBKBPy,2026-01-10 07:08:11.474,0.00957,,,0,0,9413,1569,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,69764,1737,Selenium Test Fixer,aurimrv.org
+gen-1768028865-12EtKO8MrZPKcG7WA18G,2026-01-10 07:07:45.773,0.012759,,,0,0,5720,3731,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,24050,842,Selenium Test Fixer,aurimrv.org
+gen-1768028740-p7kl2MAqAloijCEC1avb,2026-01-10 07:05:40.857,0.006555,,,0,0,6839,1910,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,123280,2183,Selenium Test Fixer,aurimrv.org
+gen-1768028543-bWMsJqm9ITX7NdcjDKVA,2026-01-10 07:02:23.351,0.011854,,,0,0,13811,3165,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,195959,2428,Selenium Test Fixer,aurimrv.org
+gen-1768028526-wsdsOAkVCd52lh3AFLXY,2026-01-10 07:02:06.829,0.009939,,,0,0,6720,2363,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14696,476,Selenium Test Fixer,aurimrv.org
+gen-1768028486-FcbAp5LDXvphRZwofTSQ,2026-01-10 07:01:25.975,0.013227,,,0,0,5655,2524,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,39103,1179,Selenium Test Fixer,aurimrv.org
+gen-1768028358-3NX4NXPOIhEW0rZPoPMW,2026-01-10 06:59:18.284,0.006027,,,0,0,2513,1808,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,125975,2432,Selenium Test Fixer,aurimrv.org
+gen-1768028166-eNflkfwIh5LDgIBFWCkz,2026-01-10 06:56:06.786,0.011614,,,0,0,7987,2729,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,188980,5942,Selenium Test Fixer,aurimrv.org
+gen-1768028133-PJJ5RQbZDHRuhYD7MhbQ,2026-01-10 06:55:33.577,0.005978,,,0,0,6186,1752,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,31351,1729,Selenium Test Fixer,aurimrv.org
+gen-1768027870-J1kpcuOIjqejUvnXcP6e,2026-01-10 06:51:10.722,0.016133,,,0,0,19853,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,261263,2868,Selenium Test Fixer,aurimrv.org
+gen-1768027545-O3uw7uMC3D03r9yVgtjS,2026-01-10 06:45:45.473,0.02231,,,0,0,13539,5675,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,323475,4574,Selenium Test Fixer,aurimrv.org
+gen-1768027445-FGF1gwXDZxRRWImbgAXV,2026-01-10 06:44:05.092,0.006923,,,0,0,9263,1609,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,98835,2295,Selenium Test Fixer,aurimrv.org
+gen-1768027381-uoCMvozarXlFpup0BbAz,2026-01-10 06:43:01.507,0.004183,,,0,0,5548,982,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,61956,1798,Selenium Test Fixer,aurimrv.org
+gen-1768027300-eP3oZYXCejRxeVcHPi5j,2026-01-10 06:41:40.283,0.008163,,,0,0,5868,2908,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,79509,984,Selenium Test Fixer,aurimrv.org
+gen-1768027208-0NmkeZAlS4FzQKdSFbVy,2026-01-10 06:40:08.558,0.012544,,,0,0,8920,4488,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,90139,1075,Selenium Test Fixer,aurimrv.org
+gen-1768027203-as9iBc23AGvDc3ShCxUQ,2026-01-10 06:40:03.362,0.01183,,,0,0,8383,1149,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3058,882,Selenium Test Fixer,aurimrv.org
+gen-1768027080-BNFuhmIk1WC2KOJjoPXK,2026-01-10 06:38:00.332,0.011954,,,0,0,7599,2958,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,121418,1342,Selenium Test Fixer,aurimrv.org
+gen-1768026973-eb1jDjMCBEEzBS3JH3eI,2026-01-10 06:36:13.748,0.007748,,,0,0,6581,1520,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,104840,5763,Selenium Test Fixer,aurimrv.org
+gen-1768026905-FwKlxAro3OwFOMpMbxAD,2026-01-10 06:35:05.118,0.00627,,,0,0,6380,977,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,66883,4243,Selenium Test Fixer,aurimrv.org
+gen-1768026769-7qaVIVvqakKs9YRt0NQw,2026-01-10 06:32:49.328,0.020677,,,0,0,15961,3766,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,134152,1765,Selenium Test Fixer,aurimrv.org
+gen-1768026624-o8wSfJ9YkxLVOYpyx6dz,2026-01-10 06:30:24.568,0.008431,,,0,0,9463,2323,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,143254,1987,Selenium Test Fixer,aurimrv.org
+gen-1768026613-idqTfLoIDxl1I0vg11pq,2026-01-10 06:30:13.370,0.00479,,,0,0,6436,1108,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,9084,453,Selenium Test Fixer,aurimrv.org
+gen-1768026560-YAhIPymdRaURcvmYArPQ,2026-01-10 06:29:20.220,0.010548,,,0,0,8726,3529,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,51363,1189,Selenium Test Fixer,aurimrv.org
+gen-1768026496-OLKmw5q5yeiHteJtbA3m,2026-01-10 06:28:16.159,0.013226,,,0,0,10133,2424,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,62350,1362,Selenium Test Fixer,aurimrv.org
+gen-1768026480-uLQlS9jl6Rqgyn41tWfr,2026-01-10 06:28:00.132,0.008581,,,0,0,3560,2578,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,14172,799,Selenium Test Fixer,aurimrv.org
+gen-1768026286-SZUiwJR4bsyYHfSIx02B,2026-01-10 06:24:46.453,0.01473,,,0,0,11101,3228,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,191956,4998,Selenium Test Fixer,aurimrv.org
+gen-1768026277-rymNpXdbKXWzzIpPVY8B,2026-01-10 06:24:37.301,0.006433,,,0,0,5602,1229,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,7280,888,Selenium Test Fixer,aurimrv.org
+gen-1768026156-mg2Kol9FuJGVXlgva4qT,2026-01-10 06:22:36.569,0.009081,,,0,0,6285,2124,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,119085,3965,Selenium Test Fixer,aurimrv.org
+gen-1768026107-3H782PakbKcepUxFmAHX,2026-01-10 06:21:47.836,0.004899,,,0,0,3266,1176,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,47099,931,Selenium Test Fixer,aurimrv.org
+gen-1768026078-YIBJE4jqEXEJaFfuGazQ,2026-01-10 06:21:18.024,0.008588,,,0,0,7873,1319,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,28146,827,Selenium Test Fixer,aurimrv.org
+gen-1768026052-4rRzWpcqSkuI6fDJWWjS,2026-01-10 06:20:52.541,0.01057,,,0,0,5863,1569,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,23773,924,Selenium Test Fixer,aurimrv.org
+gen-1768025906-8GR6UkfgdONrHugBCVlQ,2026-01-10 06:18:26.535,0.008451,,,0,0,9549,2316,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,144389,2908,Selenium Test Fixer,aurimrv.org
+gen-1768025866-S8zjtOc722moa49AU7il,2026-01-10 06:17:45.982,0.00974,,,0,0,9502,2970,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,38852,1232,Selenium Test Fixer,aurimrv.org
+gen-1768025785-2pGFHFbO3swSpEPCKlB7,2026-01-10 06:16:25.359,0.009721,,,0,0,10160,1450,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,78883,4497,Selenium Test Fixer,aurimrv.org
+gen-1768025738-vQ3pJlUxpOxqABjTNDV4,2026-01-10 06:15:38.694,0.006911,,,0,0,6323,1247,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,44699,1239,Selenium Test Fixer,aurimrv.org
+gen-1768025546-VyljpmjIeCf4tpXZwYvu,2026-01-10 06:12:26.969,0.00805,,,0,0,5152,2995,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,190230,1550,Selenium Test Fixer,aurimrv.org
+gen-1768025539-YMPOAEJByPznMU3QGAkP,2026-01-10 06:12:19.589,0.004815,,,0,0,3747,1027,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,5509,1012,Selenium Test Fixer,aurimrv.org
+gen-1768025436-rBHUetrqRN6MhTpj957H,2026-01-10 06:10:36.313,0.010742,,,0,0,10245,1838,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,101566,6532,Selenium Test Fixer,aurimrv.org
+gen-1768025302-memBgfab1pbdcuFcVE8H,2026-01-10 06:08:22.022,0.006821,,,0,0,7434,1924,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,132490,1880,Selenium Test Fixer,aurimrv.org
+gen-1768025181-cBI0AKRkw6iaAwYpR2mt,2026-01-10 06:06:21.090,0.007397,,,0,0,10083,1682,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,119253,2320,Selenium Test Fixer,aurimrv.org
+gen-1768025066-d4h8HUqNAzuDhdRPFh8h,2026-01-10 06:04:26.339,0.010865,,,0,0,9667,2026,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,113006,4406,Selenium Test Fixer,aurimrv.org
+gen-1768024833-YkzvcXw9iKuLpPwAwUcb,2026-01-10 06:00:33.756,0.008191,,,0,0,3794,3337,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,230893,2078,Selenium Test Fixer,aurimrv.org
+gen-1768024815-zkOFr61Zvv50XBvgWQfH,2026-01-10 06:00:15.821,0.011102,,,0,0,8059,2507,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,16255,1120,Selenium Test Fixer,aurimrv.org
+gen-1768024764-k8wWwzukR67JzXhtZ20z,2026-01-10 05:59:24.018,0.00933,,,0,0,9320,2801,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,50121,963,Selenium Test Fixer,aurimrv.org
+gen-1768024672-RsmulwwNWhOWgpCeMvE1,2026-01-10 05:57:52.332,0.008204,,,0,0,7690,1436,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,90061,6020,Selenium Test Fixer,aurimrv.org
+gen-1768024663-N7ln8va29LCEVdbRFpOu,2026-01-10 05:57:43.760,0.012739,,,0,0,3733,3002,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,6627,494,Selenium Test Fixer,aurimrv.org
+gen-1768024464-sXjkEgQtFgWohJgveeII,2026-01-10 05:54:24.792,0.010612,,,0,0,7592,2423,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,,,196524,1497,Selenium Test Fixer,aurimrv.org
+gen-1768024446-YpAc2P8KTxDqtt116I7m,2026-01-10 05:54:06.264,0.006348,,,0,0,2982,1122,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,17023,810,Selenium Test Fixer,aurimrv.org
+gen-1768024408-CZtAoNPf4TpFnEIzsJ1m,2026-01-10 05:53:28.266,0.007346,,,0,0,9401,1793,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,36298,785,Selenium Test Fixer,aurimrv.org
+gen-1768024308-Kg7HKTjXFf6fU2lZl8ed,2026-01-10 05:51:48.163,0.015222,,,0,0,15311,4549,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,98401,1691,Selenium Test Fixer,aurimrv.org
+gen-1768024079-9qtPcIIURvHVfmoNHl71,2026-01-10 05:47:59.503,0.015854,,,0,0,11565,3566,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,226909,7963,Selenium Test Fixer,aurimrv.org
+gen-1768023967-y4DavJuZzcVkJpdjRmrl,2026-01-10 05:46:07.838,0.004986,,,0,0,3707,1752,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,110022,2260,Selenium Test Fixer,aurimrv.org
+gen-1768023939-3MzimYlefSfaBTirrtqm,2026-01-10 05:45:39.258,0.004793,,,0,0,4239,1549,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,26771,685,Selenium Test Fixer,aurimrv.org
+gen-1768023819-9TotuOouvbN03coj7wjp,2026-01-10 05:43:39.150,0.006762,,,0,0,7752,1831,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118553,2368,Selenium Test Fixer,aurimrv.org
+gen-1768023691-eB0tOyDAhfVYr9oMjKYm,2026-01-10 05:41:31.154,0.004634,,,0,0,2066,1358,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,126505,5305,Selenium Test Fixer,aurimrv.org
+gen-1768023627-SLvRHmySrFUeu2ZJcxyj,2026-01-10 05:40:27.353,0.011843,,,0,0,6877,2604,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,62215,1535,Selenium Test Fixer,aurimrv.org
+gen-1768023541-VDVPhLpo8IItNl8xejUN,2026-01-10 05:39:01.392,0.013976,,,0,0,12072,4574,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,84456,767,Selenium Test Fixer,aurimrv.org
+gen-1768023491-WkWadhVYFZ8SoVZbemiE,2026-01-10 05:38:11.105,0.01025,,,0,0,7106,2026,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,48415,768,Selenium Test Fixer,aurimrv.org
+gen-1768023452-5WqAEgEr6jPHAvleuSJE,2026-01-10 05:37:32.670,0.007134,,,0,0,4156,1566,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,36800,654,Selenium Test Fixer,aurimrv.org
+gen-1768023293-C4GJqreeliOGGWRSPjiU,2026-01-10 05:34:53.061,0.009135,,,0,0,11183,2331,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,157932,2273,Selenium Test Fixer,aurimrv.org
+gen-1768023139-ogBxPzSYVyjoKjMxO4l4,2026-01-10 05:32:19.092,0.007932,,,0,0,8362,2294,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,152336,2463,Selenium Test Fixer,aurimrv.org
+gen-1768023102-9pi9F3L0SrNNWIETndnl,2026-01-10 05:31:42.497,0.008638,,,0,0,7409,1427,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,34929,1254,Selenium Test Fixer,aurimrv.org
+gen-1768023072-KbfTWaKzf5g8FRsLfWAC,2026-01-10 05:31:12.281,0.032352,,,0,0,11597,2377,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,28310,4900,Selenium Test Fixer,aurimrv.org
+gen-1768022955-UmBiTQWaXsSGGcx3qwc5,2026-01-10 05:29:14.933,0.012474,,,0,0,11822,3873,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,115703,1156,Selenium Test Fixer,aurimrv.org
+gen-1768022878-ciuLOMHNlZvNmR9icXZc,2026-01-10 05:27:58.094,0.007362,,,0,0,6512,1382,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,75035,4151,Selenium Test Fixer,aurimrv.org
+gen-1768022780-igkX2tkk2ZAXDlf8UUk9,2026-01-10 05:26:20.321,0.005153,,,0,0,3768,1157,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,96049,3619,Selenium Test Fixer,aurimrv.org
+gen-1768022682-RshG3aN43l1hh6CCqtZ8,2026-01-10 05:24:42.405,0.009167,,,0,0,4170,2666,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,96249,975,Selenium Test Fixer,aurimrv.org
+gen-1768022597-F68uPKW2ZMgJdJWkAsXk,2026-01-10 05:23:17.542,0.013075,,,0,0,11292,2520,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,83114,1767,Selenium Test Fixer,aurimrv.org
+gen-1768022552-ufjllnosfJ9fmiQNSvv7,2026-01-10 05:22:32.368,0.007892,,,0,0,6677,1322,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,43508,1054,Selenium Test Fixer,aurimrv.org
+gen-1768022479-HMHu4e8O09v5xy1rNShk,2026-01-10 05:21:18.935,0.008588,,,0,0,6006,1994,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,71822,1170,Selenium Test Fixer,aurimrv.org
+gen-1768022386-LgETuabEeCqUlFtqUHAV,2026-01-10 05:19:46.151,0.00493,,,0,0,5291,1407,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,91217,1895,Selenium Test Fixer,aurimrv.org
+gen-1768022241-L4yEYJKt8RS1Jv6nVfVB,2026-01-10 05:17:21.697,0.009566,,,0,0,4840,3815,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,142738,2152,Selenium Test Fixer,aurimrv.org
+gen-1768022179-uDW1EHXXdpp0SMYhVTY1,2026-01-10 05:16:19.509,0.011672,,,0,0,8715,2184,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,60506,1234,Selenium Test Fixer,aurimrv.org
+gen-1768022083-A2eYEKb0noSqvhXex580,2026-01-10 05:14:43.048,0.004473,,,0,0,3229,1591,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,94743,1506,Selenium Test Fixer,aurimrv.org
+gen-1768021947-GgbfJc0MyjPlWXXoYC0R,2026-01-10 05:12:27.308,0.009201,,,0,0,5715,2309,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,134150,4575,Selenium Test Fixer,aurimrv.org
+gen-1768021824-KuhP7mG9IZldzpDqC7eK,2026-01-10 05:10:24.792,0.007051,,,0,0,7988,1928,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,120631,2790,Selenium Test Fixer,aurimrv.org
+gen-1768021748-AHFqpHukTKaGbuscer7Z,2026-01-10 05:09:08.719,0.005119,,,0,0,7029,1154,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,74468,2184,Selenium Test Fixer,aurimrv.org
+gen-1768021650-QH7kzBt7xhVAf0w5LWjI,2026-01-10 05:07:30.828,0.007876,,,0,0,4226,3093,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,96270,483,Selenium Test Fixer,aurimrv.org
+gen-1768021622-szvYb5amQWHDlGV6hOmC,2026-01-10 05:07:02.250,0.013679,,,0,0,9023,1552,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,26893,1313,Selenium Test Fixer,aurimrv.org
+gen-1768021542-4l3V5ndX9RvyZhsfmPN0,2026-01-10 05:05:42.269,0.004814,,,0,0,5876,1232,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,78288,2295,Selenium Test Fixer,aurimrv.org
+gen-1768021484-N3knke4tPhrJPVOyYbG2,2026-01-10 05:04:44.622,0.008493,,,0,0,8669,2513,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,55963,1023,Selenium Test Fixer,aurimrv.org
+gen-1768021349-zhQDIyAabqdwjPnqCCZc,2026-01-10 05:02:29.079,0.020722,,,0,0,10371,4884,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,133940,1002,Selenium Test Fixer,aurimrv.org
+gen-1768021295-siEQdL6hO0SqnoXOFDP3,2026-01-10 05:01:35.493,0.006004,,,0,0,3695,2263,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,51847,3277,Selenium Test Fixer,aurimrv.org
+gen-1768021180-7A0YpIy42iRdzgjOJ9lr,2026-01-10 04:59:40.401,0.006042,,,0,0,4958,1227,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,113177,3677,Selenium Test Fixer,aurimrv.org
+gen-1768021020-vg8txgX4NzLDGV97tP2n,2026-01-10 04:57:00.668,0.007083,,,0,0,6069,2328,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,158107,2073,Selenium Test Fixer,aurimrv.org
+gen-1768020950-riRjJAFJwInyJWxW9wPL,2026-01-10 04:55:50.438,0.003906,,,0,0,4205,1112,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,68597,2099,Selenium Test Fixer,aurimrv.org
+gen-1768020859-PDXCliLTda8lye33httc,2026-01-10 04:54:18.951,0.008412,,,0,0,7887,1472,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,89572,9700,Selenium Test Fixer,aurimrv.org
+gen-1768020751-81AwOhAA0LRebNsZQLuT,2026-01-10 04:52:31.082,0.01991,,,0,0,18625,2984,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,106358,2055,Selenium Test Fixer,aurimrv.org
+gen-1768020730-KcVSidmh5LUK8ZhjaIXJ,2026-01-10 04:52:10.744,0.019056,,,0,0,4293,1765,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,18504,3018,Selenium Test Fixer,aurimrv.org
+gen-1768020630-WBWT6oo1HUDNHgj5jwkf,2026-01-10 04:50:30.208,0.011103,,,0,0,8443,3863,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,98749,805,Selenium Test Fixer,aurimrv.org
+gen-1768020535-C3acZYqm4GqN7usxC7MB,2026-01-10 04:48:55.770,0.004593,,,0,0,3973,1502,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,92794,1388,Selenium Test Fixer,aurimrv.org
+gen-1768020334-ebOYEdvpkdM9ZEUwOVqV,2026-01-10 04:45:34.485,0.01042,,,0,0,9561,3298,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,199781,2645,Selenium Test Fixer,aurimrv.org
+gen-1768020263-cmMsMNpmjP6TNSgjBVaQ,2026-01-10 04:44:23.079,0.008661,,,0,0,5658,3199,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,69801,851,Selenium Test Fixer,aurimrv.org
+gen-1768020068-IymdMgxkl05x41Ur8jDq,2026-01-10 04:41:08.720,0.009064,,,0,0,6441,3244,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,192605,2272,Selenium Test Fixer,aurimrv.org
+gen-1768020010-r0JBI1IYCY1iiCPdv3Vy,2026-01-10 04:40:10.798,0.009526,,,0,0,7725,3218,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,56295,990,Selenium Test Fixer,aurimrv.org
+gen-1768019970-zcI9fhXXChtHs4c1ebUX,2026-01-10 04:39:30.266,0.016061,,,0,0,8576,2495,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,38874,1284,Selenium Test Fixer,aurimrv.org
+gen-1768019921-twqQe1c0QDQ4bkNtUtmx,2026-01-10 04:38:41.373,0.006562,,,0,0,5137,1392,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,46502,1069,Selenium Test Fixer,aurimrv.org
+gen-1768019849-4A4OHPc2UprMPCBFwgDp,2026-01-10 04:37:29.323,0.013837,,,0,0,14304,2102,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,70570,6538,Selenium Test Fixer,aurimrv.org
+gen-1768019795-x6i40NM2DVoVd1IWlUi8,2026-01-10 04:36:35.006,0.006707,,,0,0,6969,1960,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,52624,1110,Selenium Test Fixer,aurimrv.org
+gen-1768019646-cidGwc2GilUexFeowMnB,2026-01-10 04:34:06.524,0.010044,,,0,0,6454,2469,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,146624,4267,Selenium Test Fixer,aurimrv.org
+gen-1768019589-vNNg2wcnLGfvXBiboZGc,2026-01-10 04:33:09.040,0.022906,,,0,0,12409,3499,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,55807,1268,Selenium Test Fixer,aurimrv.org
+gen-1768019395-nzXB4euxxTyjLgbtbRNn,2026-01-10 04:29:55.852,0.009688,,,0,0,8726,3099,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,191501,2238,Selenium Test Fixer,aurimrv.org
+gen-1768019356-0SxyMqx0kJWb31GzpgRD,2026-01-10 04:29:15.908,0.008796,,,0,0,7440,1474,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,38259,1159,Selenium Test Fixer,aurimrv.org
+gen-1768019300-k3f4ZyyALmySsTlFfsb5,2026-01-10 04:28:20.213,0.006191,,,0,0,5194,2057,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,54126,891,Selenium Test Fixer,aurimrv.org
+gen-1768019229-1RGtuMKvD6sbK8GOe3cX,2026-01-10 04:27:09.851,0.008454,,,0,0,5449,2074,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,68786,1107,Selenium Test Fixer,aurimrv.org
+gen-1768019164-aigQhmAgzzj7QSj5i53v,2026-01-10 04:26:04.219,0.005575,,,0,0,2803,2227,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,64050,507,Selenium Test Fixer,aurimrv.org
+gen-1768019059-pBPO0X5rbMw5izTTPPZs,2026-01-10 04:24:19.666,0.006784,,,0,0,4172,2558,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,103055,1114,Selenium Test Fixer,aurimrv.org
+gen-1768018991-poMburdWOxNAokwf0pHH,2026-01-10 04:23:11.294,0.009559,,,0,0,7766,1960,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,66729,1481,Selenium Test Fixer,aurimrv.org
+gen-1768018930-TwTndvYFHdZJ7D0ZP6Kz,2026-01-10 04:22:10.738,0.00616,,,0,0,3226,1690,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,57438,1361,Selenium Test Fixer,aurimrv.org
+gen-1768018750-lNYgkItocm5a6ydWq3tv,2026-01-10 04:19:10.258,0.012944,,,0,0,12686,3935,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,178946,751,Selenium Test Fixer,aurimrv.org
+gen-1768018719-zgGRr76llIZ0BvO1kqqA,2026-01-10 04:18:39.034,0.006396,,,0,0,4942,1164,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,29536,1157,Selenium Test Fixer,aurimrv.org
+gen-1768018639-aTkDK3NaICHjGFGMpAVP,2026-01-10 04:17:19.347,0.01182,,,0,0,9686,3973,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,77898,766,Selenium Test Fixer,aurimrv.org
+gen-1768018599-n3pgfrxNJxwcIDDkF4q1,2026-01-10 04:16:39.209,0.007285,,,0,0,9318,1779,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,38456,1512,Selenium Test Fixer,aurimrv.org
+gen-1768018569-63fVZCpmXSGY4dzYjy6K,2026-01-10 04:16:09.362,0.004647,,,0,0,2989,1726,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,28287,940,Selenium Test Fixer,aurimrv.org
+gen-1768018519-gKKmdspuq0ET6v0TDifE,2026-01-10 04:15:19.300,0.008403,,,0,0,7244,2753,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,47863,482,Selenium Test Fixer,aurimrv.org
+gen-1768018399-nOMXrQ1y4BgKv4k26ZPb,2026-01-10 04:13:19.807,0.00696,,,0,0,7797,1921,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,117911,2564,Selenium Test Fixer,aurimrv.org
+gen-1768018231-mq5YoPlROEZwe2oLI9ro,2026-01-10 04:10:31.037,0.012249,,,0,0,6495,3341,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,167042,3796,Selenium Test Fixer,aurimrv.org
+gen-1768018181-YQpTnrrjqyZ4pgcyi602,2026-01-10 04:09:41.212,0.011599,,,0,0,10245,1858,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,48152,1567,Selenium Test Fixer,aurimrv.org
+gen-1768018115-zuZAHXmmD8wLQ0oXLTe5,2026-01-10 04:08:35.729,0.008979,,,0,0,4579,3574,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,63973,689,Selenium Test Fixer,aurimrv.org
+gen-1768018097-hlzrXLWIxQugjS7hSYnP,2026-01-10 04:08:17.401,0.014591,,,0,0,3909,1262,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,16533,2690,Selenium Test Fixer,aurimrv.org
+gen-1768017977-fASitgBhY1UUFEH6PPmD,2026-01-10 04:06:17.639,0.006223,,,0,0,6939,1724,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,118079,3354,Selenium Test Fixer,aurimrv.org
+gen-1768017803-h4rraVGI7I20pXiSQZ4V,2026-01-10 04:03:23.042,0.018334,,,0,0,12344,3696,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,172984,1520,Selenium Test Fixer,aurimrv.org
+gen-1768017729-3W1oqqcMzlKulHUXJ8i4,2026-01-10 04:02:09.171,0.007974,,,0,0,5674,1828,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,72246,3577,Selenium Test Fixer,aurimrv.org
+gen-1768017645-kIsiTvzAxjBmzFIdGE5f,2026-01-10 04:00:45.449,0.012584,,,0,0,10524,2508,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,82072,1841,Selenium Test Fixer,aurimrv.org
+gen-1768017555-1xUDQDWriJWtO1NIpziX,2026-01-10 03:59:15.710,0.007313,,,0,0,4626,1815,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,88025,3578,Selenium Test Fixer,aurimrv.org
+gen-1768017484-Rvp1fXu6XbnE3eB0ZkDP,2026-01-10 03:58:04.267,0.013187,,,0,0,10098,2418,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,69681,1456,Selenium Test Fixer,aurimrv.org
+gen-1768017303-RElywje1cZoOgpCDR7oj,2026-01-10 03:55:03.081,0.007832,,,0,0,6645,2587,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,179519,2314,Selenium Test Fixer,aurimrv.org
+gen-1768017136-HvNoiLlYavasvRkcBGc4,2026-01-10 03:52:16.721,0.009475,,,0,0,10029,2732,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,164036,2067,Selenium Test Fixer,aurimrv.org
+gen-1768017125-YcJuyB344aXEqG8zWTfP,2026-01-10 03:52:05.722,0.005757,,,0,0,3350,1499,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,9230,1094,Selenium Test Fixer,aurimrv.org
+gen-1768017047-LrXaA6VrBemZUq6XSx3D,2026-01-10 03:50:47.686,0.008845,,,0,0,7758,2871,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,76407,787,Selenium Test Fixer,aurimrv.org
+gen-1768017006-lHlCxl4n25GIxF1CYtbO,2026-01-10 03:50:06.115,0.005705,,,0,0,3934,1338,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,39923,970,Selenium Test Fixer,aurimrv.org
+gen-1768016935-JvjjMXvjmqBlVrYrx8pD,2026-01-10 03:48:55.112,0.013631,,,0,0,14998,3816,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,69215,1671,Selenium Test Fixer,aurimrv.org
+gen-1768016867-0ciE7xTCFHASj1RtQKnN,2026-01-10 03:47:47.680,0.00701,,,0,0,5921,1383,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,65808,3759,Selenium Test Fixer,aurimrv.org
+gen-1768016816-07pbkLXcpCho2LxQDsX3,2026-01-10 03:46:56.820,0.021259,,,0,0,12505,2918,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,49135,1348,Selenium Test Fixer,aurimrv.org
+gen-1768016684-kNOwnyMUWh0vGOhqy5Gz,2026-01-10 03:44:44.612,0.015287,,,0,0,14279,2688,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,130423,4663,Selenium Test Fixer,aurimrv.org
+gen-1768016634-w9iZok8Hf03heSCYFvmr,2026-01-10 03:43:54.195,0.010317,,,0,0,4316,2599,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,48794,1006,Selenium Test Fixer,aurimrv.org
+gen-1768016523-2jvmkxtNwFY3derHRkZi,2026-01-10 03:42:03.201,0.012172,,,0,0,7726,4541,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,109293,1173,Selenium Test Fixer,aurimrv.org
+gen-1768016272-gwfzukqljVSc5cNFW6Sx,2026-01-10 03:37:52.856,0.012537,,,0,0,12879,3693,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,248652,2189,Selenium Test Fixer,aurimrv.org
+gen-1768016239-Px7Tnj8VUrOUCNcPcCRw,2026-01-10 03:37:19.129,0.005741,,,0,0,7409,1389,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,32099,812,Selenium Test Fixer,aurimrv.org
+gen-1768016105-UzZ67T2gyFWhOydyPnvX,2026-01-10 03:35:04.927,0.009444,,,0,0,4687,2234,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,132551,661,Selenium Test Fixer,aurimrv.org
+gen-1768016038-YY9rjwSWEJxPmKarxTXg,2026-01-10 03:33:57.915,0.007517,,,0,0,5880,1354,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,65302,693,Selenium Test Fixer,aurimrv.org
+gen-1768015955-46jHdyeGVYLhSD9aq1ig,2026-01-10 03:32:34.978,0.006024,,,0,0,8572,1298,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,81355,2949,Selenium Test Fixer,aurimrv.org
+gen-1768015875-V4yVJYA4OWlfnosL1Ya2,2026-01-10 03:31:15.309,0.004936,,,0,0,6021,1264,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,78164,2703,Selenium Test Fixer,aurimrv.org
+gen-1768015811-O4H9J7Vj0A9vUoAaKtam,2026-01-10 03:30:11.500,0.006346,,,0,0,5636,1186,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,62116,3549,Selenium Test Fixer,aurimrv.org
+gen-1768015755-RKm63nJq2iGJSVgl7BRz,2026-01-10 03:29:15.510,0.007929,,,0,0,8478,2269,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,54315,1135,Selenium Test Fixer,aurimrv.org
+gen-1768015517-uYAHRGXDIUoP0heIkz4a,2026-01-10 03:25:17.854,0.008529,,,0,0,7488,2767,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,235923,1131,Selenium Test Fixer,aurimrv.org
+gen-1768015451-agtztwe6sA7ZHFD8Y8w4,2026-01-10 03:24:11.772,0.007469,,,0,0,4583,1888,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,64418,1023,Selenium Test Fixer,aurimrv.org
+gen-1768015376-GR453DUol5I70M0oZyke,2026-01-10 03:22:56.710,0.007231,,,0,0,6603,1308,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,73366,4193,Selenium Test Fixer,aurimrv.org
+gen-1768015186-SpfpCERe9uj91YrfCbSz,2026-01-10 03:19:46.405,0.009711,,,0,0,11213,2613,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,188661,3149,Selenium Test Fixer,aurimrv.org
+gen-1768015084-nZjFKJV7xuBUw3Ndh9g0,2026-01-10 03:18:04.873,0.006939,,,0,0,3707,1886,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,99733,3130,Selenium Test Fixer,aurimrv.org
+gen-1768014963-X9XoFFD1whkrBeHpHmUr,2026-01-10 03:16:03.812,0.012911,,,0,0,7914,4873,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,119261,1242,Selenium Test Fixer,aurimrv.org
+gen-1768014732-1BrQrCOBmXwvYrFiFp5v,2026-01-10 03:12:12.340,0.009558,,,0,0,6135,3552,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,229879,4144,Selenium Test Fixer,aurimrv.org
+gen-1768014661-cu0TbBGiXL43lQG8xgvL,2026-01-10 03:11:01.102,0.010115,,,0,0,6928,3672,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,69641,966,Selenium Test Fixer,aurimrv.org
+gen-1768014588-wkFUwRgeG1gmFgxq7WFa,2026-01-10 03:09:48.601,0.010801,,,0,0,12357,1355,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,70796,7514,Selenium Test Fixer,aurimrv.org
+gen-1768014582-jvRYQRNtWWhzb4kaP7k1,2026-01-10 03:09:42.719,0.010632,,,0,0,5781,1617,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3777,624,Selenium Test Fixer,aurimrv.org
+gen-1768014496-G4w2s4DSQVvEOr6zBf6c,2026-01-10 03:08:16.785,0.014842,,,0,0,9386,3112,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,84239,852,Selenium Test Fixer,aurimrv.org
+gen-1768014397-Fzn6crTrnTjVeIjPTS56,2026-01-10 03:06:37.459,0.00642,,,0,0,8286,1553,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,97713,3970,Selenium Test Fixer,aurimrv.org
+gen-1768014322-wjUdtXdYS1rNt1XPU1XD,2026-01-10 03:05:22.293,0.01114,,,0,0,10009,2054,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,73492,1626,Selenium Test Fixer,aurimrv.org
+gen-1768014223-uV47NZ2qzUvu5CP6pdy4,2026-01-10 03:03:43.269,0.008797,,,0,0,7754,1658,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,97296,4365,Selenium Test Fixer,aurimrv.org
+gen-1768014020-5IfZQW3CGiQWLzpXZV1z,2026-01-10 03:00:20.897,0.011234,,,0,0,14100,2797,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,200841,3317,Selenium Test Fixer,aurimrv.org
+gen-1768013961-xKH5YsBzetFEJAU9wCN8,2026-01-10 02:59:21.640,0.004,,,0,0,2713,949,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,57479,2454,Selenium Test Fixer,aurimrv.org
+gen-1768013775-872i8uUS4md2iKWqvqVj,2026-01-10 02:56:15.475,0.009687,,,0,0,4067,2899,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,184657,3445,Selenium Test Fixer,aurimrv.org
+gen-1768013774-cqDIrr3fSQjt6lGiIMxN,2026-01-10 02:56:14.182,0,,,0,0,12889,0,0,moonshotai/kimi-k2-0905,DeepInfra,standard,true,true,,,,673,205,Selenium Test Fixer,aurimrv.org
+gen-1768013766-1fmv650CC1HyKbEDrumr,2026-01-10 02:56:06.768,0.011097,,,0,0,5523,1858,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,5335,1618,Selenium Test Fixer,aurimrv.org
+gen-1768013716-UhTLE6LRUhKJjbiDsrDt,2026-01-10 02:55:16.512,0.00716,,,0,0,7597,2061,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,48376,946,Selenium Test Fixer,aurimrv.org
+gen-1768013673-AjC53Ado4PpX4teVLj8s,2026-01-10 02:54:33.769,0.00684,,,0,0,2325,1829,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,41091,502,Selenium Test Fixer,aurimrv.org
+gen-1768013469-DsnTVdMtLdVVov3ueS8V,2026-01-10 02:51:09.099,0.008123,,,0,0,3818,3298,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,202249,6162,Selenium Test Fixer,aurimrv.org
+gen-1768013337-a8muhJFwUlbaambiKYpr,2026-01-10 02:48:57.712,0.008194,,,0,0,5637,1925,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,129633,3906,Selenium Test Fixer,aurimrv.org
+gen-1768013301-AGiS8lMaOWGVHHjShazD,2026-01-10 02:48:21.769,0.005893,,,0,0,6769,1593,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,34305,972,Selenium Test Fixer,aurimrv.org
+gen-1768013006-4nWguUoMibjSTTgxWW0N,2026-01-10 02:43:26.657,0.013896,,,0,0,4715,4427,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,293308,3556,Selenium Test Fixer,aurimrv.org
+gen-1768012844-XAZ62MEoyHISiu2qzh13,2026-01-10 02:40:44.880,0.007056,,,0,0,4061,2716,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,160123,1940,Selenium Test Fixer,aurimrv.org
+gen-1768012688-oRaGVl3tjciJ1XlvJck6,2026-01-10 02:38:08.274,0.008029,,,0,0,3582,2352,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,155042,3288,Selenium Test Fixer,aurimrv.org
+gen-1768012582-cWAEim5hHhGRfu6sbUSH,2026-01-10 02:36:22.088,0.007503,,,0,0,5873,1592,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,104577,4715,Selenium Test Fixer,aurimrv.org
+gen-1768012493-Ni7cmfjteEY1NzTJK3C7,2026-01-10 02:34:53.756,0.008004,,,0,0,7107,1496,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,86683,4299,Selenium Test Fixer,aurimrv.org
+gen-1768012315-EfU0iQg4mF5Vodr0nBzu,2026-01-10 02:31:55.686,0.01564,,,0,0,13217,3084,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,176294,7695,Selenium Test Fixer,aurimrv.org
+gen-1768012204-F23DIfp1tpQ7dHtaQKyP,2026-01-10 02:30:04.239,0.008596,,,0,0,7732,1583,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,109676,4186,Selenium Test Fixer,aurimrv.org
+gen-1768012123-DUPWbVsSX0TSxQAEMzaR,2026-01-10 02:28:43.173,0.011861,,,0,0,10458,3839,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,79252,1021,Selenium Test Fixer,aurimrv.org
+gen-1768012060-QhHIXqgI8ZqDoA3PUluM,2026-01-10 02:27:40.256,0.006124,,,0,0,4337,2195,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,61326,851,Selenium Test Fixer,aurimrv.org
+gen-1768011894-USVrhQNUpQiLxpntAOTg,2026-01-10 02:24:54.621,0.010312,,,0,0,12717,2613,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,163966,8355,Selenium Test Fixer,aurimrv.org
+gen-1768011852-pKUu2G04YIiAz4VUfrSd,2026-01-10 02:24:11.979,0.004854,,,0,0,4611,1505,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,40979,669,Selenium Test Fixer,aurimrv.org
+gen-1768011716-8fhcQ0wPQsa3M4goZnwD,2026-01-10 02:21:56.392,0.007838,,,0,0,9132,2093,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,133886,2734,Selenium Test Fixer,aurimrv.org
+gen-1768011639-g4ZItJtM0LENpBccpNJg,2026-01-10 02:20:39.079,0.003897,,,0,0,3499,1249,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,75741,1932,Selenium Test Fixer,aurimrv.org
+gen-1768011520-vAj0OvQJxLFE1GaDnuXJ,2026-01-10 02:18:40.328,0.006452,,,0,0,6462,1934,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,117280,2460,Selenium Test Fixer,aurimrv.org
+gen-1768011486-TF5ov070tsooTRpEvok2,2026-01-10 02:18:06.109,0.004662,,,0,0,3612,998,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,32494,1005,Selenium Test Fixer,aurimrv.org
+gen-1768011443-g9leZCDuUZT4qbc42xSY,2026-01-10 02:17:23.709,0.007912,,,0,0,5465,1568,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,40405,723,Selenium Test Fixer,aurimrv.org
+gen-1768011430-rFtFYajQ9Ib40peqa6c3,2026-01-10 02:17:10.889,0.008913,,,0,0,8360,1559,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11131,1200,Selenium Test Fixer,aurimrv.org
+gen-1768011373-O6W04NNZuUjm2wbDV4p1,2026-01-10 02:16:12.943,0.008754,,,0,0,7601,2857,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,56270,1137,Selenium Test Fixer,aurimrv.org
+gen-1768011293-AWXftdo63hCHZ43ogdMr,2026-01-10 02:14:53.766,0.010334,,,0,0,6604,2549,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,77470,1273,Selenium Test Fixer,aurimrv.org
+gen-1768011242-rgwliRfgh1ZjATPX0sFd,2026-01-10 02:14:01.882,0.007315,,,0,0,6779,2302,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,50287,867,Selenium Test Fixer,aurimrv.org
+gen-1768011130-Yx7mU68nTeE81W2fPyXt,2026-01-10 02:12:10.149,0.00673,,,0,0,4364,1645,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,109988,3759,Selenium Test Fixer,aurimrv.org
+gen-1768011052-yUwO8rKx2SfVfAN5dTuw,2026-01-10 02:10:51.923,0.008949,,,0,0,8289,2817,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,76611,1324,Selenium Test Fixer,aurimrv.org
+gen-1768010902-j55BHRCJCsnMr3rCiMyp,2026-01-10 02:08:22.046,0.007421,,,0,0,6934,2324,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,148361,2734,Selenium Test Fixer,aurimrv.org
+gen-1768010868-pqCFMocetUxHfmDUaaMM,2026-01-10 02:07:48.352,0.008172,,,0,0,8396,2407,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,32061,1015,Selenium Test Fixer,aurimrv.org
+gen-1768010841-8NH2DkdH9YRf2IEd403n,2026-01-10 02:07:21.586,0.011092,,,0,0,6277,1605,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,25180,916,Selenium Test Fixer,aurimrv.org
+gen-1768010735-bbR8aztK65C7HagLRu0E,2026-01-10 02:05:35.946,0.020409,,,0,0,20139,2852,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,104101,2228,Selenium Test Fixer,aurimrv.org
+gen-1768010680-04EvuQWObXScQGkttWfm,2026-01-10 02:04:40.406,0.016772,,,0,0,6230,3514,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,53831,948,Selenium Test Fixer,aurimrv.org
+gen-1768010602-wKdUaLesHxvOM1dD7Vwh,2026-01-10 02:03:22.639,0.004122,,,0,0,4061,1249,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,76129,1773,Selenium Test Fixer,aurimrv.org
+gen-1768010539-WkBDIjlSdlDAeOBlN0lK,2026-01-10 02:02:19.094,0.009008,,,0,0,7935,2917,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,61749,1113,Selenium Test Fixer,aurimrv.org
+gen-1768010463-2hRL7pKMQAmDyjjo6QLR,2026-01-10 02:01:03.011,0.007285,,,0,0,6497,1355,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,74228,3931,Selenium Test Fixer,aurimrv.org
+gen-1768010394-C9agjn5PEjpub4tI6Jfu,2026-01-10 01:59:54.242,0.011274,,,0,0,10711,1939,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,67109,1753,Selenium Test Fixer,aurimrv.org
+gen-1768010342-xmZxbNWNEH4EAkyyMnin,2026-01-10 01:59:02.733,0.006636,,,0,0,7402,1838,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,49876,487,Selenium Test Fixer,aurimrv.org
+gen-1768010240-f7ghuzYbkv7NWOY5mQfE,2026-01-10 01:57:20.344,0.012754,,,0,0,11225,4132,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,100657,1356,Selenium Test Fixer,aurimrv.org
+gen-1768010086-ZLGOcOU4phVCRqCCPKP8,2026-01-10 01:54:46.276,0.012233,,,0,0,8302,2901,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,152219,4244,Selenium Test Fixer,aurimrv.org
+gen-1768009927-pcsMFRRzWS4huV9lepZs,2026-01-10 01:52:07.456,0.0075,,,0,0,5895,2571,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,157093,2323,Selenium Test Fixer,aurimrv.org
+gen-1768009850-P5TdqQNus634NtaD8eQC,2026-01-10 01:50:50.130,0.014562,,,0,0,11921,2518,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,75745,1629,Selenium Test Fixer,aurimrv.org
+gen-1768009763-Ka1lMYO9rCB5yDw8vuP5,2026-01-10 01:49:23.017,0.008687,,,0,0,7491,1677,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,85301,4104,Selenium Test Fixer,aurimrv.org
+gen-1768009681-onN0N5rNl1BRzOD4vWVu,2026-01-10 01:48:01.731,0.009953,,,0,0,10168,1541,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,79545,4355,Selenium Test Fixer,aurimrv.org
+gen-1768009542-V6UI0TXIUTKuA2jmjkB9,2026-01-10 01:45:42.681,0.009235,,,0,0,11814,2255,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,137382,2638,Selenium Test Fixer,aurimrv.org
+gen-1768009382-WMR0K1wBpw4YuStJoTl4,2026-01-10 01:43:02.335,0.015461,,,0,0,13202,3016,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,157766,4515,Selenium Test Fixer,aurimrv.org
+gen-1768009235-NXCUM1g54c2IEubr2uoP,2026-01-10 01:40:34.973,0.008262,,,0,0,3679,2422,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,145710,3009,Selenium Test Fixer,aurimrv.org
+gen-1768009187-383QoFCwcDStgUj0CKGJ,2026-01-10 01:39:47.521,0.007752,,,0,0,6295,2617,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,34683,983,Selenium Test Fixer,aurimrv.org
+gen-1768009116-AhjWtPvmVv0or3zPqp3i,2026-01-10 01:38:35.923,0.010473,,,0,0,8660,2111,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,69880,1452,Selenium Test Fixer,aurimrv.org
+gen-1768009102-nDFtg9K9ZPdY8TTjmmZj,2026-01-10 01:38:22.711,0.009295,,,0,0,8464,1687,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11596,1380,Selenium Test Fixer,aurimrv.org
+gen-1768009088-gIlbofq8n41Ncr19tytF,2026-01-10 01:38:08.168,0.008381,,,0,0,6431,1809,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,12788,1183,Selenium Test Fixer,aurimrv.org
+gen-1768008992-SHjE58hkWXiOUc45qYZH,2026-01-10 01:36:32.891,0.015486,,,0,0,13020,5139,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,93702,1110,Selenium Test Fixer,aurimrv.org
+gen-1768008966-CnueAeq1RRRnSjbIblWA,2026-01-10 01:36:06.322,0.012591,,,0,0,8337,1418,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,24798,1174,Selenium Test Fixer,aurimrv.org
+gen-1768008788-qUbQBvEdVxndgDkDoN7r,2026-01-10 01:33:08.340,0.01539,,,0,0,11984,3280,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,176225,4636,Selenium Test Fixer,aurimrv.org
+gen-1768008570-50nAFvtPabZIqLsLKlav,2026-01-10 01:29:30.479,0.010602,,,0,0,5534,2913,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,216256,3913,Selenium Test Fixer,aurimrv.org
+gen-1768008528-6M7jpjEjVhxgyVo6VRhQ,2026-01-10 01:28:47.941,0.00985,,,0,0,7858,1744,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,40978,1357,Selenium Test Fixer,aurimrv.org
+gen-1768008460-8V9hrav521nWenxp3u97,2026-01-10 01:27:40.156,0.008513,,,0,0,4935,2221,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,66010,1040,Selenium Test Fixer,aurimrv.org
+gen-1768008391-uWY83E2UXu5KKT4GtpCY,2026-01-10 01:26:31.851,0.003634,,,0,0,3631,1091,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,66866,1971,Selenium Test Fixer,aurimrv.org
+gen-1768008380-CHxCDeUrrsz0DbUqrZaG,2026-01-10 01:26:19.960,0.008856,,,0,0,7632,1711,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,10273,486,Selenium Test Fixer,aurimrv.org
+gen-1768008246-Il0nSBaghafQ5sfcs4rf,2026-01-10 01:24:06.577,0.008129,,,0,0,9754,2114,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,131927,1994,Selenium Test Fixer,aurimrv.org
+gen-1768008231-DA4NT2qIe8kDYaZMGkqm,2026-01-10 01:23:51.310,0.009854,,,0,0,8065,2006,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13388,1159,Selenium Test Fixer,aurimrv.org
+gen-1768008136-74ScG7ZJ7YJ7DeeZZX9l,2026-01-10 01:22:16.546,0.004919,,,0,0,4963,1467,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,93071,2351,Selenium Test Fixer,aurimrv.org
+gen-1768008052-IWH1ligi7pKkVmlzfw6x,2026-01-10 01:20:52.619,0.005765,,,0,0,4872,1137,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,82432,3605,Selenium Test Fixer,aurimrv.org
+gen-1768007763-STgxFuWjUQMuPNdUf8cT,2026-01-10 01:16:03.784,0.014913,,,0,0,7743,4107,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,287017,4093,Selenium Test Fixer,aurimrv.org
+gen-1768007667-X0UQgs3ntng2lJFgtOy1,2026-01-10 01:14:27.836,0.010035,,,0,0,9464,1743,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,94501,4607,Selenium Test Fixer,aurimrv.org
+gen-1768007604-hwIXW3fIWidGwiUpzhLu,2026-01-10 01:13:24.884,0.007528,,,0,0,5662,2632,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,61413,934,Selenium Test Fixer,aurimrv.org
+gen-1768007546-mR9sUUeMKTgfUdhbIQ4M,2026-01-10 01:12:26.302,0.010306,,,0,0,6224,2219,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,57000,701,Selenium Test Fixer,aurimrv.org
+gen-1768007468-qmCIlCTwJof5dQ9CdQtS,2026-01-10 01:11:08.190,0.00944,,,0,0,6417,2236,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,76501,1187,Selenium Test Fixer,aurimrv.org
+gen-1768007436-xeR55VEw4wQ34wTF9faB,2026-01-10 01:10:35.936,0.030581,,,0,0,9591,2444,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,30429,4329,Selenium Test Fixer,aurimrv.org
+gen-1768007313-CfrywMb352YzQ1GZ3x2A,2026-01-10 01:08:33.140,0.007312,,,0,0,8801,1896,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,121144,2762,Selenium Test Fixer,aurimrv.org
+gen-1768007307-lKJ4rxxBNaYyeJnIc0o6,2026-01-10 01:08:27.016,0.010906,,,0,0,5548,1786,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,4235,672,Selenium Test Fixer,aurimrv.org
+gen-1768007301-EgCMmAGTyMItUsFFqCLG,2026-01-10 01:08:21.091,0.009086,,,0,0,4541,1515,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,3677,588,Selenium Test Fixer,aurimrv.org
+gen-1768007225-Ztb9T7TwtdZCC4zUsiW2,2026-01-10 01:07:04.896,0.008758,,,0,0,5865,3206,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,74554,769,Selenium Test Fixer,aurimrv.org
+gen-1768007131-S8MxboILkTkRbA5rFM1B,2026-01-10 01:05:31.165,0.010289,,,0,0,9179,3309,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,91895,1011,Selenium Test Fixer,aurimrv.org
+gen-1768007043-AZmqbrhrY6fZq7460rnX,2026-01-10 01:04:03.127,0.01262,,,0,0,6350,5040,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,86277,827,Selenium Test Fixer,aurimrv.org
+gen-1768006948-EPb4Rx27hgYjewg7Ofh1,2026-01-10 01:02:27.992,0.005768,,,0,0,6960,1492,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,93492,4181,Selenium Test Fixer,aurimrv.org
+gen-1768006937-5HiUbsjcaeMtVzMC244U,2026-01-10 01:02:17.293,0.007261,,,0,0,6877,1254,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,8987,1087,Selenium Test Fixer,aurimrv.org
+gen-1768006872-20vydNwHBFbIWqUK8rw5,2026-01-10 01:01:12.604,0.009456,,,0,0,6575,3413,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,63073,1283,Selenium Test Fixer,aurimrv.org
+gen-1768006799-zJD4XmGTkRAASwMtfLdo,2026-01-10 00:59:59.205,0.011017,,,0,0,5673,4374,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,71639,779,Selenium Test Fixer,aurimrv.org
+gen-1768006751-jmH3nt0z9eOdgUNXsvYB,2026-01-10 00:59:10.975,0.006744,,,0,0,5427,2287,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,46574,519,Selenium Test Fixer,aurimrv.org
+gen-1768006657-eD6fq2Z7OdXw7PL7UY04,2026-01-10 00:57:37.794,0.005961,,,0,0,7164,1548,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,91579,2231,Selenium Test Fixer,aurimrv.org
+gen-1768006628-qNjC3tC1Fdwg2pz96bfK,2026-01-10 00:57:08.615,0.007784,,,0,0,6383,1344,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,27550,1191,Selenium Test Fixer,aurimrv.org
+gen-1768006541-TIWJMZ9mcrKAGG8IciLA,2026-01-10 00:55:41.369,0.005893,,,0,0,7494,1448,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,85621,2028,Selenium Test Fixer,aurimrv.org
+gen-1768006289-gB5dnrvgIxcCdlTOboVi,2026-01-10 00:51:29.640,0.019394,,,0,0,28005,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,249017,3815,Selenium Test Fixer,aurimrv.org
+gen-1768006215-ci3TkPG1p1JSdliiIjlj,2026-01-10 00:50:15.633,0.009082,,,0,0,7545,3032,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,72219,714,Selenium Test Fixer,aurimrv.org
+gen-1768006162-Gz6UIe8hBCJHfd84haHw,2026-01-10 00:49:21.916,0.006248,,,0,0,7185,1687,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,52077,723,Selenium Test Fixer,aurimrv.org
+gen-1768006091-fTxAvBh8ovXweOiFVnQQ,2026-01-10 00:48:11.126,0.006502,,,0,0,5892,1187,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,69122,4248,Selenium Test Fixer,aurimrv.org
+gen-1768006050-4T7UeJR1mKjc6bhE9EhX,2026-01-10 00:47:30.553,0.005312,,,0,0,5677,1521,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,38828,1094,Selenium Test Fixer,aurimrv.org
+gen-1768005960-Sy5E50w3lulMGz11D2an,2026-01-10 00:46:00.070,0.005035,,,0,0,5228,1472,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,88895,1907,Selenium Test Fixer,aurimrv.org
+gen-1768005897-RVJBChDIwY8Kex9ofSxw,2026-01-10 00:44:57.472,0.010659,,,0,0,6894,3951,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,61054,709,Selenium Test Fixer,aurimrv.org
+gen-1768005872-ICcj3IgpQdd1ehwJ0v3u,2026-01-10 00:44:32.087,0.01207,,,0,0,6451,3280,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,23742,852,Selenium Test Fixer,aurimrv.org
+gen-1768005822-o6xXVSA8iMKspPOx6aJh,2026-01-10 00:43:41.922,0.00855,,,0,0,6842,1778,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,48504,1244,Selenium Test Fixer,aurimrv.org
+gen-1768005662-gMqtzS7wdOKKkKHpVhzJ,2026-01-10 00:41:02.371,0.007853,,,0,0,6384,2650,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,157180,1770,Selenium Test Fixer,aurimrv.org
+gen-1768005595-r0j3vSQXfEZ71AmV1RZs,2026-01-10 00:39:55.291,0.003685,,,0,0,3869,1069,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,65408,1821,Selenium Test Fixer,aurimrv.org
+gen-1768005545-cksDMgAwro1eoxL0RCbk,2026-01-10 00:39:05.655,0.019231,,,0,0,10036,3065,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,47912,1193,Selenium Test Fixer,aurimrv.org
+gen-1768005405-2f1kIx0osMZwsVstgAGN,2026-01-10 00:36:45.742,0.0073,,,0,0,7176,2215,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,138304,2294,Selenium Test Fixer,aurimrv.org
+gen-1768005371-uM97HwuQZDM3cC1Frzsr,2026-01-10 00:36:11.580,0.015335,,,0,0,9230,2035,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,32468,1176,Selenium Test Fixer,aurimrv.org
+gen-1768005252-oPTgrwMkKx0npwXg1oMt,2026-01-10 00:34:12.563,0.007099,,,0,0,5024,1634,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,117224,4651,Selenium Test Fixer,aurimrv.org
+gen-1768005133-Huu1yN7XbVCBNFUsdsRJ,2026-01-10 00:32:12.947,0.006647,,,0,0,6819,1960,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,117918,2288,Selenium Test Fixer,aurimrv.org
+gen-1768005025-2M3Ca6KaJ23bud3Z35f6,2026-01-10 00:30:25.038,0.009565,,,0,0,7763,3230,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,106394,673,Selenium Test Fixer,aurimrv.org
+gen-1768004956-tsGTDOW5lilLb2MLYdAL,2026-01-10 00:29:16.219,0.006996,,,0,0,3786,1890,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,67204,1084,Selenium Test Fixer,aurimrv.org
+gen-1768004831-2HS23ckOHCI3mR9xIfZi,2026-01-10 00:27:11.266,0.007752,,,0,0,4892,1927,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,123228,4613,Selenium Test Fixer,aurimrv.org
+gen-1768004782-9BV0kcwuUusOkAiLJXKU,2026-01-10 00:26:22.622,0.00714,,,0,0,7645,2041,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,47058,825,Selenium Test Fixer,aurimrv.org
+gen-1768004688-kxfIFSrrCYpJsLZ5kdLE,2026-01-10 00:24:48.757,0.017392,,,0,0,12620,6172,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,92298,1599,Selenium Test Fixer,aurimrv.org
+gen-1768004644-fp0U9c9wUVd0aov1sPXS,2026-01-10 00:24:04.793,0.006744,,,0,0,6027,2167,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,42341,452,Selenium Test Fixer,aurimrv.org
+gen-1768004594-Dxqyt4tdn78prAEJnQIl,2026-01-10 00:23:14.402,0.006515,,,0,0,5589,2140,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,48906,918,Selenium Test Fixer,aurimrv.org
+gen-1768004538-e7BGTneS5nwSNqDSaeEn,2026-01-10 00:22:18.727,0.007195,,,0,0,5483,2501,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,54115,471,Selenium Test Fixer,aurimrv.org
+gen-1768004379-7ahNocFwzigLqd0OjwiN,2026-01-10 00:19:39.505,0.009561,,,0,0,4198,2817,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,157507,3147,Selenium Test Fixer,aurimrv.org
+gen-1768004325-344JzY7XgebNDYIYy5Gn,2026-01-10 00:18:45.459,0.00676,,,0,0,6422,2096,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,52375,836,Selenium Test Fixer,aurimrv.org
+gen-1768004200-wS5TJH0EiwxVu3IwcjxH,2026-01-10 00:16:40.129,0.012362,,,0,0,11166,2265,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,123513,4495,Selenium Test Fixer,aurimrv.org
+gen-1768004174-JTwBOPCwk3eowATsgqnj,2026-01-10 00:16:14.598,0.004052,,,0,0,3985,1229,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,23940,1252,Selenium Test Fixer,aurimrv.org
+gen-1768004119-LkF0PhEHXil4tu2UOey2,2026-01-10 00:15:19.294,0.003957,,,0,0,2512,980,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,53000,2259,Selenium Test Fixer,aurimrv.org
+gen-1768004071-IlPeziO2vxIQIAbETJqE,2026-01-10 00:14:31.476,0.007298,,,0,0,6096,1238,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,46161,934,Selenium Test Fixer,aurimrv.org
+gen-1768003965-yL9Qdjtg2kyDfNwogEYq,2026-01-10 00:12:44.959,0.006493,,,0,0,7833,1680,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,104859,2197,Selenium Test Fixer,aurimrv.org
+gen-1768003892-FFZT5YYyy5OkiFSMerkB,2026-01-10 00:11:32.144,0.004468,,,0,0,5436,1147,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,71303,1776,Selenium Test Fixer,aurimrv.org
+gen-1768003869-wqPPrPYYGgUrMDM3TeoK,2026-01-10 00:11:09.237,0.005511,,,0,0,6599,1436,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,21417,743,Selenium Test Fixer,aurimrv.org
+gen-1768003836-zivqDy0T05I0EqfELzF2,2026-01-10 00:10:36.039,0.00544,,,0,0,4652,1790,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,31402,927,Selenium Test Fixer,aurimrv.org
+gen-1768003783-McgGG9zv7yhYn1BqzHkH,2026-01-10 00:09:43.714,0.053101,,,0,0,18238,4016,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,50518,5750,Selenium Test Fixer,aurimrv.org
+gen-1768003643-1fiV7W4zruKvNA8luvb9,2026-01-10 00:07:23.820,0.009696,,,0,0,6461,2328,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,138183,4236,Selenium Test Fixer,aurimrv.org
+gen-1768003582-n7NpDP6zmv5qHq2ACsfT,2026-01-10 00:06:21.894,0.008204,,,0,0,4982,2086,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,60350,1032,Selenium Test Fixer,aurimrv.org
+gen-1768003543-uoICgXLAIhC05fcI3bTE,2026-01-10 00:05:43.678,0.008814,,,0,0,6974,1572,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,36329,757,Selenium Test Fixer,aurimrv.org
+gen-1768003464-6f2S2yvXG2kRVTWkCaS3,2026-01-10 00:04:24.830,0.004529,,,0,0,5158,1233,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,77337,1545,Selenium Test Fixer,aurimrv.org
+gen-1768003461-ujzotje3UBw8bFaoy8Vy,2026-01-10 00:04:21.243,0.003724,,,0,0,5216,238,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,true,true,,,,3360,1070,Selenium Test Fixer,aurimrv.org
+gen-1768003370-aBFr2uozxj4KRmTOoff5,2026-01-10 00:02:50.515,0.006354,,,0,0,8825,1412,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,89132,3329,Selenium Test Fixer,aurimrv.org
+gen-1768003260-Ka6WiL1W6u6dyGOoloRs,2026-01-10 00:01:00.036,0.006544,,,0,0,7437,1785,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,108847,2435,Selenium Test Fixer,aurimrv.org
+gen-1768003011-drLTuqhQwOvUS6Z0yuSB,2026-01-09 23:56:51.015,0.010789,,,0,0,6494,4096,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,length,length,247473,2310,Selenium Test Fixer,aurimrv.org
+gen-1768002921-S3xG1lumg1YC61GCku8u,2026-01-09 23:55:21.806,0.008392,,,0,0,5617,3073,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,87593,961,Selenium Test Fixer,aurimrv.org
+gen-1768002880-5YCmxM2SCHJhQCmpmbZG,2026-01-09 23:54:40.121,0.006447,,,0,0,5908,1161,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,40101,1213,Selenium Test Fixer,aurimrv.org
+gen-1768002848-lLQqPIEqOO7vO2CT6T9O,2026-01-09 23:54:08.210,0.006234,,,0,0,4623,1173,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,30335,992,Selenium Test Fixer,aurimrv.org
+gen-1768002821-T2YXlE73sTt5lFbjvjLG,2026-01-09 23:53:41.294,0.004014,,,0,0,3696,1268,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,25315,892,Selenium Test Fixer,aurimrv.org
+gen-1768002762-yymeKCGILELxF28dT6sd,2026-01-09 23:52:42.579,0.009057,,,0,0,7567,1807,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,57194,1426,Selenium Test Fixer,aurimrv.org
+gen-1768002645-4qW6W77ZOowdaYpIyGCz,2026-01-09 23:50:45.428,0.005734,,,0,0,4666,1934,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,115436,1814,Selenium Test Fixer,aurimrv.org
+gen-1768002549-w9GB9ePAlSbiXIKmjfBp,2026-01-09 23:49:09.258,0.01085,,,0,0,4592,3238,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,94673,1315,Selenium Test Fixer,aurimrv.org
+gen-1768002511-93oSDRqYFJ5J2mVodmWO,2026-01-09 23:48:31.070,0.012729,,,0,0,6945,1928,0,moonshotai/kimi-k2-0905,Together,standard,false,true,,stop,stop,36506,1139,Selenium Test Fixer,aurimrv.org
+gen-1768002448-wQ52C5m4AhqRrPfhkpDR,2026-01-09 23:47:27.946,0.006986,,,0,0,7036,1106,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,61393,3651,Selenium Test Fixer,aurimrv.org
+gen-1768002291-6PhZFkShLFoDD8ZVq8rh,2026-01-09 23:44:51.857,0.007575,,,0,0,6023,2583,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,153542,1861,Selenium Test Fixer,aurimrv.org
+gen-1768002208-8HXnjG1ChiZsyOu0CLqz,2026-01-09 23:43:28.515,0.00828,,,0,0,7625,2615,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,81584,664,Selenium Test Fixer,aurimrv.org
+gen-1768002151-eW8nrTdlADhKqfMNW5KF,2026-01-09 23:42:31.507,0.011866,,,0,0,7676,2454,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,55435,1226,Selenium Test Fixer,aurimrv.org
+gen-1768002001-wruKDuBLMTLsh1H77fyM,2026-01-09 23:40:01.669,0.012888,,,0,0,5052,3943,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,148078,1074,Selenium Test Fixer,aurimrv.org
+gen-1768001960-QQkCtSR9JZOMOab5ZzQT,2026-01-09 23:39:20.172,0.006121,,,0,0,6181,965,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,39686,3440,Selenium Test Fixer,aurimrv.org
+gen-1768001951-lxsfbAcNlwe27bQlf9rw,2026-01-09 23:39:11.105,0.01579,,,0,0,9073,2239,0,moonshotai/kimi-k2-0905,Groq,standard,false,true,,stop,stop,7221,1902,Selenium Test Fixer,aurimrv.org
+gen-1768001919-NWCEGjs0iRPTqGj0nKdd,2026-01-09 23:38:39.197,0.007291,,,0,0,4544,1542,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,30237,684,Selenium Test Fixer,aurimrv.org
+gen-1768001824-k8B9KwEDfKYOZ65XJ5rZ,2026-01-09 23:37:04.294,0.004812,,,0,0,4601,1486,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,93147,3459,Selenium Test Fixer,aurimrv.org
+gen-1768001742-bQkvldRqEXZEWnuvI7bQ,2026-01-09 23:35:42.668,0.010652,,,0,0,7496,3827,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,79935,454,Selenium Test Fixer,aurimrv.org
+gen-1768001544-vNI4WBbF6koQtyhyfYOK,2026-01-09 23:32:24.040,0.013481,,,0,0,17968,3147,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,196934,3128,Selenium Test Fixer,aurimrv.org
+gen-1768001437-I3H3yDzBBAIsrICTHUI7,2026-01-09 23:30:37.101,0.005335,,,0,0,4559,1756,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,105336,1570,Selenium Test Fixer,aurimrv.org
+gen-1768001398-exFPOae247rMJCixzls7,2026-01-09 23:29:58.382,0.005408,,,0,0,3406,1346,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,37021,949,Selenium Test Fixer,aurimrv.org
+gen-1768001373-KBLdyEwL5QNmAeG1f82H,2026-01-09 23:29:33.095,0.00606,,,0,0,3369,1362,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,23597,692,Selenium Test Fixer,aurimrv.org
+gen-1768001205-NO1DJsaUn5PVmbkoxX9i,2026-01-09 23:26:45.363,0.009895,,,0,0,3814,3043,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,165977,3265,Selenium Test Fixer,aurimrv.org
+gen-1768001190-GH3wIfWfIFwRTFHd2wMm,2026-01-09 23:26:30.001,0.008988,,,0,0,5602,2251,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,13672,1049,Selenium Test Fixer,aurimrv.org
+gen-1768001019-R1lzzXyxveJhePhVQCbf,2026-01-09 23:23:39.469,0.01035,,,0,0,12360,2703,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,168650,2192,Selenium Test Fixer,aurimrv.org
+gen-1768000976-7399r9edRQai2TbHzI9t,2026-01-09 23:22:56.286,0.009671,,,0,0,5633,2123,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,41685,909,Selenium Test Fixer,aurimrv.org
+gen-1768000944-qrPLSUMyL5vtk5yR972d,2026-01-09 23:22:24.141,0.007452,,,0,0,5724,1363,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,30402,713,Selenium Test Fixer,aurimrv.org
+gen-1768000894-oMoslxYZM0JoewMy6HQ4,2026-01-09 23:21:34.881,0.007489,,,0,0,5754,2594,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,47720,1047,Selenium Test Fixer,aurimrv.org
+gen-1768000833-tGz8D90102mtsBAAsbPd,2026-01-09 23:20:33.556,0.004852,,,0,0,3729,1046,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,59737,2847,Selenium Test Fixer,aurimrv.org
+gen-1768000751-QltuUCQ2RmaBBGUhCPAM,2026-01-09 23:19:11.125,0.005945,,,0,0,8448,1283,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,80774,2699,Selenium Test Fixer,aurimrv.org
+gen-1768000618-EPwS7YpRHpURSRKr9sLV,2026-01-09 23:16:58.191,0.010329,,,0,0,7415,2352,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,131268,4458,Selenium Test Fixer,aurimrv.org
+gen-1768000546-KrIeWY0bd0QnNsN3BbGp,2026-01-09 23:15:46.710,0.006898,,,0,0,6422,1218,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,69714,3876,Selenium Test Fixer,aurimrv.org
+gen-1768000507-QIZ1Jz00KS4EmHvs6kEb,2026-01-09 23:15:07.087,0.006271,,,0,0,4928,1326,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,38017,1055,Selenium Test Fixer,aurimrv.org
+gen-1768000401-MJdkFli0TdlhagV1FL4w,2026-01-09 23:13:21.814,0.012756,,,0,0,4711,3972,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,103790,1105,Selenium Test Fixer,aurimrv.org
+gen-1768000354-nMeajnwzH23tEHReuTfB,2026-01-09 23:12:34.116,0.008395,,,0,0,7159,2766,0,moonshotai/kimi-k2-0905,DeepInfra,standard,false,true,,stop,stop,46028,1287,Selenium Test Fixer,aurimrv.org
+gen-1768000340-1Aw5xHT4mTGdBA0PwDth,2026-01-09 23:12:20.482,0.009305,,,0,0,7313,1967,0,moonshotai/kimi-k2-0905,Fireworks,standard,false,true,,stop,stop,11932,436,Selenium Test Fixer,aurimrv.org
+gen-1768000248-HJ8qH4WXbK9reghe8XmV,2026-01-09 23:10:48.031,0.008656,,,0,0,7411,1684,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,90914,4133,Selenium Test Fixer,aurimrv.org
+gen-1768000216-Xir79jM1AuSqnA0nY84i,2026-01-09 23:10:16.231,0.003627,,,0,0,1975,977,0,moonshotai/kimi-k2-0905,AtlasCloud,standard,false,true,,stop,stop,30097,753,Selenium Test Fixer,aurimrv.org
+gen-1768000126-ZOGBrQgkxXKkhyN9d4E0,2026-01-09 23:08:46.571,0.004927,,,0,0,5554,1353,0,moonshotai/kimi-k2-0905,SiliconFlow,standard,false,true,,stop,stop,88091,1770,Selenium Test Fixer,aurimrv.org
+gen-1768000029-cLN4b8dlJAt35VDvQ1Ac,2026-01-09 23:07:09.498,0.007408,,,0,0,4648,1848,0,moonshotai/kimi-k2-0905,Novita,standard,false,true,,stop,stop,95361,3148,Selenium Test Fixer,aurimrv.org
+gen-1767999947-vVuxrNHsHB7zUlIjJNoO,2026-01-09 23:05:47.521,0.015159,,,0,0,8367,3419,0,moonshotai/kimi-k2-0905,Parasail,standard,false,true,,stop,stop,80165,821,Selenium Test Fixer,aurimrv.org
+gen-1767999851-zzSF8aouFHwjxwNYWImH,2026-01-09 23:04:11.752,0.009949,,,0,0,9378,1729,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,94065,4164,Selenium Test Fixer,aurimrv.org
+gen-1767999723-kDNeWnNUDM2lkyTnmdMl,2026-01-09 23:02:03.250,0.011322,,,0,0,9408,2271,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,126727,4605,Selenium Test Fixer,aurimrv.org
+gen-1767999623-E2yfavBV9u0nRJqY70HZ,2026-01-09 23:00:23.710,0.009346,,,0,0,8435,1714,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,97660,4265,Selenium Test Fixer,aurimrv.org
+gen-1767999507-E1ua12iG7bYlJHHMMabE,2026-01-09 22:58:27.039,0.006264,,-0.00338,0,0,7512,2055,0,moonshotai/kimi-k2-0905,Moonshot AI,standard,false,true,,stop,stop,114835,3544,Selenium Test Fixer,aurimrv.org
+gen-1767999377-92iLFlO1NfqGpxggu1y6,2026-01-09 22:56:17.439,0.010149,,,0,0,7479,2265,0,moonshotai/kimi-k2-0905,Novita,standard,true,true,,,,99120,4234,Selenium Test Fixer,aurimrv.org

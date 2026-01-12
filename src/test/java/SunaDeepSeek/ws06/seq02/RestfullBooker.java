@@ -121,7 +121,7 @@ public class RestfullBooker {
         // Test form elements
         Assertions.assertTrue(driver.findElement(By.cssSelector("input[placeholder='Name']")).isDisplayed());
         Assertions.assertTrue(driver.findElement(By.cssSelector("input[placeholder='Email']")).isDisplayed());
-        Assertions.assertTrue(driver.findElement(By.cssSelector("input[placeholder='Phone']")).isDisplayed();
+        Assertions.assertTrue(driver.findElement(By.cssSelector("input[placeholder='Phone']")).isDisplayed());
         Assertions.assertTrue(driver.findElement(By.cssSelector("input[placeholder='Subject']")).isDisplayed());
         Assertions.assertTrue(driver.findElement(By.cssSelector("textarea[placeholder*='Message']")).isDisplayed());
     }

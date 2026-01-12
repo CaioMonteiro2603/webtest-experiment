@@ -5,6 +5,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.junit.jupiter.api.Assertions;
 
@@ -52,7 +53,9 @@ public class JSFiddle {
                 "Page title should contain 'JSFiddle' but was: " + title);
 
         // Verify main editor areas are present - wait for content to load
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        wait.until(driver -> 
+        ((JavascriptExecutor) driver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Check for result container with more flexible locator
         By resultContainer = By.cssSelector(".result-container, #result-container, [data-panel='result']");
@@ -76,23 +79,25 @@ public class JSFiddle {
     public void testRunButtonExecutesCode() {
         driver.get(BASE_URL);
 
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Try multiple possible run button selectors
         By runButton = By.cssSelector("button[title*='Run'], button.run, .run-button, input[value='Run']");
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(runButton));
-        
+
         List<WebElement> runButtons = driver.findElements(runButton);
         Assertions.assertTrue(runButtons.size() > 0, "Run button should be present");
-        
+
         // Click the first run button found
         runButtons.get(0).click();
 
-        // Check for result with multiple possible selectors
+        // Check for result with multiple possible selectors - FIXED
         By resultSelectors = By.cssSelector("iframe, .result, .output");
-        wait.until(presenceOfAllElementsLocatedBy(resultSelectors));
-        
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(resultSelectors));
+
         // Verify some kind of result is shown
         boolean hasResults = driver.findElements(resultSelectors).size() > 0;
         Assertions.assertTrue(hasResults, "Running code should produce some output");
@@ -102,15 +107,21 @@ public class JSFiddle {
     @Order(3)
     public void testSaveFiddleButtonShowsAuthPrompt() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        
+        // FIXED: Use lambda for document ready check
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Try different possible selectors for save button
         By saveButton = By.cssSelector("button[title*='Save'], .save-button, a[title*='Save']");
-        wait.until(presenceOfAllElementsLocatedBy(saveButton));
         
+        // FIXED: Add ExpectedConditions prefix
+        wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(saveButton));
+
         List<WebElement> saveButtons = driver.findElements(saveButton);
         Assertions.assertTrue(saveButtons.size() > 0, "Save button should be present");
-        
+
         // Try clicking save button
         try {
             saveButtons.get(0).click();
@@ -122,20 +133,22 @@ public class JSFiddle {
         // Wait for any modal or alert
         try {
             By modal = By.cssSelector(".modal, .modal-content, .alert");
-            wait.until(presenceOfAllElementsLocatedBy(modal));
             
+            // FIXED: Add ExpectedConditions prefix
+            wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(modal));
+
             // Check if we have any auth-related content
             String pageSource = driver.getPageSource().toLowerCase();
-            boolean hasAuthContent = pageSource.contains("login") || 
-                                   pageSource.contains("sign in") || 
+            boolean hasAuthContent = pageSource.contains("login") ||
+                                   pageSource.contains("sign in") ||
                                    pageSource.contains("authentication");
-            
+
             Assertions.assertTrue(hasAuthContent, "Save action should trigger authentication prompt");
         } catch (TimeoutException e) {
             // If no modal appears, check for URL change or alert
             String currentUrl = driver.getCurrentUrl();
             boolean redirectedToLogin = currentUrl.contains("login") || currentUrl.contains("signin");
-            
+
             // Also check for any alert
             try {
                 Alert alert = driver.switchTo().alert();
@@ -322,43 +335,47 @@ public class JSFiddle {
     @Order(7)
     public void testLoginPage_RedirectAndFormPresence() {
         driver.get(BASE_URL + "user/login/");
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        
+        // FIXED: Use lambda for document ready check
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Check if we were redirected and current URL contains login
         String currentUrl = driver.getCurrentUrl();
-        boolean isLoginPage = currentUrl.contains("/user/login") || 
-                            currentUrl.contains("/login") || 
+        boolean isLoginPage = currentUrl.contains("/user/login") ||
+                            currentUrl.contains("/login") ||
                             currentUrl.contains("/signin") ||
                             currentUrl.contains("login");
 
-        Assertions.assertTrue(isLoginPage || true, 
-                "Should be on a login-related page, page source contains login info: " + 
+        Assertions.assertTrue(isLoginPage || true,
+                "Should be on a login-related page, page source contains login info: " +
                 currentUrl.contains("login"));
 
         // Look for login form with various selectors
         By loginForm = By.cssSelector("form[class*='login'], form[id*='login'], form[action*='login'], .login-form, .signin-form");
         By anyForm = By.cssSelector("form");
-        
+
         List<WebElement> forms = driver.findElements(loginForm);
         if (forms.size() == 0) {
             forms = driver.findElements(anyForm);
         }
-        
+
         Assertions.assertTrue(forms.size() > 0, "Page should contain at least one form");
 
         // Look for username/email and password fields
         By usernameSelectors = By.cssSelector("input[name='username'], input[name='email'], input[name='login'], input[type='email'], input[type='text']");
         By passwordSelectors = By.cssSelector("input[name='password'], input[name='pass'], input[type='password']");
-       By submitSelectors = By.cssSelector("button[type='submit'], input[type='submit'], button[class*='submit'], .submit-button");
-        
+        By submitSelectors = By.cssSelector("button[type='submit'], input[type='submit'], button[class*='submit'], .submit-button");
+
         boolean hasUsername = driver.findElements(usernameSelectors).size() > 0;
         boolean hasPassword = driver.findElements(passwordSelectors).size() > 0;
         boolean hasSubmit = driver.findElements(submitSelectors).size() > 0;
-        
+
         String pageSource = driver.getPageSource().toLowerCase();
-        boolean hasLoginContent = pageSource.contains("username") || pageSource.contains("email") || 
+        boolean hasLoginContent = pageSource.contains("username") || pageSource.contains("email") ||
                                   pageSource.contains("password") || pageSource.contains("login");
-        
+
         Assertions.assertTrue(hasLoginContent, "Login page should contain login-related content");
     }
 
@@ -366,48 +383,53 @@ public class JSFiddle {
     @Order(8)
     public void testInvalidLoginShowsError() {
         driver.get(BASE_URL + "user/login/");
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        
+        // FIXED: Use lambda for document ready check
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Look for input fields with multiple selectors
         By usernameSelectors = By.cssSelector("input[name='username'], input[name='email'], input[name='login'], input[type='email']");
         By passwordSelectors = By.cssSelector("input[name='password'], input[name='pass'], input[type='password']");
         By submitSelectors = By.cssSelector("button[type='submit'], input[type='submit']");
-        
+
         List<WebElement> usernameFields = driver.findElements(usernameSelectors);
         List<WebElement> passwordFields = driver.findElements(passwordSelectors);
         List<WebElement> submitButtons = driver.findElements(submitSelectors);
-        
+
         if (usernameFields.size() > 0 && passwordFields.size() > 0 && submitButtons.size() > 0) {
             usernameFields.get(0).sendKeys("invalid_user");
             passwordFields.get(0).sendKeys("wrong_password");
-            
+
             try {
                 submitButtons.get(0).click();
             } catch (Exception e) {
                 // Submit form via Enter key
                 passwordFields.get(0).sendKeys(Keys.ENTER);
             }
-            
+
             // Wait for error or page change
+            // FIXED: Add ExpectedConditions prefix to all methods
             try {
-                wait.until(or(
-                    urlContains("error"),
-                    urlContains("failed"),
-                    presenceOfElementLocated(By.cssSelector(".error, .alert, .error-message, [class*='error']")),
-                    presenceOfElementLocated(By.cssSelector(".text-danger")),
-                    textToBePresentInElementLocated(By.tagName("body"), "invalid")
+                wait.until(ExpectedConditions.or(
+                    ExpectedConditions.urlContains("error"),
+                    ExpectedConditions.urlContains("failed"),
+                    ExpectedConditions.presenceOfElementLocated(By.cssSelector(".error, .alert, .error-message, [class*='error']")),
+                    ExpectedConditions.presenceOfElementLocated(By.cssSelector(".text-danger")),
+                    ExpectedConditions.textToBePresentInElementLocated(By.tagName("body"), "invalid")
                 ));
             } catch (TimeoutException ex) {
                 // If no immediate error, check page source
             }
-            
+
             // Check for error in page content
             String pageSource = driver.getPageSource().toLowerCase();
-            boolean hasError = pageSource.contains("error") || 
-                             pageSource.contains("invalid") || 
+            boolean hasError = pageSource.contains("error") ||
+                             pageSource.contains("invalid") ||
                              pageSource.contains("incorrect") ||
                              pageSource.contains("failed");
-            
+
             Assertions.assertTrue(hasError || true, "Invalid login should show error or fail gracefully");
         } else {
             Assertions.assertTrue(true, "No login form found - skipping test");
@@ -418,15 +440,19 @@ public class JSFiddle {
     @Order(9)
     public void testSignUpLinkRedirectsToRegistration() {
         driver.get(BASE_URL + "user/login/");
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        
+        // FIXED: Use lambda for document ready check
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Look for sign up links with multiple selectors
         By signUpSelectors = By.cssSelector("a[href*='signup'], a[href*='register'], a[href*='sign-up'], a:contains('Sign up'), a:contains('Register')");
-        
+
         // Find all links and check for sign up text
         List<WebElement> allLinks = driver.findElements(By.tagName("a"));
         WebElement signUpLink = null;
-        
+
         for (WebElement link : allLinks) {
             String text = link.getText().toLowerCase();
             String href = link.getAttribute("href");
@@ -436,7 +462,7 @@ public class JSFiddle {
                 break;
             }
         }
-        
+
         if (signUpLink != null) {
             String originalUrl = driver.getCurrentUrl();
             try {
@@ -445,32 +471,33 @@ public class JSFiddle {
                 // Use JavaScript to click
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", signUpLink);
             }
-            
+
             // Wait for URL change
+            // FIXED: Add ExpectedConditions prefix
             try {
-                wait.until(not(urlToBe(originalUrl)));
-                
+                wait.until(ExpectedConditions.not(ExpectedConditions.urlToBe(originalUrl)));
+
                 String currentUrl = driver.getCurrentUrl();
-                boolean isRegistrationPage = currentUrl.contains("/user/signup/") || 
-                                           currentUrl.contains("/signup") || 
+                boolean isRegistrationPage = currentUrl.contains("/user/signup/") ||
+                                           currentUrl.contains("/signup") ||
                                            currentUrl.contains("/register") ||
                                            currentUrl.contains("/user/register/");
-                
+
                 Assertions.assertTrue(isRegistrationPage, "Should navigate to registration page, current URL: " + currentUrl);
             } catch (TimeoutException e) {
                 // If no URL change, check for form or content change
                 String currentUrl = driver.getCurrentUrl();
-                boolean isRegistrationPage = currentUrl.contains("/user/signup/") || 
-                                           currentUrl.contains("/signup") || 
+                boolean isRegistrationPage = currentUrl.contains("/user/signup/") ||
+                                           currentUrl.contains("/signup") ||
                                            currentUrl.contains("/register");
-                
+
                 String pageSource = driver.getPageSource().toLowerCase();
-                boolean hasRegistrationContent = pageSource.contains("sign up") || 
+                boolean hasRegistrationContent = pageSource.contains("sign up") ||
                                                pageSource.contains("register") ||
                                                pageSource.contains("create account") ||
                                                pageSource.contains("email");
-                
-                Assertions.assertTrue(isRegistrationPage || hasRegistrationContent, 
+
+                Assertions.assertTrue(isRegistrationPage || hasRegistrationContent,
                         "Should show registration-related content");
             }
         } else {
@@ -482,13 +509,17 @@ public class JSFiddle {
     @Order(10)
     public void testHelpLinkNavigatesToDocumentation() {
         driver.get(BASE_URL);
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        
+        // FIXED: Use lambda for document ready check
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
 
         // Look for help links with multiple selectors
         By helpSelectors = By.cssSelector("a[href*='help'], a[href*='docs'], a[href*='documentation'], a:contains('Help'), a:contains('Docs')");
-        
+
         List<WebElement> helpLinks = driver.findElements(helpSelectors);
-        
+
         // Also check all links for help text
         if (helpLinks.size() == 0) {
             List<WebElement> allLinks = driver.findElements(By.tagName("a"));
@@ -499,7 +530,7 @@ public class JSFiddle {
                 }
             }
         }
-        
+
         if (helpLinks.size() > 0) {
             String originalUrl = driver.getCurrentUrl();
             try {
@@ -508,29 +539,30 @@ public class JSFiddle {
                 // Use JavaScript to click
                 ((JavascriptExecutor) driver).executeScript("arguments[0].click();", helpLinks.get(0));
             }
-            
+
             // Wait for URL change or help content
+            // FIXED: Add ExpectedConditions prefix to all methods
             try {
-                wait.until(or(
-                    not(urlToBe(originalUrl)),
-                    urlContains("/docs/"),
-                    urlContains("help"),
-                    urlContains("documentation")
+                wait.until(ExpectedConditions.or(
+                    ExpectedConditions.not(ExpectedConditions.urlToBe(originalUrl)),
+                    ExpectedConditions.urlContains("/docs/"),
+                    ExpectedConditions.urlContains("help"),
+                    ExpectedConditions.urlContains("documentation")
                 ));
             } catch (TimeoutException e) {
                 // Continue and check current state
             }
-            
+
             String currentUrl = driver.getCurrentUrl();
             String pageSource = driver.getPageSource().toLowerCase();
-            
-            boolean isHelpPage = currentUrl.contains("/docs/") || 
-                               currentUrl.contains("help") || 
+
+            boolean isHelpPage = currentUrl.contains("/docs/") ||
+                               currentUrl.contains("help") ||
                                currentUrl.contains("documentation") ||
                                pageSource.contains("documentation") ||
                                pageSource.contains("help") ||
                                pageSource.contains("guide");
-            
+
             Assertions.assertTrue(isHelpPage, "Should navigate to documentation or help page, current URL: " + currentUrl);
         } else {
             Assertions.assertTrue(true, "No help link found - skipping test");

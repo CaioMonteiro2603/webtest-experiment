@@ -163,7 +163,7 @@ public class saucedemo{
 
     @Test
     @Order(5)
-    public void testSocialLinks() {
+    public void testSocialLinks() throws InterruptedException {
         login();
         String originalWindow = driver.getWindowHandle();
 

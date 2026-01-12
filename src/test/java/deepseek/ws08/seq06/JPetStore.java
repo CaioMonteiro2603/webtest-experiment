@@ -118,8 +118,13 @@ public class JPetStore {
                 By.xpath("//a[contains(text(),'Checkout')]")));
         }
         proceedToCheckout.click();
+
+        // FIXED: Use ExpectedConditions.or() instead of ||
+        wait.until(ExpectedConditions.or(
+            ExpectedConditions.urlContains("newOrder"),
+            ExpectedConditions.urlContains("checkout")
+        ));
         
-        wait.until(ExpectedConditions.urlContains("newOrder") || ExpectedConditions.urlContains("checkout"));
         WebElement paymentDetails = wait.until(ExpectedConditions.visibilityOfElementLocated(
             By.cssSelector("body")));
         Assertions.assertTrue(paymentDetails.getText().contains("Payment") || paymentDetails.getText().contains("Order"), "Checkout form should be displayed");

@@ -1,9 +1,14 @@
 package geminiPro.ws04.seq03;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
+
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderers;
+import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -16,17 +21,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
-
 /**
  * A complete JUnit 5 test suite for the Katalon Demo AUT Form page using Selenium WebDriver
  * with Firefox in headless mode.
  */
-@TestMethodOrder(MethodOrderers.OrderAnnotation.class)
+@TestMethodOrder(OrderAnnotation.class)
 public class DemoAUT {
 
     // --- Test Configuration ---

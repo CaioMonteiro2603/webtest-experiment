@@ -212,7 +212,7 @@ public class agritest {
 
                     driver.close();
                     driver.switchTo().window(originalWindow);
-                } catch (TimeoutException | WebDriverException e) {
+                } catch (WebDriverException e) {
                     // Continue with next link if this one fails
                     try {
                         driver.switchTo().window(originalWindow);

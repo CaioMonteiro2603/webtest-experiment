@@ -5,6 +5,7 @@ import org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -166,12 +167,15 @@ public class saucedemo {
         for (String handle : handles) {
             if (!handle.equals(originalWindow)) {
                 driver.switchTo().window(handle);
-                wait.until(new ExpectedConditions<Boolean>() {
+                
+                // FIXED: Use ExpectedCondition (singular) or just use a lambda
+                wait.until(new ExpectedCondition<Boolean>() {
                     @Override
                     public Boolean apply(WebDriver driver) {
                         return driver.getCurrentUrl().contains(domain);
                     }
                 });
+                
                 Assertions.assertTrue(driver.getCurrentUrl().contains(domain), "External link did not navigate to " + domain);
                 driver.close();
                 driver.switchTo().window(originalWindow);

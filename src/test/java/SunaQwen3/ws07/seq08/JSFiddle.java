@@ -1,4 +1,3 @@
-```java
 package SunaQwen3.ws07.seq08;
 
 import org.junit.jupiter.api.*;
@@ -52,8 +51,10 @@ public class JSFiddle {
     public void testNavigationToExamplesPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on "Examples" link using xpath as alternative
         WebElement examplesLink = wait.until(
@@ -73,8 +74,10 @@ public class JSFiddle {
     public void testNavigationToDocumentationPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on "Documentation" link using xpath
         WebElement docsLink = wait.until(
@@ -94,8 +97,10 @@ public class JSFiddle {
     public void testNavigationToApiPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on "API" link using xpath
         WebElement apiLink = wait.until(
@@ -115,8 +120,10 @@ public class JSFiddle {
     public void testNavigationToEmbedPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on "Embed" link using xpath
         WebElement embedLink = wait.until(
@@ -136,8 +143,10 @@ public class JSFiddle {
     public void testNavigationToBlogPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on "Blog" link using xpath
         WebElement blogLink = wait.until(
@@ -170,8 +179,10 @@ public class JSFiddle {
     public void testNavigationToTwitterPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Twitter link using xpath
         WebElement twitterLink = wait.until(
@@ -204,8 +215,10 @@ public class JSFiddle {
     public void testNavigationToGitHubPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on GitHub link using xpath
         WebElement githubLink = wait.until(
@@ -238,8 +251,10 @@ public class JSFiddle {
     public void testNavigationToDiscordPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Discord link using xpath
         WebElement discordLink = wait.until(
@@ -272,8 +287,10 @@ public class JSFiddle {
     public void testNavigationToPatreonPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Patreon link using xpath
         WebElement patreonLink = wait.until(
@@ -306,8 +323,10 @@ public class JSFiddle {
     public void testNavigationToPrivacyPolicyPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Privacy Policy link using xpath
         WebElement privacyLink = wait.until(
@@ -327,8 +346,10 @@ public class JSFiddle {
     public void testNavigationToTermsOfServicePage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Terms of Service link using xpath
         WebElement termsLink = wait.until(
@@ -348,8 +369,10 @@ public class JSFiddle {
     public void testNavigationToContactPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Contact link using xpath
         WebElement contactLink = wait.until(
@@ -369,8 +392,10 @@ public class JSFiddle {
     public void testNavigationToStatusPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Status link using xpath
         WebElement statusLink = wait.until(
@@ -403,8 +428,10 @@ public class JSFiddle {
     public void testNavigationToSupportPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Support link using xpath
         WebElement supportLink = wait.until(
@@ -437,8 +464,10 @@ public class JSFiddle {
     public void testNavigationToNewsletterPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Newsletter link using xpath
         WebElement newsletterLink = wait.until(
@@ -471,8 +500,10 @@ public class JSFiddle {
     public void testNavigationToChangelogPage() {
         driver.get(BASE_URL);
         
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
+        // Wait for page to load completely - FIXED
+        wait.until(webDriver -> 
+            ((JavascriptExecutor) webDriver).executeScript("return document.readyState").equals("complete")
+        );
         
         // Find and click on Changelog link using xpath
         WebElement changelogLink = wait.until(
@@ -499,36 +530,4 @@ public class JSFiddle {
         driver.close();
         driver.switchTo().window(originalHandle);
     }
-
-    @Test
-    @Order(18)
-    public void testNavigationToRoadmapPage() {
-        driver.get(BASE_URL);
-        
-        // Wait for page to load completely
-        wait.until(ExpectedConditions.jsReturnsValue("return document.readyState").equals("complete"));
-        
-        // Find and click on Roadmap link using xpath
-        WebElement roadmapLink = wait.until(
-            ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(@href,'roadmap.jsfiddle.net')]"))
-        );
-        roadmapLink.click();
-        
-        // Switch to new tab
-        String originalHandle = driver.getWindowHandle();
-        String newHandle = wait.until(d -> {
-            Set<String> handles = d.getWindowHandles();
-            handles.remove(originalHandle);
-            return handles.isEmpty() ? null : handles.iterator().next();
-        });
-        
-        assertNotNull(newHandle, "New tab should open for Roadmap");
-        driver.switchTo().window(newHandle);
-        
-        // Assert URL contains expected domain
-        assertTrue(driver.getCurrentUrl().contains("roadmap.jsfiddle.net"), 
-                   "Roadmap tab URL should contain roadmap.jsfiddle.net");
-        
-        // Close new tab and switch back
-        driver.close();
-        driver.switchTo().
+}

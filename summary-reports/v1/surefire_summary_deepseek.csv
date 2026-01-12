@@ -1,0 +1,12 @@
+Type,Count
+Total Number of Tests,615
+Number of Errors,453
+org.openqa.selenium.TimeoutException,375
+org.openqa.selenium.NoSuchElementException,54
+org.openqa.selenium.ElementClickInterceptedException,10
+org.openqa.selenium.NoSuchSessionException,8
+org.openqa.selenium.StaleElementReferenceException,4
+org.openqa.selenium.InvalidSelectorException,1
+org.openqa.selenium.ElementNotInteractableException,1
+Number of Failures,41
+org.opentest4j.AssertionFailedError,41
